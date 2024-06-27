@@ -2,6 +2,7 @@ import ProductCard from "@/components/Ecommerce/ProductCard";
 import ProductsFilter from "@/components/Ecommerce/ProductsFilter";
 import HeaderImage from "@/components/Ui/HeaderImage";
 
+
 async function fetchProducts() {
   const url = `${process.env.STRAPI_URL}/api/productos?populate=*` ;
   const options = {
@@ -49,8 +50,8 @@ export default async function productsPage() {
                         .attributes.Nombre
                     : ""
                 }
-                image={`${process.env.STRAPI_URL}${product.attributes.Imagen.data.attributes.url}`}
-                altimg="product"
+                image={`${process.env.STRAPI_URL}${product.attributes.Imagen.data.attributes.formats.small.url}`}
+                altimg={product.attributes.Imagen.data.attributes.alternativeText}
               />
             ))}
           </div>

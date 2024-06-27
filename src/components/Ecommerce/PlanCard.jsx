@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ModalSchedule from "./Plans/ModalSchedule";
 
 export default function PlanCard({
   title,
@@ -8,7 +9,8 @@ export default function PlanCard({
   altimg,
   experiences,
   onlyadults,
-  allowchilds
+  allowchilds,
+  Schedules
 }) {
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
@@ -75,9 +77,10 @@ export default function PlanCard({
         >
           <span className="icon-[ph--eye]"></span> Ver
         </Link>
-        <button className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300">
+        <ModalSchedule PlanTitle={title} schedules={Schedules} />
+        {/* <button onClick={""} className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300">
           <span className="icon-[iconoir--cart-plus]"></span> Reservar Ahora
-        </button>
+        </button> */}
       </div>
     </div>
   );

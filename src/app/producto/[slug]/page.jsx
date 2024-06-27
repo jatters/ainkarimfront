@@ -79,8 +79,7 @@ export default async function singleProductPage({ params }) {
             {formatPrice(productInfo.attributes.Precio)}
           </div>          
           <ReactMarkdown className="my-7">{productInfo.attributes.Descripcion}</ReactMarkdown>
-          <div>
-            {console.log(productInfo.attributes.variaciones.data.length>0?productInfo.attributes.variaciones.data:"sin variaciones")}
+          <div>            
             <ProductVariations variations={productInfo.attributes.variaciones.data} />
           </div>
 

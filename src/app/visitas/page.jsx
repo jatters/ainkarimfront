@@ -87,6 +87,7 @@ export default async function visitasPage() {
                 altimg="product"
                 onlyadults={plan.attributes.onlyAdults}
                 allowchilds={plan.attributes.allowChilds}
+                Schedules={plan.attributes.horarios.data}
               />
             );
           })}

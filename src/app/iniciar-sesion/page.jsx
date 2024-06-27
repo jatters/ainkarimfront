@@ -4,7 +4,7 @@ import banner from '../../../public/login-image.jpg'
 export default function loginpage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center items-center">
-      <Image src={banner} alt="Banner Login" className="hidden md:block"/>
+      <Image src={banner} alt="Banner Login" className="hidden md:block h-screen object-cover"/>
       <div className="py-20 md:py-10">
         <h1 className="-text--dark-green text-3xl text-center font-bold">Iniciar Sesión</h1>
         <p className="font-semibold py-5">Inicia sesión para acceder a tu cuenta</p>
