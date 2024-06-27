@@ -42,7 +42,7 @@ export default function PlanCard({
       <ul
         className={` grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-t border-gray-300 pt-4 pb-4 border-b flex`}
       >
-        {experiences.map((experience, index) => (
+        {experiences?.map((experience, index) => (
           <li
             key={index}
             className="flex gap-x-1 items-center flex-col hover:scale-110 duration-300"

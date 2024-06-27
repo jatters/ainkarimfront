@@ -22,7 +22,7 @@ export default function homepage() {
           </Link>
         </div>
       </section>
-      <section className="bg-slate-100">
+      {/* <section className="bg-slate-100">
         <div className="container mx-auto pt-16 pb-14">
           <h2 className="text-5xl font-extrabold text-center -text--dark-green mb-10">
             CONOCE NUESTROS PRODUCTOS
@@ -34,7 +34,7 @@ export default function homepage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }
