@@ -76,11 +76,9 @@ export default function PlanCard({
           className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-3 py-2 rounded hover:-bg--dark-green hover:text-white duration-300"
         >
           <span className="icon-[ph--eye]"></span> Ver
-        </Link>
-        <ModalSchedule PlanTitle={title} schedules={Schedules} />
-        {/* <button onClick={""} className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300">
-          <span className="icon-[iconoir--cart-plus]"></span> Reservar Ahora
-        </button> */}
+        </Link>        
+        {Schedules.length>0?<ModalSchedule PlanTitle={title} schedules={Schedules} />:""}        
+        
       </div>
     </div>
   );

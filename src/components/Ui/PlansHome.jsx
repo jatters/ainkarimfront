@@ -1,13 +1,12 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
 
-const baseurl = process.env.STRAPI_URL;
-const token = process.env.STRAPI_API_TOKEN;
+
 
 async function fetchPlans() {
-  const url = `${baseurl}/api/planes?populate=*`;
+  const url = `${process.env.STRAPI_URL}/api/planes?populate=*`;
   const options = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
     },
   };
 
@@ -27,17 +26,17 @@ const formatPrice = (price) => {
 };
 
 async function GetExperiencesIcon(experienceId) {
-  const url = `${baseurl}/api/experiencias/${experienceId}?populate=icon`;
+  const url = `${process.env.STRAPI_URL}/api/experiencias/${experienceId}?populate=icon`;
 
   const options = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
     },
   };
   try {
     const res = await fetch(url, options);
     const data = await res.json();
-    return baseurl + data.data.attributes.icon.data.attributes.url || "";
+    return `${process.env.STRAPI_URL}${data.data.attributes.icon.data.attributes.url}` || "";
   } catch (error) {
     console.error(error);
   }
@@ -66,10 +65,11 @@ export default async function PlansHome() {
             title={plan.attributes.name}
             price={formatPrice(plan.attributes.price)}
             experiences={experienciesList}
-            image={`${baseurl}${plan.attributes.image.data.attributes.url}`}
+            image={`${process.env.STRAPI_URL}${plan.attributes.image.data.attributes.url}`}
             altimg="product"
             onlyadults={plan.attributes.onlyAdults}
             allowchilds={plan.attributes.allowChilds}
+            Schedules={[]}
           />
         );
       })}
