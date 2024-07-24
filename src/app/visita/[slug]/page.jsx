@@ -1,8 +1,6 @@
 import Link from "next/link";
 import PlanGallery from "@/components/Ecommerce/PlanGallery";
 import ReactMarkdown from "react-markdown";
-import ReactDom from "react-dom";
-
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 
 async function fetchPlans() {
@@ -94,7 +92,7 @@ export default async function SinglePlanPage({ params }) {
             {planInfo.attributes.description}
           </ReactMarkdown>
 
-          <ReservationField schedules={planInfo.attributes.horarios.data} />
+          <ReservationField schedules={planInfo.attributes.horarios.data} plan={planInfo} />
           <div className="p-5 border -border--dark-green rounded mt-8">
             <div className="flex items-center text-2xl font-bold gap-1 pt-2 pb-4">
               <span className="icon-[emojione--warning]"></span>Recomendaciones:

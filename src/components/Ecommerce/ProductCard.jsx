@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 export default function ProductCard({
   slug,
@@ -7,7 +10,10 @@ export default function ProductCard({
   altimg,
   price,
   category,
+  product,
 }) {
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div className="flex flex-col items-center shadow-md pb-4 hover:shadow-slate-400 rounded-md">
       <Link href={slug}>
@@ -26,9 +32,11 @@ export default function ProductCard({
           >
             <span className="icon-[ph--eye]"></span> Ver
           </Link>
-          <button className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300">
-            <span className="icon-[iconoir--cart-plus]"></span> Añadir al
-            carrito
+          <button
+            className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300"
+            onClick={() => addToCart({ ...product, quantity: 1 })}
+          >
+            <span className="icon-[iconoir--cart-plus]"></span> Añadir al carrito
           </button>
         </div>
       </div>

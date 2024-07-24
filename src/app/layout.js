@@ -3,8 +3,8 @@ import "./globals.css";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
+import { CartProvider } from "@/context/CartContext";
 
-/* const inter = Inter({ subsets: ["latin"] }); */
 export const montserrat = Montserrat({
   weight: ['100','200','300','400','500','600','700'],
   style: ['normal', 'italic'],
@@ -30,9 +30,11 @@ export default function RootLayout(props) {
   return (
     <html lang="es">
       <body className={`${montserrat.variable} ${unna.variable}`}>
-      <Header/>      
-        <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
-      <Footer/>
+        <CartProvider>
+          <Header/>      
+          <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
+          <Footer/>
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useState, useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -12,8 +14,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ModalSchedule({ PlanTitle, schedules }) {
-  const [open, setOpen] = React.useState(false);
+export default function ModalSchedule({ PlanTitle, schedules, plan }) {
+  const [open, setOpen] = useState(false);
+  const { addToCart } = useContext(CartContext);
+
+  const [reservationData, setReservationData] = useState({
+    date: "",
+    persons: 1,
+    hour: "",
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -21,6 +30,20 @@ export default function ModalSchedule({ PlanTitle, schedules }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setReservationData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleReserve = () => {
+    const productToAdd = {
+      ...plan,
+      reservationData,
+    };
+    addToCart(productToAdd);
+    handleClose();
   };
 
   return (
@@ -39,15 +62,11 @@ export default function ModalSchedule({ PlanTitle, schedules }) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{`Reservar ${PlanTitle?PlanTitle:""}`}</DialogTitle>
+        <DialogTitle>{`Reservar ${PlanTitle ? PlanTitle : ""}`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <p className="text-center">Diligencia los datos para realizar tu reserva</p>
             <div className="-bg--gray py-5 px-5 rounded-xl">
-              {/* <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
-                <span className="icon-[akar-icons--schedule]"></span>Reserva
-                ahora 
-              </div> */}
               <div className="flex gap-x-5 gap-y-2 justify-items-center items-center flex-wrap">
                 <div className="py-2 flex-1">
                   <div className="font-bold -text--dark-green text-base flex items-center gap-1">
@@ -56,8 +75,9 @@ export default function ModalSchedule({ PlanTitle, schedules }) {
                   </div>
                   <input
                     type="date"
-                    name="data"
-                    id="date"
+                    name="date"
+                    value={reservationData.date}
+                    onChange={handleChange}
                     className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full "
                   />
                 </div>
@@ -68,28 +88,32 @@ export default function ModalSchedule({ PlanTitle, schedules }) {
                   <input
                     type="number"
                     name="persons"
-                    id="personas"
+                    value={reservationData.persons}
+                    onChange={handleChange}
                     className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full text-center"
                   />
                 </div>
                 <ListHours
-            schedules={schedules}
-            classNameInput="min-w-52 w-full"
-            classNameContainer="py-2 flex-1"
-          /> 
+                  schedules={schedules}
+                  classNameInput="min-w-52 w-full"
+                  classNameContainer="py-2 flex-1"
+                  value={reservationData.hour}
+                  onChange={(hour) =>
+                    setReservationData((prev) => ({ ...prev, hour }))
+                  }
+                />
               </div>
               <div className="flex justify-center">
-                <button className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md">
+                <button
+                  onClick={handleReserve}
+                  className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
+                >
                   Reservar
                 </button>
               </div>
             </div>
           </DialogContentText>
         </DialogContent>
-        {/* <DialogActions>
-          <button onClick={handleClose}>Cancelar</button>
-          <button onClick={handleClose}>Agendar</button>
-        </DialogActions> */}
       </Dialog>
     </React.Fragment>
   );

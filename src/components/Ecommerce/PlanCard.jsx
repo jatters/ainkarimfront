@@ -10,7 +10,8 @@ export default function PlanCard({
   experiences,
   onlyadults,
   allowchilds,
-  Schedules
+  Schedules,
+  plan,
 }) {
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
@@ -64,21 +65,24 @@ export default function PlanCard({
       )}
       {allowchilds === true ? (
         <div className="flex gap-1 mb-5 text-slate-600 font-medium">
-          <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>          
+          <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>
           <span>Ingreso de menores de edad permitido sin costo</span>
         </div>
       ) : (
         ""
       )}
-      <div className="flex gap-x-5">        
+      <div className="flex gap-x-5">
         <Link
           href={slug}
           className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-3 py-2 rounded hover:-bg--dark-green hover:text-white duration-300"
         >
           <span className="icon-[ph--eye]"></span> Ver
-        </Link>        
-        {Schedules.length>0?<ModalSchedule PlanTitle={title} schedules={Schedules} />:""}        
-        
+        </Link>
+        {Schedules.length > 0 ? (
+          <ModalSchedule PlanTitle={title} schedules={Schedules} plan={plan} />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

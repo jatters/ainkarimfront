@@ -1,8 +1,15 @@
+"use client";
+import React, { useContext } from "react";
 import Image from "next/image";
 import logo from "@/../public/logoainkarim.svg";
 import Link from "next/link";
+import { CartContext } from "@/context/CartContext";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function Header() {
+  const { cart } = useContext(CartContext);
+  const cartCount = cart.length;
+
   return (
     <header>
       <div className="flex lg:hidden bg-black items-center justify-between px-6 py-4">
@@ -77,7 +84,7 @@ export default function Header() {
           </ul>
         </div>
         <div>
-          <ul className="text-white flex shrink-0 grow-0 text-2xl gap-3 ">
+          <ul className="text-white flex shrink-0 grow-0 text-2xl gap-3">
             <li className="flex items-center">
               <Link
                 className="-bg--light-green text-base font-medium text-white px-3 py-2 rounded-md hover:-bg--dark-green duration-300"
@@ -92,8 +99,15 @@ export default function Header() {
             <li className="flex items-center">
               <Link href="/iniciar-sesion"><span className="icon-[solar--user-bold-duotone] hover:-text--light-green hover:scale-110 duration-300"></span></Link>
             </li>
-            <li className="flex items-center">
-              <Link href="/carrito"><span className="icon-[bytesize--cart]"></span></Link>
+            <li className="flex items-center relative">
+              <Link href="/carrito">
+                <ShoppingCartIcon />
+                {cartCount > 0 && (
+                  <span className="absolute top-0 right-0 inline-block w-6 h-6 text-center text-sm font-bold bg-red-600 text-white rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </li>
           </ul>
         </div>

@@ -69,7 +69,7 @@ export default async function PlansHome() {
             altimg="product"
             onlyadults={plan.attributes.onlyAdults}
             allowchilds={plan.attributes.allowChilds}
-            Schedules={[]}
+            Schedules={plan.attributes.horarios.data}            
           />
         );
       })}

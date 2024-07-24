@@ -2,12 +2,11 @@ import ProductCard from "@/components/Ecommerce/ProductCard";
 import ProductsFilter from "@/components/Ecommerce/ProductsFilter";
 import HeaderImage from "@/components/Ui/HeaderImage";
 
-
 async function fetchProducts() {
-  const url = `${process.env.STRAPI_URL}/api/productos?populate=*` ;
+  const url = `${process.env.STRAPI_URL}/api/productos?populate=*`;
   const options = {
     headers: {
-      Authorization:  `Bearer ${process.env.STRAPI_API_TOKEN}`,
+      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
     },
   };
 
@@ -22,8 +21,8 @@ async function fetchProducts() {
 
 const formatPrice = (price) => {
   if (!price) return "";
-  const formatedPrice = price.split(",")[0]; 
-  return `$${Number(formatedPrice).toLocaleString("es-CO")}`; 
+  const formattedPrice = price.split(",")[0];
+  return `$${Number(formattedPrice).toLocaleString("es-CO")}`;
 };
 
 export default async function productsPage() {
@@ -52,7 +51,8 @@ export default async function productsPage() {
                 }
                 image={`${process.env.STRAPI_URL}${product.attributes.Imagen.data.attributes.formats.small.url}`}
                 altimg={product.attributes.Imagen.data.attributes.alternativeText}
-              />
+                product={product} // Pasamos el producto completo
+              />              
             ))}
           </div>
         </div>

@@ -1,7 +1,10 @@
+"use client";
 import Link from "next/link";
 import ProductGallery from "@/components/Ecommerce/SingleProduct/ProductGallery";
 import ReactMarkdown from 'react-markdown';
 import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVariations";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 async function fetchProducts() {
   const url = `${process.env.STRAPI_URL}/api/productos?populate=*`;
@@ -84,12 +87,23 @@ export default async function singleProductPage({ params }) {
           </div>
 
           <div>
-            <button className="-bg--dark-green text-white py-3 px-10 hover:-bg--light-green duration-300 rounded-md">
-              Añadir a carrito
-            </button>
+          <AddToCartButton product={productInfo} />
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function AddToCartButton({ product }) {
+  const { addToCart } = useContext(CartContext);
+
+  return (
+    <button
+      className="-bg--dark-green text-white py-3 px-10 hover:-bg--light-green duration-300 rounded-md"
+      onClick={() => addToCart(product)}
+    >
+      Añadir a carrito
+    </button>
   );
 }
