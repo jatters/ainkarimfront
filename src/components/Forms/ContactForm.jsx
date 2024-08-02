@@ -28,6 +28,7 @@ export default function ContactForm() {
                     maxRows={7}
                     fullWidth
                 />
+                <input type="checkbox" name="acepto" id="" /><span>Acepto politica de tratamiento de datos</span>
                 <Stack direction="row" spacing={1}>                    
                     <Button variant="contained" endIcon={<SendIcon />} size='large'>
                         Enviar Mensaje

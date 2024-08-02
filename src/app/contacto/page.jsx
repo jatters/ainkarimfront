@@ -30,8 +30,9 @@ export default function contactPage() {
                 </li>
                 <li>
                 <span className="icon-[solar--clock-square-broken] -text--dark-green"></span><span className="font-bold -text--dark-green"> Horarios:</span> Abierto todos los
-                  días de 10:00 am a 4:00 pm, excepto los martes.
+                  días de 13:00 am a 5:30 pm, excepto los martes.
                 </li>
+                <li className="ml-5">Ultimo recorrido 3:30pm</li>
                 <li>
                 <span className="icon-[ion--mail-outline] -text--dark-green"></span><span className="font-bold -text--dark-green"> Correo:</span><a href="mailto:ventas@marquesvl.com"> ventas@marquesvl.com</a>
                 </li>

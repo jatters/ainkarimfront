@@ -18,6 +18,7 @@ async function fetchPlans() {
     return data.data || [];
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 
@@ -40,11 +41,25 @@ async function GetExperiencesIcon(experienceId) {
     return baseurl + data.data.attributes.icon.data.attributes.url || "";
   } catch (error) {
     console.error(error);
+    return "";
   }
 }
 
-export default async function visitasPage() {
+export default async function VisitasPage() {
   const plansData = await fetchPlans();
+
+  // Obtener iconos para cada experiencia de cada plan
+  for (const plan of plansData) {
+    const experienciesListPromises = plan.attributes.experiencias.data.map(async (experience) => ({
+      id: experience.id,
+      name: experience.attributes.name,
+      iconurl: await GetExperiencesIcon(experience.id),
+    }));
+
+    plan.experienciesList = await Promise.all(experienciesListPromises);
+  }
+
+  const sortedPlanes = plansData.sort((a, b) => a.attributes.orden - b.attributes.orden);
 
   return (
     <>
@@ -53,32 +68,22 @@ export default async function visitasPage() {
         <div className="font-medium text-4xl text-center -text--dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">
-          {plansData?.map(async (plan) => {
-            const experienciesListPromises = plan.attributes.experiencias.data.map(async (id) => ({
-              id: id.id,
-              name: id.attributes.name,
-              iconurl: await GetExperiencesIcon(id.id),
-            }));
-
-            const experienciesList = await Promise.all(experienciesListPromises);
-
-            return (
-              <PlanCard
-                key={plan.id}
-                slug={`/visita/${plan.attributes.slug}`}
-                title={plan.attributes.name}
-                price={formatPrice(plan.attributes.price)}
-                experiences={experienciesList}
-                image={`${baseurl}${plan.attributes.image.data.attributes.url}`}
-                altimg="product"
-                onlyadults={plan.attributes.onlyAdults}
-                allowchilds={plan.attributes.allowChilds}
-                Schedules={plan.attributes.horarios.data}
-                plan={plan} // Pasamos el plan completo
-              />
-            );
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center mt-10 gap-x-4 mx-5 gap-y-7">
+          {sortedPlanes.map((plan) => (
+            <PlanCard
+              key={plan.id}
+              slug={`/visita/${plan.attributes.slug}`}
+              title={plan.attributes.name}
+              price={formatPrice(plan.attributes.price)}
+              experiences={plan.experienciesList}
+              image={`${baseurl}${plan.attributes.image.data.attributes.url}`}
+              altimg="product"
+              onlyadults={plan.attributes.onlyAdults}
+              allowchilds={plan.attributes.allowChilds}
+              Schedules={plan.attributes.horarios.data}
+              plan={plan}
+            />
+          ))}
         </div>
       </div>
     </>

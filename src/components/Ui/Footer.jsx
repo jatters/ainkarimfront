@@ -117,26 +117,29 @@ export default function Footer() {
           </h6>
           <ul className="flex flex-col gap-1 text-sm">
             <li>
-              <span className="font-bold">Lunes:</span> 10:00 am a 4:00 pm
+              <span className="font-bold">Lunes:</span> 10:30 am a 5:30 pm
             </li>
             <li>
               <span className="font-bold">Martes:</span> Cerrado
             </li>
             <li>
-              <span className="font-bold">Miércoles:</span> 10:00 am a 4:00 pm
+              <span className="font-bold">Miércoles:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Jueves:</span> 10:00 am a 4:00 pm
+              <span className="font-bold">Jueves:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Viernes:</span> 10:00 am a 4:00 pm
+              <span className="font-bold">Viernes:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Sábado:</span> 10:00 am a 4:00 pm
+              <span className="font-bold">Sábado:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Domingo y festivos:</span> 10:00 am a
-              4:00 pm
+              <span className="font-bold">Domingo y festivos:</span> 10:30 am a
+              5:30 pm
+            </li>
+            <li>
+              Ultimo recorrido 3:30pm
             </li>
           </ul>
         </div>

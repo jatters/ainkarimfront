@@ -5,10 +5,12 @@ import { CartContext } from "@/context/CartContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import CloseIcon from "@mui/icons-material/Close";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import ListHours from "./ListHours";
+import IconButton from "@mui/material/IconButton";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -62,6 +64,18 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogTitle>{`Reservar ${PlanTitle ? PlanTitle : ""}`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">

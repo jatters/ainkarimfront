@@ -11,7 +11,7 @@ export default function Header() {
   const cartCount = cart.length;
 
   return (
-    <header>
+    <header className="sticky top-0 z-50 shadow-xl">
       <div className="flex lg:hidden bg-black items-center justify-between px-6 py-4">
         <div className="flex items-center justify-center w-full">
           <div className="mx-auto">
