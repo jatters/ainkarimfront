@@ -54,7 +54,7 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
         onClick={handleClickOpen}
         className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300"
       >
-        <span className="icon-[iconoir--cart-plus]"></span> Reservar Ahora
+        <span className="icon-[iconoir--cart-plus]"></span> Reservar y pagar
       </button>
 
       <Dialog

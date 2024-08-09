@@ -1,7 +1,5 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
 
-
-
 async function fetchPlans() {
   const url = `${process.env.STRAPI_URL}/api/planes?populate=*`;
   const options = {
@@ -36,7 +34,10 @@ async function GetExperiencesIcon(experienceId) {
   try {
     const res = await fetch(url, options);
     const data = await res.json();
-    return `${process.env.STRAPI_URL}${data.data.attributes.icon.data.attributes.url}` || "";
+    return (
+      `${process.env.STRAPI_URL}${data.data.attributes.icon.data.attributes.url}` ||
+      ""
+    );
   } catch (error) {
     console.error(error);
   }
@@ -69,7 +70,7 @@ export default async function PlansHome() {
             altimg="product"
             onlyadults={plan.attributes.onlyAdults}
             allowchilds={plan.attributes.allowChilds}
-            Schedules={plan.attributes.horarios.data}            
+            Schedules={plan.attributes.horarios.data}
           />
         );
       })}

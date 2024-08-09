@@ -8,7 +8,7 @@ export default function homepage() {
     <>
       <HeroCoverHome />
       <section className="container mx-auto pt-16 pb-14">
-        <h2 className="text-5xl font-extrabold text-center -text--dark-green">
+        <h2 className="text-5xl font-bold text-center -text--dark-green font-serif">
           VIVE NUESTRAS EXPERIENCIAS
         </h2>
         <p className="text-xl text-center mt-5">Conoce nuestros planes</p>
@@ -24,7 +24,7 @@ export default function homepage() {
       </section>
       <section className="bg-slate-100">
         <div className="container mx-auto pt-16 pb-14">
-          <h2 className="text-5xl font-extrabold text-center -text--dark-green mb-10">
+          <h2 className="text-5xl font-bold font-serif text-center -text--dark-green mb-10">
             CONOCE NUESTROS PRODUCTOS
           </h2>
           <ProductsHome />

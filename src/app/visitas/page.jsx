@@ -50,16 +50,20 @@ export default async function VisitasPage() {
 
   // Obtener iconos para cada experiencia de cada plan
   for (const plan of plansData) {
-    const experienciesListPromises = plan.attributes.experiencias.data.map(async (experience) => ({
-      id: experience.id,
-      name: experience.attributes.name,
-      iconurl: await GetExperiencesIcon(experience.id),
-    }));
+    const experienciesListPromises = plan.attributes.experiencias.data.map(
+      async (experience) => ({
+        id: experience.id,
+        name: experience.attributes.name,
+        iconurl: await GetExperiencesIcon(experience.id),
+      })
+    );
 
     plan.experienciesList = await Promise.all(experienciesListPromises);
   }
 
-  const sortedPlanes = plansData.sort((a, b) => a.attributes.orden - b.attributes.orden);
+  const sortedPlanes = plansData.sort(
+    (a, b) => a.attributes.orden - b.attributes.orden
+  );
 
   return (
     <>

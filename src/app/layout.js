@@ -1,9 +1,10 @@
-import { Montserrat, Unna } from "next/font/google";
+import { Montserrat, Marcellus } from "next/font/google";
 import "./globals.css";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "react-hot-toast";
 
 export const montserrat = Montserrat({
   weight: ['100','200','300','400','500','600','700'],
@@ -13,12 +14,12 @@ export const montserrat = Montserrat({
   variable: '--font-montserrat',
 });
  
-export const unna = Unna({  
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
+export const marcellus = Marcellus({  
+  weight: ['400'],
+  style: ['normal'],
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-unna',
+  variable: '--font-marcellus',
 });
 
 export const metadata = {
@@ -29,12 +30,14 @@ export const metadata = {
 export default function RootLayout(props) {
   return (
     <html lang="es">
-      <body className={`${montserrat.variable} ${unna.variable}`}>
+      <body className={`${montserrat.variable} ${marcellus.variable}`}>
         <CartProvider>
           <Header/>      
           <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
+          
           <Footer/>
         </CartProvider>
+        <Toaster position="bottom-left" /> 
       </body>
     </html>
   );

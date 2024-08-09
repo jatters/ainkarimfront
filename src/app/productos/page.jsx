@@ -50,9 +50,11 @@ export default async function productsPage() {
                     : ""
                 }
                 image={`${process.env.STRAPI_URL}${product.attributes.Imagen.data.attributes.formats.small.url}`}
-                altimg={product.attributes.Imagen.data.attributes.alternativeText}
-                product={product} // Pasamos el producto completo
-              />              
+                altimg={
+                  product.attributes.Imagen.data.attributes.alternativeText
+                }
+                product={product}
+              />
             ))}
           </div>
         </div>

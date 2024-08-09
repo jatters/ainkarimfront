@@ -19,7 +19,13 @@ module.exports = {
         '--light-red': '#cd181b',
         '--dark-red': '#94191a', 
         '--gray':"#f4f4f4",        
-      }
+      }, 
+      fontFamily: {
+        montserrat: ['Montserrat  ', 'sans-serif'],
+        marcellus: ['Marcellus', 'serif'],
+        sans: ['Montserrat', 'sans-serif'],
+        serif: ['Marcellus', 'serif'],
+      },
     }
   },
   plugins: [

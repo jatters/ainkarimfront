@@ -52,8 +52,14 @@ export default async function SinglePlanPage({ params }) {
   return (
     <div className="container mx-auto pt-16 pb-14">
       <div>
-        <Link href="/" className="hover:-text--light-green">Inicio</Link> / <Link href="/visitas" className="hover:-text--light-green">Visitas</Link> /{" "}
-        <span className="capitalize">{planInfo.attributes.name}</span>
+        <Link href="/" className="hover:-text--light-green">
+          Inicio
+        </Link>{" "}
+        /{" "}
+        <Link href="/visitas" className="hover:-text--light-green">
+          Visitas
+        </Link>{" "}
+        / <span className="capitalize">{planInfo.attributes.name}</span>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-5 gap-y-9">
         <div className="max-w-3xl">
@@ -87,12 +93,15 @@ export default async function SinglePlanPage({ params }) {
           <div className="flex items-center gap-1 py-3 text-slate-600">
             <span className="icon-[fluent--people-add-20-regular] text-3xl"></span>
             Máximo {planInfo.attributes.max_guest} personas por reserva
-          </div>          
+          </div>
           <ReactMarkdown className="my-3">
             {planInfo.attributes.description}
           </ReactMarkdown>
 
-          <ReservationField schedules={planInfo.attributes.horarios.data} plan={planInfo} />
+          <ReservationField
+            schedules={planInfo.attributes.horarios.data}
+            plan={planInfo}
+          />
           <div className="p-5 border -border--dark-green rounded mt-8">
             <div className="flex items-center text-2xl font-bold gap-1 pt-2 pb-4">
               <span className="icon-[emojione--warning]"></span>Recomendaciones:
@@ -110,9 +119,10 @@ export default async function SinglePlanPage({ params }) {
                   Para reprogramación de su reserva envíe un correo a{" "}
                   <a href="mailto:ventas@marquesvl.com">ventas@marquesvl.com</a>
                 </li>
-                <li>Si es un grupo de más de {planInfo.attributes.max_guest} personas, por favor solicite información al correo ventas@marquesvl.com.
-
-
+                <li>
+                  Si es un grupo de más de {planInfo.attributes.max_guest}{" "}
+                  personas, por favor solicite información al correo
+                  ventas@marquesvl.com.
                 </li>
               </ul>
               <div className="mb-4">

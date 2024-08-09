@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import ProductGallery from "@/components/Ecommerce/SingleProduct/ProductGallery";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVariations";
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
@@ -61,8 +61,8 @@ export default async function singleProductPage({ params }) {
   return (
     <div className="container mx-auto pt-9 pb-14">
       <div>
-        <Link href="/">Inicio</Link> / <Link href="/productos">Productos</Link> /{" "}
-        <span className="capitalize">{productInfo.attributes.title}</span>
+        <Link href="/">Inicio</Link> / <Link href="/productos">Productos</Link>{" "}
+        / <span className="capitalize">{productInfo.attributes.title}</span>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-5 gap-y-9">
         <div className="max-w-3xl">
@@ -80,14 +80,18 @@ export default async function singleProductPage({ params }) {
           </div>
           <div className="text-2xl font-semibold">
             {formatPrice(productInfo.attributes.Precio)}
-          </div>          
-          <ReactMarkdown className="my-7">{productInfo.attributes.Descripcion}</ReactMarkdown>
-          <div>            
-            <ProductVariations variations={productInfo.attributes.variaciones.data} />
+          </div>
+          <ReactMarkdown className="my-7">
+            {productInfo.attributes.Descripcion}
+          </ReactMarkdown>
+          <div>
+            <ProductVariations
+              variations={productInfo.attributes.variaciones.data}
+            />
           </div>
 
           <div>
-          <AddToCartButton product={productInfo} />
+            <AddToCartButton product={productInfo} />
           </div>
         </div>
       </div>

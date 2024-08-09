@@ -9,61 +9,96 @@ import HeaderImage from "@/components/Ui/HeaderImage";
 export default function contactPage() {
   return (
     <>
-      <HeaderImage title="Contacto" background="/banner-contacto.jpg"/>
+      <HeaderImage title="Contacto" background="/banner-contacto.jpg" />
       <div className="container mx-auto pt-16 pb-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
-            <h2 className="font-bold text-4xl mb-6 -text--dark-green">ESCRÍBENOS</h2>
+            <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+              ESCRÍBENOS
+            </h2>
             <ContactForm />
           </div>
           <div className="flex flex-col gap-y-5">
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-4xl mb-6 -text--dark-green">EL VIÑEDO</h2>
+              <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+                EL VIÑEDO
+              </h2>
               <ul>
                 <li>
-                <span className="icon-[ion--location-sharp] -text--dark-green"></span><span className="font-bold -text--dark-green"> Ubicación:</span> Km 10 Vía Villa
-                  de Leyva – Santa Sofía
+                  <span className="icon-[ion--location-sharp] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green">
+                    {" "}
+                    Ubicación:
+                  </span>{" "}
+                  Km 10 Vía Villa de Leyva – Santa Sofía
                 </li>
                 <li>
-                <span className="icon-[material-symbols--phonelink-ring-rounded] -text--dark-green"></span><span className="font-bold -text--dark-green"> Teléfono:</span>{" "}
+                  <span className="icon-[material-symbols--phonelink-ring-rounded] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green">
+                    {" "}
+                    Teléfono:
+                  </span>{" "}
                   <a href="tel:3174319583">317 431 9583</a>
                 </li>
                 <li>
-                <span className="icon-[solar--clock-square-broken] -text--dark-green"></span><span className="font-bold -text--dark-green"> Horarios:</span> Abierto todos los
-                  días de 13:00 am a 5:30 pm, excepto los martes.
+                  <span className="icon-[solar--clock-square-broken] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green">
+                    {" "}
+                    Horarios:
+                  </span>{" "}
+                  Abierto todos los días de 13:00 am a 5:30 pm, excepto los
+                  martes.
                 </li>
                 <li className="ml-5">Ultimo recorrido 3:30pm</li>
                 <li>
-                <span className="icon-[ion--mail-outline] -text--dark-green"></span><span className="font-bold -text--dark-green"> Correo:</span><a href="mailto:ventas@marquesvl.com"> ventas@marquesvl.com</a>
+                  <span className="icon-[ion--mail-outline] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green"> Correo:</span>
+                  <a href="mailto:ventas@marquesvl.com">
+                    {" "}
+                    ventas@marquesvl.com
+                  </a>
                 </li>
               </ul>
             </div>
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-4xl mb-6 -text--dark-green">OFICINA</h2>
+              <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+                OFICINA
+              </h2>
               <ul>
                 <li>
-                <span className="icon-[ion--location-sharp] -text--dark-green"></span><span className="font-bold -text--dark-green">Dirección:</span> Av. Calle 127 #
-                  13A-32 Ofi. 202 | Bogotá, Colombia
-                </li>                
+                  <span className="icon-[ion--location-sharp] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green">
+                    Dirección:
+                  </span>{" "}
+                  Av. Calle 127 # 13A-32 Ofi. 202 | Bogotá, Colombia
+                </li>
                 <li>
-                <span className="icon-[material-symbols-light--phone-in-talk] -text--dark-green"></span><span className="font-bold -text--dark-green"> Teléfono:</span>
+                  <span className="icon-[material-symbols-light--phone-in-talk] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green">
+                    {" "}
+                    Teléfono:
+                  </span>
                   <a href="tel:6012589933"> (601) 258 9933</a>
                 </li>
                 <li>
-                <span className="icon-[mdi--moped] -text--dark-green"></span><span className="font-bold -text--dark-green"> Pedidos:</span>
+                  <span className="icon-[mdi--moped] -text--dark-green"></span>
+                  <span className="font-bold -text--dark-green"> Pedidos:</span>
                   <a href="tel:3175182745"> 317 518 2745</a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <div>
-          <h2 className="font-bold text-4xl text-center mb-6 -text--dark-green">¿CÓMO LLEGAR?</h2>
+        <section>
+          <h2 className="font-bold text-4xl text-center mb-6 -text--dark-green">
+            ¿CÓMO LLEGAR?
+          </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 items-center">
             <div className="flex flex-col gap-5">
               <div>
-              <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span><span className="font-bold -text--dark-green">Ubicación:</span> Km 10 Vía Villa de
-                Leyva – Santa Sofía
+                <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
+                <span className="font-bold -text--dark-green">Ubicación:</span>{" "}
+                Km 10 Vía Villa de Leyva – Santa Sofía
               </div>
               <div className="flex-1 shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
                 <a
@@ -99,7 +134,7 @@ export default function contactPage() {
               ></iframe>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </>
   );

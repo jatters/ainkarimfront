@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CartContext } from "@/context/CartContext";
 
 export default function CarritoPage() {
-  const { cart, removeFromCart } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantityInCart } = useContext(CartContext);
   const baseurl = process.env.STRAPI_URL;
 
   // Calcular el subtotal de cada producto y el total general
@@ -14,14 +14,25 @@ export default function CarritoPage() {
 
   const calculateTotal = () => {
     return cart.reduce(
-      (total, item) => total + calculateSubtotal(item.Precio || 0, item.quantity || 0),
+      (total, item) =>
+        total + calculateSubtotal(parseFloat(item.attributes.Precio) || 0, item.quantity || 0),
       0
     );
   };
 
+  const incrementarCantidad = (product) => {
+    updateQuantityInCart(product, product.quantity + 1);
+  };
+
+  const decrementarCantidad = (product) => {
+    if (product.quantity > 1) {
+      updateQuantityInCart(product, product.quantity - 1);
+    }
+  };
+
   return (
     <div className="container mx-auto pt-16 pb-14">
-      <h1 className="text-3xl mb-6">Carrito de Compras</h1>
+      <h1 className="text-5xl -text--dark-green text-center font-bold mb-14">Carrito de Compras</h1>
       {cart.length === 0 ? (
         <p>Tu carrito está vacío.</p>
       ) : (
@@ -40,14 +51,17 @@ export default function CarritoPage() {
               {cart.map((item, index) => {
                 const isReservation = item.reservationData !== undefined;
                 const attributes = item.attributes || {};
-                const imageUrl = attributes.Imagen?.data?.attributes?.formats?.thumbnail?.url
+                const imageUrl = attributes.Imagen?.data?.attributes?.formats
+                  ?.thumbnail?.url
                   ? `${baseurl}${attributes.Imagen.data.attributes.formats.thumbnail.url}`
                   : null;
-                const altText = attributes.Imagen?.data?.attributes?.alternativeText || "Imagen del producto";
+                const altText =
+                  attributes.Imagen?.data?.attributes?.alternativeText ||
+                  "Imagen del producto";
                 const title = isReservation
                   ? `${item.title} - ${item.reservationData.fecha} - ${item.reservationData.personas} personas`
                   : attributes.title || "Sin título";
-                const price = item.Precio || 0;
+                const price = parseFloat(attributes.Precio) || 0;
                 const quantity = item.quantity || 1;
 
                 return (
@@ -62,9 +76,33 @@ export default function CarritoPage() {
                       )}
                       {title}
                     </td>
-                    <td className="py-2">{price}</td>
-                    <td className="py-2">{quantity}</td>
-                    <td className="py-2">{calculateSubtotal(price, quantity)}</td>
+                    <td className="py-2">{price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</td>
+                    <td className="py-2">
+                      <div className="flex items-center justify-center">
+                        <button
+                          className="-bg--grey-lightest text-gray-700 px-2 py-1 rounded-l focus:outline-none"
+                          onClick={() => decrementarCantidad(item)}
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min="1"
+                          value={quantity}
+                          readOnly
+                          className="appearance-none border -border--grey-lightest w-12 px-3 py-1 text-gray-700 text-center leading-tight focus:outline-none"
+                        />
+                        <button
+                          className="-bg--grey-lightest text-gray-700 px-2 py-1 rounded-r focus:outline-none"
+                          onClick={() => incrementarCantidad(item)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td className="py-2">
+                      {(calculateSubtotal(price, quantity)).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                    </td>
                     <td className="py-2">
                       <button onClick={() => removeFromCart(item)}>
                         <span className="icon-[mynaui--trash]" />
@@ -93,15 +131,15 @@ export default function CarritoPage() {
               <div className="flex gap-2 mb-4">
                 <input
                   type="text"
-                  placeholder="Código de cupón"
+                  placeholder="¿Tienes un cupón?"
                   className="border px-2 py-1 rounded-md"
                 />
-                <button className="bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600">
+                <button className="-bg--dark-green text-white px-4 py-1 rounded-md hover:-bg--light-green duration-300">
                   Aplicar
                 </button>
               </div>
               <div className="text-xl font-bold">
-                Total: ${calculateTotal().toFixed(2)}
+                Total: {calculateTotal().toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
               </div>
             </div>
           </div>

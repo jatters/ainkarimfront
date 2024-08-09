@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import logo from "@/../public/logoainkarim.svg";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 
@@ -9,16 +8,9 @@ export default function Footer() {
     <footer className="-bg--dark-green text-white">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-12 pt-16 pb-12 gap-8">
         <div>
-          {/* <Image
-                    src={logo}
-                    alt="Logo ainkarim"
-                    width={300}
-                    height={57}
-                    className="invert mb-3"
-                /> */}
-          <h6 className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             EL VIÑEDO
-          </h6>
+          </div>
           <ul className="flex flex-col gap-3 text-sm">
             <li>
               <div className="flex gap-1 items-center">
@@ -76,10 +68,10 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h6 className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             VÍNCULOS DE INTERÉS
-          </h6>
-          <ul className="flex flex-col gap-1 text-sm">
+          </div>
+          <ul className="flex flex-col space-y-2 text-sm">
             <li>
               <a className="hover:-text--light-green" href="">
                 Nosotros
@@ -112,10 +104,10 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h6 className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             HORARIOS
-          </h6>
-          <ul className="flex flex-col gap-1 text-sm">
+          </div>
+          <ul className="flex flex-col space-y-2 text-sm">
             <li>
               <span className="font-bold">Lunes:</span> 10:30 am a 5:30 pm
             </li>
@@ -138,16 +130,14 @@ export default function Footer() {
               <span className="font-bold">Domingo y festivos:</span> 10:30 am a
               5:30 pm
             </li>
-            <li>
-              Ultimo recorrido 3:30pm
-            </li>
+            <li>Ultimo recorrido 3:30pm</li>
           </ul>
         </div>
         <div>
-          <h6 className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             OFICINA
-          </h6>
-          <ul className="flex flex-col gap-1 text-sm">
+          </div>
+          <ul className="flex flex-col space-y-2 text-sm">
             <li className="flex items-center gap-1">
               <span className="icon-[gridicons--location] text-xl"></span>
               <span className="font-bold">Dirección:</span> Av. Calle 127 #
@@ -168,17 +158,29 @@ export default function Footer() {
         <span className="text-xl font-semibold">Síguenos</span>
         <ul className="flex flex-row  gap-4 my-3">
           <li>
-            <a className="text-3xl" href="">
+            <a
+              className="text-3xl"
+              href="https://www.instagram.com/vinedoainkarim"
+              target="_blank"
+            >
               <span className="icon-[mdi--instagram] hover:-text--light-green hover:scale-110 duration-200"></span>
             </a>
           </li>
           <li>
-            <a className="text-3xl" href="">
+            <a
+              className="text-3xl"
+              href="https://web.facebook.com/Vinedoainkarim"
+              target="_blank"
+            >
               <span className="icon-[carbon--logo-facebook] hover:-text--light-green hover:scale-110 duration-200"></span>
             </a>
           </li>
           <li>
-            <a className="text-3xl" href="">
+            <a
+              className="text-3xl"
+              href="https://www.tripadvisor.co/Attraction_Review-g676524-d5888335-Reviews-Vinedo_Ain_Karim-Villa_de_Leyva_Boyaca_Department.html"
+              target="_blank"
+            >
               <span className="icon-[simple-icons--tripadvisor] hover:-text--light-green hover:scale-110 duration-200"></span>
             </a>
           </li>

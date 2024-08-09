@@ -11,7 +11,7 @@ export default function Header() {
   const cartCount = cart.length;
 
   return (
-    <header className="sticky top-0 z-50 shadow-xl">
+    <header className="sticky top-0 z-50 shadow-xl bg-black">
       <div className="flex lg:hidden bg-black items-center justify-between px-6 py-4">
         <div className="flex items-center justify-center w-full">
           <div className="mx-auto">
@@ -29,7 +29,7 @@ export default function Header() {
         <span className="icon-[fluent--navigation-24-filled] text-white text-2xl"></span>
       </div>
 
-      <div className="bg-black items-center px-12 py-3 justify-between hidden lg:flex">
+      <div className="items-center px-12 py-3 justify-between hidden lg:flex">
         <Link href="/">
           <Image
             src={logo}
@@ -41,9 +41,9 @@ export default function Header() {
         </Link>
         <div className="">
           <ul className="text-white flex flex-1 shrink-0 text-base gap-x-3 uppercase">
-            <li>
+            <li className="">
               <Link
-                className="py-3 px-1 hover:-text--light-green duration-300"
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/productos"
               >
                 Productos
@@ -51,7 +51,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                className="py-3 px-1 hover:-text--light-green duration-300"
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/visitas"
               >
                 Visitas
@@ -59,7 +59,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                className="py-3 px-1 hover:-text--light-green duration-300"
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/el-vinedo"
               >
                 El Viñedo
@@ -67,7 +67,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                className="py-3 px-1 hover:-text--light-green duration-300"
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/informacion"
               >
                 Información
@@ -75,7 +75,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                className="py-3 px-1 hover:-text--light-green duration-300"
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/contacto"
               >
                 Contacto
@@ -94,10 +94,14 @@ export default function Header() {
               </Link>
             </li>
             <li className="flex items-center">
-              <Link href="/"><span className="icon-[lets-icons--search-alt-light]"></span></Link>
+              <Link href="/">
+                <span className="icon-[lets-icons--search-alt-light]"></span>
+              </Link>
             </li>
             <li className="flex items-center">
-              <Link href="/iniciar-sesion"><span className="icon-[solar--user-bold-duotone] hover:-text--light-green hover:scale-110 duration-300"></span></Link>
+              <Link href="/iniciar-sesion">
+                <span className="icon-[solar--user-bold-duotone] hover:-text--light-green hover:scale-110 duration-300"></span>
+              </Link>
             </li>
             <li className="flex items-center relative">
               <Link href="/carrito">
@@ -111,7 +115,7 @@ export default function Header() {
             </li>
           </ul>
         </div>
-      </div>         
+      </div>
     </header>
   );
 }
