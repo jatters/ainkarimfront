@@ -94,11 +94,10 @@ export default function PaymentPage() {
                     <div className="font-bold">{title}</div>
                     {isReservation ? (
                       <div className="text-sm text-gray-600">
-                        <div>Fecha: {product.reservationData.date}</div>
-                        <div>Hora: {product.reservationData.hour}</div>
-                        <div>Personas: {product.reservationData.persons}</div>
+                        <div>Fecha: {product.reservationData?.date || "N/A"}</div>
+                        <div>Hora: {product.reservationData?.hour || "N/A"}</div>
+                        <div>Personas: {product.reservationData?.persons || "N/A"}</div>
                         <div>Precio por persona: {formatPrice(pricePerUnit)}</div>
-                        
                         {product.additionalService && (
                           <div>Adicional: {product.additionalService.name} - {formatPrice(product.additionalService.price)}</div>
                         )}
