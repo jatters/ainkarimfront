@@ -35,10 +35,10 @@ export default function PaymentPage() {
 
   const orderData = cart.map(product => ({
     plan: product.id,  // ID del plan
-    date: product.reservationData?.date,  // Fecha de la reserva
-    time: product.reservationData?.hour,  // Hora de la reserva
-    guests: product.reservationData?.persons,  // Número de personas
-    additionalService: product.additionalService,  // Servicio adicional si existe
+    date: product.reservationData?.date || null,  // Fecha de la reserva
+    time: product.reservationData?.hour || null,  // Hora de la reserva
+    guests: product.reservationData?.persons || null,  // Número de personas
+    additionalService: product.additionalService || null,  // Servicio adicional si existe
   }));
 
   return (
