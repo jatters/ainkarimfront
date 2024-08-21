@@ -31,7 +31,6 @@ export default function PlanCard({
             {title}
           </Link>
         </h2>
-
         <div className="flex flex-col items-center">
           <p className="font-semibold text-base">{price ? price : ""}</p>
           <p className="text-xs -text--dark-green">
@@ -41,7 +40,7 @@ export default function PlanCard({
       </div>
 
       <ul
-        className={` grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-t border-gray-300 pt-4 pb-4 border-b flex`}
+        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}
       >
         {experiences?.map((experience, index) => (
           <li

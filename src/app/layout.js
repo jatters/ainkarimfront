@@ -1,25 +1,25 @@
 import { Montserrat, Marcellus } from "next/font/google";
 import "./globals.css";
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "react-hot-toast";
 
 export const montserrat = Montserrat({
-  weight: ['100','200','300','400','500','600','700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-montserrat',
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-montserrat",
 });
- 
-export const marcellus = Marcellus({  
-  weight: ['400'],
-  style: ['normal'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-marcellus',
+
+export const marcellus = Marcellus({
+  weight: ["400"],
+  style: ["normal"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-marcellus",
 });
 
 export const metadata = {
@@ -30,14 +30,16 @@ export const metadata = {
 export default function RootLayout(props) {
   return (
     <html lang="es">
-      <body className={`${montserrat.variable} ${marcellus.variable}`}>
+      <body
+        className={`${montserrat.variable} ${marcellus.variable} antialiased`}
+      >
         <CartProvider>
-          <Header/>      
+          <Header />
           <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
-          
-          <Footer/>
+
+          <Footer />
         </CartProvider>
-        <Toaster position="bottom-left" /> 
+        <Toaster position="bottom-left" />
       </body>
     </html>
   );

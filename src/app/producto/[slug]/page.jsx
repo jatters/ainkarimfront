@@ -79,7 +79,7 @@ export default async function singleProductPage({ params }) {
               : ""}
           </div>
           <div className="text-2xl font-semibold">
-            {formatPrice(productInfo.attributes.Precio)}
+            {formatPrice(productInfo.attributes.Precio)}<sup className="ml-1 text-base">COP</sup>
           </div>
           <ReactMarkdown className="my-7">
             {productInfo.attributes.Descripcion}

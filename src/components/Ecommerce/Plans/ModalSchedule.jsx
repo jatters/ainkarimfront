@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -10,21 +10,52 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import ListHours from "./ListHours";
+import { useRouter } from "next/navigation";
 import IconButton from "@mui/material/IconButton";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+function formatHour(hourString) {
+  const [hour, minute] = hourString.split(':');
+  const hourInt = parseInt(hour, 10);
+  
+  const period = hourInt >= 12 ? 'pm' : 'am';
+  const formattedHour = hourInt % 12 || 12;
+
+  return `${formattedHour}:${minute}${period}`;
+}
+
 export default function ModalSchedule({ PlanTitle, schedules, plan }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useContext(CartContext);
+  const router = useRouter();
 
   const [reservationData, setReservationData] = useState({
     date: "",
     persons: 1,
     hour: "",
   });
+
+  const [minDate, setMinDate] = useState("");
+  const [maxDate, setMaxDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const threeMonthsFromNow = new Date();
+    threeMonthsFromNow.setMonth(today.getMonth() + 3);
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    setMinDate(formatDate(today));
+    setMaxDate(formatDate(threeMonthsFromNow));
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,12 +71,34 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
   };
 
   const handleReserve = () => {
+    const formattedHour = formatHour(reservationData.hour);
     const productToAdd = {
       ...plan,
-      reservationData,
+      reservationData: {
+        ...reservationData,
+        hour: formattedHour,
+      },
+      title: `${PlanTitle} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
+      Precio: parseInt(plan.attributes.price, 10),
+      quantity: reservationData.persons,
     };
     addToCart(productToAdd);
     handleClose();
+    router.push("/carrito");
+  };
+
+  const increasePersons = () => {
+    setReservationData((prev) => ({
+      ...prev,
+      persons: prev.persons + 1
+    }));
+  };
+
+  const decreasePersons = () => {
+    setReservationData((prev) => ({
+      ...prev,
+      persons: prev.persons > 1 ? prev.persons - 1 : prev.persons
+    }));
   };
 
   return (
@@ -76,11 +129,13 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle>{`Reservar ${PlanTitle ? PlanTitle : ""}`}</DialogTitle>
+        <DialogTitle className="!font-serif !font-bold !text-2xl uppercase !pt-10 text-center">{`Reservar ${PlanTitle ? PlanTitle : ""}`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <p className="text-center">Diligencia los datos para realizar tu reserva</p>
-            <div className="-bg--gray py-5 px-5 rounded-xl">
+            <p className="text-center font-semibold mb-5">
+              Diligencia los datos para realizar tu reserva
+            </p>
+            <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
               <div className="flex gap-x-5 gap-y-2 justify-items-center items-center flex-wrap">
                 <div className="py-2 flex-1">
                   <div className="font-bold -text--dark-green text-base flex items-center gap-1">
@@ -92,20 +147,26 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
                     name="date"
                     value={reservationData.date}
                     onChange={handleChange}
-                    className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full "
+                    min={minDate} 
+                    max={maxDate} 
+                    className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full"
                   />
                 </div>
                 <div className="py-2 flex-1">
                   <div className="font-bold -text--dark-green text-base flex items-center gap-1">
                     <span className="icon-[ion--people]"></span>Personas:
                   </div>
-                  <input
-                    type="number"
-                    name="persons"
-                    value={reservationData.persons}
-                    onChange={handleChange}
-                    className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full text-center"
-                  />
+                  <div className="flex items-center">
+                    <button className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-l focus:outline-none hover:bg-slate-300" onClick={decreasePersons}>-</button>            
+                    <input
+                      type="number"
+                      name="persons"
+                      value={reservationData.persons}
+                      readOnly
+                      className="appearance-none border border-slate-200 mt-2 w-36 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+                    />
+                    <button className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-r focus:outline-none hover:bg-slate-300" onClick={increasePersons}>+</button>            
+                  </div>
                 </div>
                 <ListHours
                   schedules={schedules}
@@ -122,7 +183,7 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
                   onClick={handleReserve}
                   className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
                 >
-                  Reservar
+                  Ir a pagar
                 </button>
               </div>
             </div>

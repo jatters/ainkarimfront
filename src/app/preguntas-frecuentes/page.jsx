@@ -13,7 +13,7 @@ export default function FaqPage() {
         background="/banner-contacto.jpg"
       />
       <div className="container mx-auto pt-16 pb-14">
-        <div className="">
+        <div className="max-w-screen-md mx-auto">
           <Accordion defaultExpanded>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

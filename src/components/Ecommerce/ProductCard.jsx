@@ -14,6 +14,15 @@ export default function ProductCard({
 }) {
   const { addToCart } = useContext(CartContext);
 
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      attributes: product.attributes,
+      Precio: parseInt(product.attributes.Precio, 10),  // Asegurándonos de enviar el precio
+      quantity: 1,  // Iniciar con una cantidad de 1
+    });
+  };
+
   return (
     <div className="flex flex-col items-center shadow-md pb-4 hover:shadow-slate-400 rounded-md">
       <Link href={slug}>
@@ -34,7 +43,7 @@ export default function ProductCard({
           </Link>
           <button
             className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300"
-            onClick={() => addToCart({ ...product, quantity: 1 })}
+            onClick={handleAddToCart}
           >
             <span className="icon-[iconoir--cart-plus]"></span> Añadir al carrito
           </button>

@@ -1,17 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormatHour from "./FormatHour";
 
-export default function ListHours({ schedules, classNameInput, classNameContainer }) {
-  const [selectedHour, setSelectedHour] = useState("");
+export default function ListHours({ schedules, classNameInput, classNameContainer, value, onChange }) {
+  const [selectedHour, setSelectedHour] = useState(value || "");
 
   const handleHourChange = (event) => {
-    setSelectedHour(event.target.value);
+    const newHour = event.target.value;
+    setSelectedHour(newHour);
+    onChange(newHour); // Propaga la hora seleccionada hacia el componente padre
   };
+
+  useEffect(() => {
+    setSelectedHour(value); // Actualizar la hora seleccionada si cambia el valor desde el padre
+  }, [value]);
 
   return (
     <div className={classNameContainer}>
-      <div className="font-bold -text--dark-green text-base flex items-center gap-1" ><span className="icon-[lucide--clock]"></span>Hora:</div>
+      <div className="font-bold -text--dark-green text-base flex items-center gap-1">
+        <span className="icon-[lucide--clock]"></span>Hora:
+      </div>
       <select
         value={selectedHour}
         onChange={handleHourChange}
@@ -26,7 +34,7 @@ export default function ListHours({ schedules, classNameInput, classNameContaine
       </select>
       {/* {selectedHour && (
         <p className="mt-2">Has seleccionado el horario: <FormatHour hourString={selectedHour}/></p>
-      )}  */}
+      )} */}
     </div>
   );
 }
