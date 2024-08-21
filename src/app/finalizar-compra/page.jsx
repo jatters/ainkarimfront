@@ -61,7 +61,7 @@ export default function PaymentPage() {
           </div>
         </div>
         <div className="col-span-1">
-          <h2 className="font-bold text-2xl mb-6">TU PEDIDO</h2>
+          <h2 className="font-bold text-2xl mb-6 -text--dark-green">TU PEDIDO</h2>
           <div className="bg-white rounded-lg py-4 px-5 border">
             {cart.map((product, index) => {
               const attributes = product?.attributes || {};
@@ -101,43 +101,44 @@ export default function PaymentPage() {
                     </div>
                   )}
                   <div className={isReservation ? "col-span-4" : "col-span-3"}>
-                    <div className="font-bold">{title}</div>
+                    <div className="font-bold -text--dark-green">{title}</div>
                     {isReservation ? (
                       <div className="text-sm text-gray-600">
                         <div>
-                          Fecha: {product.reservationData?.date || "N/A"}
+                          <span className="font-semibold -text--dark-green">Fecha:</span> {product.reservationData?.date || "N/A"}
                         </div>
                         <div>
-                          Hora: {product.reservationData?.hour || "N/A"}
+                        <span className="font-semibold -text--dark-green">Hora:</span> {product.reservationData?.hour || "N/A"}
                         </div>
                         <div>
-                          Personas: {product.reservationData?.persons || "N/A"}
+                        <span className="font-semibold -text--dark-green">Personas:</span> {product.reservationData?.persons || "N/A"}
                         </div>
                         <div>
-                          Precio por persona: {formatPrice(pricePerUnit)}
+                        <span className="font-semibold -text--dark-green">Precio por persona:</span> {formatPrice(pricePerUnit)}
                         </div>
                         {product.additionalService && (
                           <div>
-                            Adicional: {product.additionalService.name} -{" "}
+                            <span className="font-semibold -text--dark-green">Adicional:</span> {product.additionalService.name} -{" "}
                             {formatPrice(product.additionalService.price)}
                           </div>
                         )}
-                        <div>Subtotal: {formatPrice(subtotalPrice)}</div>
+                        <div><span className="font-semibold -text--dark-green">Subtotal:</span> {formatPrice(subtotalPrice)}</div>
                       </div>
                     ) : (
                       <>
-                        <div className="">{attributes.slug}</div>
-                        <div>Precio: {formatPrice(pricePerUnit)}</div>
+                        {/* <div className="">{attributes.slug}</div> */}
+                        <div className="text-sm"><span className="font-semibold -text--dark-green">Precio:</span> {formatPrice(pricePerUnit)}</div>
                       </>
                     )}
                   </div>
                   <div className="col-span-1 text-center">
                     <div>
                       <button onClick={() => removeFromCart(product)}>
-                        <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 duration-300" />
+                        <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300" />
                       </button>
                     </div>
-                    <div>{quantity} unidad(es)</div>
+                    
+                    <div>{quantity} {quantity > 1 ? "unidades" : "unidad"}</div>
                   </div>
                 </div>
               );
@@ -154,9 +155,9 @@ export default function PaymentPage() {
             </div>
             <div className="grid grid-cols-4 py-8 border-t">
               <div className="col-span-2">
-                <div className="font-bold">Total</div>
+                <div className="font-bold text-xl">Total</div>
               </div>
-              <div className="col-span-2 text-right">
+              <div className="col-span-2 text-right text-xl">
                 <div>{formatPrice(calculateTotal())}</div>
               </div>
             </div>

@@ -112,7 +112,7 @@ export default function CarritoPage() {
                                         <td className="py-2 px-5">
                                             <div className="flex items-center justify-center">
                                                 <button
-                                                    className="bg-slate-200 text-gray-700 px-2 py-2 rounded-l focus:outline-none"
+                                                    className="-bg--dark-green/70 text-white px-2 py-2 rounded-l hover:-bg--dark-green focus:outline-none"
                                                     onClick={() => decrementarCantidad(item)}
                                                 >
                                                     -
@@ -122,10 +122,10 @@ export default function CarritoPage() {
                                                     min="1"
                                                     value={quantity}
                                                     readOnly
-                                                    className="appearance-none border border-slate-200 w-12 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+                                                    className="appearance-none border -border--dark-green/70 w-12 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
                                                 />
                                                 <button
-                                                    className="bg-slate-200 text-gray-700 px-2 py-2 rounded-r focus:outline-none"
+                                                    className="-bg--dark-green/70 text-white px-2 py-2 rounded-r hover:-bg--dark-green focus:outline-none"
                                                     onClick={() => incrementarCantidad(item)}
                                                 >
                                                     +

@@ -129,16 +129,16 @@ export default function ReservationField({ schedules, plan, additionalServices }
           <div className="font-bold -text--dark-green text-base flex items-center gap-1">
             <span className="icon-[ion--people]"></span>Personas:
           </div>
-          <button className="bg-slate-200 text-gray-700 px-3 py-2 rounded-l focus:outline-none hover:bg-slate-300" onClick={decreasePersons}>-</button>            
+          <button className="-bg--dark-green/70 text-white px-3 py-2 rounded-l focus:outline-none hover:-bg--dark-green duration-200" onClick={decreasePersons}>-</button>            
           <input
             type="number"
             min={"1"}
             readOnly
             name="persons"
             value={reservationData.persons}              
-            className="appearance-none border border-slate-200 mt-2 w-36 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+            className="appearance-none border -border--dark-green/70 mt-2 w-36 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
           />
-          <button className="bg-slate-200 text-gray-700 px-3 py-2 rounded-r focus:outline-none hover:bg-slate-300" onClick={increasePersons}>+</button>            
+          <button className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200" onClick={increasePersons}>+</button>            
         </div>
         <ListHours
           schedules={schedules}

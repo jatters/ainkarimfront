@@ -16,20 +16,23 @@ export default function AdditionalServices({ services, onSelectService }) {
   };
 
   return (
-    <div className="py-10">
-      <div className="font-semibold text-lg text-center">
+    <div className="pt-5">
+      <div className="font-semibold text-lg text-center mb-3">
         ¿Vas a celebrar una ocasión especial?
       </div>
-      <p>Tiene un valor adicional que te incluye:</p>
-      <p>Una tartaleta tipo postre de la casa por 18cms.</p>
-      <p>Porciones de 4 a 6</p>
-      <p>Decoración para la ocasión</p>
+      <div className="text-center text-sm">
+        <p>Tiene un valor adicional que te incluye:</p>
+        <p>
+          Una tartaleta tipo postre de la casa por 18cms, porciones de 4 a 6 y
+          decoración para la ocasión
+        </p>
+      </div>
       <div className="flex gap-5 mx-auto justify-center my-5">
         {services.map((servicio, index) => (
           <div key={index} className="flex flex-col items-center">
             <div className="flex gap-2 items-center">
               <input
-                type="radio"
+                type="checkbox"
                 name="additionalService"
                 id={`service-${index}`}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"

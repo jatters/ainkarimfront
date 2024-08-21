@@ -118,13 +118,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
         <div className="md:col-span-1">
-          <label
-            htmlFor="firstName"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="firstName" className="sr-only">
             Primer nombre
           </label>
           <input
+            placeholder="Primer Nombre"
             type="text"
             name="firstName"
             id="firstName"
@@ -135,13 +133,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-1">
-          <label
-            htmlFor="secondName"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="secondName" className="sr-only">
             Segundo nombre
           </label>
           <input
+            placeholder="Segundo nombre"
             type="text"
             name="secondName"
             id="secondName"
@@ -151,13 +147,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-1">
-          <label
-            htmlFor="firstLastName"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="firstLastName" className="sr-only">
             Primer apellido
           </label>
           <input
+            placeholder="Primer apellido"
             type="text"
             name="firstLastName"
             id="firstLastName"
@@ -168,13 +162,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-1">
-          <label
-            htmlFor="secondLastName"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="secondLastName" className="sr-only">
             Segundo apellido
           </label>
           <input
+            placeholder="Segundo apellido"
             type="text"
             name="secondLastName"
             id="secondLastName"
@@ -184,13 +176,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-2">
-          <label
-            htmlFor="documentNumber"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="documentNumber" className="sr-only">
             Número de documento
           </label>
           <input
+            placeholder="Número de documento"
             type="text"
             name="documentNumber"
             id="documentNumber"
@@ -204,13 +194,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
         {showAddressFields && (
           <>
             <div className="md:col-span-2">
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium -text--dark-green"
-              >
+              <label htmlFor="address" className="sr-only">
                 Dirección
               </label>
               <input
+                placeholder="Dirección"
                 type="text"
                 name="address"
                 id="address"
@@ -221,13 +209,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               />
             </div>
             <div className="md:col-span-2">
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium -text--dark-green"
-              >
+              <label htmlFor="city" className="sr-only">
                 Ciudad
               </label>
               <input
+                placeholder="Ciudad"
                 type="text"
                 name="city"
                 id="city"
@@ -238,13 +224,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               />
             </div>
             <div className="md:col-span-2">
-              <label
-                htmlFor="state"
-                className="block text-sm font-medium -text--dark-green"
-              >
+              <label htmlFor="state" className="sr-only">
                 Departamento
               </label>
               <input
+                placeholder="Departamento"
                 type="text"
                 name="state"
                 id="state"
@@ -258,13 +242,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
         )}
 
         <div className="md:col-span-2">
-          <label
-            htmlFor="mobile"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="mobile" className="sr-only">
             Móvil
           </label>
           <input
+            placeholder="Móvil"
             type="text"
             name="mobile"
             id="mobile"
@@ -275,13 +257,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-2">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="email" className="sr-only">
             Correo electrónico
           </label>
           <input
+            placeholder="Correo electrónico"
             type="email"
             name="email"
             id="email"
@@ -292,13 +272,11 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           />
         </div>
         <div className="md:col-span-2">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium -text--dark-green"
-          >
+          <label htmlFor="password" className="sr-only">
             Contraseña
           </label>
           <input
+            placeholder="Contraseña"
             type="password"
             name="password"
             id="password"
