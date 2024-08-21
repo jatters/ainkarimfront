@@ -7,8 +7,10 @@ export default function PaymentPage() {
   const { cart, removeFromCart } = useContext(CartContext);
 
   const calculateSubtotal = (price, quantity, additionalService) => {
-    const additionalPrice = additionalService ? parseFloat(additionalService.price) : 0;
-    return (price * quantity) + additionalPrice;
+    const additionalPrice = additionalService
+      ? parseFloat(additionalService.price)
+      : 0;
+    return price * quantity + additionalPrice;
   };
 
   const calculateTotal = () => {
@@ -33,16 +35,15 @@ export default function PaymentPage() {
 
   const baseurl = process.env.STRAPI_URL;
 
-  const orderData = cart.map(product => ({
-    plan: product.id,  // ID del plan
-    date: product.reservationData?.date || null,  // Fecha de la reserva
-    time: product.reservationData?.hour || null,  // Hora de la reserva
-    guests: product.reservationData?.persons || null,  // Número de personas
-    additionalService: product.additionalService || null,  // Servicio adicional si existe
+  const orderData = cart.map((product) => ({
+    plan: product.id, // ID del plan
+    date: product.reservationData?.date || null, // Fecha de la reserva
+    time: product.reservationData?.hour || null, // Hora de la reserva
+    guests: product.reservationData?.persons || null, // Número de personas
+    additionalService: product.additionalService || null, // Servicio adicional si existe
   }));
 
   return (
-    
     <div className="container mx-auto pt-16 pb-14">
       {/* {console.log("carrito actual", orderData[0].plan)} */}
       <h1 className="font-bold text-center text-5xl uppercase -text--dark-green">
@@ -51,7 +52,12 @@ export default function PaymentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-9 -bg--grey-lightest py-10 px-6 rounded-lg">
         <div className="col-span-1">
           <div>
-            <CheckoutForm showAddressFields={cart.some(item => !item.reservationData)} orderData={orderData} />
+            {orderData.length > 0 && (
+              <CheckoutForm
+                showAddressFields={cart.some((item) => !item.reservationData)}
+                orderData={orderData}
+              />
+            )}
           </div>
         </div>
         <div className="col-span-1">
@@ -70,7 +76,11 @@ export default function PaymentPage() {
               const pricePerUnit = attributes.Precio || product.Precio || 0;
               const quantity = product.quantity || 1;
               const isReservation = !!product.reservationData;
-              const subtotalPrice = calculateSubtotal(pricePerUnit, quantity, product.additionalService);
+              const subtotalPrice = calculateSubtotal(
+                pricePerUnit,
+                quantity,
+                product.additionalService
+              );
 
               return (
                 <div
@@ -94,12 +104,23 @@ export default function PaymentPage() {
                     <div className="font-bold">{title}</div>
                     {isReservation ? (
                       <div className="text-sm text-gray-600">
-                        <div>Fecha: {product.reservationData?.date || "N/A"}</div>
-                        <div>Hora: {product.reservationData?.hour || "N/A"}</div>
-                        <div>Personas: {product.reservationData?.persons || "N/A"}</div>
-                        <div>Precio por persona: {formatPrice(pricePerUnit)}</div>
+                        <div>
+                          Fecha: {product.reservationData?.date || "N/A"}
+                        </div>
+                        <div>
+                          Hora: {product.reservationData?.hour || "N/A"}
+                        </div>
+                        <div>
+                          Personas: {product.reservationData?.persons || "N/A"}
+                        </div>
+                        <div>
+                          Precio por persona: {formatPrice(pricePerUnit)}
+                        </div>
                         {product.additionalService && (
-                          <div>Adicional: {product.additionalService.name} - {formatPrice(product.additionalService.price)}</div>
+                          <div>
+                            Adicional: {product.additionalService.name} -{" "}
+                            {formatPrice(product.additionalService.price)}
+                          </div>
                         )}
                         <div>Subtotal: {formatPrice(subtotalPrice)}</div>
                       </div>
@@ -139,7 +160,7 @@ export default function PaymentPage() {
                 <div>{formatPrice(calculateTotal())}</div>
               </div>
             </div>
-           {/*  <div className="py-8 border-t">
+            {/*  <div className="py-8 border-t">
               <button className="-bg--light-green text-white font-bold py-3 rounded-lg w-full hover:-bg--dark-green duration-200">
                 REALIZAR PAGO
               </button>
