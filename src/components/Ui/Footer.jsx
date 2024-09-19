@@ -79,10 +79,10 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/politica-de-privacidad"
+                href="/terminos-y-condiciones"
                 className="hover:-text--light-green"
               >
-                Política de privacidad
+                Términos y condiciones
               </Link>
             </li>
             <li>
@@ -90,7 +90,7 @@ export default function Footer() {
                 href="/politica-de-tratamiento-de-datos-personales"
                 className="hover:-text--light-green"
               >
-                Política de tratamiento de datos
+                Política de tratamiento de datos personales
               </Link>
             </li>
             <li>

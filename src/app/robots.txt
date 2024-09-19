@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /mi-cuenta
+
+Sitemap: https://ainkarim.co/sitemap.xml
