@@ -150,7 +150,7 @@ export default function ReservationField({ schedules, plan, additionalServices }
           }
         />
       </div>
-      {additionalServices.length > 0 && (
+      {additionalServices && (
         <AdditionalServices
           services={additionalServices}
           onSelectService={handleServiceSelect}

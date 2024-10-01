@@ -3,36 +3,20 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-async function fetchFaqs() {
-  const url = `${process.env.STRAPI_URL}/api/faqs`;
-  const options = {
-    headers: {
-      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-    },
-  };
-
-  try {
-    const res = await fetch(url, options);
-    const data = await res.json();
-    return data.data || [];
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { GetFaqs } from "../GetContentApi";
 
 export default async function FAQ() {
-  const faqs = await fetchFaqs();
+  const faqs = await GetFaqs();
   return (
     <div className="max-w-3xl px-5 mx-auto py-10">
-      {faqs.map((faq) => (
-        <Accordion key={faq.id}>
+      {faqs.data.map((faq) => (
+        <Accordion key={faq.documentId}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <h3 className="font-bold -text--dark-green hover:-text--light-green">
-              {faq.attributes.title}
+              {faq.title}
             </h3>
           </AccordionSummary>
-          <AccordionDetails>{faq.attributes.content}</AccordionDetails>
+          <AccordionDetails>{faq.content}</AccordionDetails>
         </Accordion>
       ))}
     </div>

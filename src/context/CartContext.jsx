@@ -62,8 +62,8 @@ export function CartProvider({ children }) {
                 ...product,
                 quantity: product.reservationData ? product.reservationData.persons : product.quantity || 1,
                 title: isReservation
-                    ? `${product.attributes.name} - ${product.reservationData.date} - ${product.reservationData.persons} personas - ${product.reservationData.hour}`
-                    : product.attributes.title,
+                    ? `${product.name} - ${product.reservationData.date} - ${product.reservationData.persons} personas - ${product.reservationData.hour}`
+                    : product.title,
             };
             return [...prevCart, newProduct];
         }

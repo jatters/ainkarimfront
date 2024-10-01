@@ -3,8 +3,7 @@ import React, { useState } from "react";
 
 function formatPrice(price) {
   if (!price) return "";
-  const formatedPrice = price.split(",")[0];
-  return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
+  return `$${Number(price).toLocaleString("es-CO")}`;
 }
 
 export default function AdditionalServices({ services, onSelectService }) {
@@ -37,13 +36,13 @@ export default function AdditionalServices({ services, onSelectService }) {
                 id={`service-${index}`}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
                 onChange={() => handleServiceChange(servicio)}
-                checked={selectedService && selectedService.id === servicio.id}
+                checked={
+                  selectedService && selectedService.id === servicio.documentId
+                }
               />
-              <span className="font-semibold">{servicio.attributes.name}</span>
+              <span className="font-semibold">{servicio.name}</span>
             </div>
-            <span className="text-sm">
-              + {formatPrice(servicio.attributes.price)}
-            </span>
+            <span className="text-sm">+ {formatPrice(servicio.price)}</span>
           </div>
         ))}
       </div>

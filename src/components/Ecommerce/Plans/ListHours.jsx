@@ -2,7 +2,13 @@
 import React, { useState, useEffect } from "react";
 import FormatHour from "./FormatHour";
 
-export default function ListHours({ schedules, classNameInput, classNameContainer, value, onChange }) {
+export default function ListHours({
+  schedules,
+  classNameInput,
+  classNameContainer,
+  value,
+  onChange,
+}) {
   const [selectedHour, setSelectedHour] = useState(value || "");
 
   const handleHourChange = (event) => {
@@ -15,9 +21,16 @@ export default function ListHours({ schedules, classNameInput, classNameContaine
     setSelectedHour(value); // Actualizar la hora seleccionada si cambia el valor desde el padre
   }, [value]);
 
+  // Ordenar los horarios por startTime
+  const sortedSchedules = schedules?.sort(
+    (a, b) =>
+      new Date(`1970-01-01T${a.startTime}`) -
+      new Date(`1970-01-01T${b.startTime}`)
+  );
+
   return (
     <div className={classNameContainer}>
-      <div className="font-bold -text--dark-green text-base flex items-center gap-1">
+      <div className="font-bold text--dark-green text-base flex items-center gap-1">
         <span className="icon-[lucide--clock]"></span>Hora:
       </div>
       <select
@@ -26,9 +39,9 @@ export default function ListHours({ schedules, classNameInput, classNameContaine
         className={`mt-2 p-2 border border-gray-300 rounded ${classNameInput}`}
       >
         <option value="">Selecciona un horario</option>
-        {schedules.map((schedule, index) => (
-          <option key={index} value={schedule.attributes.startTime}>
-            <FormatHour hourString={schedule.attributes.startTime} />
+        {sortedSchedules?.map((schedule, index) => (
+          <option key={index} value={schedule.startTime}>
+            <FormatHour hourString={schedule.startTime} />
           </option>
         ))}
       </select>

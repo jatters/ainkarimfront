@@ -1,76 +1,37 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
-
-async function fetchPlans() {
-  const url = `${process.env.STRAPI_URL}/api/planes?populate=*`;
-  const options = {
-    headers: {
-      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-    },
-  };
-
-  try {
-    const res = await fetch(url, options);
-    const data = await res.json();
-    return data.data || [];
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { GetPlansForHome } from "../GetContentApi";
 
 const formatPrice = (price) => {
   if (!price) return "";
-  const formatedPrice = price.split(",")[0];
+  const formatedPrice = String(price);
   return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
 };
 
-async function GetExperiencesIcon(experienceId) {
-  const url = `${process.env.STRAPI_URL}/api/experiencias/${experienceId}?populate=icon`;
-
-  const options = {
-    headers: {
-      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-    },
-  };
-  try {
-    const res = await fetch(url, options);
-    const data = await res.json();
-    return (
-      `${process.env.STRAPI_URL}${data.data.attributes.icon.data.attributes.url}` ||
-      ""
-    );
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export default async function PlansHome() {
-  const plansData = await fetchPlans();
+  const plansData = await GetPlansForHome();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">
-      {plansData?.slice(0, 3).map(async (plan) => {
-        const experienciesListPromises = plan.attributes.experiencias.data.map(
-          async (id) => ({
-            id: id.id,
-            name: id.attributes.name,
-            iconurl: await GetExperiencesIcon(id.id),
-          })
-        );
-
-        const experienciesList = await Promise.all(experienciesListPromises);
+      {plansData.data.slice(0, 3).map((plan) => {
+        const experienciesList = plan.experiencias.map((experiencia) => ({
+          id: experiencia.documentId,
+          name: experiencia.name,
+          alt: `Icono ${experiencia.name}`,
+          iconurl: `${process.env.STRAPI_URL}${experiencia.icon.url}`,
+        }));
 
         return (
           <PlanCard
             key={plan.id}
-            slug={`/visita/${plan.attributes.slug}`}
-            title={plan.attributes.name}
-            price={formatPrice(plan.attributes.price)}
+            slug={`/visita/${plan.slug}`}
+            title={plan.name}
+            price={formatPrice(plan.price)}
             experiences={experienciesList}
-            image={`${process.env.STRAPI_URL}${plan.attributes.image.data.attributes.url}`}
+            image={`${process.env.STRAPI_URL}${plan.image.formats.medium.url}`}
             altimg="product"
-            onlyadults={plan.attributes.onlyAdults}
-            allowchilds={plan.attributes.allowChilds}
-            Schedules={plan.attributes.horarios.data}
+            onlyadults={plan.onlyAdults}
+            allowchilds={plan.allowChilds}
+            Schedules={plan.horarios}
           />
         );
       })}

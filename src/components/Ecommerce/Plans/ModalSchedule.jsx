@@ -18,10 +18,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function formatHour(hourString) {
-  const [hour, minute] = hourString.split(':');
+  const [hour, minute] = hourString.split(":");
   const hourInt = parseInt(hour, 10);
-  
-  const period = hourInt >= 12 ? 'pm' : 'am';
+
+  const period = hourInt >= 12 ? "pm" : "am";
   const formattedHour = hourInt % 12 || 12;
 
   return `${formattedHour}:${minute}${period}`;
@@ -90,14 +90,14 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
   const increasePersons = () => {
     setReservationData((prev) => ({
       ...prev,
-      persons: prev.persons + 1
+      persons: prev.persons + 1,
     }));
   };
 
   const decreasePersons = () => {
     setReservationData((prev) => ({
       ...prev,
-      persons: prev.persons > 1 ? prev.persons - 1 : prev.persons
+      persons: prev.persons > 1 ? prev.persons - 1 : prev.persons,
     }));
   };
 
@@ -129,7 +129,9 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle className="!font-serif !font-bold !text-2xl uppercase !pt-10 text-center">{`Reservar ${PlanTitle ? PlanTitle : ""}`}</DialogTitle>
+        <DialogTitle className="!font-serif !font-bold !text-2xl uppercase !pt-10 text-center">{`Reservar ${
+          PlanTitle ? PlanTitle : ""
+        }`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <p className="text-center font-semibold mb-5">
@@ -147,8 +149,8 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
                     name="date"
                     value={reservationData.date}
                     onChange={handleChange}
-                    min={minDate} 
-                    max={maxDate} 
+                    min={minDate}
+                    max={maxDate}
                     className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full"
                   />
                 </div>
@@ -157,7 +159,12 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
                     <span className="icon-[ion--people]"></span>Personas:
                   </div>
                   <div className="flex items-center">
-                    <button className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-l focus:outline-none hover:bg-slate-300" onClick={decreasePersons}>-</button>            
+                    <button
+                      className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-l focus:outline-none hover:bg-slate-300"
+                      onClick={decreasePersons}
+                    >
+                      -
+                    </button>
                     <input
                       type="number"
                       name="persons"
@@ -165,7 +172,12 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
                       readOnly
                       className="appearance-none border border-slate-200 mt-2 w-36 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
                     />
-                    <button className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-r focus:outline-none hover:bg-slate-300" onClick={increasePersons}>+</button>            
+                    <button
+                      className="bg-slate-200 text-gray-700 px-3 mt-2 py-2 rounded-r focus:outline-none hover:bg-slate-300"
+                      onClick={increasePersons}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
                 <ListHours

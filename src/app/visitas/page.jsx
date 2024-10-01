@@ -1,7 +1,8 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { GetPlans } from "@/components/GetContentApi";
 
-const baseurl = process.env.STRAPI_URL;
+/* const baseurl = process.env.STRAPI_URL;
 const token = process.env.STRAPI_API_TOKEN;
 
 async function fetchPlans() {
@@ -20,15 +21,15 @@ async function fetchPlans() {
     console.error(error);
     return [];
   }
-}
+} */
 
 const formatPrice = (price) => {
   if (!price) return "";
-  const formatedPrice = price.split(",")[0];
+  const formatedPrice = String(price);
   return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
 };
 
-async function GetExperiencesIcon(experienceId) {
+/* async function GetExperiencesIcon(experienceId) {
   const url = `${baseurl}/api/experiencias/${experienceId}?populate=icon`;
   const options = {
     headers: {
@@ -43,14 +44,14 @@ async function GetExperiencesIcon(experienceId) {
     console.error(error);
     return "";
   }
-}
+} */
 
 export default async function VisitasPage() {
-  const plansData = await fetchPlans();
+  const plansData = await GetPlans();
 
   // Obtener iconos para cada experiencia de cada plan
-  for (const plan of plansData) {
-    const experienciesListPromises = plan.attributes.experiencias.data.map(
+  /*  for (const plan of plansData) {
+    const experienciesListPromises = plan.experiencias.data.map(
       async (experience) => ({
         id: experience.id,
         name: experience.attributes.name,
@@ -59,11 +60,11 @@ export default async function VisitasPage() {
     );
 
     plan.experienciesList = await Promise.all(experienciesListPromises);
-  }
+  } */
 
-  const sortedPlanes = plansData.sort(
+  /* const sortedPlanes = plansData.sort(
     (a, b) => a.attributes.orden - b.attributes.orden
-  );
+  ); */
 
   return (
     <>
@@ -73,21 +74,34 @@ export default async function VisitasPage() {
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center mt-10 gap-x-4 mx-5 gap-y-7">
-          {sortedPlanes.map((plan) => (
-            <PlanCard
-              key={plan.id}
-              slug={`/visita/${plan.attributes.slug}`}
-              title={plan.attributes.name}
-              price={formatPrice(plan.attributes.price)}
-              experiences={plan.experienciesList}
-              image={`${baseurl}${plan.attributes.image.data.attributes.url}`}
-              altimg="product"
-              onlyadults={plan.attributes.onlyAdults}
-              allowchilds={plan.attributes.allowChilds}
-              Schedules={plan.attributes.horarios.data}
-              plan={plan}
-            />
-          ))}
+          {plansData.data.map((plan) => {
+            const experienciesList = plan.experiencias.map((experiencia) => ({
+              id: experiencia.documentId,
+              name: experiencia.name,
+              alt: `Icono ${experiencia.name}`,
+              iconurl: `${process.env.STRAPI_URL}${experiencia.icon.url}`,
+            }));
+
+            return (
+              <PlanCard
+                key={plan.documentId}
+                slug={`/visita/${plan.slug}`}
+                title={plan.name}
+                price={formatPrice(plan.price)}
+                experiences={experienciesList}
+                image={`${process.env.STRAPI_URL}${plan.image.formats.medium.url}`}
+                altimg={
+                  plan.image.alternativeText
+                    ? plan.image.alternativeText
+                    : `Imagen ${plan.name}`
+                }
+                onlyadults={plan.onlyAdults}
+                allowchilds={plan.allowChilds}
+                Schedules={plan.horarios}
+                plan={plan}
+              />
+            );
+          })}
         </div>
       </div>
     </>
