@@ -7,6 +7,12 @@ import { GetFaqs } from "../GetContentApi";
 
 export default async function FAQ() {
   const faqs = await GetFaqs();
+  if(!faqs || !faqs.data){
+    console.error("Error fetching FAQS")
+    return(
+      <div>Error cargando preguntas frecuentes</div>
+    )
+  }
   return (
     <div className="max-w-3xl px-5 mx-auto py-10">
       {faqs.data.map((faq) => (

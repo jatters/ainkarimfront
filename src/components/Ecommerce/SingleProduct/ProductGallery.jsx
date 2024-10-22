@@ -3,9 +3,9 @@ import { register } from "swiper/element/bundle";
 import Image from "next/image";
 register();
 
-export default function ProductGallery(props) {  
+export default function ProductGallery({images}) {  
 
-  const swiperSlides = props.galleryImages.map((image, index) => (
+  const swiperSlides = images?.map((image, index) => (
     <swiper-slide key={index}>
       <img
         src={image.sourceUrl}

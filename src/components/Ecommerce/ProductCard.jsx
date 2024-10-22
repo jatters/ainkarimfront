@@ -17,10 +17,10 @@ export default function ProductCard({
 
   const handleAddToCart = () => {
     addToCart({
-      id: product.id,
-      attributes: product.attributes,
-      Precio: parseInt(product.Precio, 10), 
-      quantity: 1, 
+      id: product.documentId,
+      attributes: product,
+      Precio: parseInt(product.Precio, 10),
+      quantity: 1,
     });
   };
 

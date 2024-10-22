@@ -44,14 +44,14 @@ export default function PaymentPage() {
   }));
 
   return (
-    <div className="container mx-auto pt-16 pb-14">
+    <section className="container mx-auto py-16 px-5">
       {/* {console.log("carrito actual", orderData[0].plan)} */}
       <h1 className="font-bold text-center text-5xl uppercase -text--dark-green">
         FINALIZAR COMPRA
       </h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-9 -bg--grey-lightest py-10 px-6 rounded-lg">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 -bg--grey-lightest py-10 px-6 rounded-lg">
         <div className="col-span-1">
-          <div>
+          <div>            
             {orderData.length > 0 && (
               <CheckoutForm
                 showAddressFields={cart.some((item) => !item.reservationData)}
@@ -169,6 +169,6 @@ export default function PaymentPage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

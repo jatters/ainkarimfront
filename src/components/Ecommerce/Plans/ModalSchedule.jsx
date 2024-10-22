@@ -27,7 +27,7 @@ function formatHour(hourString) {
   return `${formattedHour}:${minute}${period}`;
 }
 
-export default function ModalSchedule({ PlanTitle, schedules, plan }) {
+export default function ModalSchedule({ title,price, schedules, plan }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useContext(CartContext);
   const router = useRouter();
@@ -78,8 +78,8 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
         ...reservationData,
         hour: formattedHour,
       },
-      title: `${PlanTitle} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
-      Precio: parseInt(plan.attributes.price, 10),
+      title: `${title} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
+      Precio: parseInt(price, 10),
       quantity: reservationData.persons,
     };
     addToCart(productToAdd);
@@ -105,7 +105,7 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
     <React.Fragment>
       <button
         onClick={handleClickOpen}
-        className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-300"
+        className="flex items-center gap-1 -bg--dark-green text-white px-6 py-3 rounded hover:-bg--light-green duration-200"
       >
         <span className="icon-[iconoir--cart-plus]"></span> Reservar y pagar
       </button>
@@ -130,7 +130,7 @@ export default function ModalSchedule({ PlanTitle, schedules, plan }) {
           <CloseIcon />
         </IconButton>
         <DialogTitle className="!font-serif !font-bold !text-2xl uppercase !pt-10 text-center">{`Reservar ${
-          PlanTitle ? PlanTitle : ""
+          title && title
         }`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">

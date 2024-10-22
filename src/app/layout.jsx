@@ -36,7 +36,6 @@ export default function RootLayout(props) {
         <CartProvider>
           <Header />
           <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
-
           <Footer />
         </CartProvider>
         <Toaster position="bottom-left" />

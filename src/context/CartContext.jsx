@@ -37,13 +37,13 @@ export function CartProvider({ children }) {
         const existingProductIndex = prevCart.findIndex((item) => {
             if (isReservation) {
                 return (
-                    item.id === product.id &&
+                    item.id === product.documentId &&
                     item.reservationData?.date === product.reservationData?.date &&
                     item.reservationData?.hour === product.reservationData?.hour &&
                     (!item.additionalService || item.additionalService.name === product.additionalService?.name)
                 );
             } else {
-                return item.id === product.id;
+                return item.id === product.documentId;
             }
         });
 
@@ -52,7 +52,7 @@ export function CartProvider({ children }) {
             if (isReservation) {
                 updatedCart[existingProductIndex].reservationData.persons += product.reservationData.persons || 1;
                 updatedCart[existingProductIndex].quantity = updatedCart[existingProductIndex].reservationData.persons;
-                updatedCart[existingProductIndex].title = `${product.attributes.name} - ${updatedCart[existingProductIndex].reservationData.date} - ${updatedCart[existingProductIndex].reservationData.persons} personas - ${updatedCart[existingProductIndex].reservationData.hour}`;
+                updatedCart[existingProductIndex].title = `${product.name} - ${updatedCart[existingProductIndex].reservationData.date} - ${updatedCart[existingProductIndex].reservationData.persons} personas - ${updatedCart[existingProductIndex].reservationData.hour}`;
             } else {
                 updatedCart[existingProductIndex].quantity += product.quantity || 1;
             }
@@ -78,7 +78,7 @@ export function CartProvider({ children }) {
     setCart((prevCart) =>
       prevCart.filter(
         (item) =>
-          item.id !== product.id ||
+          item.id !== product.documentId ||
           item.reservationData?.hour !== product.reservationData?.hour ||
           item.reservationData?.date !== product.reservationData?.date ||
           item.additionalService?.name !== product.additionalService?.name
@@ -89,7 +89,7 @@ export function CartProvider({ children }) {
   const updateQuantityInCart = (product, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === product.id && (!product.reservationData || 
+        item.id === product.documentId && (!product.reservationData || 
           (item.reservationData?.date === product.reservationData?.date && item.reservationData?.hour === product.reservationData?.hour))
           ? product.reservationData
             ? {
@@ -99,7 +99,7 @@ export function CartProvider({ children }) {
                   persons: quantity,
                 },
                 quantity,
-                title: `${item.attributes.name} - ${item.reservationData.date} - ${quantity} personas - ${item.reservationData.hour}`,
+                title: `${item.name} - ${item.reservationData.date} - ${quantity} personas - ${item.reservationData.hour}`,
               }
             : { ...item, quantity }
           : item

@@ -9,6 +9,10 @@ const formatPrice = (price) => {
 
 export default async function ProductsHome() {
   const products = await GetProductsForHome();
+  if (!products || !products.data) {
+    console.error("Error fetching products for home");
+    return <p>Error cargando productos</p>;
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">

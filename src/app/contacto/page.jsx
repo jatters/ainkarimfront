@@ -10,15 +10,15 @@ export default function contactPage() {
   return (
     <>
       <HeaderImage title="Contacto" background="/banner-contacto.jpg" />
-      <div className="container mx-auto pt-16 pb-14">
+      <section className="container mx-auto pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
-            <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+            <h2 className="font-bold text-4xl my-3 -text--dark-green">
               ESCRÍBENOS
             </h2>
             <ContactForm />
           </div>
-          <div className="flex flex-col gap-y-5">
+          <div className="flex flex-col gap-y-10 justify-center px-5">
             <div className="shadow-xl rounded-lg p-8">
               <h2 className="font-bold text-4xl mb-6 -text--dark-green">
                 EL VIÑEDO
@@ -89,18 +89,20 @@ export default function contactPage() {
             </div>
           </div>
         </div>
-        <section>
-          <h2 className="font-bold text-4xl text-center mb-6 -text--dark-green">
-            ¿CÓMO LLEGAR?
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 items-center">
-            <div className="flex flex-col gap-5">
-              <div>
-                <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
-                <span className="font-bold -text--dark-green">Ubicación:</span>{" "}
-                Km 10 Vía Villa de Leyva – Santa Sofía
-              </div>
-              <div className="flex-1 shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+      </section>
+      <section className="container mx-auto pb-16 px-5">
+        <h2 className="font-bold text-4xl text-center mb-10 -text--dark-green">
+          ¿CÓMO LLEGAR?
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="flex flex-col gap-5 flex-wrap items-center">
+            <div className="flex items-center flex-wrap justify-center gap-1 text-center">
+              <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
+              <span className="font-bold -text--dark-green">Ubicación:</span> Km
+              10 Vía Villa de Leyva – Santa Sofía
+            </div>
+            <div className="flex flex-wrap gap-5 justify-center">
+              <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
                 <a
                   className="flex flex-col items-center"
                   target="_blank"
@@ -110,7 +112,7 @@ export default function contactPage() {
                   <span>Abrir en Google Maps</span>
                 </a>
               </div>
-              <div className="flex-1 shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+              <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
                 <a
                   className="flex flex-col items-center"
                   target="_blank"
@@ -121,21 +123,17 @@ export default function contactPage() {
                 </a>
               </div>
             </div>
-            <div>
-              <iframe
-                title="Viñedo Ain Karim Map"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15881.664845343797!2d-73.59622766183533!3d5.652774901465026!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e41d09be8b159e5%3A0x4b74ccd285409a6d!2sVi%C3%B1edo%20Ain%20Karim!5e0!3m2!1ses!2sve!4v1714492685787!5m2!1ses!2sve"
-                width="100%"
-                height="450"
-                style={{ border: 0 }}
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
           </div>
-        </section>
-      </div>
+          <div className="relative">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15881.664845343797!2d-73.59622766183533!3d5.652774901465026!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e41d09be8b159e5%3A0x4b74ccd285409a6d!2sVi%C3%B1edo%20Ain%20Karim!5e0!3m2!1ses!2sve!4v1714492685787!5m2!1ses!2sve"
+              width="100%"
+              height="450"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

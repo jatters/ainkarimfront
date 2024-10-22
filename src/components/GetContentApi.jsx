@@ -1,5 +1,5 @@
-const url = process.env.STRAPI_URL;
-const token = process.env.STRAPI_API_TOKEN;
+const url = process.env.NEXT_PUBLIC_STRAPI_URL;
+const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
 const createFetchOptions = () => ({
   headers: {
@@ -71,5 +71,12 @@ export async function GetSingleProduct(slug) {
 export async function GetFaqs(slug) {
   return await fetchData(
     `faqs`
+  );
+}
+
+//Get About Us
+export async function GetAboutUs() {
+  return await fetchData(
+    `nosotro?populate[timeline][populate][image][fields]=url,alternativeText&populate[viticultura][populate][image][fields]=url,alternativeText&populate[filantropia][populate][image][fields]=url,alternativeText&populate[slider][populate][image][fields]=url,alternativeText&populate[cover][fields]=url,alternativeText`
   );
 }

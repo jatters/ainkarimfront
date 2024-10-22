@@ -13,13 +13,13 @@ export default function Footer() {
           </div>
           <ul className="flex flex-col gap-3 text-sm">
             <li>
-              <div className="flex gap-1 items-center">
+              <div className="flex flex-wrap gap-1 items-center">
                 <span className="icon-[gridicons--location] text-xl"></span>
-                <span className="font-bold">Ubicación: </span> Km 10 Vía Villa
+                <span className="font-semibold">Ubicación: </span> Km 10 Vía Villa
                 de Leyva - Santa Sofía
               </div>
-              <div className="flex gap-2 justify-center mt-3 mb-3">
-                <div className="shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+              <div className="flex flex-wrap gap-2 justify-center mt-3 mb-3">
+                <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
                   <a
                     className="flex flex-col items-center"
                     target="_blank"
@@ -29,7 +29,7 @@ export default function Footer() {
                     <span>Abrir en Google Maps</span>
                   </a>
                 </div>
-                <div className="shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+                <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
                   <a
                     className="flex flex-col items-center"
                     target="_blank"
@@ -41,25 +41,25 @@ export default function Footer() {
                 </div>
               </div>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[mdi--phone] text-xl"></span>
-              <span className="font-bold">Teléfono: </span>
-              <a className="hover:-text--light-green" href="tel:6012589933">
+              <span className="font-semibold">Teléfono: </span>
+              <a className="hover:-text--light-green duration-200" href="tel:6012589933">
                 (601) 258 9933 Opción 2
               </a>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
-              <span className="font-bold">Información: </span>
-              <a className="hover:-text--light-green" href="tel:3174319583">
+              <span className="font-semibold">Información: </span>
+              <a className="hover:-text--light-green duration-200" href="tel:3174319583">
                 317 431 9583
               </a>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[material-symbols--mail] text-xl"></span>
-              <span className="font-bold">Correo: </span>
+              <span className="font-semibold">Correo: </span>
               <a
-                className="hover:-text--light-green"
+                className="hover:-text--light-green duration-200"
                 href="mailto:ventas@marquesvl.com"
               >
                 ventas@marquesvl.com
@@ -73,22 +73,25 @@ export default function Footer() {
           </div>
           <ul className="flex flex-col space-y-2 text-sm">
             <li>
-              <a className="hover:-text--light-green" href="">
-                Nosotros
-              </a>
+              <Link
+                href="/aviso-de-privacidad"
+                className="hover:-text--light-green duration-200"
+              >
+                Aviso de Privacidad
+              </Link>
             </li>
             <li>
               <Link
-                href="/terminos-y-condiciones"
-                className="hover:-text--light-green"
+                className="hover:-text--light-green duration-200"
+                href="/el-vinedo"
               >
-                Términos y condiciones
+                Nosotros
               </Link>
             </li>
             <li>
               <Link
                 href="/politica-de-tratamiento-de-datos-personales"
-                className="hover:-text--light-green"
+                className="hover:-text--light-green duration-200"
               >
                 Política de tratamiento de datos personales
               </Link>
@@ -96,9 +99,17 @@ export default function Footer() {
             <li>
               <Link
                 href="/preguntas-frecuentes"
-                className="hover:-text--light-green"
+                className="hover:-text--light-green duration-200"
               >
                 Preguntas Frecuentes
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/terminos-y-condiciones"
+                className="hover:-text--light-green duration-200"
+              >
+                Términos y condiciones
               </Link>
             </li>
           </ul>
@@ -109,28 +120,28 @@ export default function Footer() {
           </div>
           <ul className="flex flex-col space-y-2 text-sm">
             <li>
-              <span className="font-bold">Lunes:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Lunes:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Martes:</span> Cerrado
+              <span className="font-semibold">Martes:</span> Cerrado
             </li>
             <li>
-              <span className="font-bold">Miércoles:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Miércoles:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Jueves:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Jueves:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Viernes:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Viernes:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Sábado:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Sábado:</span> 10:30 am a 5:30 pm
             </li>
             <li>
-              <span className="font-bold">Domingo y festivos:</span> 10:30 am a
+              <span className="font-semibold">Domingo y festivos:</span> 10:30 am a
               5:30 pm
             </li>
-            <li>Ultimo recorrido 3:30pm</li>
+            <li><span className="font-semibold">Ultimo recorrido:</span> 3:30pm</li>
           </ul>
         </div>
         <div>
@@ -140,13 +151,13 @@ export default function Footer() {
           <ul className="flex flex-col space-y-2 text-sm">
             <li className="flex items-center gap-1">
               <span className="icon-[gridicons--location] text-xl"></span>
-              <span className="font-bold">Dirección:</span> Av. Calle 127 #
+              <span className="font-semibold">Dirección:</span> Av. Calle 127 #
               13A-32 Ofi. 202
             </li>
             <li className="flex items-center gap-1">
               <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
-              <span className="font-bold">Teléfono:</span>
-              <a className="hover:-text--light-green" href="tel:6012589933">
+              <span className="font-semibold">Teléfono:</span>
+              <a className="hover:-text--light-green duration-200" href="tel:6012589933">
                 (601) 258 9933
               </a>
             </li>

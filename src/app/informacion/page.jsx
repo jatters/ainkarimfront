@@ -8,7 +8,7 @@ export default function Informationpage() {
   return (
     <>
       <HeaderImage title="Información" background="/banner-informacion.jpg" />
-      <section className="container mx-auto py-14 px-5">
+      <section className="container mx-auto py-16 px-5">
         <h2 className="text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>
         <div className="text-center mb-8">
           <p>
@@ -24,7 +24,7 @@ export default function Informationpage() {
         </p>
         <div className="max-w-2xl mx-auto py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div className="flex-1 max-w-64 shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+            <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
               <a
                 className="flex flex-col items-center"
                 target="_blank"
@@ -34,7 +34,7 @@ export default function Informationpage() {
                 <span>Abrir en Google Maps</span>
               </a>
             </div>
-            <div className="flex-1 max-w-64 shrink-0 grow-0 bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold hover:bg-gradient-to-l from-white from-0% to-gray-300 to-100%">
+            <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
               <a
                 className="flex flex-col items-center"
                 target="_blank"
@@ -81,7 +81,7 @@ export default function Informationpage() {
           </div>
         </div>
       </section>
-      <section className="container mx-auto py-14 px-5">
+      <section className="container mx-auto pb-16 px-5">
         <h2 className="text-3xl text-center mb-8">PREGUNTAS FRECUENTES</h2>
         <FAQ />
       </section>

@@ -9,6 +9,10 @@ const formatPrice = (price) => {
 
 export default async function PlansHome() {
   const plansData = await GetPlansForHome();
+  if (!plansData || !plansData.data) {
+    console.error("Error fetching plans for home");
+    return <p>Error cargando planes</p>;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">

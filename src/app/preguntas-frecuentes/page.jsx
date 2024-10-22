@@ -12,7 +12,7 @@ export default function FaqPage() {
         title="Preguntas Frecuentes"
         background="/banner-contacto.jpg"
       />
-      <div className="container mx-auto pt-16 pb-14">
+      <section className="container mx-auto py-16 px-5">
         <div className="max-w-screen-md mx-auto">
           <Accordion defaultExpanded>
             <AccordionSummary
@@ -279,7 +279,7 @@ export default function FaqPage() {
             </AccordionDetails>
           </Accordion>
         </div>
-      </div>
+      </section>
     </>
   );
 }

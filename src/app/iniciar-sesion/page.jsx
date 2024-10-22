@@ -3,33 +3,36 @@ import banner from "../../../public/login-image.jpg";
 
 export default function loginpage() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center items-center">
+    <section className="grid grid-cols-1 lg:grid-cols-2 justify-items-center items-center">
       <Image
         src={banner}
         alt="Banner Login"
-        className="hidden md:block h-screen object-cover"
+        className="hidden lg:block h-screen object-cover"
       />
-      <div className="py-20 md:py-10">
+      <div className="py-20 md:py-10 px-5 flex flex-col justify-center items-center">
         <h1 className="-text--dark-green text-3xl text-center font-bold">
           Iniciar Sesión
         </h1>
-        <p className="font-semibold py-5">
+        <p className="font-semibold py-5 text-center">
           Inicia sesión para acceder a tu cuenta
         </p>
-        <form action="" className="flex flex-col space-y-4 mt-5">
+        <form
+          action=""
+          className="flex flex-col space-y-4 mt-5 w-full max-w-xs"
+        >
           <input
             type="email"
             name=""
             id=""
             placeholder="Correo electronico"
-            className="border border-gray-300 px-5 min-w-72 py-3 rounded-md"
+            className="border border-gray-300 px-5 py-3 rounded-md"
           />
           <input
             type="password"
             name=""
             id=""
             placeholder="Contraseña"
-            className="border border-gray-300 px-5 min-w-72 py-3 rounded-md"
+            className="border border-gray-300 px-5 py-3 rounded-md"
           />
           <button
             type="submit"
@@ -51,6 +54,6 @@ export default function loginpage() {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

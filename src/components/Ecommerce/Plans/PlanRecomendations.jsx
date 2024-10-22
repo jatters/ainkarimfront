@@ -1,14 +1,13 @@
-import React from "react";
 import Link from "next/link";
 
-export default function PlanRecomendations({max_reservations}) {
+export default function PlanRecomendations({ max_reservations }) {
   return (
-    <div className="p-5 border -border--dark-green rounded mt-8">
+    <div className="p-5 border -border--dark-green rounded-md mt-8">
       <div className="flex items-center text-2xl font-bold gap-1 pt-2 pb-4">
         <span className="icon-[emojione--warning]"></span>
         Recomendaciones:
       </div>
-      <div className="">
+      <div className="space-y-3">
         <p>Evite contratiempos.</p>
         <ul className="list-disc list-inside">
           <li>Procure llegar 15 minutos antes de su reserva programada.</li>
@@ -37,7 +36,7 @@ export default function PlanRecomendations({max_reservations}) {
         </ul>
         <div className="mb-4">
           <Link
-            href="/politica-de-privacidad"
+            href="/terminos-y-condiciones"
             className="text-xs hover:-text--light-green duration-200"
             target="_blank"
           >

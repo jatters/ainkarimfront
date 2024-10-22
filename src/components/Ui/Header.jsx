@@ -94,11 +94,6 @@ export default function Header() {
               </Link>
             </li>
             <li className="flex items-center">
-              <Link href="/">
-                <span className="icon-[lets-icons--search-alt-light]"></span>
-              </Link>
-            </li>
-            <li className="flex items-center">
               <Link href="/iniciar-sesion">
                 <span className="icon-[solar--user-bold-duotone] hover:-text--light-green hover:scale-110 duration-300"></span>
               </Link>

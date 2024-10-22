@@ -22,13 +22,28 @@ const extractGallery = (images) => {
 export default async function SinglePlanPage({ params }) {
   try {
     const planData = await GetSinglePlan(params.slug);
-    const plan = planData?.data[0];
-
-    if (!plan) {
-      return <div className="container mx-auto py-16">Plan no encontrado</div>;
+    if (!planData || !planData.data[0]) {
+      console.error("Error fetching plan data");
+      return (
+        <div className="container mx-auto py-16 px-5">
+          Error cargando información del plan
+        </div>
+      );
     }
+    const {
+      name,
+      gallery,
+      price,
+      description,
+      max_reservations,
+      onlyAdults,
+      allowChilds,
+      horarios,
+      servicios_adicionales,
+    } = planData?.data[0];
+
     return (
-      <div className="container mx-auto py-16">
+      <section className="container mx-auto py-16 px-5">
         <div>
           <Link href="/" className="hover:-text--light-green">
             Inicio
@@ -37,53 +52,55 @@ export default async function SinglePlanPage({ params }) {
           <Link href="/visitas" className="hover:-text--light-green">
             Visitas
           </Link>{" "}
-          / <span className="capitalize">{plan.name}</span>
+          / <span className="capitalize">{name}</span>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-5 gap-y-9">
           <div className="max-w-3xl">
-            <PlanGallery galleryImages={extractGallery(plan.gallery)} />
+            <PlanGallery images={extractGallery(gallery)} />
           </div>
           <div className="px-5">
             <h1 className="-text--dark-green text-5xl font-bold mb-3 uppercase">
-              {plan.name}
+              {name}
             </h1>
-            {plan.price && (
+            {price && (
               <div className="text-2xl font-semibold">
-                {formatPrice(plan.price)}{" "}
+                {formatPrice(price)}{" "}
                 <sup className="font-normal text-base">por persona</sup>{" "}
               </div>
             )}
-            {plan.onlyAdults && (
+            {onlyAdults && (
               <div className="flex text-slate-600 gap-x-1 mt-4">
                 <span className="icon-[uil--18-plus] text-2xl"></span>
                 <span>Solo para mayores de edad.</span>
               </div>
             )}
-            {plan.allowChilds && (
+            {allowChilds && (
               <div className="flex text-slate-600 gap-x-1 mt-4">
                 <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>
                 <span>Ingreso de menores de edad permitido sin costo.</span>
               </div>
             )}
-            {plan.max_reservations && (
+            {max_reservations && (
               <div className="flex items-center gap-1 py-3 text-slate-600">
                 <span className="icon-[fluent--people-add-20-regular] text-3xl" />
-                Máximo {plan.max_reservations} personas por reserva.
+                Máximo {max_reservations} personas por reserva.
               </div>
             )}
-
-            <ReactMarkdown className="my-3">{plan.description}</ReactMarkdown>
+            {description && (
+              <ReactMarkdown className="my-3">{description}</ReactMarkdown>
+            )}
 
             <ReservationField
-              schedules={plan.horarios}
-              plan={plan}
-              additionalServices={plan.servicios_adicionales} 
+              horarios={horarios}
+              additionalServices={servicios_adicionales}
+              price={price}
+              name={name}
             />
 
-            <PlanRecomendations max_reservations={plan.max_reservations} />
+            <PlanRecomendations max_reservations={max_reservations} />
           </div>
         </div>
-      </div>
+      </section>
     );
   } catch (error) {
     console.log("Error cargando el plan", error);
