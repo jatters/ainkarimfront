@@ -3,8 +3,19 @@ import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
-    const { formType, name, email, phone, message } =
-      await request.json();
+    const {
+      formType,
+      name,
+      email,
+      phone,
+      message,
+      user_agent,
+      uuid,
+      ip_address,
+      terms,
+      marketing,
+      date
+    } = await request.json();
     const transporter = nodemailer.createTransport({
       service: "google",
       host: "smtp.gmail.com",
@@ -59,18 +70,56 @@ export async function POST(request) {
             <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
               <strong>Mensaje:</strong> ${message}
             </p>
+            <p><strong>User Agent:</strong>${user_agent}</p>
+            <p><strong>UUID:</strong>${uuid}</p>
+            <p><strong>Fecha:</strong>${date}</p>
+            <p><strong>IP:</strong>${ip_address}</p>
+            ${
+              terms ? (
+                `<p>                  
+                    Autorizo el tratamiento de mis datos para responder a mi
+                    mensaje y/o requerimiento presentado por este medio, lo que
+                    implica la autorización de contacto a través de e-mail,
+                    teléfono, o mensajería instantánea: <strong>Si Acepto</strong>
+                </p>`
+              ) : (
+                `<p>                  
+                    Autorizo el tratamiento de mis datos para responder a mi
+                    mensaje y/o requerimiento presentado por este medio, lo que
+                    implica la autorización de contacto a través de e-mail,
+                    teléfono, o mensajería instantánea: <strong>No Acepto</strong>
+                </p>`
+              )
+            }
+            ${
+              marketing ? (
+                `<p>                  
+                    Autorizo el tratamiento de mis datos de contacto para
+                    informarme de ofertas y lanzamientos exclusivos; invitarme a
+                    eventos y en general realizar actos de marketing y/o
+                    publicidad por contacto a través de e-mail, teléfono, y/o
+                    mensajería instantánea: <strong>Si acepto</strong>
+                </p>`
+              ) : (
+                `<p>                  
+                    Autorizo el tratamiento de mis datos de contacto para
+                    informarme de ofertas y lanzamientos exclusivos; invitarme a
+                    eventos y en general realizar actos de marketing y/o
+                    publicidad por contacto a través de e-mail, teléfono, y/o
+                    mensajería instantánea: <strong>No acepto</strong>
+                </p>`
+              )
+            }
+            
           </div>
-
           <!-- Footer Text -->
           <p style="font-size: 14px; line-height: 1.5; color: #6c757d; text-align: center; margin-top: 20px;">
             Este mensaje fue enviado desde la web de Ainkarim.co
-          </p>
+          </p>          
         </div>
       </div>
     `;
         break;
-
-      
 
       default:
         return NextResponse.json(
@@ -87,6 +136,30 @@ export async function POST(request) {
     };
 
     await transporter.sendMail(mailOptions);
+
+     // Registra el envío en Strapi
+     const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/correos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+      },
+      body: JSON.stringify({
+        data: {
+        formName: "contacto",
+        userName: name,
+        fromMail: email,
+        phone: phone,
+        message: message,
+        user_agent: user_agent,
+        uuid: uuid,
+        ipAddress: ip_address,
+        allowresponse: terms,
+        allowMarketing: marketing,
+        date: date, // Enviamos la fecha en ISO 8601
+      }}),
+      
+    } );
 
     return NextResponse.json(
       { name: name, message: "Tu mensaje ha sido enviado" },

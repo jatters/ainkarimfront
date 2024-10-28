@@ -1,4 +1,8 @@
 import Link from "next/link";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function PersonalInformationPage() {
   return (
@@ -8,53 +12,16 @@ export default function PersonalInformationPage() {
           POLÍTICA DE TRATAMIENTO DE LA INFORMACIÓN PERSONAL DE VIÑEDO AIN KARIM
           S.A.S.
         </h1>
-        <ol className="list-decimal list-inside">
-          <li>
-            <a href="#introduccion">INTRODUCCIÓN</a>
-          </li>
-          <li>
-            <a href="#definiciones">DEFINICIONES</a>
-          </li>
-          <li>
-            <a href="#principios">PRINCIPIOS APLICABLES A LA MATERIA</a>
-          </li>
-          <li>
-            <a href="#responsable">
-              DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO
-              RESPONSABLE DEL TRATAMIENTO DE DATOS PERSONALES
-            </a>
-          </li>
-          <li>
-            <a href="#encargado">
-              DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO ENCARGADO
-              DEL TRATAMIENTO DE DATOS PERSONALES
-            </a>
-          </li>
-          <li>
-            <a href="#politicas">
-              POLÍTICAS APLICABLES AL TRATAMIENTO DE DATOS PERSONALES
-            </a>
-          </li>
-          <li>
-            <a href="#derechos">DERECHOS DE LOS TITULARES</a>
-          </li>
-          <li>
-            <a href="#ejercicio">
-              EJERCICIO DE LOS DERECHOS POR PARTE DE LOS TITULARES
-            </a>
-          </li>
-          <li>
-            <a href="#privacidad">AVISO DE PRIVACIDAD</a>
-          </li>
-          <li>
-            <a href="#vigencia">VIGENCIA Y MODIFICACIÓN DE LA POLÍTICA</a>
-          </li>
-        </ol>
-        <ol className="py-12 list-decimal space-y-5">
-          <li id="introduccion" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              INTRODUCCIÓN
-            </span>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">1. INTRODUCCIÓN</span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               <strong>VIÑEDO AIN KARIM S.A.S.</strong> garantiza la protección
               de los derechos de Hábeas Data, privacidad, intimidad, buen
@@ -86,11 +53,17 @@ export default function PersonalInformationPage() {
               aplicable por los terceros que obren en nombre de
               <strong>VIÑEDO AIN KARIM S.A.S.</strong> como encargados.
             </p>
-          </li>
-          <li id="definiciones" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              DEFINICIONES
-            </span>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">2. DEFINICIONES</span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               De conformidad con la legislación vigente, se establecen las
               siguientes definiciones:
@@ -144,11 +117,19 @@ export default function PersonalInformationPage() {
                 almacenamiento, uso, circulación o supresión.
               </li>
             </ul>
-          </li>
-          <li id="principios" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              PRINCIPIOS APLICABLES A LA MATERIA
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              3. PRINCIPIOS APLICABLES A LA MATERIA
             </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               <strong>VIÑEDO AIN KARIM S.A.S.</strong> aplicará los siguientes
               principios, los cuales constituyen las reglas a seguir en la
@@ -227,12 +208,20 @@ export default function PersonalInformationPage() {
                 funciones que comprende el tratamiento.
               </li>
             </ul>
-          </li>
-          <li id="responsable" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              4. DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO
               RESPONSABLE DEL TRATAMIENTO DE DATOS PERSONALES
             </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               Cuando <strong>VIÑEDO AIN KARIM S.A.S.</strong> actúe como
               Responsable del tratamiento de datos personales, cumplirá con los
@@ -315,12 +304,20 @@ export default function PersonalInformationPage() {
                 que imparta la Superintendencia de Industria y Comercio.
               </li>
             </ul>
-          </li>
-          <li id="encargado" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO ENCARGADO
-              DEL TRATAMIENTO DE DATOS PERSONALES
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              5. DEBERES DE <strong>VIÑEDO AIN KARIM S.A.S.</strong> COMO
+              ENCARGADO DEL TRATAMIENTO DE DATOS PERSONALES
             </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               Cuando <strong>VIÑEDO AIN KARIM S.A.S.</strong> actúe como
               Encargado del tratamiento de datos personales, cumplirá con los
@@ -389,11 +386,19 @@ export default function PersonalInformationPage() {
                 que imparta la Superintendencia de Industria y Comercio.
               </li>
             </ul>
-          </li>
-          <li id="politicas" className="space-y-3">
-            <span className="font-semibold text-lg mb-5 block">
-              POLÍTICAS APLICABLES AL TRATAMIENTO DE DATOS PERSONALES
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              6. POLÍTICAS APLICABLES AL TRATAMIENTO DE DATOS PERSONALES
             </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <ol className=" list-decimal pl-5 list-inside space-y-5">
               <li className="space-y-3">
                 <div className="font-semibold text-lg mb-5  inline-block">
@@ -1781,11 +1786,17 @@ export default function PersonalInformationPage() {
                 </ol>
               </li>
             </ol>
-          </li>
-          <li id="derechos" className="space-y-3">
-            <div className="font-semibold text-lg mb-5  inline-block">
-              DERECHOS DE LOS TITULARES
-            </div>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">7. DERECHOS DE LOS TITULARES</span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               Atendiendo a lo dispuesto en la normatividad vigente y aplicable
               en materia de hábeas data o protección de datos personales, el
@@ -1823,11 +1834,19 @@ export default function PersonalInformationPage() {
                 personales que hayan sido objeto de tratamiento.
               </li>
             </ul>
-          </li>
-          <li id="ejercicio" className="space-y-3">
-            <div className="font-semibold text-lg mb-5 inline-block">
-              EJERCICIO DE LOS DERECHOS POR PARTE DE LOS TITULARES
-            </div>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              8. EJERCICIO DE LOS DERECHOS POR PARTE DE LOS TITULARES
+            </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               <strong>VIÑEDO AIN KARIM S.A.S.</strong> cuenta con una estructura
               administrativa que le permite atender las solicitudes, consultas y
@@ -2006,11 +2025,17 @@ export default function PersonalInformationPage() {
                 </p>
               </li>
             </ol>
-          </li>
-          <li id="privacidad" className="space-y-3">
-            <div className="font-semibold text-lg mb-5 inline-block">
-              AVISO DE PRIVACIDAD
-            </div>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">9. AVISO DE PRIVACIDAD</span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
               El aviso de privacidad es el documento físico, electrónico o en
               cualquier otro formato conocido o por conocer, que es puesto a
@@ -2030,21 +2055,52 @@ export default function PersonalInformationPage() {
               evento o reunión en la cual se recolecten datos personales para
               informar a los titulares acerca del tratamiento.{" "}
             </p>
-          </li>
-          <li id="vigencia" className="space-y-3">
-            <div className="font-semibold text-lg mb-5 inline-block">
-              VIGENCIA Y MODIFICACIÓN DE LA POLÍTICA
-            </div>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <span className="font-bold">
+              10. VIGENCIA Y MODIFICACIÓN DE LA POLÍTICA
+            </span>
+          </AccordionSummary>
+          <AccordionDetails className="space-y-3">
             <p>
-              La presente política rige a partir del 27 de febrero de 2024 y
-              deja sin efectos los reglamentos o manuales especiales que se
-              hubiesen expedido con anterioridad. En todo caso,{" "}
-              <strong>VIÑEDO AIN KARIM S.A.S.</strong> se reserva el derecho de
-              modificar la misma en cualquier momento, comunicando a los
-              interesados oportunamente su entrada en vigor.
+              <strong>VIÑEDO AIN KARIM S.A.S.</strong> garantiza la protección
+              de los derechos de Hábeas Data, privacidad, intimidad, buen
+              nombre, e imagen, y con tal propósito todas las actuaciones se
+              regirán siempre por principios de buena fe, legalidad,
+              autodeterminación informática, libertad y transparencia.{" "}
             </p>
-          </li>
-        </ol>
+            <p>
+              En ejercicio de sus funciones y actividades ocasionales o
+              permanentes, <strong>VIÑEDO AIN KARIM S.A.S.</strong> NIT.
+              860.010.706-4, sociedad domiciliada en la ciudad de Bogotá, en la
+              Calle 127 # 13a-32 Oficina 202, con teléfono (+57) 601 258 9933 y
+              correo electrónico smartinez@marquesvl.com, (quién en delante se
+              podrá denominar simplemente la organización), actúa como
+              Responsable del tratamiento de datos personales. Por esta razón y
+              para dar cumplimiento a la ley, se expide la presente Política de
+              Tratamiento de la Información Personal, la cual busca dar a
+              conocer a los interesados los principios y directrices que guían
+              el tratamiento de datos personales al interior de la organización,
+              logrando de esta forma fortalecer la confianza en los titulares
+              cuando aquellos entreguen sus datos personales a{" "}
+              <strong>VIÑEDO AIN KARIM S.A.S.</strong> para su tratamiento.
+            </p>
+            <p>
+              La presente Política será aplicable a todos los datos personales
+              registrados en cualquier base de datos que los haga susceptibles
+              de tratamiento por parte de{" "}
+              <strong>VIÑEDO AIN KARIM S.A.S.</strong>, así como también será
+              aplicable por los terceros que obren en nombre de
+              <strong>VIÑEDO AIN KARIM S.A.S.</strong> como encargados.
+            </p>
+          </AccordionDetails>
+        </Accordion>
       </section>
     </>
   );

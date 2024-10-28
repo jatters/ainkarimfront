@@ -27,7 +27,8 @@
     "react-vertical-timeline-component": "^3.6.0",
     "styled-components": "^6.1.11",
     "swiper": "^11.1.4",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "uuid": "^11.0.1"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.222",

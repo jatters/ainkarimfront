@@ -8,8 +8,11 @@ import Stack from "@mui/material/Stack";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useState } from "react";
+import style from "./PrettyCheckbox.css";
+import { NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 
-export default function ContactForm() {
+export default function ContactForm({ ipAddress, useragent }) {
   const {
     register,
     handleSubmit,
@@ -19,6 +22,10 @@ export default function ContactForm() {
 
   const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
+
+  const uuid = uuidv4();
+  const ip = ipAddress;
+  const date = new Date().toISOString(); 
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -31,9 +38,14 @@ export default function ContactForm() {
         body: JSON.stringify({
           formType: "contacto",
           ...data,
+          user_agent: useragent,
+          uuid: uuid,
+          ip_address: ip,
+          date: date,
         }),
       });
       const result = await res.json();
+
       setResponse({
         message: result.message || t("failure"),
         name: data.name,
@@ -229,19 +241,23 @@ export default function ContactForm() {
             voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
             datos personales, y en especial:
           </div>
-          <div className="mb-3 flex gap-2  items-center -text--light-gray">
-            <input
-              type="checkbox"
-              id="terms"
-              {...register("terms", {
-                required: true,
-              })}
-            />
-            <label htmlFor="terms" className="text-xs">
-              Autorizo el tratamiento de mis datos para responder a mi mensaje
-              y/o requerimiento presentado por este medio, lo que implica la
-              autorización de contacto a través de e-mail, teléfono, o
-              mensajería instantánea.
+          <div className="pretty-checkbox mb-3 flex items-center">
+            <label className="checkbox flex items-center gap-1  ">
+              <input
+                type="checkbox"
+                id="terms"
+                {...register("terms", {
+                  required: true,
+                })}
+                className="checkbox__input"
+              />
+              <span className="checkbox__label"></span>
+              <span htmlFor="terms" className="text-xs">
+                Autorizo el tratamiento de mis datos para responder a mi mensaje
+                y/o requerimiento presentado por este medio, lo que implica la
+                autorización de contacto a través de e-mail, teléfono, o
+                mensajería instantánea.
+              </span>
             </label>
           </div>
           {errors.terms && (
@@ -249,20 +265,24 @@ export default function ContactForm() {
               {"Este campo es requerido"}
             </span>
           )}
-          <div className="mb-3 flex gap-2  items-center -text--light-gray">
-            <input
-              type="checkbox"
-              id="marketing"
-              {...register("marketing", {
-                required: false,
-              })}
-            />
-            <label htmlFor="marketing" className="text-xs">
-              Autorizo el tratamiento de mis datos de contacto para informarme
-              de ofertas y lanzamientos exclusivos; invitarme a eventos y en
-              general realizar actos de marketing y/o publicidad por contacto a
-              través de e-mail, teléfono, y/o mensajería instantánea.{" "}
-              <span className="italic font-medium">(Opcional)</span>
+          <div className="pretty-checkbox mb-3 flex gap-2  items-center">
+            <label className="checkbox flex items-center gap-1">
+              <input
+                type="checkbox"
+                id="marketing"
+                {...register("marketing", {
+                  required: false,
+                })}
+                className="checkbox__input"
+              />
+              <span className="checkbox__label"></span>
+              <span htmlFor="marketing" className="text-xs">
+                Autorizo el tratamiento de mis datos de contacto para informarme
+                de ofertas y lanzamientos exclusivos; invitarme a eventos y en
+                general realizar actos de marketing y/o publicidad por contacto
+                a través de e-mail, teléfono, y/o mensajería instantánea.{" "}
+                <span className="italic font-medium">(Opcional)</span>
+              </span>
             </label>
           </div>
           {errors.marketing && (

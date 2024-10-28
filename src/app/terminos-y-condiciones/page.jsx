@@ -76,7 +76,7 @@ export default function PolicyPricacyPage() {
                 Para cualquier tipo de duda, consulta o sugerencia, puede
                 enviarnos sus comentarios por email a: ventas@marquesvl.com o
                 por vía telefónica 3174319583 también puede dirigirse
-                directamente a nuestras instalaciones en la ciudad de Bogotá́:
+                directamente a nuestras instalaciones en la ciudad de Bogotá:
                 calle 127# 13a-32 Oficina 202 edificio de desarrollo.{" "}
               </p>
             </li>
@@ -136,7 +136,7 @@ export default function PolicyPricacyPage() {
                     La anulación parcial del pedido debido a falta de
                     disponibilidad no da derecho a la anulación de la totalidad
                     del pedido. Si a raíz de esta anulación el cliente quiere
-                    devolver el producto entregado deberá́ seguir lo estipulado
+                    devolver el producto entregado deberá seguir lo estipulado
                     en el apartado Devolución.{" "}
                   </p>
                 </li>
@@ -147,7 +147,7 @@ export default function PolicyPricacyPage() {
                   <p>
                     El Cliente se compromete a pagar en el momento que realiza
                     el pedido. El ticket o comprobante de compra que corresponde
-                    al pedido, será́ enviado al correo electrónico suministrado
+                    al pedido, será enviado al correo electrónico suministrado
                     al momento de registro en la página web del{" "}
                     <strong>VIÑEDO AIN KARIM S.A.S.</strong>{" "}
                   </p>
@@ -343,7 +343,10 @@ export default function PolicyPricacyPage() {
                       el producto quiere ser devuelto explicando las razones de
                       su devolución. La información deberá enviarse vía correo
                       electrónico a{" "}
-                      <a href="mailto:ventas@marquesvl.com">
+                      <a
+                        href="mailto:ventas@marquesvl.com"
+                        className="hover:-text--light-green duration-200"
+                      >
                         ventas@marquesvl.com
                       </a>
                     </li>
@@ -396,7 +399,7 @@ export default function PolicyPricacyPage() {
                   <p>
                     La garantía no será aplicable a los vicios aparentes y los
                     defectos de conformidad del producto, para los que cualquier
-                    reclamación deberá́ ser formulada por el Cliente en cuestión
+                    reclamación deberá ser formulada por el Cliente en cuestión
                     en los 5 días siguientes a la entrega de los productos. La
                     garantía no cubrirá los productos dañados por un uso
                     inadecuado.{" "}
@@ -418,7 +421,7 @@ export default function PolicyPricacyPage() {
                     Clientes y Usuarios siempre dispondrán de estas Condiciones
                     de Uso en un sitio visible, libremente accesible para
                     cuantas consultas quiera realizar. En cualquier caso, la
-                    aceptación de las Condiciones de Uso será́ un paso previo e
+                    aceptación de las Condiciones de Uso será un paso previo e
                     indispensable a la adquisición de cualquier producto
                     disponible a través del Sitio Web.{" "}
                   </p>
@@ -438,7 +441,7 @@ export default function PolicyPricacyPage() {
                     </div>
                     <p>
                       La disponibilidad de los planes esta publicada en la
-                      página web; los días en que haya cierre programado estará́
+                      página web; los días en que haya cierre programado estará
                       oculto el calendario de reservas. Los cuales podrán ser
                       modificados sin previo aviso{" "}
                     </p>
@@ -461,7 +464,7 @@ export default function PolicyPricacyPage() {
                       La confirmación de la reserva llegará al correo
                       electrónico inscrito en la página web con algunas
                       recomendaciones para el día de la visita y un código QR el
-                      cual será́ el único medio de autorización de entrada.{" "}
+                      cual será el único medio de autorización de entrada.{" "}
                     </p>
                   </li>
                   <li className="space-y-3">
@@ -527,11 +530,11 @@ export default function PolicyPricacyPage() {
                     </div>
                     <p>
                       Si el visitante no puede cumplir con la reserva, debe dar
-                      aviso para la cancelación mínimo con tres (3)
-                      díascalendario de antelación a la reserva.{" "}
+                      aviso para la cancelación mínimo con tres (3) días
+                      calendario de antelación a la reserva.{" "}
                     </p>
                     <p>
-                      Se hará́ devolución de dinero al cliente por los siguientes
+                      Se hará devolución de dinero al cliente por los siguientes
                       motivos:{" "}
                     </p>
                     <ul className="list-disc list-inside space-y-3">
@@ -549,12 +552,15 @@ export default function PolicyPricacyPage() {
                     <ol className="list-decimal list-inside space-y-3 pl-5">
                       <li className="space-y-3">
                         El cliente debe diligenciar el formato que se encuentra
-                        en el siguiente link: FORMATO DE DEVOLUCION DE DINERO
-                      </li>
+                        en el siguiente link:{" "}
+                        <Link href={"/solicitud-reembolso"} target="_blank" className="hover:-text--light-green duration-200 font-medium">
+                          FORMATO DE DEVOLUCION DE DINERO
+                        </Link>
+                      </li>{/* 
                       <li className="space-y-3">
                         Enviar el formato diligenciado y documentos anexos si
                         asi lo requiere al correo ventas@marquesvl.com{" "}
-                      </li>
+                      </li> */}
                       <li className="space-y-3">
                         El personal encargado del viñedo procederá a realizar la
                         verificación y devolución de dinero.{" "}

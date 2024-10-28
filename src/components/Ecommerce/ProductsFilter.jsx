@@ -80,7 +80,6 @@ export default function ProductsFilter() {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      
     </div>
   );
 }

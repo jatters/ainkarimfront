@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import style from "./PrettyCheckbox.css";
 
 export default function CheckoutForm({ showAddressFields, orderData }) {
   const {
@@ -455,6 +456,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           </label>
           <input
             type="email"
+            id="email"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.email ? "border-red-500" : "border"
             }`}
@@ -476,16 +478,20 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             </span>
           )}
         </div>
-        <div className="flex gap-2 items-center col-span-2">
-          <input
-            type="checkbox"
-            id="register"
-            {...register("register", {
-              required: false,
-            })}
-          />
-          <label htmlFor="register" className="text-slate-600">
-            ¿Quieres crear una cuenta?
+        <div className="pretty-checkbox flex gap-1 items-center col-span-2">
+          <label className="checkbox flex items-center gap-0">
+            <input
+              type="checkbox"
+              id="register"
+              {...register("register", {
+                required: false,
+              })}
+              className="checkbox__input"
+            />
+            <span className="checkbox__label"></span>
+            <span htmlFor="register" className="text-slate-600">
+              ¿Quieres crear una cuenta?
+            </span>
           </label>
           {errors.register && (
             <span className="text-sm mb-5 text-red-600 pl-1 block">
@@ -493,36 +499,59 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             </span>
           )}
         </div>
-        {registerUser === true && (
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-                errors.password ? "border-red-500" : "border"
-              }`}
-              placeholder="Contraseña"
-              {...register("password", {
-                required: {
-                  value: true,
-                  message: "La contraseña es requerida",
-                },
-              })}
-            />
-            {errors.password && (
-              <span className="text-sm text-red-600 mt-2 pl-1 block">
-                {errors.password.message}
-              </span>
-            )}
-          </div>
-        )}
         {registerUser === true ? (
           <>
+            <div className="col-span-2">
+              <label htmlFor="password" className="sr-only">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                  errors.password ? "border-red-500" : "border"
+                }`}
+                placeholder="Crea tu contraseña"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es requerida",
+                  },
+                })}
+              />
+              {errors.password && (
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="confirmPassword" className="sr-only">
+                Confirmar Contraseña
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                  errors.confirmPassword ? "border-red-500" : "border"
+                }`}
+                placeholder="Confirma tu contraseña"
+                {...register("confirmPassword", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es requerida",
+                  },
+                })}
+              />
+              {errors.confirmPassword && (
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
+            </div>
             <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
               <div className="space-y-3">
-                <div className="font-semibold">
+                <div className="font-semibold mb-5 text-center">
                   AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
                 </div>
                 <p className="overflow-hidden">
@@ -579,21 +608,25 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
               datos personales, y en especial:
             </div>
-            <div className="mb-3 flex gap-2  items-center -text--light-gray col-span-2">
-              <input
-                type="checkbox"
-                id="terms"
-                {...register("terms", {
-                  required: true,
-                })}
-              />
-              <label htmlFor="terms" className="text-xs">
-                Autorizo el tratamiento de mis datos de identificación y
-                contacto para; crear una cuenta personal que permita gestionar
-                mis reservas y/o pedidos; administrar mis direcciones de envío y
-                facturación; enviar comunicaciones vía e-mail relacionadas con
-                mi cuenta, reservas y/o pedidos; y gestionar la contraseña de mi
-                cuenta y su recuperación en caso de perdida.
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+              <label className="checkbox flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  {...register("terms", {
+                    required: true,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="terms" className="text-xs">
+                  Autorizo el tratamiento de mis datos de identificación y
+                  contacto para; crear una cuenta personal que permita gestionar
+                  mis reservas y/o pedidos; administrar mis direcciones de envío
+                  y facturación; enviar comunicaciones vía e-mail relacionadas
+                  con mi cuenta, reservas y/o pedidos; y gestionar la contraseña
+                  de mi cuenta y su recuperación en caso de perdida.
+                </span>
               </label>
             </div>
             {errors.terms && (
@@ -601,20 +634,25 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 {"Este campo es requerido"}
               </span>
             )}
-            <div className="mb-3 flex gap-2  items-center -text--light-gray col-span-2">
-              <input
-                type="checkbox"
-                id="marketing"
-                {...register("marketing", {
-                  required: false,
-                })}
-              />
-              <label htmlFor="marketing" className="text-xs">
-                Autorizo el tratamiento de mis datos de contacto para informarme
-                de ofertas y lanzamientos exclusivos; invitarme a eventos y en
-                general realizar actos de marketing y/o publicidad por contacto
-                a través de e-mail, teléfono, y/o mensajería instantánea.{" "}
-                <span className="italic font-medium">(Opcional)</span>
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+              <label className="checkbox flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  id="marketing"
+                  {...register("marketing", {
+                    required: false,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="marketing" className="text-xs">
+                  Autorizo el tratamiento de mis datos de contacto para
+                  informarme de ofertas y lanzamientos exclusivos; invitarme a
+                  eventos y en general realizar actos de marketing y/o
+                  publicidad por contacto a través de e-mail, teléfono, y/o
+                  mensajería instantánea.{" "}
+                  <span className="italic font-medium">(Opcional)</span>
+                </span>
               </label>
             </div>
             {errors.marketing && (
@@ -625,10 +663,9 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           </>
         ) : (
           <>
-            {" "}
             <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
               <div className="space-y-3">
-                <div className="font-semibold">
+                <div className="font-semibold text-center mb-5">
                   AUTORIZACIÓN WEB PARA EL TRATAMIENTO DE DATOS PERSONALES
                 </div>
                 <p className="overflow-hidden">
@@ -685,21 +722,25 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
               datos personales, y en especial:
             </div>
-            <div className="mb-3 flex gap-2  items-center -text--light-gray col-span-2">
-              <input
-                type="checkbox"
-                id="terms"
-                {...register("terms", {
-                  required: true,
-                })}
-              />
-              <label htmlFor="terms" className="text-xs">
-                Autorizo el tratamiento de mis datos de identificación y
-                contancto para emitir la factura electrónica y gestionar mi
-                pedido (lo que implica contacto a través de e-mail, teléfono,
-                y/o mensajería instantánea y su transferencia con la respectiva
-                empresa transportadora) y participar de una evaluación de
-                calidad.
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+              <label className="checkbox flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  {...register("terms", {
+                    required: true,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="terms" className="text-xs">
+                  Autorizo el tratamiento de mis datos de identificación y
+                  contancto para emitir la factura electrónica y gestionar mi
+                  pedido (lo que implica contacto a través de e-mail, teléfono,
+                  y/o mensajería instantánea y su transferencia con la
+                  respectiva empresa transportadora) y participar de una
+                  evaluación de calidad.
+                </span>
               </label>
             </div>
             {errors.terms && (
@@ -707,20 +748,25 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 {"Este campo es requerido"}
               </span>
             )}
-            <div className="mb-3 flex gap-2  items-center -text--light-gray col-span-2">
-              <input
-                type="checkbox"
-                id="marketing"
-                {...register("marketing", {
-                  required: false,
-                })}
-              />
-              <label htmlFor="marketing" className="text-xs">
-                Autorizo el tratamiento de mis datos de contacto para informarme
-                de ofertas y lanzamientos exclusivos; invitarme a eventos y en
-                general realizar actos de marketing y/o publicidad por contacto
-                a través de e-mail, teléfono, y/o mensajería instantánea.{" "}
-                <span className="italic font-medium">(Opcional)</span>
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+              <label className="checkbox flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  id="marketing"
+                  {...register("marketing", {
+                    required: false,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="marketing" className="text-xs">
+                  Autorizo el tratamiento de mis datos de contacto para
+                  informarme de ofertas y lanzamientos exclusivos; invitarme a
+                  eventos y en general realizar actos de marketing y/o
+                  publicidad por contacto a través de e-mail, teléfono, y/o
+                  mensajería instantánea.{" "}
+                  <span className="italic font-medium">(Opcional)</span>
+                </span>
               </label>
             </div>
             {errors.marketing && (

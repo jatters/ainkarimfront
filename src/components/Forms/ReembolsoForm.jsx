@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useState } from "react";
+import styles from "./PrettyCheckbox.css"
 
 export default function ReembolsoForm() {
   const {
@@ -126,6 +127,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="tel"
+            id="phone"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.phone ? "border-red-500" : "border"
             }`}
@@ -221,6 +223,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="email"
+            id="email"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.email ? "border-red-500" : "border"
             }`}
@@ -248,6 +251,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="tel"
+            id="reservation"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.reservation ? "border-red-500" : "border"
             }`}
@@ -275,6 +279,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="tel"
+            id="reservationDate"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.reservationDate ? "border-red-500" : "border"
             }`}
@@ -302,6 +307,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="tel"
+            id="paymentValue"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.paymentValue ? "border-red-500" : "border"
             }`}
@@ -329,6 +335,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="tel"
+            id="planName"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.planName ? "border-red-500" : "border"
             }`}
@@ -356,6 +363,7 @@ export default function ReembolsoForm() {
           </label>
           <input
             type="text"
+            id="paymentMehotd"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
               errors.paymentMehotd ? "border-red-500" : "border"
             }`}
@@ -379,7 +387,7 @@ export default function ReembolsoForm() {
         </div>
         <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
           <div className="space-y-3">
-            <div className="font-semibold">
+            <div className="font-semibold text-center mb-5">
               AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
             </div>
             <p className="overflow-hidden">
@@ -435,23 +443,26 @@ export default function ReembolsoForm() {
           personales y el ejercicio de su derecho de hábeas data, contáctenos al
           correo electrónico
         </div>
-        <div className="mb-3 flex gap-2  items-center -text--light-gray col-span-2">
-          <input
-            type="checkbox"
-            id="terms"
-            {...register("terms", {
-              required: true,
-            })}
-          />
-          <label htmlFor="terms" className="text-xs">
-            Autorizo el tratamiento de mis datos proporcionados en este
-            formulario para tramitar la solicitud de devolución de dinero por
-            reservas, lo que implica la autorización de contacto a través de
-            e-mail, teléfono, o mensajería instantánea.
+        <div className="pretty-checkbox mb-3 flex items-center col-span-2">
+          <label className="checkbox flex items-center gap-1">
+            <input
+              type="checkbox"
+              id="terms"
+              className="checkbox__input"
+              {...register("terms", { required: true })}
+            />
+            <span className="checkbox__label"></span>
+            <span className="text-xs">
+              Autorizo el tratamiento de mis datos proporcionados en este
+              formulario para tramitar la solicitud de devolución de dinero por
+              reservas, lo que implica la autorización de contacto a través de
+              e-mail, teléfono, o mensajería instantánea.
+            </span>
           </label>
+
           {errors.terms && (
-            <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
-              {"Este campo es requerido"}
+            <span className="text-sm text-red-600 mt-1">
+              Este campo es requerido
             </span>
           )}
         </div>

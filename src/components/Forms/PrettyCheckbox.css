@@ -1,0 +1,91 @@
+/*custom css for checkbox*/
+.pretty-checkbox {
+  --size: 1rem;
+  --background: #fff;
+  font-size: var(--size);
+}
+
+.pretty-checkbox *,
+.pretty-checkbox *::after,
+.pretty-checkbox *::before {
+  box-sizing: border-box;
+}
+
+.pretty-checkbox input[type="checkbox"] {
+  visibility: hidden;
+  display: none;
+}
+
+.pretty-checkbox .checkbox__label {
+  width: var(--size);
+}
+
+.pretty-checkbox .checkbox__label:before {
+  content: " ";
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  position: absolute;
+  top: calc(var(--size) * 0.125);
+  left: 0;
+  background: var(--background);
+}
+
+.pretty-checkbox .checkbox__label:after {
+  content: " ";
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  border: calc(var(--size) * 0.14) solid #000;
+  transition: 200ms;
+  position: absolute;
+  top: calc(var(--size) * 0.125);
+  left: 0;
+  background: var(--background);
+}
+
+.pretty-checkbox .checkbox__label:after {
+  transition: 100ms ease-in-out;
+}
+
+.pretty-checkbox .checkbox__input:checked ~ .checkbox__label:after {
+  border-top-style: none;
+  border-right-style: none;
+  -ms-transform: rotate(-45deg); /* IE9 */
+  transform: rotate(-45deg);
+  height: calc(var(--size) * 0.5);
+  border-color: #00af50;
+}
+
+.pretty-checkbox .checkbox {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  /* Mobile Safari: */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.pretty-checkbox .checkbox__label:after:hover,
+.pretty-checkbox .checkbox__label:after:active {
+  border-color: #00af50;
+}
+
+.pretty-checkbox .checkbox__label {
+  margin-right: calc(var(--size) * 0.45);
+}
+
+.checkbox__input:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox__label {
+  margin-left: 0.5rem;
+}

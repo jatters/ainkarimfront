@@ -6,10 +6,10 @@ export default function ReembolsoPage() {
       <h1 className="-text--dark-green text-4xl font-bold text-center mb-12 ">
         SOLICITUD DE DEVOLUCIÓN DE DINERO
       </h1>
-      <p className="max-w-screen-md mx-auto mb-10">
+      <p className="max-w-screen-md mx-auto mb-10 text-center">
         Diligencia el siguiente formulario para realizar la solicitu del tramite
         de tu dinero, es importante tener en cuenta que el tiempo estimado para
-        realizar la devolución de tu dinero es de 15 días
+        realizar la devolución de tu dinero es de 15 días:
       </p>
       <ReembolsoForm />
     </section>

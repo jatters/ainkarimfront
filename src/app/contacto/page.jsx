@@ -5,18 +5,34 @@ import maps from "@/../public/logo-google-maps.svg";
 import banner from "@/../public/banner-contacto.jpg";
 import Link from "next/link";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { headers } from "next/headers";
 
-export default function contactPage() {
+
+export async function getIPAddress() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip;
+  } catch (error) {
+    console.error('Error obteniendo la IP:', error);
+    return 'IP desconocida';
+  }
+}
+
+export default async function contactPage() {
+  const ipAddress = await getIPAddress()
+  const userAgent = headers().get('user-agent');
   return (
     <>
       <HeaderImage title="Contacto" background="/banner-contacto.jpg" />
+      
       <section className="container mx-auto pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
             <h2 className="font-bold text-4xl my-3 -text--dark-green">
               ESCRÍBENOS
             </h2>
-            <ContactForm />
+            <ContactForm ipAddress={ipAddress} useragent={userAgent} />
           </div>
           <div className="flex flex-col gap-y-10 justify-center px-5">
             <div className="shadow-xl rounded-lg p-8">
