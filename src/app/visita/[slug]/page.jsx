@@ -90,7 +90,7 @@ export default async function SinglePlanPage({ params }) {
             {description && (
               <ReactMarkdown className="my-3">{description}</ReactMarkdown>
             )}
-            
+            {console.log(reglas_planes)}
             <ReservationField
               horarios={horarios}
               additionalServices={servicios_adicionales}

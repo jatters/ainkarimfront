@@ -56,7 +56,7 @@ export async function GetPlans() {
 //Get single plans
 export async function GetSinglePlan(slug) {
   return await fetchData(
-    `planes?filters[slug][$eq]=${slug}&populate=image&populate=gallery&populate=servicios_adicionales&populate=horarios`
+    `planes?filters[slug][$eq]=${slug}&populate=image&populate=gallery&populate=servicios_adicionales&populate=horarios&populate=reglas_planes`
   );
 }
 
