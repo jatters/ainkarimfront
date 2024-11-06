@@ -35,7 +35,7 @@ export async function GetPlansForHome() {
 //Get content of products for home
 export async function GetProductsForHome() {
   return await fetchData(
-    `productos?populate[image][fields]=url,formats&populate=categorias_de_producto`
+    `productos?filters[productInHome][$eq]=true&populate[image][fields]=url&populate[categorias_de_producto][fields]=name&pagination[limit]=4`
   );
 }
 

@@ -18,6 +18,7 @@ export default function ReservationField({
   price,
   horarios,
   additionalServices,
+  rules,
 }) {
   const { addToCart } = useContext(CartContext);
   const [reservationData, setReservationData] = useState({
@@ -28,9 +29,10 @@ export default function ReservationField({
   const [selectedService, setSelectedService] = useState(null);
   const router = useRouter();
 
-  // Calcular las fechas mínima y máxima
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
+  const [disabledDates, setDisabledDates] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const today = new Date();
@@ -44,16 +46,64 @@ export default function ReservationField({
       return `${year}-${month}-${day}`;
     };
 
+    const restrictedDates = [];
+
+    // Reglas de rango de fechas
+    rules.forEach((regla) => {
+      if (regla.isRangeData) {
+        let current = new Date(regla.rangeDateFrom);
+        const until = new Date(regla.rangeDateUntil);
+
+        while (current <= until) {
+          restrictedDates.push(formatDate(current));
+          current.setDate(current.getDate() + 1);
+        }
+      }
+    });
+
+    // Reglas de días restringidos
+    const restrictedDays = rules
+      .filter((regla) => regla.isDayRestric)
+      .map((regla) => regla.day.toLowerCase());
+
+    let currentDate = new Date(today);
+    while (currentDate <= threeMonthsFromNow) {
+      const dayOfWeek = currentDate.toLocaleString("es-CO", { weekday: "long" }).toLowerCase();
+
+      if (restrictedDays.includes(dayOfWeek)) {
+        restrictedDates.push(formatDate(currentDate));
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
     setMinDate(formatDate(today));
     setMaxDate(formatDate(threeMonthsFromNow));
-  }, []);
+    setDisabledDates(restrictedDates);
+  }, [rules]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setReservationData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "date") {
+      if (disabledDates.includes(value)) {
+        setError("La fecha seleccionada no está disponible. Por favor, elige otra fecha.");
+        setReservationData((prev) => ({
+          ...prev,
+          date: "",
+        }));
+      } else {
+        setError("");
+        setReservationData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    } else {
+      setReservationData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleServiceSelect = (service) => {
@@ -61,14 +111,17 @@ export default function ReservationField({
   };
 
   const handleReserve = () => {
+    if (reservationData.date === "") {
+      setError("Por favor selecciona una fecha disponible.");
+      return;
+    }
+
     const formattedHour = formatHour(reservationData.hour);
-    const unitPrice = parseFloat(price.replace(/[^0-9.-]+/g, ""));
-    const additionalServicePrice = selectedService
-      ? parseFloat(selectedService.price.replace(/[^0-9.-]+/g, ""))
-      : 0;
+    const unitPrice = price;
+    const additionalServicePrice = selectedService ? selectedService.price : 0;
 
     const productToAdd = {
-      ...plan,
+      name,
       reservationData: {
         ...reservationData,
         hour: formattedHour,
@@ -105,6 +158,7 @@ export default function ReservationField({
   if (horarios && horarios.length > 0) {
     return (
       <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
+        
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
@@ -119,10 +173,13 @@ export default function ReservationField({
               name="date"
               value={reservationData.date}
               onChange={handleChange}
-              min={minDate} // Fecha mínima
-              max={maxDate} // Fecha máxima
+              min={minDate}
+              max={maxDate}
               className="mt-2 p-2 border border-gray-300 rounded w-full"
             />
+            {error && (
+              <div className="text-sm text-red-600 mt-1 pl-1">{error}</div>
+            )}
           </div>
           <div className="py-2 flex-1">
             <div className="font-bold -text--dark-green text-base flex items-center gap-1">
@@ -152,7 +209,7 @@ export default function ReservationField({
             </div>
           </div>
           <ListHours
-            horarios={horarios}
+            schedules={horarios}
             classNameInput="w-full"
             classNameContainer="py-2 flex-1"
             value={reservationData.hour}
@@ -185,7 +242,7 @@ export default function ReservationField({
         </div>
         <div className="py-3">Comunícate con nosotros para reservar</div>
         <div className="flex items-center gap-1 py-3 -text--dark-green">
-          <span class="icon-[ph--envelope-simple-bold]"></span>
+          <span className="icon-[ph--envelope-simple-bold]"></span>
           <span className="font-bold">Correo:</span>
           <a
             href="mailto:ventas@marquesvl.com"

@@ -40,6 +40,7 @@ export default async function SinglePlanPage({ params }) {
       allowChilds,
       horarios,
       servicios_adicionales,
+      reglas_planes
     } = planData?.data[0];
 
     return (
@@ -89,12 +90,13 @@ export default async function SinglePlanPage({ params }) {
             {description && (
               <ReactMarkdown className="my-3">{description}</ReactMarkdown>
             )}
-
+            
             <ReservationField
               horarios={horarios}
               additionalServices={servicios_adicionales}
               price={price}
               name={name}
+              rules={reglas_planes}
             />
 
             <PlanRecomendations max_reservations={max_reservations} />
@@ -103,7 +105,7 @@ export default async function SinglePlanPage({ params }) {
       </section>
     );
   } catch (error) {
-    console.log("Error cargando el plan", error);
+    console.error("Error cargando el plan", error);
     return (
       <div className="container mx-auto py-16">
         Ha ocurrido un error cargando el plan

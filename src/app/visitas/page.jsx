@@ -23,7 +23,8 @@ export default async function VisitasPage() {
       <div className="container mx-auto py-16 px-5">
         <div className="font-medium text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
-        </div>
+        </div>        
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center mt-10 gap-x-4 gap-y-7">
           {plansData.data.map((plan) => {
             const experienciesList = plan.experiencias.map((experiencia) => ({
@@ -41,14 +42,11 @@ export default async function VisitasPage() {
                 price={formatPrice(plan.price)}
                 experiences={experienciesList}
                 image={`${process.env.STRAPI_URL}${plan.image.formats.small.url}`}
-                altimg={
-                  plan.image.alternativeText
-                    ? plan.image.alternativeText
-                    : `Imagen ${plan.name}`
-                }
+                altimg={plan.image.alternativeText || `Imagen ${plan.name}`}
                 onlyadults={plan.onlyAdults}
                 allowchilds={plan.allowChilds}
-                Schedules={plan.horarios}                
+                Schedules={plan.horarios}
+                rules={plan.reglas_planes}
               />
             );
           })}

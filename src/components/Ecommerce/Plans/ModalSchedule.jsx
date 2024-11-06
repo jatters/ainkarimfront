@@ -3,7 +3,7 @@ import * as React from "react";
 import { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
+//import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -20,14 +20,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function formatHour(hourString) {
   const [hour, minute] = hourString.split(":");
   const hourInt = parseInt(hour, 10);
-
   const period = hourInt >= 12 ? "pm" : "am";
   const formattedHour = hourInt % 12 || 12;
 
   return `${formattedHour}:${minute}${period}`;
 }
 
-export default function ModalSchedule({ title,price, schedules, plan }) {
+export default function ModalSchedule({ title,price, schedules, plan, rules }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useContext(CartContext);
   const router = useRouter();
@@ -73,19 +72,20 @@ export default function ModalSchedule({ title,price, schedules, plan }) {
   const handleReserve = () => {
     const formattedHour = formatHour(reservationData.hour);
     const productToAdd = {
-      ...plan,
+      title: `${title} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
       reservationData: {
         ...reservationData,
         hour: formattedHour,
       },
-      title: `${title} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
-      Precio: parseInt(price, 10),
+      name: title, // Solo guarda el nombre del plan.
+      Precio: parseInt(price.replace("$", "").replace(".", ""), 10),
       quantity: reservationData.persons,
     };
     addToCart(productToAdd);
     handleClose();
     router.push("/carrito");
   };
+  
 
   const increasePersons = () => {
     setReservationData((prev) => ({
@@ -179,7 +179,7 @@ export default function ModalSchedule({ title,price, schedules, plan }) {
                       +
                     </button>
                   </div>
-                </div>
+                </div>                
                 <ListHours
                   schedules={schedules}
                   classNameInput="min-w-52 w-full"

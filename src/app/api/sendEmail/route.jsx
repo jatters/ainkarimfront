@@ -39,6 +39,9 @@ export async function POST(request) {
           <div style="text-align: center; margin-bottom: 20px; background-color: #000; padding: 15px 0;">
             <img src="https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo viñedo Ain Karim" style="width: 350px; height: auto;"/>
           </div>
+          <div>
+            <p style="text-align:right; font-size:12px"><strong>ID:</strong> ${uuid}</p>
+          </div>
           <!-- Title -->
           <h2 style="color: #062f1d; font-size: 18px; margin-top: 0; text-align: center;">
             Has recibido un nuevo mensaje desde la página de contacto, con la siguiente información:
@@ -69,25 +72,21 @@ export async function POST(request) {
             </p>
             <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
               <strong>Mensaje:</strong> ${message}
-            </p>
-            <p><strong>User Agent:</strong>${user_agent}</p>
-            <p><strong>UUID:</strong>${uuid}</p>
-            <p><strong>Fecha:</strong>${date}</p>
-            <p><strong>IP:</strong>${ip_address}</p>
+            </p>            
             ${
               terms ? (
                 `<p>                  
                     Autorizo el tratamiento de mis datos para responder a mi
                     mensaje y/o requerimiento presentado por este medio, lo que
                     implica la autorización de contacto a través de e-mail,
-                    teléfono, o mensajería instantánea: <strong>Si Acepto</strong>
+                    teléfono, o mensajería instantánea: <strong style="color:#0ead0e">Si Autorizo</strong>
                 </p>`
               ) : (
                 `<p>                  
                     Autorizo el tratamiento de mis datos para responder a mi
                     mensaje y/o requerimiento presentado por este medio, lo que
                     implica la autorización de contacto a través de e-mail,
-                    teléfono, o mensajería instantánea: <strong>No Acepto</strong>
+                    teléfono, o mensajería instantánea: <strong style="color:#b70b0b">No Autorizo</strong>
                 </p>`
               )
             }
@@ -98,7 +97,7 @@ export async function POST(request) {
                     informarme de ofertas y lanzamientos exclusivos; invitarme a
                     eventos y en general realizar actos de marketing y/o
                     publicidad por contacto a través de e-mail, teléfono, y/o
-                    mensajería instantánea: <strong>Si acepto</strong>
+                    mensajería instantánea: <strong style="color:#0ead0e">Si Autorizo</strong>
                 </p>`
               ) : (
                 `<p>                  
@@ -106,7 +105,7 @@ export async function POST(request) {
                     informarme de ofertas y lanzamientos exclusivos; invitarme a
                     eventos y en general realizar actos de marketing y/o
                     publicidad por contacto a través de e-mail, teléfono, y/o
-                    mensajería instantánea: <strong>No acepto</strong>
+                    mensajería instantánea: <strong style="color:#b70b0b">No Autorizo</strong>
                 </p>`
               )
             }
@@ -146,7 +145,7 @@ export async function POST(request) {
       },
       body: JSON.stringify({
         data: {
-        formName: "contacto",
+        formName: "Contacto",
         userName: name,
         fromMail: email,
         phone: phone,

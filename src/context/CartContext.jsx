@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
@@ -8,7 +8,7 @@ export function CartProvider({ children }) {
 
   // Cargar el carrito desde localStorage al iniciar
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
+    const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       try {
         const parsedCart = JSON.parse(storedCart);
@@ -26,59 +26,70 @@ export function CartProvider({ children }) {
   useEffect(() => {
     if (cart.length > 0) {
       console.log("Guardando carrito en localStorage:", cart);
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } else {
+      localStorage.removeItem("cart");
     }
   }, [cart]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
-        const isReservation = product.reservationData !== undefined;
+      const isReservation = product.reservationData !== undefined;
 
-        const existingProductIndex = prevCart.findIndex((item) => {
-            if (isReservation) {
-                return (
-                    item.id === product.documentId &&
-                    item.reservationData?.date === product.reservationData?.date &&
-                    item.reservationData?.hour === product.reservationData?.hour &&
-                    (!item.additionalService || item.additionalService.name === product.additionalService?.name)
-                );
-            } else {
-                return item.id === product.documentId;
-            }
-        });
-
-        if (existingProductIndex >= 0) {
-            const updatedCart = [...prevCart];
-            if (isReservation) {
-                updatedCart[existingProductIndex].reservationData.persons += product.reservationData.persons || 1;
-                updatedCart[existingProductIndex].quantity = updatedCart[existingProductIndex].reservationData.persons;
-                updatedCart[existingProductIndex].title = `${product.name} - ${updatedCart[existingProductIndex].reservationData.date} - ${updatedCart[existingProductIndex].reservationData.persons} personas - ${updatedCart[existingProductIndex].reservationData.hour}`;
-            } else {
-                updatedCart[existingProductIndex].quantity += product.quantity || 1;
-            }
-            return updatedCart;
+      const existingProductIndex = prevCart.findIndex((item) => {
+        if (isReservation) {
+          return (
+            item.id === product.id &&
+            item.reservationData?.date === product.reservationData?.date &&
+            item.reservationData?.hour === product.reservationData?.hour &&
+            (!item.additionalService ||
+              item.additionalService.name === product.additionalService?.name)
+          );
         } else {
-            const newProduct = {
-                ...product,
-                quantity: product.reservationData ? product.reservationData.persons : product.quantity || 1,
-                title: isReservation
-                    ? `${product.name} - ${product.reservationData.date} - ${product.reservationData.persons} personas - ${product.reservationData.hour}`
-                    : product.title,
-            };
-            return [...prevCart, newProduct];
+          return item.id === product.id;
         }
+      });
+
+      if (existingProductIndex >= 0) {
+        const updatedCart = [...prevCart];
+        if (isReservation) {
+          updatedCart[existingProductIndex].reservationData.persons +=
+            product.reservationData.persons || 1;
+          updatedCart[existingProductIndex].quantity =
+            updatedCart[existingProductIndex].reservationData.persons;
+          updatedCart[
+            existingProductIndex
+          ].title = `${product.name} - ${updatedCart[existingProductIndex].reservationData.date} - ${updatedCart[existingProductIndex].reservationData.persons} personas - ${updatedCart[existingProductIndex].reservationData.hour}`;
+        } else {
+          updatedCart[existingProductIndex].quantity += product.quantity || 1;
+        }
+        return updatedCart;
+      } else {
+        // Cambia la lógica donde se crea el newProduct
+        const newProduct = {
+          ...product,
+          quantity: product.reservationData
+            ? product.reservationData.persons
+            : product.quantity || 1,
+          title: product.reservationData
+            ? `${product.name || "Producto sin nombre"} - ${
+                product.reservationData?.date || "Sin fecha"
+              } - ${product.reservationData?.persons || 1} personas - ${
+                product.reservationData?.hour || "Sin hora"
+              }`
+            : product.title || product.name || "Producto sin nombre",
+        };
+
+        return [...prevCart, newProduct];
+      }
     });
-};
-
-
- 
-  
+  };
 
   const removeFromCart = (product) => {
     setCart((prevCart) =>
       prevCart.filter(
         (item) =>
-          item.id !== product.documentId ||
+          item.id !== product.id ||
           item.reservationData?.hour !== product.reservationData?.hour ||
           item.reservationData?.date !== product.reservationData?.date ||
           item.additionalService?.name !== product.additionalService?.name
@@ -89,8 +100,10 @@ export function CartProvider({ children }) {
   const updateQuantityInCart = (product, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === product.documentId && (!product.reservationData || 
-          (item.reservationData?.date === product.reservationData?.date && item.reservationData?.hour === product.reservationData?.hour))
+        item.id === product.id &&
+        (!product.reservationData ||
+          (item.reservationData?.date === product.reservationData?.date &&
+            item.reservationData?.hour === product.reservationData?.hour))
           ? product.reservationData
             ? {
                 ...item,
@@ -108,7 +121,9 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantityInCart }}>      
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, updateQuantityInCart }}
+    >
       {children}
     </CartContext.Provider>
   );

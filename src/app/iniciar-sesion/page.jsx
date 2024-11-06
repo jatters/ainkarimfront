@@ -1,5 +1,6 @@
 import Image from "next/image";
 import banner from "../../../public/login-image.jpg";
+import Link from "next/link";
 
 export default function loginpage() {
   return (
@@ -44,9 +45,9 @@ export default function loginpage() {
         <div>
           <p className="text-center py-5">
             ¿No tienes una cuenta?{" "}
-            <a href="" className="-text--dark-green font-semibold">
+            <Link href="/registro" className="-text--dark-green font-semibold">
               Registrate
-            </a>
+            </Link>
           </p>
           <p className="text-center py-5">
             Olvidaste tu contraseña{" "}

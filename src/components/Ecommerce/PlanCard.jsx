@@ -37,7 +37,7 @@ export default function PlanCard({
           </Link>
         </h2>
         <div className="flex flex-col items-center">
-          <p className="font-semibold text-base">{price ? price : ""}</p>
+          <p className="font-semibold text-base">{price || ""}</p>
           <p className="text-xs -text--dark-green">
             {price ? "por persona" : "Ingresa para ver más"}
           </p>

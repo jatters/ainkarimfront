@@ -15,7 +15,7 @@ export default async function productsPage() {
     console.error("Error loading products");
     return (
       <div className="container mx-auto py-16 px-5">
-        Error cargando productos
+        Error cargando productos. Por favor intenta más tarde.
       </div>
     );
   }
@@ -28,26 +28,57 @@ export default async function productsPage() {
           <div className="grid-cols-1">
             <ProductsFilter />
           </div>
+
           <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-7">
-            {products.data?.map((product) => (
-              <ProductCard
-                key={product.documentId}
-                slug={`/producto/${product.slug}`}
-                title={product.title}
-                price={formatPrice(product.price)}
-                category={
-                  product.categorias_de_producto &&
-                  product.categorias_de_producto.name
-                }
-                image={`${process.env.STRAPI_URL}${product.image.formats.small.url}`}
-                altimg={
-                  product.image.alternativeText
-                    ? product.image.alternativeText
-                    : `Imagen ${product.title}`
-                }
-                product={product}
-              />
-            ))}
+            {products.data
+              .filter((product) => product.isActive) // Filtramos solo productos activos
+              .map((product) => {
+                // Desestructuramos los atributos necesarios para mayor claridad
+                const {
+                  id,
+                  slug,
+                  title,
+                  price,
+                  image,
+                  categorias_de_producto,
+                  isActive,
+                } = product;
+
+                const imageUrl = image?.url
+                  ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${image.url}`
+                  : null;
+                
+                const altText = image?.alternativeText
+                  ? image.alternativeText
+                  : `Imagen ${title}`;
+                
+                const categoryName =
+                  categorias_de_producto?.name || "Sin categoría";
+
+                return (
+                  <ProductCard
+                    key={id}
+                    slug={`/producto/${slug}`}
+                    title={title}
+                    price={price}
+                    category={categoryName}
+                    image={imageUrl} // Asegúrate de pasar la URL de la imagen aquí
+                    altimg={altText}
+                    product={{
+                      id,
+                      title,
+                      price,
+                      image: {
+                        url: imageUrl,
+                        alternativeText: altText,
+                      },
+                      categorias_de_producto,
+                      quantity: 1,
+                    }}
+                    isActive={isActive}
+                  />
+                );
+              })}
           </div>
         </div>
       </div>

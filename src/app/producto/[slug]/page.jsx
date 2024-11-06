@@ -35,6 +35,7 @@ function createGallery(product) {
   return galleryImages;
 }
 
+
 export default async function singleProductPage({ params }) {
   const slug = params.slug;
   try {
@@ -45,14 +46,18 @@ export default async function singleProductPage({ params }) {
         <div className="container mx-auto py-16">Producto no encontrado</div>
       );
     }
+    
     const { title, categorias_de_producto, price, description, variaciones } =
       productData?.data[0];
     const categoryName = categorias_de_producto?.name;
     const producto = productData?.data[0];
 
     const productImages = createGallery(producto);
+
+    
     return (
       <section className="container mx-auto py-16 px-5">
+
         <div>
           <Link href="/">Inicio</Link> /{" "}
           <Link href="/productos">Productos</Link> /{" "}
@@ -86,7 +91,7 @@ export default async function singleProductPage({ params }) {
                 <ProductVariations variations={variaciones} />
               </div>
             )}
-
+            
             <div className="mt-10 lg:mt-0">
               <AddToCartButton product={producto} />
             </div>
@@ -95,22 +100,43 @@ export default async function singleProductPage({ params }) {
       </section>
     );
   } catch (error) {
-    console.log("Error cargando el producto", error);
+    console.error("Error cargando el producto", error);
     return (
       <div className="container mx-auto py-16">Error cargando el producto</div>
     );
   }
 }
 
+
 function AddToCartButton({ product }) {
   const { addToCart } = useContext(CartContext);
+
+  const handleAddToCart = () => {
+    // Crear un objeto con los atributos necesarios para el carrito
+    const productToAdd = {
+      id: product.id,
+      title: product.title || "Sin título",
+      price: product.price || 0,
+      image: product.image?.url
+        ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${product.image.url}`
+        : null,
+      quantity: 1, // Inicializamos la cantidad en 1
+      reservationData: null, // No es una reserva, así que lo dejamos como null
+      additionalService: null, // No hay servicio adicional en este caso
+    };
+
+    addToCart(productToAdd);
+  };
 
   return (
     <button
       className="-bg--dark-green text-white py-3 px-10 hover:-bg--light-green duration-200 rounded-md"
-      onClick={() => addToCart(product)}
+      onClick={handleAddToCart}
     >
       Añadir a carrito
     </button>
   );
 }
+
+
+

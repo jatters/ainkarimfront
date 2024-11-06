@@ -8,7 +8,7 @@ import { GetAboutUs } from "@/components/GetContentApi";
 export default async function vinedoPage() {
   const data = await GetAboutUs();
   if (!data || !data.data) {
-    console.log("Error fetching about us info page");
+    console.error("Error fetching about us info page");
     return <div>Error cargando la información</div>;
   }
 

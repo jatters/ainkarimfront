@@ -11,14 +11,14 @@ export default async function ProductsHome() {
   const products = await GetProductsForHome();
   if (!products || !products.data) {
     console.error("Error fetching products for home");
-    return <p>Error cargando productos</p>;
+    return null;
   }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
-      {products.data?.slice(0, 4).map((product) => (
+      {products.data.map((product, index) => (
         <ProductCard
-          key={product.documentId}
+          key={product.id || index}
           slug={`/producto/${product.slug}`}
           title={product.title}
           price={formatPrice(product.price)}
@@ -26,8 +26,10 @@ export default async function ProductsHome() {
             product.categorias_de_producto &&
             product.categorias_de_producto.name
           }
-          image={`${process.env.STRAPI_URL}${product.image.formats.small.url}`}
-          altimg={product.image.alternativeText}
+          image={`${process.env.NEXT_PUBLIC_STRAPI_URL}${product.image.url}`}
+          altimg={product.image.alternativeText || "Imagen de producto"}
+          isActive={product.isActive}
+          product={product}
         />
       ))}
     </div>

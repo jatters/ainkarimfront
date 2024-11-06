@@ -44,7 +44,6 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
 
   const registerUser = watch("register");
 
-  
 
   return (
     <div className="mx-auto p-8 bg-white shadow-md rounded-lg">
@@ -216,8 +215,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             </span>
           )}
         </div>
-        {showAddressFields && (
-          <><div>
+        <div>
           <label htmlFor="address" className="sr-only">
             Dirección
           </label>
@@ -242,6 +240,38 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           {errors.address && (
             <span className="text-sm text-red-600 mt-2 pl-1 block">
               {errors.address.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <label htmlFor="city" className="sr-only">
+            Ciudad
+          </label>
+          <input
+            type="text"
+            id="city"
+            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+              errors.city ? "!border-red-500" : ""
+            }`}
+            placeholder="Ciudad"
+            {...register("city", {
+              required: {
+                value: true,
+                message: "La ciudad es requerida",
+              },
+              minLength: {
+                value: 2,
+                message: "El nombre de ciudad es muy corto",
+              },
+              pattern: {
+                value: /^[A-Za-zÀ-ÿ\s]+$/,
+                message: "El nombre no es válido",
+              },
+            })}
+          />
+          {errors.city && (
+            <span className="text-sm text-red-600 mt-2 pl-1 block">
+              {errors.city.message}
             </span>
           )}
         </div>
@@ -309,7 +339,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               {errors.mobiletwo.message}
             </span>
           )}
-        </div></>)}
+        </div>
         <div className="mb-4">
           <label htmlFor="email" className="sr-only">
             Correo

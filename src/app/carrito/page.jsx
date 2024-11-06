@@ -6,27 +6,22 @@ import { CartContext } from "@/context/CartContext";
 export default function CarritoPage() {
   const { cart, removeFromCart, updateQuantityInCart } =
     useContext(CartContext);
-  const baseurl = process.env.STRAPI_URL;
+  const baseurl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-  const calculateSubtotal = (price, quantity, additionalService) => {
-    const additionalPrice = additionalService
-      ? parseFloat(additionalService.price)
-      : 0;
-    return price * quantity + additionalPrice;
+  const calculateSubtotal = (item) => {
+    const price = parseFloat(item.Precio || item.price || 0);
+    const additionalPrice = item.additionalService ? parseFloat(item.additionalService.price) : 0;
+    const quantity = item.quantity || 1;
+  
+    // En el caso de una reserva, se multiplica el precio por la cantidad de personas
+    return item.reservationData ? (price * item.reservationData.persons + additionalPrice) : (price * quantity + additionalPrice);
   };
+  
 
   const calculateTotal = () => {
-    return cart.reduce(
-      (total, item) =>
-        total +
-        calculateSubtotal(
-          parseFloat(item.attributes?.Precio || item.Precio || 0),
-          item.quantity || 0,
-          item.additionalService
-        ),
-      0
-    );
+    return cart.reduce((total, item) => total + calculateSubtotal(item), 0);
   };
+  
 
   const incrementarCantidad = (product) => {
     updateQuantityInCart(product, product.quantity + 1);
@@ -53,7 +48,24 @@ export default function CarritoPage() {
         Carrito de Compras
       </h1>
       {cart.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+        <>
+          <p className="text-xl text-center">Tu carrito está vacío.</p>
+          <div className="flex gap-3 justify-center mt-12">
+            <Link
+              href="/productos"
+              className="-bg--dark-green text-white px-6 py-3 rounded-md hover:-bg--light-green duration-200"
+            >
+              Ir a la página de productos
+            </Link>
+            <Link
+              href="/visitas"
+              className="-bg--dark-green text-white px-6 py-3 rounded-md hover:-bg--light-green duration-200"
+            >
+              {" "}
+              Ir a la lista de planes
+            </Link>
+          </div>
+        </>
       ) : (
         <div>
           <table className="max-w-screen-2xl mx-auto bg-white ">
@@ -70,28 +82,21 @@ export default function CarritoPage() {
               {cart.map((item, index) => {
                 const isReservation = item.reservationData !== undefined;
                 const attributes = item.attributes || {};
-                const imageUrl = attributes.Imagen?.data?.attributes?.formats
-                  ?.thumbnail?.url
-                  ? `${baseurl}${attributes.Imagen.data.attributes.formats.thumbnail.url}`
+                const imageUrl = item.image?.formats?.thumbnail?.url
+                  ? `${baseurl}${item.image.formats.thumbnail.url}`
                   : null;
                 const altText =
-                  attributes.Imagen?.data?.attributes?.alternativeText ||
-                  "Imagen del producto";
+                  item.image?.alternativeText || "Imagen del producto";
                 const title = isReservation
                   ? `${item.title}`
-                  : attributes.title || "Sin título";
-                const price = parseFloat(attributes.Precio) || item.Precio || 0;
+                  : item.title || "Sin título";
+
+                // Ajustar la extracción del precio aquí:
+                const price = parseFloat(item.Precio || item.price || 0);
                 const quantity = item.quantity || 1;
 
-                // Mostrar el precio unitario correctamente
-                const unitPrice = price;
-
                 // Calcular el subtotal correctamente
-                const subtotal = calculateSubtotal(
-                  price,
-                  quantity,
-                  item.additionalService
-                );
+                const subtotal = calculateSubtotal(item);
 
                 return (
                   <tr key={index} className="text-center">
@@ -116,8 +121,7 @@ export default function CarritoPage() {
                       </span>
                     </td>
                     <td className="py-2 items-center justify-center">
-                      {formatPrice(unitPrice)}{" "}
-                      {/* Mostrando solo el precio unitario */}
+                      {formatPrice(price)}
                     </td>
                     <td className="py-2 px-5">
                       <div className="flex items-center justify-center">

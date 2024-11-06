@@ -9,11 +9,11 @@ export default function ClientReservation({ plan }) {
   return (
     <div>
       <SpecialServices
-        services={plan.attributes.servicios_adicionales.data}
+        services={plan.servicios_adicionales.data}
         onSelectService={setSelectedService}
       />
       <ReservationField
-        schedules={plan.attributes.horarios.data}
+        schedules={plan.horarios.data}
         plan={plan}
         selectedService={selectedService} 
       />

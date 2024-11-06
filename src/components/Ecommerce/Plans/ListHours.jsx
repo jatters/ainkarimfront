@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import FormatHour from "./FormatHour";
 
 export default function   ListHours({
-  horarios,
+  schedules,
   classNameInput,
   classNameContainer,
   value,
@@ -22,7 +22,7 @@ export default function   ListHours({
   }, [value]);
 
   // Ordenar los horarios por startTime
-  const horariosSorted = horarios?.sort(
+  const horariosSorted = schedules?.sort(
     (a, b) =>
       new Date(`1970-01-01T${a.startTime}`) -
       new Date(`1970-01-01T${b.startTime}`)
