@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 
 export default function HeroCoverHome() {
   const scrollToContent = () => {
@@ -9,7 +10,7 @@ export default function HeroCoverHome() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden -bg--dark-green">
       <video
         className="absolute top-0 left-0 z-0 object-cover w-full h-full"
         autoPlay
@@ -30,14 +31,14 @@ export default function HeroCoverHome() {
         <div className="flex justify-center mb-8">
           <Link
             href="/visitas"
-            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base mr-4 hover:-bg--light-green transition duration-300"
+            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base mr-4 hover:-bg--light-green transition duration-200"
           >
             <span className="icon-[uil--schedule] text-lg" />
             Ver Planes
           </Link>
           <Link
             href="/productos"
-            className="-bg--light-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base hover:-bg--dark-green transition duration-300"
+            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200"
           >
             <span className="icon-[material-symbols-light--wine-bar-rounded] text-lg" />
             Ver Productos

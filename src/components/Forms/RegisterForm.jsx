@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import style from "./PrettyCheckbox.css";
 
 export default function CheckoutForm({ showAddressFields, orderData }) {
@@ -453,6 +454,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
+                    rel="noopener"
                     className="font-medium hover:-text--light-green duration-200"
                   >
                     Política de Tratamiento de Datos Personales
@@ -461,6 +463,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
+                    rel="noopener"
                     className="underline hover:-text--light-green duration-200"
                   >
                     aquí
@@ -567,6 +570,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
+                    rel="noopener"
                     className="font-medium hover:-text--light-green duration-200"
                   >
                     Política de Tratamiento de Datos Personales
@@ -575,6 +579,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
+                    rel="noopener"
                     className="underline hover:-text--light-green duration-200"
                   >
                     aquí

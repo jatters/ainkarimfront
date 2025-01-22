@@ -115,7 +115,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
+        
       >
         <IconButton
           aria-label="close"
@@ -133,7 +133,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
           title && title
         }`}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          
             <p className="text-center font-semibold mb-5">
               Diligencia los datos para realizar tu reserva
             </p>
@@ -151,6 +151,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                     onChange={handleChange}
                     min={minDate}
                     max={maxDate}
+                    aria-label="Fecha de la reserva"
                     className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full"
                   />
                 </div>
@@ -170,6 +171,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                       name="persons"
                       value={reservationData.persons}
                       readOnly
+                      aria-label="Número de personas"
                       className="appearance-none border border-slate-200 mt-2 w-36 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
                     />
                     <button
@@ -199,7 +201,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                 </button>
               </div>
             </div>
-          </DialogContentText>
+          
         </DialogContent>
       </Dialog>
     </React.Fragment>

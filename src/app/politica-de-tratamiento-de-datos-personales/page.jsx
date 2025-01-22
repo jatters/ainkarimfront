@@ -1,4 +1,5 @@
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -6,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function PersonalInformationPage() {
   return (
-    <>
+    <main>
       <section className="max-w-screen-lg mx-auto py-16 px-5">
         <h1 className="-text--dark-green text-4xl font-bold text-center mb-12">
           POLÍTICA DE TRATAMIENTO DE LA INFORMACIÓN PERSONAL DE VIÑEDO AIN KARIM
@@ -2102,6 +2103,6 @@ export default function PersonalInformationPage() {
           </AccordionDetails>
         </Accordion>
       </section>
-    </>
+    </main>
   );
 }

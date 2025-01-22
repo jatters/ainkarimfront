@@ -6,7 +6,8 @@ import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import { useState } from "react";
 import style from "./PrettyCheckbox.css";
 import { NextRequest, NextResponse } from "next/server";
@@ -89,6 +90,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 },
               })}
               placeholder="Nombre"
+              aria-label="Ingresa tu nombre"
               className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
                 errors.name ? "border-red-500" : "-border--light-gray"
               } `}
@@ -118,6 +120,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   },
                 })}
                 placeholder="Correo"
+                aria-label="Ingresa tu correo electrónico"
                 className={`w-full px-3 py-2 border border-gray-400/40/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
                   errors.email ? "border-red-500" : "border-gray-400/40"
                 }`}
@@ -133,7 +136,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 Teléfono
               </label>
               <input
-                type="text"
+                type="text"                
                 id="phone"
                 {...register("phone", {
                   required: {
@@ -146,6 +149,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   },
                 })}
                 placeholder="Teléfono"
+                aria-label="Ingresa tu número de teléfono"
                 className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
                   errors.phone ? "border-red-500" : "border-gray-400/40"
                 }`}
@@ -174,7 +178,8 @@ export default function ContactForm({ ipAddress, useragent }) {
               })}
               rows="4"
               id="message"
-              placeholder="Mensaje"
+              placeholder="Mensaje"   
+              aria-label="Escribe tu mensaje"           
               className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none -border--dark-green ${
                 errors.message ? "border-red-500" : "border-gray-400/40"
               }`}
@@ -199,6 +204,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 <Link
                   href="/politica-de-tratamiento-de-datos-personales"
                   target="_blank"
+                  rel="noopener"
                   className="font-medium hover:-text--light-green duration-200"
                 >
                   Política de Tratamiento de Datos Personales
@@ -207,6 +213,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 <Link
                   href="/politica-de-tratamiento-de-datos-personales"
                   target="_blank"
+                  rel="noopener"
                   className="underline hover:-text--light-green duration-200"
                 >
                   aquí
@@ -250,6 +257,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   required: true,
                 })}
                 className="checkbox__input"
+                aria-label="Autorizo el tratamiento de mis datos para responder a mi mensaje y/o requerimiento presentado por este medio, lo que implica la autorización de contacto a través de e-mail, teléfono, o mensajería instantánea."
               />
               <span className="checkbox__label"></span>
               <span htmlFor="terms" className="text-xs">
@@ -274,6 +282,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   required: false,
                 })}
                 className="checkbox__input"
+                aria-label="Autorizo el tratamiento de mis datos de contacto para informarme de ofertas y lanzamientos exclusivos; invitarme a eventos y en general realizar actos de marketing y/o publicidad por contacto a través de e-mail, teléfono, y/o mensajería instantánea."
               />
               <span className="checkbox__label"></span>
               <span htmlFor="marketing" className="text-xs">
@@ -296,6 +305,7 @@ export default function ContactForm({ ipAddress, useragent }) {
               type="submit"
               className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
               disabled={submitting}
+              aria-label="Enviar mensaje"
             >
               {submitting ? "Enviando..." : "Enviar"}
             </button>

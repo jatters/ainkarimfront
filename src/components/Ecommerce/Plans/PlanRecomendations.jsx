@@ -1,4 +1,5 @@
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 
 export default function PlanRecomendations({ max_reservations }) {
   return (
@@ -17,6 +18,8 @@ export default function PlanRecomendations({ max_reservations }) {
             <a
               href="mailto:ventas@marquesvl.com"
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir correo a Ventas del Viñedo Ain Karim"
               className="hover:-text--light-green duration-200"
             >
               ventas@marquesvl.com
@@ -28,6 +31,8 @@ export default function PlanRecomendations({ max_reservations }) {
             <a
               href="mailto:ventas@marquesvl.com"
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir correo a Viñedo Ain Karim"
               className="hover:-text--light-green duration-200"
             >
               ventas@marquesvl.com.
@@ -39,6 +44,7 @@ export default function PlanRecomendations({ max_reservations }) {
             href="/terminos-y-condiciones"
             className="text-xs hover:-text--light-green duration-200"
             target="_blank"
+            rel="noopener"
           >
             Aplica términos y condiciones
           </Link>

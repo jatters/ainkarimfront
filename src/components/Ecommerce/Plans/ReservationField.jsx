@@ -1,9 +1,11 @@
 "use client";
+
 import React, { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
 import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
+import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar"; // Ajusta la ruta según tu estructura
 
 function formatHour(hourString) {
   const [hours, minutes] = hourString.split(":");
@@ -13,6 +15,7 @@ function formatHour(hourString) {
   const period = hour >= 12 ? "pm" : "am";
   return `${formattedHour}:${minutes} ${period}`;
 }
+
 export default function ReservationField({
   name,
   price,
@@ -68,7 +71,11 @@ export default function ReservationField({
 
     let currentDate = new Date(today);
     while (currentDate <= threeMonthsFromNow) {
-      const dayOfWeek = currentDate.toLocaleString("es-CO", { weekday: "long" }).toLowerCase();
+      const dayOfWeek = currentDate
+        .toLocaleString("es-CO", {
+          weekday: "long",
+        })
+        .toLowerCase();
 
       if (restrictedDays.includes(dayOfWeek)) {
         restrictedDates.push(formatDate(currentDate));
@@ -82,39 +89,24 @@ export default function ReservationField({
     setDisabledDates(restrictedDates);
   }, [rules]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "date") {
-      if (disabledDates.includes(value)) {
-        setError("La fecha seleccionada no está disponible. Por favor, elige otra fecha.");
-        setReservationData((prev) => ({
-          ...prev,
-          date: "",
-        }));
-      } else {
-        setError("");
-        setReservationData((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
-    } else {
-      setReservationData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleServiceSelect = (service) => {
     setSelectedService(service);
   };
 
   const handleReserve = () => {
-    if (reservationData.date === "") {
+    if (!reservationData.date) {
       setError("Por favor selecciona una fecha disponible.");
       return;
     }
+    // Si la fecha está en disabledDates, también es un error
+    if (disabledDates.includes(reservationData.date)) {
+      setError(
+        "La fecha seleccionada no está disponible. Por favor, elige otra fecha."
+      );
+      return;
+    }
+
+    setError(""); // Limpia error si todo bien
 
     const formattedHour = formatHour(reservationData.hour);
     const unitPrice = price;
@@ -158,29 +150,41 @@ export default function ReservationField({
   if (horarios && horarios.length > 0) {
     return (
       <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
-        
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
+
+        {/* -- Fila de inputs -- */}
         <div className="flex gap-x-5 gap-y-2 justify-items-center items-center flex-wrap">
+          {/* Fecha (con el DatePicker) */}
           <div className="py-2 flex-1">
             <div className="font-bold -text--dark-green text-base flex items-center gap-1">
               <span className="icon-[material-symbols--calendar-month-rounded]"></span>
               Fecha:
             </div>
-            <input
-              type="date"
-              name="date"
+            <CallyDatePicker
               value={reservationData.date}
-              onChange={handleChange}
+              onChange={(newDate) => {
+                setReservationData((prev) => ({ ...prev, date: newDate }));
+                if (disabledDates.includes(newDate)) {
+                  setError(
+                    "La fecha seleccionada no está disponible. Por favor, elige otra."
+                  );
+                } else {
+                  setError("");
+                }
+              }}
               min={minDate}
               max={maxDate}
-              className="mt-2 p-2 border border-gray-300 rounded w-full"
+              disallowedDates={disabledDates}
             />
+
             {error && (
               <div className="text-sm text-red-600 mt-1 pl-1">{error}</div>
             )}
           </div>
+
+          {/* Personas */}
           <div className="py-2 flex-1">
             <div className="font-bold -text--dark-green text-base flex items-center gap-1">
               <span className="icon-[ion--people]"></span>Personas:
@@ -189,25 +193,29 @@ export default function ReservationField({
               <button
                 className="-bg--dark-green/70 text-white px-3 py-2 rounded-l focus:outline-none hover:-bg--dark-green duration-200"
                 onClick={decreasePersons}
+                aria-label="Disminuir cantidad de personas"
               >
                 -
               </button>
               <input
                 type="number"
-                min={"1"}
                 readOnly
                 name="persons"
                 value={reservationData.persons}
-                className="appearance-none border -border--dark-green/70  w-full px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+                aria-label="Número de personas"
+                className="appearance-none border -border--dark-green/70 w-full px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
               />
               <button
                 className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200"
                 onClick={increasePersons}
+                aria-label="Aumentar cantidad de personas"
               >
                 +
               </button>
             </div>
           </div>
+
+          {/* Horas */}
           <ListHours
             schedules={horarios}
             classNameInput="w-full"
@@ -218,16 +226,21 @@ export default function ReservationField({
             }
           />
         </div>
+
+        {/* Servicios adicionales */}
         {additionalServices && (
           <AdditionalServices
             services={additionalServices}
             onSelectService={handleServiceSelect}
           />
         )}
+
+        {/* Botón Reservar */}
         <div className="flex justify-center">
           <button
             onClick={handleReserve}
             className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
+            aria-label="Reservar"
           >
             Reservar
           </button>
@@ -235,6 +248,7 @@ export default function ReservationField({
       </div>
     );
   } else {
+    // Si no hay horarios, muestra una sección distinta
     return (
       <div className="-bg--gray py-5 px-5 rounded-xl">
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green ">
@@ -257,6 +271,8 @@ export default function ReservationField({
           <a
             href="https://api.whatsapp.com/send?phone=573183490389"
             target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ir al Whatsapp de Viñedo Ain Karim"
             className="hover:-text--light-green"
           >
             318 349 0389

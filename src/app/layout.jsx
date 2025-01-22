@@ -5,6 +5,7 @@ import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "react-hot-toast";
+import { ViewTransitions } from "next-view-transitions";
 
 export const montserrat = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -29,17 +30,19 @@ export const metadata = {
 
 export default function RootLayout(props) {
   return (
-    <html lang="es">
-      <body
-        className={`${montserrat.variable} ${marcellus.variable} antialiased`}
-      >
-        <CartProvider>
-          <Header />
-          <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
-          <Footer />
-        </CartProvider>
-        <Toaster position="bottom-left" />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="es">
+        <body
+          className={`${montserrat.variable} ${marcellus.variable} antialiased`}
+        >
+          <CartProvider>
+            <Header />
+            <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
+            <Footer />
+          </CartProvider>
+          <Toaster position="bottom-left" />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

@@ -1,8 +1,9 @@
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 
 export default function PolicyPricacyPage() {
   return (
-    <>
+    <main>
       <section className="max-w-screen-lg mx-auto py-16 px-5">
         <h1 className="-text--dark-green text-4xl font-bold text-center mb-12 ">
           TÉRMINOS Y CONDICIONES
@@ -427,7 +428,7 @@ export default function PolicyPricacyPage() {
                   </p>
                 </li>
               </ol>
-              <li className="space-y-3">
+              <ol className="space-y-3">
                 <div className="font-semibold text-lg mb-5 inline-block">
                   RESERVA DE PLANES VIÑEDO AIN KARIM
                 </div>
@@ -553,14 +554,15 @@ export default function PolicyPricacyPage() {
                       <li className="space-y-3">
                         El cliente debe diligenciar el formato que se encuentra
                         en el siguiente link:{" "}
-                        <Link href={"/solicitud-reembolso"} target="_blank" className="hover:-text--light-green duration-200 font-medium">
+                        <Link
+                          href={"/solicitud-reembolso"}
+                          target="_blank"
+                          rel="noopener"
+                          className="hover:-text--light-green duration-200 font-medium"
+                        >
                           FORMATO DE DEVOLUCION DE DINERO
                         </Link>
-                      </li>{/* 
-                      <li className="space-y-3">
-                        Enviar el formato diligenciado y documentos anexos si
-                        asi lo requiere al correo ventas@marquesvl.com{" "}
-                      </li> */}
+                      </li>                      
                       <li className="space-y-3">
                         El personal encargado del viñedo procederá a realizar la
                         verificación y devolución de dinero.{" "}
@@ -583,11 +585,11 @@ export default function PolicyPricacyPage() {
                     </p>
                   </li>
                 </ol>
-              </li>
+              </ol>
             </li>
           </ol>
         </div>
       </section>
-    </>
+    </main>
   );
 }

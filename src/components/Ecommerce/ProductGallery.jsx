@@ -7,11 +7,13 @@ export default function ProductGalery({images}) {
  
   const swiperSlides = images.map((image, index) => (
     <swiper-slide key={index}>
-      <img
+      <Image
         src={(image.sourceUrl)+'.webp'}
         alt={image.altText}
         className="object-contain border border-gray-100 rounded-lg"
         loading="lazy"
+        width={750}
+        height={750}
       />
     </swiper-slide>
   ));

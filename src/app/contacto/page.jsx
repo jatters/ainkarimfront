@@ -2,30 +2,29 @@ import ContactForm from "@/components/Forms/ContactForm";
 import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
-import banner from "@/../public/banner-contacto.jpg";
-import Link from "next/link";
+import banner from "@/../public/banner-contacto.webp";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
 
-
 export async function getIPAddress() {
   try {
-    const res = await fetch('https://api.ipify.org?format=json');
+    const res = await fetch("https://api.ipify.org?format=json");
     const data = await res.json();
     return data.ip;
   } catch (error) {
-    console.error('Error obteniendo la IP:', error);
-    return 'IP desconocida';
+    console.error("Error obteniendo la IP:", error);
+    return "IP desconocida";
   }
 }
 
 export default async function contactPage() {
-  const ipAddress = await getIPAddress()
-  const userAgent = headers().get('user-agent');
+  const ipAddress = await getIPAddress();
+  const userAgent = headers().get("user-agent");
   return (
-    <>
-      <HeaderImage title="Contacto" background="/banner-contacto.jpg" />
-      
+    <main>
+      <HeaderImage title="Contacto" background="/banner-contacto.webp" />
       <section className="container mx-auto pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
@@ -122,6 +121,8 @@ export default async function contactPage() {
                 <a
                   className="flex flex-col items-center"
                   target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Abrir ubicación en Google Maps"
                   href="https://www.google.com/maps/place/Viñedo+Ain+Karim/@5.6539568,-73.5901023,17z/data=!3m1!4b1!4m6!3m5!1s0x8e41d09be8b159e5:0x4b74ccd285409a6d!8m2!3d5.6539515!4d-73.5875274!16s%2Fg%2F11c42mqkdf?entry=ttu"
                 >
                   <Image src={maps} alt="Logo Google Maps" width={15} />
@@ -132,6 +133,8 @@ export default async function contactPage() {
                 <a
                   className="flex flex-col items-center"
                   target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Abrir ubicación en Waze"
                   href="https://ul.waze.com/ul?preview_venue_id=187695161.1877017141.11201163&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
                 >
                   <Image src={waze} alt="Logo Waze" width={84} />
@@ -150,6 +153,6 @@ export default async function contactPage() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

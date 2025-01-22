@@ -36,6 +36,7 @@ export default function   ListHours({
       <select
         value={selectedHour}
         onChange={handleHourChange}
+        aria-label="Selecciona un horario"
         className={`mt-2 p-2 border border-gray-300 rounded ${classNameInput}`}
       >
         <option value="">Selecciona un horario</option>

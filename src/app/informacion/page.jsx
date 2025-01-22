@@ -6,8 +6,8 @@ import maps from "@/../public/logo-google-maps.svg";
 
 export default function Informationpage() {
   return (
-    <>
-      <HeaderImage title="Información" background="/banner-informacion.jpg" />
+    <main>
+      <HeaderImage title="Información" background="/banner-informacion.webp" />
       <section className="container mx-auto py-16 px-5">
         <h2 className="text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>
         <div className="text-center mb-8">
@@ -28,6 +28,8 @@ export default function Informationpage() {
               <a
                 className="flex flex-col items-center"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir ubicación en Google Maps"
                 href="https://www.google.com/maps/place/Viñedo+Ain+Karim/@5.6539568,-73.5901023,17z/data=!3m1!4b1!4m6!3m5!1s0x8e41d09be8b159e5:0x4b74ccd285409a6d!8m2!3d5.6539515!4d-73.5875274!16s%2Fg%2F11c42mqkdf?entry=ttu"
               >
                 <Image src={maps} alt="Logo Google Maps" width={15} />
@@ -38,6 +40,8 @@ export default function Informationpage() {
               <a
                 className="flex flex-col items-center"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir ubicación en Waze"
                 href="https://ul.waze.com/ul?preview_venue_id=187695161.1877017141.11201163&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
               >
                 <Image src={waze} alt="Logo Waze" width={84} />
@@ -85,6 +89,6 @@ export default function Informationpage() {
         <h2 className="text-3xl text-center mb-8">PREGUNTAS FRECUENTES</h2>
         <FAQ />
       </section>
-    </>
+    </main>
   );
 }

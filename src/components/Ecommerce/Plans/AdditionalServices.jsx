@@ -34,6 +34,7 @@ export default function AdditionalServices({ services, onSelectService }) {
                 type="checkbox"
                 name="additionalService"
                 id={`service-${index}`}
+                aria-label={`Agregar ${servicio.name} como servicio adicional`}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
                 onChange={() => handleServiceChange(servicio)}
                 checked={

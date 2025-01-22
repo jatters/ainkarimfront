@@ -14,7 +14,7 @@ export async function POST(request) {
       ip_address,
       terms,
       marketing,
-      date
+      date,
     } = await request.json();
     const transporter = nodemailer.createTransport({
       service: "google",
@@ -74,40 +74,36 @@ export async function POST(request) {
               <strong>Mensaje:</strong> ${message}
             </p>            
             ${
-              terms ? (
-                `<p>                  
+              terms
+                ? `<p>                  
                     Autorizo el tratamiento de mis datos para responder a mi
                     mensaje y/o requerimiento presentado por este medio, lo que
                     implica la autorización de contacto a través de e-mail,
                     teléfono, o mensajería instantánea: <strong style="color:#0ead0e">Si Autorizo</strong>
                 </p>`
-              ) : (
-                `<p>                  
+                : `<p>                  
                     Autorizo el tratamiento de mis datos para responder a mi
                     mensaje y/o requerimiento presentado por este medio, lo que
                     implica la autorización de contacto a través de e-mail,
                     teléfono, o mensajería instantánea: <strong style="color:#b70b0b">No Autorizo</strong>
                 </p>`
-              )
             }
             ${
-              marketing ? (
-                `<p>                  
+              marketing
+                ? `<p>                  
                     Autorizo el tratamiento de mis datos de contacto para
                     informarme de ofertas y lanzamientos exclusivos; invitarme a
                     eventos y en general realizar actos de marketing y/o
                     publicidad por contacto a través de e-mail, teléfono, y/o
                     mensajería instantánea: <strong style="color:#0ead0e">Si Autorizo</strong>
                 </p>`
-              ) : (
-                `<p>                  
+                : `<p>                  
                     Autorizo el tratamiento de mis datos de contacto para
                     informarme de ofertas y lanzamientos exclusivos; invitarme a
                     eventos y en general realizar actos de marketing y/o
                     publicidad por contacto a través de e-mail, teléfono, y/o
                     mensajería instantánea: <strong style="color:#b70b0b">No Autorizo</strong>
                 </p>`
-              )
             }
             
           </div>
@@ -136,29 +132,32 @@ export async function POST(request) {
 
     await transporter.sendMail(mailOptions);
 
-     // Registra el envío en Strapi
-     const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/correos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
-      },
-      body: JSON.stringify({
-        data: {
-        formName: "Contacto",
-        userName: name,
-        fromMail: email,
-        phone: phone,
-        message: message,
-        user_agent: user_agent,
-        uuid: uuid,
-        ipAddress: ip_address,
-        allowresponse: terms,
-        allowMarketing: marketing,
-        date: date, // Enviamos la fecha en ISO 8601
-      }}),
-      
-    } );
+    // Registra el envío en Strapi
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/correos`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+        },
+        body: JSON.stringify({
+          data: {
+            formName: "Contacto",
+            userName: name,
+            fromMail: email,
+            phone: phone,
+            message: message,
+            user_agent: user_agent,
+            uuid: uuid,
+            ipAddress: ip_address,
+            allowresponse: terms,
+            allowMarketing: marketing,
+            date: date, // Enviamos la fecha en ISO 8601
+          },
+        }),
+      }
+    );
 
     return NextResponse.json(
       { name: name, message: "Tu mensaje ha sido enviado" },

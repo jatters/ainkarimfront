@@ -7,79 +7,80 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function ProductsFilter() {
+export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
   return (
     <div>
+      {/* Secciones de filtro para vinos */}
       <Accordion defaultExpanded>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <span className="font-semibold capitalize">Vinos</span>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <span className="font-semibold capitalize -text--dark-green">Cepa</span>
         </AccordionSummary>
         <AccordionDetails>
           <FormGroup>
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label="Tintos"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{
-                    color: "#000000",
-                    "&.Mui-checked": {
-                      color: "#ff0000",
-                    },
-                  }}
+            {["Cabernet", "Chardonnay", "Merlot", "Pinot Noir", "Syrah"].map(
+              (cepa) => (
+                <FormControlLabel
+                  key={cepa}
+                  control={
+                    <Checkbox
+                      sx={{ "&.Mui-checked": { color: "#00af50" } }}
+                      onChange={(e) => onCepasChange(cepa, e.target.checked)}
+                    />
+                  }
+                  label={cepa}
                 />
-              }
-              label="Blancos"
-            />
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label="Rosados"
-            />
+              )
+            )}
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion defaultExpanded>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <span className="font-semibold capitalize">Categorias</span>
+      {/* <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <span className="font-semibold capitalize">Color</span>
         </AccordionSummary>
         <AccordionDetails>
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Vinos" />
-            <FormControlLabel control={<Checkbox />} label="Acompañamientos" />
-            <FormControlLabel control={<Checkbox />} label="Sourvenirs" />
+            {["Blanco", "Rosado", "Tinto"].map(color => (
+              <FormControlLabel
+                key={color}
+                control={
+                  <Checkbox 
+                    color="default" 
+                    onChange={(e) => onCepasChange(color, e.target.checked)} 
+                  />
+                }
+                label={color}
+              />
+            ))}
           </FormGroup>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
+
       <Accordion defaultExpanded>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <span className="font-semibold capitalize">Cepa</span>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <span className="font-semibold capitalize -text--dark-green">Categorías</span>
         </AccordionSummary>
         <AccordionDetails>
           <FormGroup>
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label="Malbec"
-            />
-            <FormControlLabel control={<Checkbox />} label="Merlot" />
-            <FormControlLabel control={<Checkbox />} label="Cabernet" />
-            <FormControlLabel control={<Checkbox />} label="Syrah" />
+            {["Vinos", "Acompañamientos", "Souvenirs"].map((categoria) => (
+              <FormControlLabel
+                key={categoria}
+                control={
+                  <Checkbox
+                    onChange={(e) =>
+                      onCategoriasChange(categoria, e.target.checked)
+                    }
+                    sx={{ "&.Mui-checked": { color: "#00af50" } }}
+                  />
+                }
+                label={categoria}
+              />
+            ))}
           </FormGroup>
         </AccordionDetails>
       </Accordion>
+
+      {/* Otros filtros pueden añadirse de manera similar */}
     </div>
   );
 }

@@ -22,10 +22,10 @@ export default function page() {
     { almacen: "LA LICORERA", direccion: "CARRERA 14 #104-45" },
   ];
   return (
-    <>
+    <main>
       <HeaderImage
         title="Puntos de Venta"
-        background="/banner-puntos-de-venta.jpg"
+        background="/banner-puntos-de-venta.webp"
       />
       <section className="container mx-auto py-16 px-5">
         <h2 className="text-center text-4xl font-bold -text--dark-green">
@@ -50,6 +50,6 @@ export default function page() {
           </table>
         </div>
       </section>
-    </>
+    </main>
   );
 }

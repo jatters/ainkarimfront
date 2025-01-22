@@ -18,9 +18,9 @@ export default async function VisitasPage() {
   }
 
   return (
-    <>
-      <HeaderImage title="Visitas" background="/banner-visitas.jpg" />
-      <div className="container mx-auto py-16 px-5">
+    <main>
+      <HeaderImage title="Visitas" background="/banner-visitas.webp" />
+      <section className="container mx-auto py-16 px-5">
         <div className="font-medium text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
         </div>        
@@ -31,7 +31,7 @@ export default async function VisitasPage() {
               id: experiencia.documentId,
               name: experiencia.name,
               alt: `Icono ${experiencia.name}`,
-              iconurl: `${process.env.STRAPI_URL}${experiencia.icon.url}`,
+              iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon.url}`,
             }));
 
             return (
@@ -41,7 +41,7 @@ export default async function VisitasPage() {
                 title={plan.name}
                 price={formatPrice(plan.price)}
                 experiences={experienciesList}
-                image={`${process.env.STRAPI_URL}${plan.image.formats.small.url}`}
+                image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.small.url}`}
                 altimg={plan.image.alternativeText || `Imagen ${plan.name}`}
                 onlyadults={plan.onlyAdults}
                 allowchilds={plan.allowChilds}
@@ -51,7 +51,7 @@ export default async function VisitasPage() {
             );
           })}
         </div>
-      </div>
-    </>
+      </section>
+    </main>
   );
 }

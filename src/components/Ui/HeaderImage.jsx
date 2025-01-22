@@ -1,6 +1,6 @@
 import Breadcumbs from "./Breadcrumbs";
 
-export default function HeaderImage({ title, background = "" }) {
+export default function HeaderImage({ title = "", background = "" }) {
   return (
     <section
       style={{ "--image-url": `url(${background})` }}

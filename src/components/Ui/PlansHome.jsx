@@ -21,7 +21,7 @@ export default async function PlansHome() {
           id: experiencia.documentId,
           name: experiencia.name,
           alt: `Icono ${experiencia.name}`,
-          iconurl: `${process.env.STRAPI_URL}${experiencia.icon.url}`,
+          iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon.url}`,
         }));
 
         return (
@@ -31,7 +31,7 @@ export default async function PlansHome() {
             title={plan.name}
             price={formatPrice(plan.price)}
             experiences={experienciesList}
-            image={`${process.env.STRAPI_URL}${plan.image.formats.medium.url}`}
+            image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.medium.url}`}
             altimg="product"
             onlyadults={plan.onlyAdults}
             allowchilds={plan.allowChilds}

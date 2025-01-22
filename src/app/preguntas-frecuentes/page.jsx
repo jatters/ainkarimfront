@@ -7,10 +7,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function FaqPage() {
   return (
-    <>
+    <main>
       <HeaderImage
         title="Preguntas Frecuentes"
-        background="/banner-contacto.jpg"
+        background="/banner-contacto.webp"
       />
       <section className="container mx-auto py-16 px-5">
         <div className="max-w-screen-md mx-auto">
@@ -280,6 +280,6 @@ export default function FaqPage() {
           </Accordion>
         </div>
       </section>
-    </>
+    </main>
   );
 }

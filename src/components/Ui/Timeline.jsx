@@ -24,7 +24,7 @@ export default function Timeline({ timeline }) {
             key={item.doccumentId ? item.doccumentId : index}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.image.url}`}
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}${item.image.url}`}
               alt={
                 item.image.alternativeText
                   ? item.image.alternativeText

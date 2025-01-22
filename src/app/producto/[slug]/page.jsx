@@ -1,5 +1,6 @@
 "use client";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from "next-view-transitions";
 import ProductGallery from "@/components/Ecommerce/SingleProduct/ProductGallery";
 import ReactMarkdown from "react-markdown";
 import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVariations";
@@ -14,8 +15,8 @@ const formatPrice = (price) => {
 
 function createGallery(product) {
   const mainImage = {
-    sourceUrl: process.env.NEXT_PUBLIC_STRAPI_URL + product.image.url,
-    altText: product.image.alternativeText || `Imagen ${product.title}`,
+    sourceUrl: process.env.NEXT_PUBLIC_SITE_URL + product.image.url,
+    altText: product.image.alternativeText || `Imagen ${product.title} `,
   };
 
   let galleryImages = [mainImage];
@@ -24,9 +25,10 @@ function createGallery(product) {
     if (Array.isArray(product.gallery)) {
       galleryImages = [
         ...galleryImages,
-        ...product.gallery.map((image) => ({
+        ...product.gallery.map((image, index) => ({
           sourceUrl: process.env.NEXT_PUBLIC_STRAPI_URL + image.url,
-          altText: image.alternativeText || `Imagen ${product.title}`,
+          altText:
+            image.alternativeText || `Imagen ${product.title} ${index + 1}`,
         })),
       ];
     }
@@ -34,7 +36,6 @@ function createGallery(product) {
 
   return galleryImages;
 }
-
 
 export default async function singleProductPage({ params }) {
   const slug = params.slug;
@@ -46,58 +47,83 @@ export default async function singleProductPage({ params }) {
         <div className="container mx-auto py-16">Producto no encontrado</div>
       );
     }
-    
-    const { title, categorias_de_producto, price, description, variaciones } =
-      productData?.data[0];
+
+    const {
+      title,
+      categorias_de_producto,
+      regularPrice,
+      price,
+      description,
+      variaciones,
+    } = productData?.data[0];
     const categoryName = categorias_de_producto?.name;
     const producto = productData?.data[0];
 
     const productImages = createGallery(producto);
 
-    
     return (
-      <section className="container mx-auto py-16 px-5">
-
-        <div>
-          <Link href="/">Inicio</Link> /{" "}
-          <Link href="/productos">Productos</Link> /{" "}
-          <span className="capitalize">{title}</span>
-        </div>
-        <div className="lg:hidden mt-10">
-          <h1 className="-text--dark-green text-5xl font-bold mb-2 capitalize">
-            {title}
-          </h1>
-          <div className="italic -text--dark-red">{categoryName}</div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 gap-x-5 gap-y-9">
-          <div className="max-w-3xl">
-            <ProductGallery images={productImages} />
+      <main>
+        <section className="container mx-auto py-16 px-5">
+          <div>
+            <Link href="/">Inicio</Link> /{" "}
+            <Link href="/productos">Productos</Link> /{" "}
+            <span className="capitalize">{title}</span>
           </div>
-          <div className="lg:px-5">
-            <div className="hidden lg:block">
-              <h1 className="-text--dark-green text-5xl font-bold mb-2 capitalize">
-                {title}
-              </h1>
-              <div className="italic mb-2 -text--dark-red">{categoryName}</div>
+          <div className="lg:hidden mt-10">
+            <h1 className="-text--dark-green text-5xl font-bold mb-2 capitalize">
+              {title}
+            </h1>
+            <div className="italic -text--dark-red">{categoryName}</div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 gap-x-5 gap-y-9">
+            <div className="max-w-3xl">
+              <ProductGallery images={productImages} />
             </div>
-            <div className="text-2xl font-semibold mb-5 ">
-              {formatPrice(price)}
-              <sup className="lg:ml-1 text-base">COP</sup>
-            </div>
-            <ReactMarkdown className="lg:my-7">{description}</ReactMarkdown>
-
-            {variaciones && (
-              <div>
-                <ProductVariations variations={variaciones} />
+            <div className="lg:px-5">
+              <div className="hidden lg:block">
+                <div className="-text--dark-green text-5xl font-bold mb-2 capitalize flex items-center gap-3">
+                  <h1>{title}</h1>{" "}
+                 
+                    {regularPrice > price ? <span className="font-normal -bg--dark-red text-xl text-white px-2 py-1 rounded-md flex items-center gap-1"> <span className="icon-[whh--sale]" role="img" aria-hidden="true" /> En oferta</span> : null}
+                  
+                </div>
+                <div className="italic mb-2 -text--dark-red">
+                  {categoryName}
+                </div>
               </div>
-            )}
-            
-            <div className="mt-10 lg:mt-0">
-              <AddToCartButton product={producto} />
+              {regularPrice > price ? (
+                <div className="text-2xl font-semibold mb-5 flex gap-3 ">
+                  <span className="font-normal line-through -text--dark-red">
+                    {formatPrice(regularPrice)}
+                  </span>
+                  <span>-</span>
+                  <span>
+                    {formatPrice(price)}
+                    <sup className="lg:ml-1 text-base">COP</sup>
+                  </span>
+                </div>
+              ) : (
+                <div className="text-2xl font-semibold mb-5 ">
+                  {formatPrice(regularPrice)}
+                  <sup className="lg:ml-1 text-base">COP</sup>
+                </div>
+              )}
+
+              <ReactMarkdown className="lg:my-7">{description}</ReactMarkdown>
+
+              {variaciones && (
+                <div>
+                  <ProductVariations variations={variaciones} />
+                </div>
+              )}
+
+              <div className="mt-10 lg:mt-0">
+                <AddToCartButton product={producto} />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     );
   } catch (error) {
     console.error("Error cargando el producto", error);
@@ -106,7 +132,6 @@ export default async function singleProductPage({ params }) {
     );
   }
 }
-
 
 function AddToCartButton({ product }) {
   const { addToCart } = useContext(CartContext);
@@ -137,6 +162,3 @@ function AddToCartButton({ product }) {
     </button>
   );
 }
-
-
-

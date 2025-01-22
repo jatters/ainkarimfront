@@ -16,10 +16,10 @@ export default async function vinedoPage() {
     data.data;
 
   return (
-    <>
+    <main>
       <HeaderImage
         title={title}
-        background={`${process.env.NEXT_PUBLIC_STRAPI_URL}${cover.url}`}
+        background={`${process.env.NEXT_PUBLIC_SITE_URL}${cover.url}`}
       />
       <section className="container mx-auto py-16 px-10">
         <h2 className="text-4xl -text--dark-green text-center mb-14 uppercase">
@@ -33,6 +33,6 @@ export default async function vinedoPage() {
       {filantropia && <Filantropia filantropia={filantropia} />}
 
       {slider && <SliderReconocimientos reconocimientos={slider} />}
-    </>
+    </main>
   );
 }

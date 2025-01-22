@@ -1,8 +1,10 @@
 "use client";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
+import FormatPrice from "@/components/Ecommerce/FormatPrice";
 
 export default function ProductCard({
   slug,
@@ -10,6 +12,7 @@ export default function ProductCard({
   image,
   altimg,
   price,
+  regularprice,
   category,
   product,
   isActive,
@@ -28,26 +31,49 @@ export default function ProductCard({
   return (
     <>
       {isActive ? (
-        <div className="flex flex-col items-center shadow-md pb-4 hover:shadow-lg rounded-md group">
-          
-          <div className="relative overflow-hidden rounded-t-lg">
-            <Link href={slug}>
-              <Image
-                src={image}
-                width={369}
-                height={369}
-                alt={altimg}
-                className="rounded-t-lg group-hover:scale-105 duration-200"
-              />
-            </Link>
+        <div className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] ">
+          <div>
+            {regularprice > price && (
+              <div className="absolute top-3 right-4 -bg--dark-red text-white text-xs py-4 px-2 flex items-center justify-center rounded-xl font-bold group-hover:-bg--light-red  duration-200 z-10">
+                OFERTA %
+              </div>
+            )}
+            <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100">
+              <Link href={slug}>
+                <Image
+                  src={image}
+                  width={369}
+                  height={369}
+                  alt={altimg}
+                  className="rounded-t-lg group-hover:scale-105 duration-200 h-[369px] w-[369px] object-cover"
+                />
+              </Link>
+            </div>
           </div>
-          <div className="px-4 flex flex-col items-center">
-            <h3 className="font-bold mt-4 mb-1 uppercase -text--dark-red text-center group-hover:-text--dark-green duration-200 h-11">
+          <div className="px-4 flex flex-col flex-1 items-center">
+            <h2 className="font-bold  uppercase -text--dark-red text-center group-hover:-text--dark-green duration-200 ">
               <Link href={slug}>{title}</Link>
-            </h3>
+            </h2>
             <div className="-text--dark-green italic">{category}</div>
-            <div className="mb-3 font-semibold">{price}</div>
-            <div className="flex gap-3">
+            {regularprice > price ? (
+              <div className="flex gap-1">
+                <div className="mb-3 line-through -text--dark-red">
+                  <FormatPrice price={regularprice} />
+                </div>
+                <span>-</span>
+                <div className="mb-3 font-semibold">
+                  <FormatPrice price={price} />
+                </div>
+              </div>
+            ) : (
+              <div className="mb-3 font-semibold">
+                <FormatPrice price={regularprice} />
+              </div>
+            )}
+            <div className="flex-1"></div>
+
+            {/* Contenedor de botones con mt-auto para mantenerse al fondo */}
+            <div className="flex gap-3 mt-auto w-full justify-center pb-5">
               <Link
                 href={slug}
                 className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-3 py-2 rounded hover:-bg--dark-green hover:text-white duration-200"

@@ -1,11 +1,12 @@
 import HeroCoverHome from "@/components/Ui/HeroCoverHome";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import PlansHome from "@/components/Ui/PlansHome";
 import ProductsHome from "@/components/Ui/ProductsHome";
 
 export default function homepage() {
   return (
-    <>
+    <main>
       <HeroCoverHome />
       <section className="container mx-auto pt-16 pb-14">
         <h2 className="text-5xl font-bold text-center -text--dark-green font-serif">
@@ -35,6 +36,6 @@ export default function homepage() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

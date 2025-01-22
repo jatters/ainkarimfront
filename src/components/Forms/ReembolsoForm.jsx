@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import { useState } from "react";
 import styles from "./PrettyCheckbox.css"
 
@@ -399,6 +400,7 @@ export default function ReembolsoForm() {
               <Link
                 href="/politica-de-tratamiento-de-datos-personales"
                 target="_blank"
+                rel="noopener"
                 className="font-medium hover:-text--light-green duration-200"
               >
                 Política de Tratamiento de Datos Personales
@@ -407,6 +409,7 @@ export default function ReembolsoForm() {
               <Link
                 href="/politica-de-tratamiento-de-datos-personales"
                 target="_blank"
+                rel="noopener"
                 className="underline hover:-text--light-green duration-200"
               >
                 aquí

@@ -1,4 +1,5 @@
-import Link from "next/link";
+//import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import ModalSchedule from "./Plans/ModalSchedule";
 import Image from "next/image";
 
@@ -45,7 +46,8 @@ export default function PlanCard({
       </div>
 
       <ul
-        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}
+        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`} 
+        aria-label="Caracteristicas del plan"
       >
         {experiences?.map((experience, index) => (
           <li

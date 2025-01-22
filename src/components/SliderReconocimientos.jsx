@@ -44,17 +44,18 @@ export default function SliderReconocimientos({ reconocimientos }) {
         {reconocimientos.map((item, index) => (
           <SwiperSlide key={item.documentId ? item.documentId : index}>
             <div className="relative ">
-            <Image
-              loading="lazy"
-              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.image.url}`}
-              alt={
-                item.image.alternativeText
-                  ? item.image.alternativeText
-                  : `slide reconocimiento ${index}`
-              }
-              width={350}
-              height={350}
-            /></div>
+              <Image
+                loading="lazy"
+                src={`${process.env.NEXT_PUBLIC_SITE_URL}${item.image.url}`}
+                alt={
+                  item.image.alternativeText
+                    ? item.image.alternativeText
+                    : `slide reconocimiento ${index}`
+                }
+                width={350}
+                height={350}
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -6,6 +6,9 @@ export const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
+  const clearCart = () => {
+    setCart([]);
+  };
   // Cargar el carrito desde localStorage al iniciar
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -53,8 +56,19 @@ export function CartProvider({ children }) {
       if (existingProductIndex >= 0) {
         const updatedCart = [...prevCart];
         if (isReservation) {
+          // Asegurarse de que reservationData y persons existen antes de usarlos
+          if (!updatedCart[existingProductIndex].reservationData) {
+            updatedCart[existingProductIndex].reservationData = { persons: 0 };
+          }
+          if (
+            typeof updatedCart[existingProductIndex].reservationData.persons !==
+            "number"
+          ) {
+            updatedCart[existingProductIndex].reservationData.persons = 0;
+          }
+
           updatedCart[existingProductIndex].reservationData.persons +=
-            product.reservationData.persons || 1;
+            product.reservationData?.persons || 1;
           updatedCart[existingProductIndex].quantity =
             updatedCart[existingProductIndex].reservationData.persons;
           updatedCart[
@@ -65,7 +79,6 @@ export function CartProvider({ children }) {
         }
         return updatedCart;
       } else {
-        // Cambia la lógica donde se crea el newProduct
         const newProduct = {
           ...product,
           quantity: product.reservationData

@@ -14,7 +14,7 @@ export default function filantropia({ filantropia }) {
             key={item.documentId ? item.documentId : index}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.image.url}`}
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}${item.image.url}`}
               alt={
                 item.image.alternativeText
                   ? item.image.alternativeText

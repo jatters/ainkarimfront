@@ -16,7 +16,7 @@ export default function Viticultura({ viticultura }) {
           >
             <div className="relative h-48 sm:h-80 md:h-96">
               <Image
-                src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.image.url}`}
+                src={`${process.env.NEXT_PUBLIC_SITE_URL}${item.image.url}`}
                 alt={
                   item.image.alternativeText
                     ? item.image.alternativeText
@@ -30,7 +30,7 @@ export default function Viticultura({ viticultura }) {
             <h3 className="-text--dark-green text-center font-semibold text-xl mt-5 md:hidden">
               {item.title}
             </h3>
-            <ReactMarkdown className="px-5 pt-5 pb-10">
+            <ReactMarkdown className="px-5 pt-5 pb-10 ">
               {item.description}
             </ReactMarkdown>
           </div>

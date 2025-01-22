@@ -26,8 +26,8 @@ export default async function ProductsHome() {
             product.categorias_de_producto &&
             product.categorias_de_producto.name
           }
-          image={`${process.env.NEXT_PUBLIC_STRAPI_URL}${product.image.url}`}
-          altimg={product.image.alternativeText || "Imagen de producto"}
+          image={`${process.env.NEXT_PUBLIC_SITE_URL}${product.image.url}`}
+          altimg={product.image.alternativeText || `Imagen de ${product.title}`}
           isActive={product.isActive}
           product={product}
         />
