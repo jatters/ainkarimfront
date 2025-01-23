@@ -22,7 +22,8 @@ export async function POST(request) {
         failure: process.env.MP_BACK_URL_FAILURE || "https://default-failure-url.com",
         pending: process.env.MP_BACK_URL_PENDING || "https://default-pending-url.com",
       },
-      notification_url: "https://ainkarin.co/api/mercadopago/webhook",
+      notification_url: `/api/mercadopago/webhook`,
+      
       auto_return: "approved",
     };
 

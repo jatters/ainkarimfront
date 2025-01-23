@@ -58,7 +58,7 @@ export default function CarritoPage() {
 
   return (
     <main>
-      <section className="container mx-auto py-16 px-5">
+      <section className="max-w-screen-lg mx-auto py-16 px-5">
         <h1 className="text-5xl -text--dark-green text-center font-bold mb-14">
           Carrito de Compras
         </h1>
