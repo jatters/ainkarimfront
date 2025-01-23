@@ -93,7 +93,7 @@ export default function CarritoPage() {
                     <th className="py-2">Eliminar</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="">
                   {cart.map((item) => {
                     const {
                       id,
@@ -120,8 +120,11 @@ export default function CarritoPage() {
                       : itemTitle || "Sin título";
 
                     return (
-                      <tr key={id} className="text-center">
-                        <td className="py-2 flex items-center px-5">
+                      <tr
+                        key={id}
+                        className="text-center even:bg-gray-100 rounded-md hover:bg-gray-200 duration-200 border-b"
+                      >
+                        <td className="py-2 flex items-center px-5  ">
                           {!isReservation && imageUrl && (
                             <Image
                               src={imageUrl || "/default-image.jpg"}
@@ -160,8 +163,8 @@ export default function CarritoPage() {
                               min="1"
                               value={displayQuantity}
                               readOnly
-                              className="appearance-none border -border--dark-green/70 w-14 px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
-                              aria-label={`Cantidad de ${title}`}
+                              className="appearance-none border -border--dark-green/70 w-12 h-10 px-0 py-2 text-gray-700 text-center focus:outline-none "
+                              aria-label={`Cantidad de ${title}`}                              
                             />
                             <button
                               className="-bg--dark-green/70 text-white px-2 py-2 rounded-r hover:-bg--dark-green focus:outline-none"
@@ -180,7 +183,7 @@ export default function CarritoPage() {
                             onClick={() => removeFromCart(item)}
                             aria-label={`Eliminar ${title}`}
                           >
-                            <span className="icon-[mynaui--trash]" />
+                            <span className="icon-[mynaui--trash] hover:-text--light-red hover:scale-125 duration-200" />
                           </button>
                         </td>
                       </tr>

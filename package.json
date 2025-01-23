@@ -19,7 +19,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/system": "^5.15.15",
     "cally": "^0.7.2",
-    "mercadopago": "^2.2.0",
+    "mercadopago": "^2.3.0",
     "next": "^14.2.5",
     "next-view-transitions": "^0.3.4",
     "nodemailer": "^6.9.15",

@@ -32,24 +32,23 @@ export default function ProductCard({
     <>
       {isActive ? (
         <div className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] ">
-          <div>
-            {regularprice > price && (
-              <div className="absolute top-3 right-4 -bg--dark-red text-white text-xs py-4 px-2 flex items-center justify-center rounded-xl font-bold group-hover:-bg--light-red  duration-200 z-10">
-                OFERTA %
-              </div>
-            )}
-            <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100">
-              <Link href={slug}>
-                <Image
-                  src={image}
-                  width={369}
-                  height={369}
-                  alt={altimg}
-                  className="rounded-t-lg group-hover:scale-105 duration-200 h-[369px] w-[369px] object-cover"
-                />
-              </Link>
+          {regularprice > price && (
+            <div className="absolute top-3 right-4 -bg--dark-red text-white text-xs py-4 px-2 flex items-center justify-center rounded-xl font-bold group-hover:-bg--light-red  duration-200 z-10">
+              OFERTA %
             </div>
+          )}
+          <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100">
+            <Link href={slug}>
+              <Image
+                src={image}
+                width={370}
+                height={370}
+                alt={altimg}
+                className="rounded-t-lg group-hover:scale-105 duration-200 h-full w-full object-contain"
+              />
+            </Link>
           </div>
+
           <div className="px-4 flex flex-col flex-1 items-center">
             <h2 className="font-bold  uppercase -text--dark-red text-center group-hover:-text--dark-green duration-200 ">
               <Link href={slug}>{title}</Link>
@@ -76,12 +75,12 @@ export default function ProductCard({
             <div className="flex gap-3 mt-auto w-full justify-center pb-5">
               <Link
                 href={slug}
-                className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-3 py-2 rounded hover:-bg--dark-green hover:text-white duration-200"
+                className="flex items-center gap-1 -text--dark-green text-sm -border--dark-green border-solid border-2 px-2 py-1 rounded hover:-bg--dark-green hover:text-white duration-200"
               >
                 <span className="icon-[ph--eye]"></span> Ver
               </Link>
               <button
-                className="add-to-cart-button -bg--dark-green text-white px-3 py-2 rounded hover:-bg--light-green duration-200"
+                className="add-to-cart-button -bg--dark-green text-sm text-white px-2 py-1 rounded hover:-bg--light-green duration-200"
                 onClick={() => addToCart(product)}
               >
                 Añadir a carrito

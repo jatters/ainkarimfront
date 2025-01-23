@@ -49,7 +49,7 @@ export default function FilterableProducts({ initialProducts }) {
           onCategoriasChange={handleCategoriasChange}
         />
       </aside>
-      <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 row-span-5 ">
+      <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 row-span-5 px-5">
         {filteredProducts.map((product) => {
           const {
             id,

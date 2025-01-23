@@ -5,6 +5,13 @@
   justify-content: center;
 }
 
+calendar-date{
+  background-color: #fafafa; 
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  
+}
 calendar-date {
   svg {
     height: 16px;
@@ -17,6 +24,9 @@ calendar-date {
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+  &::part(heading) {    
+    color: #062f1d;
+  }
   &::part(button) {
     border: 1px solid #adb5bd;
     background-color: #fff;
@@ -24,13 +34,20 @@ calendar-date {
     width: 26px;
     height: 26px;
   }
-
+  &::part(button):hover {
+    background-color: #e0e0e0;
+    transition: 200ms;
+  }
   &::part(button):focus-visible {
-    outline: 2px solid #7048e8;
+    outline: 2px solid #062f1d;
   }
   calendar-month {
     --color-accent: #00af50;
     --color-text-on-accent: #ffffff;
+    &::part(heading) {    
+      color: #00af50;
+      text-transform: capitalize;
+    }
   }
 
 }

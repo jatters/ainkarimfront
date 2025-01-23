@@ -1,46 +1,90 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useEffect, useState } from "react";
 
-function PendingContent() {
-  const searchParams = useSearchParams();
+export default function PendingPage({ searchParams }) {
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const collection_id = searchParams.get("collection_id");
-  const status = searchParams.get("status");
-  const external_reference = searchParams.get("external_reference");
+  useEffect(() => {
+    async function fetchPaymentDetails() {
+      try {
+        const response = await fetch(
+          `/api/mercadopago/get-payment?payment_id=${searchParams.payment_id}`
+        );
+        const data = await response.json();
+        setPaymentDetails(data);
+      } catch (error) {
+        console.error("Error fetching payment details:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (searchParams.payment_id) {
+      fetchPaymentDetails();
+    }
+  }, [searchParams.payment_id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-6 px-5">
+        <p>Cargando detalles del pago...</p>
+      </div>
+    );
+  }
+
+  if (!paymentDetails) {
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold text-yellow-500">
+          Pago Pendiente ⏳
+        </h1>
+        <p>
+          No se encontraron detalles del pago. Por favor, revisa nuevamente más
+          tarde.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Pago Pendiente</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold text-yellow-500">Pago Pendiente ⏳</h1>
       <p>
-        Tu pago está pendiente de confirmación. Recibirás una notificación una vez que se 
-        procese el pago.
+        Tu pago está en proceso de verificación. Recibirás una confirmación
+        cuando se apruebe.
       </p>
 
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Detalles del Pago Pendiente</h2>
-        <ul className="list-disc list-inside">
-          <li><strong>ID de Colección:</strong> {collection_id || "N/A"}</li>
-          <li><strong>Estado:</strong> {status || "N/A"}</li>
-          <li><strong>Referencia Externa:</strong> {external_reference || "N/A"}</li>
+      <h2 className="text-xl font-semibold mt-6">Detalles del Pago:</h2>
+      <p>
+        <strong>ID del Pago:</strong> {paymentDetails.id}
+      </p>
+      <p>
+        <strong>Estado:</strong> {paymentDetails.status}
+      </p>
+      <p>
+        <strong>Monto:</strong> {paymentDetails.amount.toLocaleString()} COP
+      </p>
+      <p>
+        <strong>Fecha:</strong>{" "}
+        {paymentDetails.date
+          ? new Date(paymentDetails.date).toLocaleString("es-CO")
+          : "No disponible"}
+      </p>
+
+      <h2 className="text-xl font-semibold mt-6">Resumen del Pedido:</h2>
+      {paymentDetails.items?.length > 0 ? (
+        <ul className="mt-2 list-disc list-inside">
+          {paymentDetails.items.map((item, index) => (
+            <li key={index}>
+              {item.quantity}x {item.title} -{" "}
+              {parseInt(item.unit_price).toLocaleString()} COP
+            </li>
+          ))}
         </ul>
-      </section>
-
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Instrucciones Adicionales</h2>
-        <p>
-          Una vez que tu pago sea confirmado, recibirás un correo electrónico con la confirmación 
-          y los detalles de tu pedido. Si tienes preguntas, por favor contáctanos.
-        </p>
-      </section>
-    </main>
-  );
-}
-
-export default function PendingPage() {
-  return (
-    <Suspense fallback={<p className="text-center text-gray-500">Cargando detalles del pago...</p>}>
-      <PendingContent />
-    </Suspense>
+      ) : (
+        <p>No hay información del pedido.</p>
+      )}
+    </div>
   );
 }

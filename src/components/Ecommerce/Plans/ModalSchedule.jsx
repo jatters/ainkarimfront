@@ -12,6 +12,7 @@ import Slide from "@mui/material/Slide";
 import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import IconButton from "@mui/material/IconButton";
+import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -26,7 +27,13 @@ function formatHour(hourString) {
   return `${formattedHour}:${minute}${period}`;
 }
 
-export default function ModalSchedule({ title,price, schedules, plan, rules }) {
+export default function ModalSchedule({
+  title,
+  price,
+  schedules,
+  plan,
+  rules,
+}) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useContext(CartContext);
   const router = useRouter();
@@ -85,7 +92,6 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
     handleClose();
     router.push("/carrito");
   };
-  
 
   const increasePersons = () => {
     setReservationData((prev) => ({
@@ -100,6 +106,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
       persons: prev.persons > 1 ? prev.persons - 1 : prev.persons,
     }));
   };
+  const [disabledDates, setDisabledDates] = useState([]);
 
   return (
     <React.Fragment>
@@ -115,7 +122,6 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        
       >
         <IconButton
           aria-label="close"
@@ -133,13 +139,28 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
           title && title
         }`}</DialogTitle>
         <DialogContent>
-          
-            <p className="text-center font-semibold mb-5">
-              Diligencia los datos para realizar tu reserva
-            </p>
-            <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
-              <div className="flex gap-x-5 gap-y-2 justify-items-center items-center flex-wrap">
-                <div className="py-2 flex-1">
+          <p className="text-center font-semibold mb-5">
+            Diligencia los datos para realizar tu reserva
+          </p>
+          <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
+            <div className="flex gap-x-5 gap-y-2 justify-items-center justify-center items-center flex-wrap">
+              <CallyDatePicker
+                value={reservationData.date}
+                onChange={(newDate) => {
+                  setReservationData((prev) => ({ ...prev, date: newDate }));
+                  if (disabledDates.includes(newDate)) {
+                    setError(
+                      "La fecha seleccionada no está disponible. Por favor, elige otra."
+                    );
+                  } else {
+                    setError("");
+                  }
+                }}
+                min={minDate}
+                max={maxDate}
+                disallowedDates={disabledDates}
+              />
+              {/* <div className="py-2 flex-1">
                   <div className="font-bold -text--dark-green text-base flex items-center gap-1">
                     <span className="icon-[material-symbols--calendar-month-rounded]"></span>
                     Fecha:
@@ -154,7 +175,8 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                     aria-label="Fecha de la reserva"
                     className="mt-2 p-2 border border-gray-300 rounded min-w-52 w-full"
                   />
-                </div>
+                </div> */}
+              <div className="flex flex-col gap-y-2">
                 <div className="py-2 flex-1">
                   <div className="font-bold -text--dark-green text-base flex items-center gap-1">
                     <span className="icon-[ion--people]"></span>Personas:
@@ -181,7 +203,7 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                       +
                     </button>
                   </div>
-                </div>                
+                </div>
                 <ListHours
                   schedules={schedules}
                   classNameInput="min-w-52 w-full"
@@ -192,16 +214,16 @@ export default function ModalSchedule({ title,price, schedules, plan, rules }) {
                   }
                 />
               </div>
-              <div className="flex justify-center">
-                <button
-                  onClick={handleReserve}
-                  className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
-                >
-                  Ir a pagar
-                </button>
-              </div>
             </div>
-          
+            <div className="flex justify-center">
+              <button
+                onClick={handleReserve}
+                className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
+              >
+                Ir a pagar
+              </button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </React.Fragment>

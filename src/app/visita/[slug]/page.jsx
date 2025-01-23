@@ -58,11 +58,11 @@ export default async function SinglePlanPage({ params }) {
             </Link>{" "}
             / <span className="capitalize">{name}</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-5 gap-y-9">
+          <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-3 gap-y-9">
             <div className="max-w-3xl">
               <PlanGallery images={extractGallery(gallery)} />
             </div>
-            <div className="px-5">
+            <div className="px-0 md:px-5">
               <h1 className="-text--dark-green text-5xl font-bold mb-3 uppercase">
                 {name}
               </h1>

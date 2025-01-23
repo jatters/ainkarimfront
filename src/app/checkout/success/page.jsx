@@ -1,57 +1,82 @@
 "use client";
+
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
-
-function SuccessContent() {
-  const searchParams = useSearchParams();
-
-  const collection_id = searchParams.get("collection_id");
-  const collection_status = searchParams.get("collection_status");
-  const payment_id = searchParams.get("payment_id");
-  const status = searchParams.get("status");
-  const external_reference = searchParams.get("external_reference");
-  const payment_type = searchParams.get("payment_type");
-  const merchant_order_id = searchParams.get("merchant_order_id");
-  const preference_id = searchParams.get("preference_id");
-  const site_id = searchParams.get("site_id");
-  const processing_mode = searchParams.get("processing_mode");
-
-  return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Pago Exitoso</h1>
-      <p>¡Gracias por tu compra! Tu pago se ha realizado correctamente.</p>
-
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Detalles del Pago</h2>
-        <ul className="list-disc list-inside">
-          <li><strong>ID de Colección:</strong> {collection_id || "N/A"}</li>
-          <li><strong>Estado de la Colección:</strong> {collection_status || "N/A"}</li>
-          <li><strong>ID de Pago:</strong> {payment_id || "N/A"}</li>
-          <li><strong>Estado:</strong> {status || "N/A"}</li>
-          <li><strong>Referencia Externa:</strong> {external_reference || "N/A"}</li>
-          <li><strong>Tipo de Pago:</strong> {payment_type || "N/A"}</li>
-          <li><strong>ID de Orden del Comerciante:</strong> {merchant_order_id || "N/A"}</li>
-          <li><strong>ID de Preferencia:</strong> {preference_id || "N/A"}</li>
-          <li><strong>ID del Sitio:</strong> {site_id || "N/A"}</li>
-          <li><strong>Modo de Procesamiento:</strong> {processing_mode || "N/A"}</li>
-        </ul>
-      </section>
-
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Instrucciones Adicionales</h2>
-        <p>
-          Tu pago ha sido procesado con éxito. Recibirás un correo electrónico con la confirmación y los detalles de tu pedido. 
-          Si tienes alguna pregunta, no dudes en contactarnos.
-        </p>
-      </section>
-    </main>
-  );
-}
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<p className="text-center text-gray-500">Cargando detalles del pago...</p>}>
+    <Suspense fallback={<p>Cargando detalles del pago...</p>}>
       <SuccessContent />
     </Suspense>
+  );
+}
+
+function SuccessContent() {
+  const searchParams = useSearchParams();
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPaymentDetails() {
+      try {
+        const paymentId = searchParams.get("payment_id");
+        if (!paymentId) return;
+
+        const response = await fetch(`/api/mercadopago/get-payment?payment_id=${paymentId}`);
+        const data = await response.json();
+        setPaymentDetails(data);
+      } catch (error) {
+        console.error("Error fetching payment details:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPaymentDetails();
+  }, [searchParams]);
+
+  if (loading) {
+    return <p>Cargando detalles del pago...</p>;
+  }
+
+  if (!paymentDetails) {
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold text-red-600">Error en el pago ❌</h1>
+        <p>No se encontraron detalles del pago. Por favor, revisa nuevamente más tarde.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold text-green-600">¡Pago exitoso! 🎉</h1>
+      <p>Gracias por tu compra. Aquí están los detalles:</p>
+
+      <h2 className="text-xl font-semibold mt-6">Detalles del Pago:</h2>
+      <p><strong>ID del Pago:</strong> {paymentDetails.id}</p>
+      <p><strong>Estado:</strong> {paymentDetails.status}</p>
+      <p><strong>Monto:</strong> {paymentDetails.amount?.toLocaleString()} COP</p>
+      <p><strong>Fecha:</strong> {paymentDetails.date ? new Date(paymentDetails.date).toLocaleString("es-CO") : "No disponible"}</p>
+
+      <h2 className="text-xl font-semibold mt-6">Resumen del Pedido:</h2>
+      {paymentDetails.items?.length > 0 ? (
+        <ul className="mt-2 list-disc list-inside">
+          {paymentDetails.items.map((item, index) => (
+            <li key={index}>
+              {item.quantity}x {item.title} - {parseInt(item.unit_price).toLocaleString()} COP
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No hay información del pedido.</p>
+      )}
+
+      <div className="mt-6">
+        <a href="/" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Volver al inicio
+        </a>
+      </div>
+    </div>
   );
 }

@@ -4,8 +4,8 @@ import FormatHour from "./FormatHour";
 
 export default function   ListHours({
   schedules,
-  classNameInput,
-  classNameContainer,
+  classNameInput="",
+  classNameContainer="",
   value,
   onChange,
 }) {
@@ -29,8 +29,8 @@ export default function   ListHours({
   );
 
   return (
-    <div className={classNameContainer}>
-      <div className="font-bold text--dark-green text-base flex items-center gap-1">
+    <div className={`${classNameContainer} `}>
+      <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
         <span className="icon-[lucide--clock]"></span>Hora:
       </div>
       <select

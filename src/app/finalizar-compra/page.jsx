@@ -74,14 +74,14 @@ export default function PaymentPage() {
                 let imageUrl = null;
                 if (
                   !isReservation &&
-                  product.attributes?.image?.formats?.thumbnail?.url
+                  product.image?.url
                 ) {
-                  imageUrl = `${baseurl}${product.attributes.image.formats.thumbnail.url}`;
+                  imageUrl = `${product.image.url}`;
                 }
 
                 const altText = isReservation
                   ? "Imagen no disponible para reservas"
-                  : product.attributes?.image?.alternativeText || "Sin imagen";
+                  : product.image?.alternativeText || "Sin imagen";
 
                 const title =
                   product.title || product.attributes?.title || "Sin título";
@@ -96,7 +96,7 @@ export default function PaymentPage() {
                 return (
                   <div
                     key={index}
-                    className="grid grid-cols-5 py-8 border-t items-center"
+                    className="grid grid-cols-5 py-8 border-b items-center"
                   >
                     {!isReservation && (
                       <div className="col-span-1">

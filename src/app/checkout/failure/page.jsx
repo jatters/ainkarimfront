@@ -1,46 +1,93 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useEffect, useState } from "react";
 
-function FailureContent() {
-  const searchParams = useSearchParams();
+export default function FailurePage({ searchParams }) {
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const collection_id = searchParams.get("collection_id");
-  const status = searchParams.get("status");
-  const external_reference = searchParams.get("external_reference");
+  useEffect(() => {
+    async function fetchPaymentDetails() {
+      try {
+        const response = await fetch(
+          `/api/mercadopago/get-payment?payment_id=${searchParams.payment_id}`
+        );
+        const data = await response.json();
+        setPaymentDetails(data);
+      } catch (error) {
+        console.error("Error fetching payment details:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (searchParams.payment_id) {
+      fetchPaymentDetails();
+    }
+  }, [searchParams.payment_id]);
+
+  if (loading) {
+    return <p>Cargando detalles del pago...</p>;
+  }
+
+  if (!paymentDetails) {
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold text-red-600">Pago Rechazado ❌</h1>
+        <p>
+          No se encontraron detalles del pago. Por favor, intenta nuevamente más
+          tarde.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Pago Fallido</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold text-red-600">Pago Rechazado ❌</h1>
       <p>
-        Lamentablemente, hubo un problema con tu pago. Por favor, intenta nuevamente o contacta con 
-        soporte si el problema persiste.
+        Tu pago no se pudo procesar correctamente. Por favor, revisa los
+        detalles y vuelve a intentarlo.
       </p>
 
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Detalles del Intento de Pago</h2>
-        <ul className="list-disc list-inside">
-          <li><strong>ID de Colección:</strong> {collection_id || "N/A"}</li>
-          <li><strong>Estado:</strong> {status || "N/A"}</li>
-          <li><strong>Referencia Externa:</strong> {external_reference || "N/A"}</li>
+      <h2 className="text-xl font-semibold mt-6">Detalles del Pago:</h2>
+      <p>
+        <strong>ID del Pago:</strong> {paymentDetails.id}
+      </p>
+      <p>
+        <strong>Estado:</strong> {paymentDetails.status}
+      </p>
+      <p>
+        <strong>Monto:</strong> {paymentDetails.amount.toLocaleString()} COP
+      </p>
+      <p>
+        <strong>Fecha:</strong>{" "}
+        {paymentDetails.date
+          ? new Date(paymentDetails.date).toLocaleString("es-CO")
+          : "No disponible"}
+      </p>
+
+      <h2 className="text-xl font-semibold mt-6">Resumen del Pedido:</h2>
+      {paymentDetails.items?.length > 0 ? (
+        <ul className="mt-2 list-disc list-inside">
+          {paymentDetails.items.map((item, index) => (
+            <li key={index}>
+              {item.quantity}x {item.title} -{" "}
+              {parseInt(item.unit_price).toLocaleString()} COP
+            </li>
+          ))}
         </ul>
-      </section>
+      ) : (
+        <p>No hay información del pedido.</p>
+      )}
 
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold mb-2">Instrucciones Adicionales</h2>
-        <p>
-          Por favor, revisa tus datos de pago o intenta usar otro método de pago. Si necesitas ayuda, 
-          contáctanos para asistirte en el proceso.
-        </p>
-      </section>
-    </main>
-  );
-}
-
-export default function FailurePage() {
-  return (
-    <Suspense fallback={<p className="text-center text-gray-500">Cargando detalles del pago...</p>}>
-      <FailureContent />
-    </Suspense>
+      <div className="mt-6">
+        <a
+          href="/checkout"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Intentar de nuevo
+        </a>
+      </div>
+    </div>
   );
 }

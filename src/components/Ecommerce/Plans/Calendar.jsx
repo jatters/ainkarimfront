@@ -13,7 +13,7 @@ export default function CallyDatePicker({
   const calendarRef = useRef(null);
 
   useEffect(() => {
-    console.log("Received disallowedDates:", disallowedDates);
+    //console.log("Received disallowedDates:", disallowedDates);
 
     // Importar "cally" solo en el cliente
     import("cally").then(() => {
@@ -22,14 +22,14 @@ export default function CallyDatePicker({
         calendarRef.current.isDateDisallowed = (date) => {
           const formatted = formatDateYYYYMMDD(date);
           const isDisallowed = disallowedDates.includes(formatted);
-          console.log(`isDateDisallowed llamado para ${formatted}: ${isDisallowed}`);
+          //console.log(`isDateDisallowed llamado para ${formatted}: ${isDisallowed}`);
           return isDisallowed;
         };
 
         // Manejar el evento 'change'
         const handleChange = () => {
           const selectedDate = calendarRef.current.value;
-          console.log("Fecha seleccionada:", selectedDate);
+          //console.log("Fecha seleccionada:", selectedDate);
           if (onChange) {
             onChange(selectedDate);
           }
@@ -37,7 +37,7 @@ export default function CallyDatePicker({
 
         // Añadir listener para el evento 'change'
         calendarRef.current.addEventListener("change", handleChange);
-        console.log("Listener 'change' añadido al calendario.");
+        //console.log("Listener 'change' añadido al calendario.");
 
         // Limpieza al desmontar
         return () => {
@@ -60,14 +60,14 @@ export default function CallyDatePicker({
   
 
   return (
-    <div className="calendar-container" style={{ position: "relative" }}>
+    <div className="calendar-container flex justify-center relative">
       <calendar-date
         ref={calendarRef}
         locale="es"
         value={value || ""}
         min={min || ""}
         max={max || ""}
-        first-day-of-week="0"
+        first-day-of-week="0"        
       >
         {/* Ícono para el mes anterior */}
         <svg

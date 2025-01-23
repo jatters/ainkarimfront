@@ -9,7 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
   return (
-    <div>
+    <div className="px-5 space-y-5">
       {/* Secciones de filtro para vinos */}
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>

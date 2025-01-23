@@ -5,7 +5,7 @@ import { CartContext } from "@/context/CartContext";
 import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
-import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar"; // Ajusta la ruta según tu estructura
+import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar"; 
 
 function formatHour(hourString) {
   const [hours, minutes] = hourString.split(":");
@@ -149,18 +149,18 @@ export default function ReservationField({
 
   if (horarios && horarios.length > 0) {
     return (
-      <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
+      <div className="-bg--gray py-5 px-2 sm:px-5 rounded-xl border shadow-md">
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
 
         {/* -- Fila de inputs -- */}
-        <div className="flex gap-x-5 gap-y-2 justify-items-center items-center flex-wrap">
+        <div className="flex gap-x-0 sm:gap-x-3 gap-y-2 justify-center justify-items-center items-center flex-wrap">
           {/* Fecha (con el DatePicker) */}
-          <div className="py-2 flex-1">
-            <div className="font-bold -text--dark-green text-base flex items-center gap-1">
+          <div className="py-2 flex-1 mx-auto">
+            <div className="font-bold -text--dark-green text-base flex items-center gap-1 mb-5 ">
               <span className="icon-[material-symbols--calendar-month-rounded]"></span>
-              Fecha:
+              Selecciona la fecha:
             </div>
             <CallyDatePicker
               value={reservationData.date}
@@ -176,7 +176,7 @@ export default function ReservationField({
               }}
               min={minDate}
               max={maxDate}
-              disallowedDates={disabledDates}
+              disallowedDates={disabledDates}              
             />
 
             {error && (
@@ -185,46 +185,48 @@ export default function ReservationField({
           </div>
 
           {/* Personas */}
-          <div className="py-2 flex-1">
-            <div className="font-bold -text--dark-green text-base flex items-center gap-1">
-              <span className="icon-[ion--people]"></span>Personas:
+          <div className="flex flex-col gap-y-2 mx-auto" >
+            <div className="py-2 flex-1 items-center">
+              <div className="font-bold -text--dark-green text-base flex items-center gap-1">
+                <span className="icon-[ion--people]"></span>Personas:
+              </div>
+              <div className="flex items-center mt-2">
+                <button
+                  className="-bg--dark-green/70 text-white px-3 py-2 rounded-l focus:outline-none hover:-bg--dark-green duration-200"
+                  onClick={decreasePersons}
+                  aria-label="Disminuir cantidad de personas"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  readOnly
+                  name="persons"
+                  value={reservationData.persons}
+                  aria-label="Número de personas"
+                  className="appearance-none border -border--dark-green/70 w-full px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+                />
+                <button
+                  className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200"
+                  onClick={increasePersons}
+                  aria-label="Aumentar cantidad de personas"
+                >
+                  +
+                </button>
+              </div>
             </div>
-            <div className="flex items-center">
-              <button
-                className="-bg--dark-green/70 text-white px-3 py-2 rounded-l focus:outline-none hover:-bg--dark-green duration-200"
-                onClick={decreasePersons}
-                aria-label="Disminuir cantidad de personas"
-              >
-                -
-              </button>
-              <input
-                type="number"
-                readOnly
-                name="persons"
-                value={reservationData.persons}
-                aria-label="Número de personas"
-                className="appearance-none border -border--dark-green/70 w-full px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
-              />
-              <button
-                className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200"
-                onClick={increasePersons}
-                aria-label="Aumentar cantidad de personas"
-              >
-                +
-              </button>
-            </div>
-          </div>
 
-          {/* Horas */}
-          <ListHours
-            schedules={horarios}
-            classNameInput="w-full"
-            classNameContainer="py-2 flex-1"
-            value={reservationData.hour}
-            onChange={(hour) =>
-              setReservationData((prev) => ({ ...prev, hour }))
-            }
-          />
+            {/* Horas */}
+            <ListHours
+              schedules={horarios}
+              classNameInput="w-full"
+              classNameContainer="py-2 flex-1 items-center"
+              value={reservationData.hour}
+              onChange={(hour) =>
+                setReservationData((prev) => ({ ...prev, hour }))
+              }
+            />
+          </div>
         </div>
 
         {/* Servicios adicionales */}
