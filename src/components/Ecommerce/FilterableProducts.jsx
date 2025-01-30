@@ -52,7 +52,7 @@ export default function FilterableProducts({ initialProducts }) {
       <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 row-span-5 px-5">
         {filteredProducts.map((product) => {
           const {
-            id,
+            documentId,
             slug,
             title,
             price,
@@ -75,7 +75,7 @@ export default function FilterableProducts({ initialProducts }) {
 
           return (
             <ProductCard
-              key={id}
+              key={documentId}
               slug={`/producto/${slug}`}
               title={title}
               price={price}
@@ -84,7 +84,7 @@ export default function FilterableProducts({ initialProducts }) {
               image={imageUrl}
               altimg={altText}
               product={{
-                id,
+                documentId,
                 title,
                 price,
                 image: {

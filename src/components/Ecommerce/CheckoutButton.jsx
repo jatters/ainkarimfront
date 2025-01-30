@@ -1,50 +1,54 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import React, { useState } from "react";
+import { initMercadoPago } from "@mercadopago/sdk-react";
 
 initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY);
 
-export default function CheckoutButton({ orderData }) {
-  const [preferenceId, setPreferenceId] = useState(null);
+export default function CheckoutButton({ orderData, formData, formValid, triggerValidation }) {
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!orderData || orderData.length === 0) return;
+  const handlePayment = async () => {
+    if (!formValid) {
+      triggerValidation();
+      return;
+    }
 
-    const createPreference = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/mercadopago/create-preference", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderData }),
-        });
+    setLoading(true);
+    try {
+      console.log("🟢 Enviando datos a API MercadoPago:", { orderData, formData });
 
-        const data = await res.json();
-        if (data.id) {
-          setPreferenceId(data.id);
-        } else {
-          console.error("No preference ID received", data);
-        }
-      } catch (error) {
-        console.error("Error al crear preferencia:", error);
-      } finally {
-        setLoading(false);
+      const res = await fetch("/api/mercadopago/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderData,
+          customer: formData,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.id) {
+        window.location.href = `https://www.mercadopago.com.co/checkout/v1/redirect?preference-id=${data.id}`;
+      } else {
+        console.error("❌ No se recibió un ID de preferencia", data);
       }
-    };
-
-    createPreference();
-  }, [orderData]);
+    } catch (error) {
+      console.error("❌ Error al crear la preferencia de Mercado Pago:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center">
-      {loading ? (
-        <p className="text-gray-500">Generando orden de pago...</p>
-      ) : preferenceId ? (
-        <Wallet initialization={{ preferenceId }} />
-      ) : (
-        <p className="text-red-500">No se pudo generar la preferencia</p>
-      )}
+      <button
+        onClick={handlePayment}
+        className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition ${loading ? "opacity-50" : ""}`}
+        disabled={loading}
+      >
+        {loading ? "Generando orden de pago..." : "Pagar con Mercado Pago"}
+      </button>
     </div>
   );
 }

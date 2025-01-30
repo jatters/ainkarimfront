@@ -5,7 +5,7 @@ import { CartContext } from "@/context/CartContext";
 import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
-import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar"; 
+import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
 
 function formatHour(hourString) {
   const [hours, minutes] = hourString.split(":");
@@ -17,6 +17,7 @@ function formatHour(hourString) {
 }
 
 export default function ReservationField({
+  documentId,
   name,
   price,
   horarios,
@@ -113,13 +114,14 @@ export default function ReservationField({
     const additionalServicePrice = selectedService ? selectedService.price : 0;
 
     const productToAdd = {
+      documentId,
       name,
       reservationData: {
         ...reservationData,
         hour: formattedHour,
       },
       title: `${name} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
-      Precio: unitPrice,
+      price: unitPrice,
       quantity: reservationData.persons,
       additionalService: selectedService
         ? {
@@ -176,7 +178,7 @@ export default function ReservationField({
               }}
               min={minDate}
               max={maxDate}
-              disallowedDates={disabledDates}              
+              disallowedDates={disabledDates}
             />
 
             {error && (
@@ -185,7 +187,7 @@ export default function ReservationField({
           </div>
 
           {/* Personas */}
-          <div className="flex flex-col gap-y-2 mx-auto" >
+          <div className="flex flex-col gap-y-2 mx-auto">
             <div className="py-2 flex-1 items-center">
               <div className="font-bold -text--dark-green text-base flex items-center gap-1">
                 <span className="icon-[ion--people]"></span>Personas:
@@ -204,7 +206,7 @@ export default function ReservationField({
                   name="persons"
                   value={reservationData.persons}
                   aria-label="Número de personas"
-                  className="appearance-none border -border--dark-green/70 w-full px-3 py-2 text-gray-700 text-center leading-tight focus:outline-none"
+                  className="appearance-none border -border--dark-green/70 w-full px-3 py-2 h-10 text-gray-700 text-center leading-tight focus:outline-none"
                 />
                 <button
                   className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200"
@@ -256,13 +258,14 @@ export default function ReservationField({
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green ">
           ¿Deseas Reservar?
         </div>
-        <div className="py-3">Comunícate con nosotros para reservar</div>
+        <div className="pb-3">Comunícate con nosotros para reservar</div>
         <div className="flex items-center gap-1 py-3 -text--dark-green">
           <span className="icon-[ph--envelope-simple-bold]"></span>
           <span className="font-bold">Correo:</span>
           <a
             href="mailto:ventas@marquesvl.com"
-            className="hover:-text--light-green"
+            className="hover:-text--light-green hover:underline duration-200"
+            aria-label="Enviar correo a Viñedo Ain Karim"
           >
             ventas@marquesvl.com
           </a>
@@ -274,8 +277,8 @@ export default function ReservationField({
             href="https://api.whatsapp.com/send?phone=573183490389"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Ir al Whatsapp de Viñedo Ain Karim"
-            className="hover:-text--light-green"
+            aria-label="Iniciar chat por Whatsapp con el Viñedo Ain Karim"
+            className="hover:-text--light-green duration-200"
           >
             318 349 0389
           </a>

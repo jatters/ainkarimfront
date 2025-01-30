@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import FormatHour from "./FormatHour";
 
-export default function   ListHours({
+export default function ListHours({
   schedules,
-  classNameInput="",
-  classNameContainer="",
+  classNameInput = "",
+  classNameContainer = "",
   value,
   onChange,
 }) {
@@ -37,7 +37,7 @@ export default function   ListHours({
         value={selectedHour}
         onChange={handleHourChange}
         aria-label="Selecciona un horario"
-        className={`mt-2 p-2 border border-gray-300 rounded ${classNameInput}`}
+        className={`mt-2 p-2 border text-slate-700   border-gray-300 rounded ${classNameInput}`}
       >
         <option value="">Selecciona un horario</option>
         {horariosSorted?.map((horario, index) => (

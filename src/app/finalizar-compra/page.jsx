@@ -1,13 +1,21 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import CheckoutForm from "@/components/Forms/CheckoutForm";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function PaymentPage() {
   const { cart, removeFromCart } = useContext(CartContext);
+  const [formState, setFormState] = useState({ isValid: false, formData: {} });
+  /* const handleFormSubmit = (formData) => {
+    setFormState({ isValid: true, formData });
+  }; */
 
+  const handleFormChange = (updatedFormState) => {
+    setFormState(updatedFormState);
+  };
   const calculateSubtotal = (item) => {
     const price = parseFloat(item.Precio || item.price || 0);
     const additionalPrice = item.additionalService
@@ -32,17 +40,22 @@ export default function PaymentPage() {
 
   // orderData se usa para registrar/mostrar info de lo que se va a pagar
   const orderData = cart.map((product) => ({
-    id: product.id,
-    plan: product.id,
-    name: product.title,
+    id: product.documentId ? String(product.documentId) : "sin-id",
+    name: product.title || product.attributes?.title || "Producto sin nombre",
     date: product.reservationData?.date || null,
     time: product.reservationData?.hour || null,
     guests: product.reservationData?.persons || null,
     price: parseFloat(product.Precio || product.price || 0),
     additionalService: product.additionalService || null,
     quantity: product.quantity || 1,
+    image: product.image ? { url: product.image.url } : null, // ✅ Agregar imagen si existe
   }));
-
+  
+  //console.log("🛒 Datos de `orderData` antes de enviar:", orderData);
+  {console.log("cart es:", cart)}
+  {console.log("orderdata es:", orderData)}
+  
+  
   return (
     <main>
       <div className="container mx-auto pt-16 pb-14">
@@ -53,10 +66,12 @@ export default function PaymentPage() {
           {/* Columna izquierda: Formulario de datos cliente */}
           <div className="col-span-1">
             <div>
+              
               {orderData.length > 0 && (
                 <CheckoutForm
                   showAddressFields={cart.some((item) => !item.reservationData)}
                   orderData={orderData}
+                  onFormChange={handleFormChange}
                 />
               )}
             </div>
@@ -71,18 +86,6 @@ export default function PaymentPage() {
               {cart.map((product, index) => {
                 const isReservation = !!product.reservationData;
 
-                let imageUrl = null;
-                if (
-                  !isReservation &&
-                  product.image?.url
-                ) {
-                  imageUrl = `${product.image.url}`;
-                }
-
-                const altText = isReservation
-                  ? "Imagen no disponible para reservas"
-                  : product.image?.alternativeText || "Sin imagen";
-
                 const title =
                   product.title || product.attributes?.title || "Sin título";
                 const pricePerUnit = parseFloat(
@@ -96,25 +99,9 @@ export default function PaymentPage() {
                 return (
                   <div
                     key={index}
-                    className="grid grid-cols-5 py-8 border-b items-center"
+                    className="grid grid-cols-5 py-3 pl-4 border-b items-center hover:bg-slate-100 duration-200"
                   >
-                    {!isReservation && (
-                      <div className="col-span-1">
-                        {imageUrl ? (
-                          <Image
-                            src={imageUrl}
-                            alt={altText}
-                            className="h-20 w-20 object-cover"
-                            width={80}
-                            height={80}
-                          />
-                        ) : (
-                          <span className="mr-2">Sin imagen</span>
-                        )}
-                      </div>
-                    )}
-
-                    <div className={isReservation ? "col-span-4" : "col-span-3"}>
+                    <div className="col-span-4">
                       <div className="font-bold -text--dark-green">{title}</div>
                       {isReservation ? (
                         <div className="text-sm text-gray-600">
@@ -162,13 +149,13 @@ export default function PaymentPage() {
                         <>
                           <div className="text-sm">
                             <span className="font-semibold -text--dark-green">
-                              Precio:
+                              Precio unitario:
                             </span>{" "}
-                            {formatPrice(pricePerUnit)}
+                            {`${formatPrice(pricePerUnit)} x ${quantity}`}
                           </div>
                           <div>
                             <span className="font-semibold -text--dark-green">
-                              Subtotal:
+                              Valor:
                             </span>{" "}
                             {formatPrice(subtotalPrice)}
                           </div>
@@ -178,9 +165,15 @@ export default function PaymentPage() {
 
                     <div className="col-span-1 text-center">
                       <div>
-                        <button onClick={() => removeFromCart(product)}>
-                          <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300" />
-                        </button>
+                        <Tooltip
+                          title="Eliminar producto"
+                          placement="top"
+                          arrow
+                        >
+                          <button onClick={() => removeFromCart(product)}>
+                            <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300" />
+                          </button>
+                        </Tooltip>
                       </div>
                       <div>
                         {quantity} {quantity > 1 ? "unidades" : "unidad"}
@@ -202,7 +195,12 @@ export default function PaymentPage() {
 
               {/* Botón de pago Mercado Pago */}
               <div>
-                <CheckoutButton orderData={orderData} />
+                <CheckoutButton
+                  orderData={cart}
+                  formData={formState.formData}
+                  formValid={formState.isValid}
+                  triggerValidation={formState.triggerValidation} // ✅ Pasamos la validación al botón
+                />
               </div>
             </div>
           </div>

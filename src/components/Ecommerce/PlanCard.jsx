@@ -1,5 +1,5 @@
 //import Link from "next/link";
-import { Link } from 'next-view-transitions'
+import { Link } from "next-view-transitions";
 import ModalSchedule from "./Plans/ModalSchedule";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ export default function PlanCard({
   experiences,
   onlyadults,
   allowchilds,
-  Schedules,  
+  Schedules,
 }) {
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
@@ -40,19 +40,23 @@ export default function PlanCard({
         <div className="flex flex-col items-center">
           <p className="font-semibold text-base">{price || ""}</p>
           <p className="text-xs -text--dark-green">
-            {price ? "por persona" : "Ingresa para ver más"}
+            {price ? (
+              "por persona"
+            ) : (
+              <span className="break-normal">Ingresa para ver más</span>
+            )}
           </p>
         </div>
       </div>
 
       <ul
-        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`} 
+        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}
         aria-label="Caracteristicas del plan"
       >
         {experiences?.map((experience, index) => (
           <li
             key={index}
-            className="flex gap-x-1 items-center flex-col hover:scale-110 duration-300"
+            className="flex gap-x-1 items-center flex-col hover:scale-110 duration-200 antialiased"
           >
             <Image
               src={experience.iconurl}
@@ -75,8 +79,10 @@ export default function PlanCard({
       )}
       {allowchilds === true && (
         <div className="flex gap-1 mb-5 text-slate-600 font-medium">
-          <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>
-          <span className="text-center">Ingreso de menores de edad permitido sin costo</span>
+          <span className="text-center">
+            <span className="icon-[material-symbols--child-care-outline] text-2xl -mb-2"></span>
+            Ingreso de menores de edad permitido sin costo
+          </span>
         </div>
       )}
       <div className="flex flex-wrap gap-5  justify-center">
@@ -87,7 +93,7 @@ export default function PlanCard({
           <span className="icon-[ph--eye]"></span> Ver
         </Link>
         {Schedules.length > 0 && (
-          <ModalSchedule title={title} price={price} schedules={Schedules}  />
+          <ModalSchedule title={title} price={price} schedules={Schedules} />
         )}
       </div>
     </div>

@@ -51,7 +51,7 @@ export default function Informationpage() {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
-          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg">
+          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg border border-gray-200">
             <span className="icon-[lucide--car] text-8xl -text--dark-green" />
             <h3 className="-text--dark-green text-xl font-semibold">
               AUTOMÓVIL PARTICULAR
@@ -70,7 +70,7 @@ export default function Informationpage() {
               </li>
             </ul>
           </div>
-          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg">
+          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg border border-gray-200">
             <span className="icon-[lucide--bus] text-8xl -text--dark-green" />
             <h3 className="-text--dark-green text-xl font-semibold">
               BUS COLECTIVO

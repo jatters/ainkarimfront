@@ -25,7 +25,7 @@ export default function filantropia({ filantropia }) {
               height={700}
               className="rounded-t-lg lg:rounded-lg"
             />
-            <div className="space-y-5 py-5 lg:py-10 px-10">
+            <div className="space-y-5 py-5 lg:py-10 px-10 prose">
               <h3 className="text-3xl -text--dark-green mb-7">{item.title}</h3>
               <ReactMarkdown>{item.description}</ReactMarkdown>
             </div>

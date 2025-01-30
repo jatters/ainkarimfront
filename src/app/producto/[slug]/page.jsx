@@ -109,7 +109,7 @@ export default async function singleProductPage({ params }) {
                 </div>
               )}
 
-              <ReactMarkdown className="lg:my-7">{description}</ReactMarkdown>
+              <ReactMarkdown className="lg:my-7 prose">{description}</ReactMarkdown>
 
               {variaciones && (
                 <div>
@@ -139,7 +139,7 @@ function AddToCartButton({ product }) {
   const handleAddToCart = () => {
     // Crear un objeto con los atributos necesarios para el carrito
     const productToAdd = {
-      id: product.id,
+      documentId: product.documentId,
       title: product.title || "Sin título",
       price: product.price || 0,
       image: product.image?.url

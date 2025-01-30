@@ -4,7 +4,7 @@ import { Link } from 'next-view-transitions'
 export default function AvisoPrivacidadPage() {
   return (
     <main>
-      <section className="max-w-screen-xl mx-auto py-16 px-5 space-y-5">
+      <section className="max-w-screen-xl mx-auto py-16 px-5 space-y-5 prose">
         <h1 className="-text--dark-green text-4xl font-bold text-center mb-12">
           Aviso de Privacidad
         </h1>
@@ -52,7 +52,7 @@ export default function AvisoPrivacidadPage() {
           a través del canal de atención dispuesto por el VIÑEDO:{" "}
           <a
             href="mailto:smartinez@marquesvl.com"
-            className="-text--dark-green font-medium hover:-text--light-green duration-200"
+            className="-text--dark-green font-medium hover:-text--light-green hover:underline duration-200"
           >
             smartinez@marquesvl.com.
           </a>

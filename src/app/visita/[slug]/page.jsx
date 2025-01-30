@@ -33,6 +33,7 @@ export default async function SinglePlanPage({ params }) {
       );
     }
     const {
+      documentId,
       name,
       gallery,
       price,
@@ -91,7 +92,7 @@ export default async function SinglePlanPage({ params }) {
                 </div>
               )}
               {description && (
-                <ReactMarkdown className="my-3">{description}</ReactMarkdown>
+                <ReactMarkdown className="mt-3 mb-5 xl:mb-10 prose">{description}</ReactMarkdown>
               )}
               
               
@@ -101,6 +102,7 @@ export default async function SinglePlanPage({ params }) {
                 additionalServices={servicios_adicionales}
                 price={price}
                 name={name}
+                documentId={documentId}
                 rules={reglas_planes}
               />
 

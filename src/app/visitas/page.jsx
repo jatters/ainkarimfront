@@ -21,9 +21,9 @@ export default async function VisitasPage() {
     <main>
       <HeaderImage title="Visitas" background="/banner-visitas.webp" />
       <section className="container mx-auto py-16 px-5">
-        <div className="font-medium text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
+        <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
-        </div>        
+        </h2>        
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center mt-10 gap-x-4 gap-y-7">
           {plansData.data.map((plan) => {

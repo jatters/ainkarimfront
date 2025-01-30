@@ -1,4 +1,5 @@
 const { addDynamicIconSelectors } = require('@iconify/tailwind');
+import typography from '@tailwindcss/typography'
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -29,6 +30,7 @@ module.exports = {
     }
   },
   plugins: [
+    typography,
     addDynamicIconSelectors(),
   ],
 };

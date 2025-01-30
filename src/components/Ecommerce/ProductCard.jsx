@@ -21,7 +21,7 @@ export default function ProductCard({
 
   const handleAddToCart = () => {
     addToCart({
-      id: product.id,
+      id: product.documentId,
       attributes: product,
       Precio: parseInt(product.price, 10),
       quantity: 1,
@@ -31,7 +31,7 @@ export default function ProductCard({
   return (
     <>
       {isActive ? (
-        <div className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] ">
+        <div className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] lg:max-h-[475px] 2xl:max-h-[445px]">
           {regularprice > price && (
             <div className="absolute top-3 right-4 -bg--dark-red text-white text-xs py-4 px-2 flex items-center justify-center rounded-xl font-bold group-hover:-bg--light-red  duration-200 z-10">
               OFERTA %

@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -21,12 +19,21 @@ export async function GET(req) {
       return Response.json({ error: paymentData.message || "Error obteniendo el pago" }, { status: response.status });
     }
 
+    console.log("🔍 Respuesta de MercadoPago:", paymentData);
+
     return Response.json({
       id: paymentData.id,
       status: paymentData.status,
       amount: paymentData.transaction_amount,
-      date: paymentData.date_approved,
-      items: paymentData.additional_info?.items || [], // 🔥 Aquí aseguramos que los items lleguen
+      date: paymentData.date_approved || paymentData.date_created,
+      method: paymentData.payment_method_id || "No disponible",
+      payer: {
+        name: paymentData.additional_info?.payer?.first_name || paymentData.payer?.first_name || "No disponible",
+        surname: paymentData.additional_info?.payer?.last_name || paymentData.payer?.last_name || "No disponible",
+        email: paymentData.payer?.email || "No disponible",
+        phone: paymentData.additional_info?.payer?.phone?.number || paymentData.payer?.phone?.number || "No disponible",
+      },
+      items: paymentData.additional_info?.items || [],
     });
 
   } catch (error) {

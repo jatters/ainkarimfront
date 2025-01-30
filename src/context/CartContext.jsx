@@ -8,6 +8,7 @@ export function CartProvider({ children }) {
 
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem("cart");
   };
   // Cargar el carrito desde localStorage al iniciar
   useEffect(() => {
@@ -42,14 +43,14 @@ export function CartProvider({ children }) {
       const existingProductIndex = prevCart.findIndex((item) => {
         if (isReservation) {
           return (
-            item.id === product.id &&
+            item.documentId === product.documentId &&
             item.reservationData?.date === product.reservationData?.date &&
             item.reservationData?.hour === product.reservationData?.hour &&
             (!item.additionalService ||
               item.additionalService.name === product.additionalService?.name)
           );
         } else {
-          return item.id === product.id;
+          return item.documentId === product.documentId;
         }
       });
 
@@ -102,7 +103,7 @@ export function CartProvider({ children }) {
     setCart((prevCart) =>
       prevCart.filter(
         (item) =>
-          item.id !== product.id ||
+          item.documentId !== product.documentId ||
           item.reservationData?.hour !== product.reservationData?.hour ||
           item.reservationData?.date !== product.reservationData?.date ||
           item.additionalService?.name !== product.additionalService?.name

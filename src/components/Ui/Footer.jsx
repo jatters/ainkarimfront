@@ -1,6 +1,6 @@
 import Image from "next/image";
 //import Link from "next/link";
-import { Link } from 'next-view-transitions'
+import { Link } from "next-view-transitions";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 
@@ -12,7 +12,10 @@ export default function Footer() {
           <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             EL VIÑEDO
           </div>
-          <ul className="flex flex-col gap-3 text-sm" aria-label="Datos de contacto del Viñedo Ain Karim">
+          <ul
+            className="flex flex-col gap-3 text-sm"
+            aria-label="Datos de contacto del Viñedo Ain Karim"
+          >
             <li>
               <div className="flex flex-wrap gap-1 items-center">
                 <span className="icon-[gridicons--location] text-xl"></span>
@@ -159,7 +162,7 @@ export default function Footer() {
               am a 5:30 pm
             </li>
             <li>
-              <span className="font-semibold">Ultimo recorrido:</span> 3:30pm
+              <span className="font-semibold">Último recorrido:</span> 3:30pm
             </li>
           </ul>
         </div>
@@ -167,7 +170,10 @@ export default function Footer() {
           <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             OFICINA
           </div>
-          <ul className="flex flex-col space-y-2 text-sm" aria-label="Datos de la oficina del Viñedo Ain Karim">
+          <ul
+            className="flex flex-col space-y-2 text-sm"
+            aria-label="Datos de la oficina del Viñedo Ain Karim"
+          >
             <li className="flex items-center gap-1">
               <span className="icon-[gridicons--location] text-xl"></span>
               <span className="font-semibold">Dirección:</span> Av. Calle 127 #
@@ -189,7 +195,10 @@ export default function Footer() {
       </div>
       <div className="flex flex-col items-center pb-5">
         <span className="text-xl font-semibold">Síguenos</span>
-        <ul className="flex flex-row  gap-4 my-3" aria-label="Redes sociales del Viñedo Ain Karim">
+        <ul
+          className="flex flex-row  gap-4 my-3"
+          aria-label="Redes sociales del Viñedo Ain Karim"
+        >
           <li>
             <a
               className="text-3xl"
@@ -214,7 +223,7 @@ export default function Footer() {
           </li>
           <li>
             <a
-              className="text-3xl"
+              className="text-3xl"              
               href="https://www.tripadvisor.co/Attraction_Review-g676524-d5888335-Reviews-Vinedo_Ain_Karim-Villa_de_Leyva_Boyaca_Department.html"
               target="_blank"
               rel="noreferrer noopener"

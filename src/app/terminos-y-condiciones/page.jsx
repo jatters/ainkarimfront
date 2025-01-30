@@ -4,7 +4,7 @@ import { Link } from 'next-view-transitions'
 export default function PolicyPricacyPage() {
   return (
     <main>
-      <section className="max-w-screen-lg mx-auto py-16 px-5">
+      <section className="max-w-screen-lg mx-auto py-16 px-5 prose">
         <h1 className="-text--dark-green text-4xl font-bold text-center mb-12 ">
           TÉRMINOS Y CONDICIONES
         </h1>

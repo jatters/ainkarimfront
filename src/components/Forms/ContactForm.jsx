@@ -191,7 +191,7 @@ export default function ContactForm({ ipAddress, useragent }) {
             )}
           </div>
           <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md">
-            <div className="space-y-3">
+            <div className="prose-sm">
               <div className="font-semibold">
                 AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
               </div>
@@ -236,7 +236,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 data, contáctenos al correo electrónico{" "}
                 <a
                   href="mailto:smartinez@marquesvl.com"
-                  className="hover:-text--light-green duration-200 font-medium"
+                  className="hover:-text--light-green duration-200 hover:underline  font-medium"
                 >
                   smartinez@marquesvl.com.
                 </a>

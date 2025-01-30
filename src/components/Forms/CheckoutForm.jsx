@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import style from "./PrettyCheckbox.css";
 
-export default function CheckoutForm({ showAddressFields, orderData }) {
+export default function CheckoutForm({
+  showAddressFields,
+  onFormChange,
+  //onSubmit,
+}) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
+    trigger,
     watch,
-  } = useForm();
+  } = useForm({ mode: "onChange" });
 
-  const [submitting, setSubmitting] = useState(false);
+  /* const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
 
   const onSubmit = handleSubmit(async (data) => {
@@ -40,18 +45,34 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
     } finally {
       setSubmitting(false);
     }
-  });
+  }); */
+  
+  useEffect(() => {
+    if (typeof onFormChange === "function") {
+      onFormChange({
+        isValid,
+        formData: watch(),
+        triggerValidation: () => trigger(), // ✅ Función para ejecutar validación manualmente
+      });
+    }
+  }, [isValid, watch]);
+  
+  
 
   const registerUser = watch("register");
 
-  
+  const isSamePassword = watch("password") === watch("confirmPassword");
 
   return (
     <div className="mx-auto p-8 bg-white shadow-md rounded-lg">
       <form
-        onSubmit={onSubmit}
+        //onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-3"
       >
+        {/* <form
+        onSubmit={onSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-3"
+      > */}
         <div>
           <label htmlFor="firstName" className="sr-only">
             Primer nombre
@@ -188,7 +209,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             type="text"
             id="document"
             className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-              errors.legalDocument ? "!border-red-500" : ""
+              errors.document ? "!border-red-500" : ""
             }`}
             placeholder="Número de Documento"
             {...register("document", {
@@ -213,67 +234,6 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           {errors.document && (
             <span className="text-sm text-red-600 mt-2 pl-1 block">
               {errors.document.message}
-            </span>
-          )}
-        </div>
-        {showAddressFields && (
-          <><div>
-          <label htmlFor="address" className="sr-only">
-            Dirección
-          </label>
-          <input
-            type="text"
-            id="address"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-1 focus:-ring--grey-light ${
-              errors.address ? "!border-red-500" : "border"
-            }`}
-            placeholder="Dirección"
-            {...register("address", {
-              required: {
-                value: true,
-                message: "La dirección es requerida",
-              },
-              minLength: {
-                value: 10,
-                message: "La dirección es muy corta",
-              },
-            })}
-          />
-          {errors.address && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.address.message}
-            </span>
-          )}
-        </div>
-        <div>
-          <label htmlFor="departament" className="sr-only">
-            Departamento
-          </label>
-          <input
-            type="text"
-            id="departament"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-              errors.locality ? "!border-red-500" : ""
-            }`}
-            placeholder="Departamento"
-            {...register("departament", {
-              required: {
-                value: true,
-                message: "El departamento es requerido",
-              },
-              minLength: {
-                value: 2,
-                message: "El departamento es muy corto",
-              },
-              pattern: {
-                value: /^[A-Za-zÀ-ÿ\s]+$/,
-                message: "El departamento no es válido",
-              },
-            })}
-          />
-          {errors.departament && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.departament.message}
             </span>
           )}
         </div>
@@ -309,7 +269,71 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               {errors.mobiletwo.message}
             </span>
           )}
-        </div></>)}
+        </div>
+        {showAddressFields && (
+          <>
+            <div>
+              <label htmlFor="address" className="sr-only">
+                Dirección
+              </label>
+              <input
+                type="text"
+                id="address"
+                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-1 focus:-ring--grey-light ${
+                  errors.address ? "!border-red-500" : "border"
+                }`}
+                placeholder="Dirección"
+                {...register("address", {
+                  required: {
+                    value: true,
+                    message: "La dirección es requerida",
+                  },
+                  minLength: {
+                    value: 10,
+                    message: "La dirección es muy corta",
+                  },
+                })}
+              />
+              {errors.address && (
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <label htmlFor="departament" className="sr-only">
+                Departamento
+              </label>
+              <input
+                type="text"
+                id="departament"
+                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                  errors.locality ? "!border-red-500" : ""
+                }`}
+                placeholder="Departamento"
+                {...register("departament", {
+                  required: {
+                    value: true,
+                    message: "El departamento es requerido",
+                  },
+                  minLength: {
+                    value: 2,
+                    message: "El departamento es muy corto",
+                  },
+                  pattern: {
+                    value: /^[A-Za-zÀ-ÿ\s]+$/,
+                    message: "El departamento no es válido",
+                  },
+                })}
+              />
+              {errors.departament && (
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                  {errors.departament.message}
+                </span>
+              )}
+            </div>
+          </>
+        )}
         <div className="mb-4">
           <label htmlFor="email" className="sr-only">
             Correo
@@ -524,7 +548,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
         ) : (
           <>
             <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
-              <div className="space-y-3">
+              <div className="prose-sm">
                 <div className="font-semibold text-center mb-5">
                   AUTORIZACIÓN WEB PARA EL TRATAMIENTO DE DATOS PERSONALES
                 </div>
@@ -636,8 +660,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             )}
           </>
         )}
-
-        <div className="mb-6 col-span-2">
+        {/* <div className="mb-6 col-span-2">
           <button
             type="submit"
             className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
@@ -658,7 +681,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 : response.message}
             </div>
           )}
-        </div>
+        </div> */}
       </form>
     </div>
   );

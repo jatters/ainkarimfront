@@ -14,11 +14,11 @@ export default async function FAQ() {
     )
   }
   return (
-    <div className="max-w-3xl px-5 mx-auto py-10">
+    <div className="max-w-3xl px-5 mx-auto py-10 " aria-label="Preguntas frecuentes">
       {faqs.data.map((faq) => (
         <Accordion key={faq.documentId}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <h3 className="font-bold -text--dark-green hover:-text--light-green">
+            <h3 className="font-bold -text--dark-green hover:-text--light-green duration-200">
               {faq.title}
             </h3>
           </AccordionSummary>
