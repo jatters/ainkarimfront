@@ -17,7 +17,7 @@ export function CartProvider({ children }) {
       try {
         const parsedCart = JSON.parse(storedCart);
         if (parsedCart && Array.isArray(parsedCart) && parsedCart.length > 0) {
-          console.log("Cargando carrito desde localStorage:", parsedCart);
+          //console.log("Cargando carrito desde localStorage:", parsedCart);
           setCart(parsedCart);
         }
       } catch (error) {
@@ -29,7 +29,7 @@ export function CartProvider({ children }) {
   // Guardar el carrito en localStorage cada vez que cambie, si no está vacío
   useEffect(() => {
     if (cart.length > 0) {
-      console.log("Guardando carrito en localStorage:", cart);
+      //console.log("Guardando carrito en localStorage:", cart);
       localStorage.setItem("cart", JSON.stringify(cart));
     } else {
       localStorage.removeItem("cart");
@@ -114,7 +114,7 @@ export function CartProvider({ children }) {
   const updateQuantityInCart = (product, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === product.id &&
+        item.documentId === product.documentId &&
         (!product.reservationData ||
           (item.reservationData?.date === product.reservationData?.date &&
             item.reservationData?.hour === product.reservationData?.hour))

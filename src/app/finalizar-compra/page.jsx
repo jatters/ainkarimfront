@@ -52,8 +52,8 @@ export default function PaymentPage() {
   }));
   
   //console.log("🛒 Datos de `orderData` antes de enviar:", orderData);
-  {console.log("cart es:", cart)}
-  {console.log("orderdata es:", orderData)}
+  //{//console.log("cart es:", cart)}
+  //{//console.log("orderdata es:", orderData)}
   
   
   return (

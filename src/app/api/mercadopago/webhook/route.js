@@ -9,7 +9,7 @@ async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
     const response = await fetch(url, options);
     if (response.ok) return response.json();
     console.warn(`🔄 Reintentando (${i + 1}/${retries}) ${url}...`);
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await new Promise((resolve) => setTimeout(resolve, delay));
   }
   throw new Error(`❌ Error: No se pudo obtener respuesta de ${url}`);
 }
@@ -17,7 +17,7 @@ async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    console.log("🔔 Webhook MercadoPago recibido =>", body);
+    console.log("🔔 Webhook MercadoPago recibido =>", JSON.stringify(body, null, 2));
 
     const topic = request.nextUrl.searchParams.get("topic");
     const id = request.nextUrl.searchParams.get("id");
@@ -39,7 +39,7 @@ export async function POST(request) {
         return new Response("Esperando pago", { status: 202 });
       }
 
-      paymentId = orderData.payments.find(p => p.status === "approved")?.id || null;
+      paymentId = orderData.payments.find((p) => p.status === "approved")?.id || null;
       externalReference = orderData.external_reference;
     }
 
@@ -49,11 +49,12 @@ export async function POST(request) {
 
     if (!paymentId) {
       console.warn("⏳ Esperando a que MercadoPago confirme el pago...");
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const paymentResponse = await fetch(`https://api.mercadopago.com/v1/payments/${body.data?.id}`, {
-        headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` },
-      });
+      const paymentResponse = await fetch(
+        `https://api.mercadopago.com/v1/payments/${body.data?.id}`,
+        { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } }
+      );
 
       const paymentData = await paymentResponse.json();
       paymentId = paymentData.id || null;
@@ -71,7 +72,7 @@ export async function POST(request) {
       5, 3000
     );
 
-    console.log("📄 Datos del pago recibidos:", paymentData);
+    console.log("📄 Datos del pago recibidos:", JSON.stringify(paymentData, null, 2));
 
     if (!paymentData.id) {
       console.error("❌ No se pudo obtener el pago.");
@@ -86,38 +87,96 @@ export async function POST(request) {
     const paymentMethod = paymentData.payment_method_id || "No disponible";
 
     const payerData = {
-      name: paymentData.payer?.first_name || "No disponible",
-      surname: paymentData.payer?.last_name || "No disponible",
+      name: paymentData.additional_info?.payer?.first_name || paymentData.payer?.first_name || "No disponible",
+      surname: paymentData.additional_info?.payer?.last_name || paymentData.payer?.last_name || "No disponible",
       email: paymentData.payer?.email || "No disponible",
-      phone: paymentData.payer?.phone?.number || "No disponible",
+      phone: paymentData.additional_info?.payer?.phone?.number || paymentData.payer?.phone?.number || "No disponible",
       document: paymentData.payer?.identification?.number || "No disponible",
       address: paymentData.additional_info?.payer?.address?.street_name || "No disponible",
     };
 
+    console.log("📢 Datos del cliente correctos:", JSON.stringify(payerData, null, 2));
+
     let pedidoStatus = "Pendiente";
-    if (paymentStatus === "approved") pedidoStatus = "Pago";
-    else if (paymentStatus === "rejected") pedidoStatus = "Fallido";
+    let reservaEstado = "Pendiente";
+    if (paymentStatus === "approved") {
+      pedidoStatus = "Pago";
+      reservaEstado = "Confirmada";
+    } else if (paymentStatus === "rejected") {
+      pedidoStatus = "Fallido";
+      reservaEstado = "Cancelada";
+    }
 
     console.log(`🔎 Verificando si el pedido ${externalReference} ya existe en Strapi...`);
 
-    const orderExistsResponse = await fetch(`${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}`, {
-      headers: {
-        Authorization: `Bearer ${STRAPI_TOKEN}`,
-      },
-    });
+    const orderExistsResponse = await fetch(
+      `${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}`,
+      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+    );
 
     const orderExistsData = await orderExistsResponse.json();
-
     if (orderExistsData.data.length > 0) {
       console.log(`✅ Pedido ${externalReference} ya existe en Strapi. No se creará nuevamente.`);
       return new Response("Pedido ya existe", { status: 200 });
     }
+    
+    console.log(`📧 Enviando correo de confirmación de compra...`);
+    await fetch(`${process.env.CURRENT_ENVIRONMENT}/api/sendEmail`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        formType: "compraConfirmada",
+        name: paymentData.payer?.first_name || "Cliente",
+        email: paymentData.payer?.email || "No disponible",
+        phone: paymentData.payer?.phone?.number || "No disponible",
+        orderId: externalReference,
+        total: paymentData.transaction_amount,
+        date: new Date().toISOString(),
+        orderItems: paymentData.additional_info?.items.map((item) => ({
+          productName: item.title,
+          quantity: item.quantity,
+          unitPrice: item.unit_price,
+        })),
+      }),
+    });
 
     console.log(`❌ Pedido ${externalReference} no encontrado en Strapi. Creándolo...`);
 
-    const productosTransformados = paymentData.additional_info.items.map(item => ({
-      documentId: item.id // Se asegura de que se use el ID del producto como documentId
-    }));
+    const productos = [];
+    const reservas = [];
+
+    paymentData.additional_info.items.forEach((item) => {
+      if (item.title.toLowerCase().includes("plan") || item.unit_price === 0) {
+        const reservationDate = item.reservationData?.date || new Date().toISOString().split("T")[0];
+        const reservationTime = item.reservationData?.hour || "10:30:00.000";
+        const guests = item.reservationData?.persons || item.quantity || 1;
+
+        reservas.push({
+          data: {
+            plan: item.id,
+            guests,
+            reservationDate,
+            reservationTime,
+            state: reservaEstado,
+            payment_status: paymentStatus,
+            customerName: payerData.name,
+            customerLastname: payerData.surname,
+            customerEmail: payerData.email,
+            customerPhone: payerData.phone,
+            customerDocument: payerData.document,
+          },
+        });
+      } else {
+        productos.push({
+          documentId: item.id,
+          title: item.title,
+          quantity: item.quantity,
+        });
+      }
+    });
+
+    console.log("📦 Productos a conectar:", JSON.stringify(productos, null, 2));
+    console.log("📦 Reservas a conectar:", JSON.stringify(reservas, null, 2));
 
     const orderDataJson = {
       data: {
@@ -128,40 +187,34 @@ export async function POST(request) {
         payment_id: String(paymentId),
         payment_method: paymentMethod,
         totalPriceOrder: paymentData.transaction_amount,
-        customerName: payerData.name || "No disponible",
-        customerLastname: payerData.surname || "No disponible",
-        customerEmail: payerData.email || "No disponible",
-        customerPhone: payerData.phone || "No disponible",
-        customerDocument: payerData.document || "No disponible",
-        customerAddress: payerData.address || "No disponible",
-        productos: {
-          connect: productosTransformados
-        }
-      }
+        customerName: payerData.name,
+        customerLastname: payerData.surname,
+        customerEmail: payerData.email,
+        customerPhone: payerData.phone,
+        customerDocument: payerData.document,
+        customerAddress: payerData.address,
+        productos: { connect: productos.map((p) => ({ documentId: p.documentId })) },
+      },
     };
 
-    // 🔴 Agregar un console.log() para ver el array de productos antes de enviarlo
-    console.log("📦 Array de productos a conectar en Strapi:", JSON.stringify(orderDataJson.data.productos, null, 2));
+    console.log("📦 JSON enviado a Strapi para PEDIDO:", JSON.stringify(orderDataJson, null, 2));
 
-    console.log("📦 JSON que se enviará a Strapi:", orderDataJson);
-
-    const createOrderResponse = await fetch(`${STRAPI_URL}/api/pedidos`, {
+    await fetch(`${STRAPI_URL}/api/pedidos`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${STRAPI_TOKEN}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${STRAPI_TOKEN}`, "Content-Type": "application/json" },
       body: JSON.stringify(orderDataJson),
     });
 
-    if (!createOrderResponse.ok) {
-      console.error("❌ Error creando el pedido en Strapi.");
-      const errorResponse = await createOrderResponse.json();
-      console.error("🔴 Error de API Strapi:", errorResponse);
-      return new Response("Error creando el pedido", { status: 500 });
+    for (const reserva of reservas) {
+      console.log("📦 JSON enviado a Strapi para RESERVA:", JSON.stringify(reserva, null, 2));
+
+      await fetch(`${STRAPI_URL}/api/reservas`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${STRAPI_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify(reserva),
+      });
     }
 
-    console.log(`✅ Pedido ${externalReference} creado correctamente.`);
     return new Response("OK", { status: 200 });
 
   } catch (error) {
