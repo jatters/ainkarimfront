@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import style from "./PrettyCheckbox.css";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 export default function CheckoutForm({
   showAddressFields,
@@ -16,6 +17,13 @@ export default function CheckoutForm({
     trigger,
     watch,
   } = useForm({ mode: "onChange" });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   /* const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
@@ -46,7 +54,7 @@ export default function CheckoutForm({
       setSubmitting(false);
     }
   }); */
-  
+
   useEffect(() => {
     if (typeof onFormChange === "function") {
       onFormChange({
@@ -56,18 +64,16 @@ export default function CheckoutForm({
       });
     }
   }, [isValid, watch]);
-  
-  
 
   const registerUser = watch("register");
 
   const isSamePassword = watch("password") === watch("confirmPassword");
 
   return (
-    <div className="mx-auto p-8 bg-white shadow-md rounded-lg">
+    <div className="mx-auto lg:p-8 bg-white shadow-md rounded-lg">
       <form
         //onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-3"
+        className="grid grid-cols-1 lg:grid-cols-2 sm:gap-2 gap-3"
       >
         {/* <form
         onSubmit={onSubmit}
@@ -198,6 +204,34 @@ export default function CheckoutForm({
           {errors.secondSurname && (
             <span className="text-sm text-red-600 mt-1 pl-1 block">
               {errors.secondSurname.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <label htmlFor="documentType" className="sr-only">
+            Tipo de Documento
+          </label>
+          <select
+            type="select"
+            id="documentType"
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg  text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              errors.documentType ? "!border-red-500" : ""
+            }`}
+            {...register("documentType", {
+              required: {
+                value: true,
+                message: "Tipo de documento es requerido",
+              },
+            })}
+          >
+            <option value="Cédula">Cédula</option>
+            <option value="Cédula de extranjería">Cedula de extranjeria</option>
+            <option value="NIT">NIT</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+          {errors.documentType && (
+            <span className="text-sm text-red-600 mt-2 pl-1 block">
+              {errors.documentType.message}
             </span>
           )}
         </div>
@@ -385,24 +419,73 @@ export default function CheckoutForm({
         </div>
         {registerUser === true ? (
           <>
-            <div className="col-span-2">
-              <label htmlFor="password" className="sr-only">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                id="password"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-                  errors.password ? "border-red-500" : "border"
-                }`}
-                placeholder="Crea tu contraseña"
-                {...register("password", {
-                  required: {
-                    value: true,
-                    message: "La contraseña es requerida",
-                  },
-                })}
-              />
+            <div className="col-span-2 ">
+              <div className="relative">
+                <label htmlFor="password" className="sr-only">
+                  Contraseña
+                </label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                    errors.password ? "border-red-500" : "border"
+                  }`}
+                  placeholder="Crea tu contraseña"
+                  {...register("password", {
+                    required: {
+                      value: true,
+                      message: "La contraseña es requerida",
+                    },
+                  })}
+                />
+                <Tooltip
+                  title={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                  slotProps={{
+                    popper: {
+                      sx: {
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginTop: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginBottom: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginLeft: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginRight: "0px",
+                          },
+                      },
+                    },
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  >
+                    {showPassword ? (
+                      <span
+                        className="icon-[ri--eye-close-line]"
+                        role="img"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <span
+                        className="icon-[bi--eye]"
+                        role="img"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
               {errors.password && (
                 <span className="text-sm text-red-600 mt-2 pl-1 block">
                   {errors.password.message}
@@ -410,23 +493,74 @@ export default function CheckoutForm({
               )}
             </div>
             <div className="col-span-2">
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirmar Contraseña
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-                  errors.confirmPassword ? "border-red-500" : "border"
-                }`}
-                placeholder="Confirma tu contraseña"
-                {...register("confirmPassword", {
-                  required: {
-                    value: true,
-                    message: "La contraseña es requerida",
-                  },
-                })}
-              />
+              <div className="relative">
+                <label htmlFor="confirmPassword" className="sr-only">
+                  Confirmar Contraseña
+                </label>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                    errors.confirmPassword ? "border-red-500" : "border"
+                  }`}
+                  placeholder="Confirma tu contraseña"
+                  {...register("confirmPassword", {
+                    required: {
+                      value: true,
+                      message: "La contraseña es requerida",
+                    },
+                  })}
+                />
+                <Tooltip
+                  title={
+                    showConfirmPassword
+                      ? "Ocultar contraseña"
+                      : "Mostrar contraseña"
+                  }
+                  slotProps={{
+                    popper: {
+                      sx: {
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginTop: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginBottom: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginLeft: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginRight: "0px",
+                          },
+                      },
+                    },
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={toggleConfirmPasswordVisibility}
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  >
+                    {showConfirmPassword ? (
+                      <span
+                        className="icon-[ri--eye-close-line]"
+                        role="img"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <span
+                        className="icon-[bi--eye]"
+                        role="img"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
               {errors.confirmPassword && (
                 <span className="text-sm text-red-600 mt-2 pl-1 block">
                   {errors.confirmPassword.message}

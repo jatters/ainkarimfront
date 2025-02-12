@@ -15,8 +15,8 @@ export default async function PlansHome() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">
-      {plansData.data.slice(0, 3).map((plan) => {
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">
+      {plansData.data.slice(0, 4).map((plan) => {
         const experienciesList = plan.experiencias.map((experiencia) => ({
           id: experiencia.documentId,
           name: experiencia.name,

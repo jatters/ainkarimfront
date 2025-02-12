@@ -28,21 +28,21 @@ const fetchData = async (endpoint) => {
 //Get content of plans for home
 export async function GetPlansForHome() {
   return await fetchData(
-    `planes?populate[experiencias][populate][icon][fields]=url&populate[experiencias][fields]=name&populate[image][fields]=url,formats&populate=horarios`
+    `planes?filters[showInHome][$eq]=true&populate[experiencias][populate][icon][fields]=url&populate[experiencias][fields]=name&populate[image][fields]=url,formats&populate=horarios&pagination[limit]=4&sort[1]=order`
   );
 }
 
 //Get content of products for home
 export async function GetProductsForHome() {
   return await fetchData(
-    `productos?filters[productInHome][$eq]=true&populate[image][fields]=url&populate[categorias_de_producto][fields]=name&pagination[limit]=4`
+    `productos?filters[productInHome][$eq]=true&populate[image][fields]=url&populate[categorias_de_producto][fields]=name&pagination[limit]=5&sort[1]=title:desc`
   );
 }
 
 //Get content of products for product page
 export async function GetProducts() {
   return await fetchData(
-    `productos?populate[image][fields]=url,formats&populate=categorias_de_producto&sort[1]=title:desc`
+    `productos?populate[image][fields]=url,formats&populate[categorias_de_producto][fields]=name&populate[variaciones][fields]=*&sort[1]=title:desc`
   );
 }
 

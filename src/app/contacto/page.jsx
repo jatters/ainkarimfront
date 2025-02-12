@@ -3,7 +3,6 @@ import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 import banner from "@/../public/banner-contacto.webp";
-//import Link from "next/link";
 import { Link } from 'next-view-transitions'
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
@@ -25,17 +24,17 @@ export default async function contactPage() {
   return (
     <main>
       <HeaderImage title="Contacto" background="/banner-contacto.webp" />
-      <section className="container mx-auto pt-16 pb-8 px-5">
+      <section className="container mx-auto pt-8 lg:pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
-            <h2 className="font-bold text-4xl my-3 -text--dark-green">
+            <h2 className="font-bold text-2xl lg:text-4xl my-3 -text--dark-green">
               ESCRÍBENOS
             </h2>
             <ContactForm ipAddress={ipAddress} useragent={userAgent} />
           </div>
           <div className="flex flex-col gap-y-10 justify-center px-5">
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+              <h2 className="font-bold text-2xl lg:text-4xl mb-6 -text--dark-green">
                 EL VIÑEDO
               </h2>
               <ul>
@@ -76,7 +75,7 @@ export default async function contactPage() {
               </ul>
             </div>
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-4xl mb-6 -text--dark-green">
+              <h2 className="font-bold text-2xl lg:text-4xl mb-6 -text--dark-green">
                 OFICINA
               </h2>
               <ul>
@@ -106,7 +105,7 @@ export default async function contactPage() {
         </div>
       </section>
       <section className="container mx-auto pb-16 px-5">
-        <h2 className="font-bold text-4xl text-center mb-10 -text--dark-green">
+        <h2 className="font-bold text-2xl lg:text-4xl text-center mb-10 -text--dark-green">
           ¿CÓMO LLEGAR?
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">

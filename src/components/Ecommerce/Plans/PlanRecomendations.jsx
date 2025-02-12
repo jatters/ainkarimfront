@@ -1,4 +1,3 @@
-//import Link from "next/link";
 import { Link } from "next-view-transitions";
 
 export default function PlanRecomendations({ max_reservations }) {

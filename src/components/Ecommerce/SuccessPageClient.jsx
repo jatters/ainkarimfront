@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 import { CartContext } from "@/context/CartContext";
 import ConfettiWrapper from "@/components/Ecommerce/ConfettiWrapper"; 
+import Link from "next/link";
 
 export default function SuccessPageClient() {
   const searchParams = useSearchParams();
@@ -69,12 +70,12 @@ export default function SuccessPageClient() {
         <p className="text-gray-600 mt-2">
           {error || "No se encontraron detalles del pago."}
         </p>
-        <a
+        <Link
           href="/"
           className="mt-4 inline-block bg-blue-500 text-white px-5 py-3 rounded-md hover:bg-blue-700 transition"
         >
           Volver al inicio
-        </a>
+        </Link>
       </div>
     );
   }
@@ -104,13 +105,7 @@ export default function SuccessPageClient() {
 
       {/* Confetti animation */}
       <ConfettiWrapper
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
+        
       />
 
       <div className="mt-6 border-t pt-4">
@@ -199,12 +194,12 @@ export default function SuccessPageClient() {
         </p>
       </div>
       <div className="mt-8 text-center">
-        <a
+        <Link
           href="/"
           className="-bg--dark-green text-white px-6 py-3 rounded-md hover:-bg--light-green transition"
         >
           Volver al inicio
-        </a>
+        </Link>
       </div>
     </div>
   );

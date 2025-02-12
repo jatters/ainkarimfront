@@ -6,6 +6,7 @@ import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
 import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
+import { normalizeReservationForCart } from "@/components/Ecommerce/NormalizeReservationForCart";
 
 function formatHour(hourString) {
   const [hours, minutes] = hourString.split(":");
@@ -19,12 +20,15 @@ function formatHour(hourString) {
 export default function ReservationField({
   documentId,
   name,
+  image,
   price,
   horarios,
   additionalServices,
   rules,
 }) {
   const { addToCart } = useContext(CartContext);
+  const [dateError, setDateError] = useState("");
+  const [hourError, setHourError] = useState("");
   const [reservationData, setReservationData] = useState({
     date: "",
     persons: 1,
@@ -95,43 +99,29 @@ export default function ReservationField({
   };
 
   const handleReserve = () => {
-    if (!reservationData.date) {
-      setError("Por favor selecciona una fecha disponible.");
-      return;
-    }
-    // Si la fecha está en disabledDates, también es un error
-    if (disabledDates.includes(reservationData.date)) {
-      setError(
-        "La fecha seleccionada no está disponible. Por favor, elige otra fecha."
-      );
-      return;
-    }
-
-    setError(""); // Limpia error si todo bien
-
-    const formattedHour = formatHour(reservationData.hour);
-    const unitPrice = price;
-    const additionalServicePrice = selectedService ? selectedService.price : 0;
-
-    const productToAdd = {
-      documentId,
-      name,
-      reservationData: {
-        ...reservationData,
-        hour: formattedHour,
-      },
-      title: `${name} - ${reservationData.date} - ${reservationData.persons} personas - ${formattedHour}`,
-      price: unitPrice,
-      quantity: reservationData.persons,
-      additionalService: selectedService
-        ? {
-            name: selectedService.name,
-            price: additionalServicePrice,
-          }
-        : null,
+    // Validaciones (fecha, hora, etc.)
+    if (!reservationData.date) { setDateError("Por favor selecciona una fecha disponible."); return; }
+    if (!reservationData.hour) { setHourError("Por favor selecciona una hora disponible."); return; }
+    if (disabledDates.includes(reservationData.date)) { setDateError("La fecha seleccionada no está disponible. Elige otra."); return; }
+    
+    const selectedOptions = {
+      date: reservationData.date,
+      hour: reservationData.hour,
+      persons: reservationData.persons,
+      additionalService: selectedService, // Si se ha seleccionado
     };
-
-    addToCart(productToAdd);
+  
+    const cartItem = normalizeReservationForCart(
+      {
+        documentId,
+        name, // o plan.name si lo llamas así
+        price,
+        image,
+        categorias_de_producto:"Plan",
+      },
+      selectedOptions
+    );
+    addToCart(cartItem);
     router.push("/carrito");
   };
 
@@ -181,8 +171,8 @@ export default function ReservationField({
               disallowedDates={disabledDates}
             />
 
-            {error && (
-              <div className="text-sm text-red-600 mt-1 pl-1">{error}</div>
+            {dateError && (
+              <div className="text-sm text-red-600 mt-1 pl-12 max-w-64 break-words">{dateError}</div>
             )}
           </div>
 
@@ -219,7 +209,7 @@ export default function ReservationField({
             </div>
 
             {/* Horas */}
-            <ListHours
+            {/* <ListHours
               schedules={horarios}
               classNameInput="w-full"
               classNameContainer="py-2 flex-1 items-center"
@@ -227,7 +217,24 @@ export default function ReservationField({
               onChange={(hour) =>
                 setReservationData((prev) => ({ ...prev, hour }))
               }
+            /> */}
+            <ListHours
+              schedules={horarios}
+              classNameInput="w-full"
+              classNameContainer="py-2 flex-1 items-center"
+              value={reservationData.hour}
+              onChange={(hour) => {
+                setReservationData((prev) => ({ ...prev, hour }));
+                if (!hour) {
+                  setError("Por favor selecciona una hora disponible.");
+                } else {
+                  setError("");
+                }
+              }}
             />
+            {hourError && (
+              <div className="text-sm text-red-600 pl-1">{hourError}</div>
+            )}
           </div>
         </div>
 

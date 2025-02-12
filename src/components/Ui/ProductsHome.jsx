@@ -15,7 +15,7 @@ export default async function ProductsHome() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 px-5">
       {products.data.map((product, index) => (
         <ProductCard
           key={product.id || index}

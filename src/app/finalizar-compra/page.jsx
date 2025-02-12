@@ -58,15 +58,13 @@ export default function PaymentPage() {
   
   return (
     <main>
-      <div className="container mx-auto pt-16 pb-14">
-        <h1 className="font-bold text-center text-5xl uppercase -text--dark-green">
+      <div className="container mx-auto py-8 lg:py-16 px-5">
+        <h1 className="font-bold text-center text-2xl lg:text-4xl uppercase -text--dark-green">
           FINALIZAR COMPRA
         </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-9 -bg--grey-lightest py-10 px-6 rounded-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
           {/* Columna izquierda: Formulario de datos cliente */}
-          <div className="col-span-1">
-            <div>
-              
+          <div className="col-span-1 mt-6">
               {orderData.length > 0 && (
                 <CheckoutForm
                   showAddressFields={cart.some((item) => !item.reservationData)}
@@ -74,7 +72,7 @@ export default function PaymentPage() {
                   onFormChange={handleFormChange}
                 />
               )}
-            </div>
+            
           </div>
 
           {/* Columna derecha: Resumen del pedido */}
@@ -100,7 +98,7 @@ export default function PaymentPage() {
                   <div
                     key={index}
                     className="grid grid-cols-5 py-3 pl-4 border-b items-center hover:bg-slate-100 duration-200"
-                  >
+                  >{console.log("El carrito actual es:", cart)}
                     <div className="col-span-4">
                       <div className="font-bold -text--dark-green">{title}</div>
                       {isReservation ? (

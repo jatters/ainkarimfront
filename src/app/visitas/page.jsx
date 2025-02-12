@@ -20,7 +20,7 @@ export default async function VisitasPage() {
   return (
     <main>
       <HeaderImage title="Visitas" background="/banner-visitas.webp" />
-      <section className="container mx-auto py-16 px-5">
+      <section className="container mx-auto py-8 lg:py-16 px-5">
         <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
         </h2>        
@@ -31,7 +31,7 @@ export default async function VisitasPage() {
               id: experiencia.documentId,
               name: experiencia.name,
               alt: `Icono ${experiencia.name}`,
-              iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon.url}`,
+              iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon?.url}`,
             }));
 
             return (
@@ -41,8 +41,8 @@ export default async function VisitasPage() {
                 title={plan.name}
                 price={formatPrice(plan.price)}
                 experiences={experienciesList}
-                image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.small.url}`}
-                altimg={plan.image.alternativeText || `Imagen ${plan.name}`}
+                image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image?.formats.small.url || plan.image.url}`}
+                altimg={plan.image.alternativeText || `https://placehold.co/480x275`}
                 onlyadults={plan.onlyAdults}
                 allowchilds={plan.allowChilds}
                 Schedules={plan.horarios}

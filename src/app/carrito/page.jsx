@@ -1,27 +1,20 @@
 "use client";
 import React, { useContext } from "react";
-import Link from "next/link"; // Considera usar 'next/link' estándar
+import { Link } from "next-view-transitions";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 
 export default function CarritoPage() {
   const { cart, removeFromCart, updateQuantityInCart } =
     useContext(CartContext);
+
   const baseurl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   const calculateSubtotal = (item) => {
-    const price = parseFloat(item.Precio || item.price) || 0;
-    const additionalPrice = item.additionalService
-      ? parseFloat(item.additionalService.price) || 0
-      : 0;
-
-    if (item.reservationData) {
-      const persons = parseInt(item.reservationData.persons, 10) || 1;
-      return price * persons + additionalPrice;
-    } else {
-      const quantity = parseInt(item.quantity, 10) || 1;
-      return price * quantity + additionalPrice;
-    }
+    const unitPrice = parseFloat(item.price) || 0;
+    const additionalPrice = item.additionalService ? parseFloat(item.additionalService.price) || 0 : 0;
+    const quantity = parseInt(item.quantity, 10) || 1;
+    return unitPrice * quantity + additionalPrice;
   };
 
   const calculateTotal = () => {
@@ -58,8 +51,8 @@ export default function CarritoPage() {
 
   return (
     <main>
-      <section className="max-w-screen-lg mx-auto py-16 px-5">
-        <h1 className="text-5xl -text--dark-green text-center font-bold mb-14">
+      <section className="max-w-screen-lg mx-auto py-8 lg:py-16 px-5">
+        <h1 className=" text-2xl lg:text-5xl -text--dark-green text-center font-bold mb-14">
           Carrito de Compras
         </h1>
         {cart.length === 0 ? (
@@ -93,41 +86,40 @@ export default function CarritoPage() {
                     <th className="py-2">Eliminar</th>
                   </tr>
                 </thead>
-                <tbody className="">
-                  {cart.map((item) => {
-                    const {
-                      id,
-                      Precio,
-                      price,
-                      quantity = 1,
-                      additionalService,
-                      reservationData,
-                      image,
-                      title: itemTitle,
-                    } = item;
-                    const isReservation = !!reservationData;
-                    const displayPrice = parseFloat(Precio || price) || 0;
-                    const displayQuantity = quantity;
+                <tbody>
+                  {console.log("cart:", cart)}
+                  {cart.map((item, index) => {
+                    // Dado que los datos están normalizados, usamos directamente item.title, item.price, item.quantity y item.image.
+                    // Si el producto es variable, concatenamos el título con el nombre de la variación.
+                    const displayTitle = item.isReservation
+                      ? `${item.attributes?.name || item.title} - ${item.reservationData.date} - ${
+                          parseInt(item.reservationData.persons, 10) > 1
+                            ? item.reservationData.persons + " personas"
+                            : "1 persona"
+                        } - ${item.reservationData.hour}`
+                      : item.isVariable && item.variation
+                      ? `${item.title} - ${item.variation.name}`
+                      : item.title || "Sin título";
                     const subtotal = calculateSubtotal(item);
 
-                    const imageUrl = image?.formats?.thumbnail?.url
-                      ? `${baseurl}${image.formats.thumbnail.url}`
-                      : null;
-                    const altText =
-                      image?.alternativeText || "Imagen del producto";
-                    const title = isReservation
-                      ? itemTitle
-                      : itemTitle || "Sin título";
-
+                    // La imagen ya es una URL completa.
+                    const imageUrl =
+                      typeof item.image === "string"
+                        ? item.image
+                        : item.image && item.image.formats && item.image.formats.thumbnail
+                        ? `${baseurl}${item.image.formats.thumbnail.url}`
+                        : null;
+                    const altText = imageUrl ? `Imagen de ${displayTitle}` : "Imagen del producto";
+                    
                     return (
                       <tr
-                        key={id}
+                        key={index}
                         className="text-center even:bg-gray-100 rounded-md hover:bg-gray-200 duration-200 border-b"
                       >
                         <td className="py-2 flex items-center px-5  ">
-                          {!isReservation && imageUrl && (
+                          {imageUrl && (
                             <Image
-                              src={imageUrl || "/default-image.jpg"}
+                              src={imageUrl}
                               alt={altText}
                               height={64}
                               width={64}
@@ -135,41 +127,43 @@ export default function CarritoPage() {
                             />
                           )}
                           <span className="inline-block break-words max-w-xs text-left">
-                            {title}
-                            {additionalService && (
+                            {displayTitle}
+                            {item.additionalService && (
                               <div className="text-sm text-gray-600">
-                                <div>Adicional: {additionalService.name}</div>
                                 <div>
-                                  + {formatPrice(additionalService.price)}
+                                  Adicional: {item.additionalService.name}
+                                </div>
+                                <div>
+                                  + {formatPrice(item.additionalService.price)}
                                 </div>
                               </div>
                             )}
                           </span>
                         </td>
                         <td className="py-2 items-center justify-center">
-                          {formatPrice(displayPrice)}
+                          {formatPrice(item.price)}
                         </td>
                         <td className="py-2 px-5">
                           <div className="flex items-center justify-center">
                             <button
                               className="-bg--dark-green/70 text-white px-2 py-2 rounded-l hover:-bg--dark-green focus:outline-none"
                               onClick={() => decrementarCantidad(item)}
-                              aria-label={`Disminuir cantidad de ${title}`}
+                              aria-label={`Disminuir cantidad de ${displayTitle}`}
                             >
                               -
                             </button>
                             <input
                               type="number"
                               min="1"
-                              value={displayQuantity}
+                              value={item.quantity}
                               readOnly
                               className="appearance-none border -border--dark-green/70 w-12 h-10 px-0 py-2 text-gray-700 text-center focus:outline-none "
-                              aria-label={`Cantidad de ${title}`}                              
+                              aria-label={`Cantidad de ${displayTitle}`}
                             />
                             <button
                               className="-bg--dark-green/70 text-white px-2 py-2 rounded-r hover:-bg--dark-green focus:outline-none"
                               onClick={() => incrementarCantidad(item)}
-                              aria-label={`Aumentar cantidad de ${title}`}
+                              aria-label={`Aumentar cantidad de ${displayTitle}`}
                             >
                               +
                             </button>
@@ -181,7 +175,7 @@ export default function CarritoPage() {
                         <td className="py-2 px-5 items-center justify-center">
                           <button
                             onClick={() => removeFromCart(item)}
-                            aria-label={`Eliminar ${title}`}
+                            aria-label={`Eliminar ${displayTitle}`}
                           >
                             <span className="icon-[mynaui--trash] hover:-text--light-red hover:scale-125 duration-200" />
                           </button>

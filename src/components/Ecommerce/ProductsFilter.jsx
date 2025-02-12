@@ -33,28 +33,7 @@ export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
             )}
           </FormGroup>
         </AccordionDetails>
-      </Accordion>
-      {/* <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <span className="font-semibold capitalize">Color</span>
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            {["Blanco", "Rosado", "Tinto"].map(color => (
-              <FormControlLabel
-                key={color}
-                control={
-                  <Checkbox 
-                    color="default" 
-                    onChange={(e) => onCepasChange(color, e.target.checked)} 
-                  />
-                }
-                label={color}
-              />
-            ))}
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion> */}
+      </Accordion>    
 
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -80,7 +59,6 @@ export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
         </AccordionDetails>
       </Accordion>
 
-      {/* Otros filtros pueden añadirse de manera similar */}
     </div>
   );
 }

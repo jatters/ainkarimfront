@@ -12,8 +12,8 @@ import { Autoplay } from "swiper/modules";
 
 export default function SliderReconocimientos({ reconocimientos }) {
   return (
-    <section className="container mx-auto pb-16 px-10 ">
-      <h2 className="text-4xl -text--dark-green text-center mb-16">
+    <section className="container mx-auto pb-8 lg:pb-16 px-5 lg:px-10 ">
+      <h2 className="text-2xl lg:text-4xl -text--dark-green text-center mb-8 lg:mb-16">
         RECONOCIMIENTOS
       </h2>
       <Swiper

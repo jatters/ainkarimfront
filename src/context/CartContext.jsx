@@ -36,103 +36,206 @@ export function CartProvider({ children }) {
     }
   }, [cart]);
 
+ /*  const addToCart = (product) => {
+    setCart((prevCart) => {
+      // Rama para productos variables: se espera que product.isVariable sea true y que exista product.variation
+      if (product.isVariable && product.variation) {
+        const index = prevCart.findIndex((item) =>
+          item.documentId === product.documentId &&
+          item.variation?.id === product.variation.id
+        );
+        if (index >= 0) {
+          const updatedCart = [...prevCart];
+          // Incrementa la cantidad almacenada, ignorando cualquier quantity entrante
+          const currentQty = updatedCart[index].quantity || 1;
+          updatedCart[index] = { ...updatedCart[index], quantity: currentQty + 1 };
+          return updatedCart;
+        } else {
+          // Agrega el producto variable con quantity inicial 1
+          const newProduct = { ...product, quantity: 1 };
+          return [...prevCart, newProduct];
+        }
+      }
+      // Rama para productos de reserva (se espera que product.reservationData sea un objeto válido)
+      else if (product.reservationData && typeof product.reservationData === "object") {
+        const index = prevCart.findIndex((item) =>
+          item.documentId === product.documentId &&
+          item.reservationData?.date === product.reservationData.date &&
+          item.reservationData?.hour === product.reservationData.hour &&
+          (!item.additionalService ||
+            item.additionalService.name === product.additionalService?.name)
+        );
+        if (index >= 0) {
+          const updatedCart = [...prevCart];
+          // Incrementa la cantidad de personas (y la cantidad general)
+          const currentPersons = updatedCart[index].reservationData.persons || 0;
+          const newPersons = currentPersons + 1;
+          updatedCart[index] = {
+            ...updatedCart[index],
+            quantity: newPersons,
+            reservationData: {
+              ...updatedCart[index].reservationData,
+              persons: newPersons,
+            },
+            // Se puede actualizar el title si lo requieres
+            title: `${product.name} - ${product.reservationData.date} - ${newPersons} personas - ${product.reservationData.hour}`,
+          };
+          return updatedCart;
+        } else {
+          const newProduct = {
+            ...product,
+            quantity: 1,
+            // Si reservationData ya es un objeto, se conserva
+            reservationData: product.reservationData,
+          };
+          return [...prevCart, newProduct];
+        }
+      }
+      // Rama para productos simples (ni variables ni de reserva)
+      else {
+        const index = prevCart.findIndex((item) =>
+          item.documentId === product.documentId &&
+          !item.variation && !item.reservationData
+        );
+        if (index >= 0) {
+          const updatedCart = [...prevCart];
+          const currentQty = updatedCart[index].quantity || 1;
+          updatedCart[index] = { ...updatedCart[index], quantity: currentQty + 1 };
+          return updatedCart;
+        } else {
+          const newProduct = { ...product, quantity: 1 };
+          return [...prevCart, newProduct];
+        }
+      }
+    });
+  }; */
+
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const isReservation = product.reservationData !== undefined;
-
-      const existingProductIndex = prevCart.findIndex((item) => {
-        if (isReservation) {
-          return (
-            item.documentId === product.documentId &&
-            item.reservationData?.date === product.reservationData?.date &&
-            item.reservationData?.hour === product.reservationData?.hour &&
-            (!item.additionalService ||
-              item.additionalService.name === product.additionalService?.name)
-          );
+      // Rama para productos variables (ya implementada)
+      if (product.isVariable && product.variation) {
+        const uniqueId = product.uniqueId; // Debe venir ya incluido en el objeto normalizado
+        const index = prevCart.findIndex((item) => item.uniqueId === uniqueId);
+        if (index >= 0) {
+          const updatedCart = [...prevCart];
+          const currentQty = updatedCart[index].quantity || 1;
+          updatedCart[index] = { ...updatedCart[index], quantity: currentQty + 1 };
+          return updatedCart;
         } else {
-          return item.documentId === product.documentId;
+          return [...prevCart, { ...product, quantity: 1 }];
         }
-      });
-
-      if (existingProductIndex >= 0) {
-        const updatedCart = [...prevCart];
-        if (isReservation) {
-          // Asegurarse de que reservationData y persons existen antes de usarlos
-          if (!updatedCart[existingProductIndex].reservationData) {
-            updatedCart[existingProductIndex].reservationData = { persons: 0 };
-          }
-          if (
-            typeof updatedCart[existingProductIndex].reservationData.persons !==
-            "number"
-          ) {
-            updatedCart[existingProductIndex].reservationData.persons = 0;
-          }
-
-          updatedCart[existingProductIndex].reservationData.persons +=
-            product.reservationData?.persons || 1;
-          updatedCart[existingProductIndex].quantity =
-            updatedCart[existingProductIndex].reservationData.persons;
-          updatedCart[
-            existingProductIndex
-          ].title = `${product.name} - ${updatedCart[existingProductIndex].reservationData.date} - ${updatedCart[existingProductIndex].reservationData.persons} personas - ${updatedCart[existingProductIndex].reservationData.hour}`;
+      }
+      // Rama para reservas: aquí usaremos product.reservationData.persons como cantidad
+      else if (product.isReservation && product.reservationData && typeof product.reservationData === "object") {
+        // Buscamos si ya existe una reserva idéntica (mismo documento, fecha y hora)
+        const index = prevCart.findIndex((item) =>
+          item.documentId === product.documentId &&
+          item.reservationData?.date === product.reservationData.date &&
+          item.reservationData?.hour === product.reservationData.hour &&
+          (!item.additionalService ||
+           item.additionalService.name === product.additionalService?.name)
+        );
+        if (index >= 0) {
+          // Actualizamos la cantidad usando directamente product.reservationData.persons
+          const updatedCart = [...prevCart];
+          const newPersons = product.reservationData.persons;
+          updatedCart[index] = {
+            ...updatedCart[index],
+            quantity: newPersons,
+            reservationData: {
+              ...updatedCart[index].reservationData,
+              persons: newPersons,
+            },
+            // Reconstruimos el título usando una propiedad original (originalName) si se ha guardado,
+            // o utilizando el nombre actual (aunque se recomienda conservar el nombre original al normalizar)
+            title: `${updatedCart[index].originalName || updatedCart[index].title.split(" - ")[0]} - ${updatedCart[index].reservationData.date} - ${newPersons > 1 ? newPersons + " personas" : "1 persona"} - ${updatedCart[index].reservationData.hour}`,
+          };
+          return updatedCart;
         } else {
-          updatedCart[existingProductIndex].quantity += product.quantity || 1;
+          // Si es nuevo, usamos la cantidad que venga (reservationData.persons)
+          return [...prevCart, { ...product, quantity: product.reservationData.persons }];
         }
-        return updatedCart;
-      } else {
-        const newProduct = {
-          ...product,
-          quantity: product.reservationData
-            ? product.reservationData.persons
-            : product.quantity || 1,
-          title: product.reservationData
-            ? `${product.name || "Producto sin nombre"} - ${
-                product.reservationData?.date || "Sin fecha"
-              } - ${product.reservationData?.persons || 1} personas - ${
-                product.reservationData?.hour || "Sin hora"
-              }`
-            : product.title || product.name || "Producto sin nombre",
-        };
-
-        return [...prevCart, newProduct];
+      }
+      // Rama para productos simples
+      else {
+        const index = prevCart.findIndex((item) =>
+          item.documentId === product.documentId &&
+          !item.variation && !item.isReservation
+        );
+        if (index >= 0) {
+          const updatedCart = [...prevCart];
+          const currentQty = updatedCart[index].quantity || 1;
+          updatedCart[index] = { ...updatedCart[index], quantity: currentQty + 1 };
+          return updatedCart;
+        } else {
+          return [...prevCart, { ...product, quantity: 1 }];
+        }
       }
     });
   };
+  
+  
+  
+  
+  
+  
 
   const removeFromCart = (product) => {
     setCart((prevCart) =>
-      prevCart.filter(
-        (item) =>
-          item.documentId !== product.documentId ||
-          item.reservationData?.hour !== product.reservationData?.hour ||
-          item.reservationData?.date !== product.reservationData?.date ||
-          item.additionalService?.name !== product.additionalService?.name
-      )
+      prevCart.filter((item) => {
+        // Para productos variables, se elimina usando el uniqueId
+        if (product.isVariable && product.variation) {
+          const uniqueId = `${product.documentId}_${product.variation.id}`;
+          return item.uniqueId !== uniqueId;
+        }
+        // Para reservas o simples, la lógica previa es válida
+        return item.documentId !== product.documentId;
+      })
     );
   };
+  
 
-  const updateQuantityInCart = (product, quantity) => {
+  const updateQuantityInCart = (product, newQuantity) => {
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.documentId === product.documentId &&
-        (!product.reservationData ||
-          (item.reservationData?.date === product.reservationData?.date &&
-            item.reservationData?.hour === product.reservationData?.hour))
-          ? product.reservationData
-            ? {
-                ...item,
-                reservationData: {
-                  ...item.reservationData,
-                  persons: quantity,
-                },
-                quantity,
-                title: `${item.name} - ${item.reservationData.date} - ${quantity} personas - ${item.reservationData.hour}`,
-              }
-            : { ...item, quantity }
-          : item
-      )
+      prevCart.map((item) => {
+        // Para productos variables que tienen uniqueId:
+        if (product.isVariable && product.uniqueId) {
+          if (item.uniqueId === product.uniqueId) {
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        }
+        // Para reservas (suponiendo que se normalizan con isReservation y uniqueId)
+        if (product.isReservation && product.uniqueId) {
+          if (item.uniqueId === product.uniqueId) {
+            // Además de actualizar la cantidad, actualizamos reservationData.persons
+            const updatedItem = {
+              ...item,
+              quantity: newQuantity,
+              reservationData: {
+                ...item.reservationData,
+                persons: newQuantity,
+              },
+            };
+            // Opcional: reconstruir el título usando originalName si existe
+            const original =
+              item.originalName || (item.attributes && item.attributes.name) || item.title;
+            updatedItem.title = `${original} - ${item.reservationData.date} - ${
+              newQuantity > 1 ? newQuantity + " personas" : "1 persona"
+            } - ${item.reservationData.hour}`;
+            return updatedItem;
+          }
+          return item;
+        }
+        // Para productos simples (ni variables ni reservas)
+        if (!product.isVariable && !product.isReservation && item.documentId === product.documentId) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      })
     );
   };
+  
 
   return (
     <CartContext.Provider

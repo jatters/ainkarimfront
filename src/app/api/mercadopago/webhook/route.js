@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
-const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
+/**
+ * Opcional: reintenta la misma fetch varias veces si falla,
+ * útil porque a veces MercadoPago tarda en reflejar la info del pago.
+ */
 async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
   for (let i = 0; i < retries; i++) {
     const response = await fetch(url, options);
@@ -16,22 +20,25 @@ async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
 
 export async function POST(request) {
   try {
+    // 1. Parsear los parámetros de la URL y el body
     const body = await request.json();
     console.log("🔔 Webhook MercadoPago recibido =>", JSON.stringify(body, null, 2));
 
     const topic = request.nextUrl.searchParams.get("topic");
-    const id = request.nextUrl.searchParams.get("id");
+    const queryId = request.nextUrl.searchParams.get("id");
 
     let paymentId = null;
     let externalReference = null;
 
-    if (topic === "merchant_order" && id) {
-      console.log(`🔍 Buscando detalles de la orden: ${id}`);
-
+    // 2. Dependiendo del 'topic', buscamos la info en MP
+    //    (merchant_order o payment).
+    if (topic === "merchant_order" && queryId) {
+      console.log(`🔍 Buscando detalles de la orden: ${queryId}`);
       const orderData = await fetchWithRetry(
-        `https://api.mercadopago.com/merchant_orders/${id}`,
+        `https://api.mercadopago.com/merchant_orders/${queryId}`,
         { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } },
-        5, 3000
+        5,
+        3000
       );
 
       if (!orderData.payments || orderData.payments.length === 0) {
@@ -39,25 +46,32 @@ export async function POST(request) {
         return new Response("Esperando pago", { status: 202 });
       }
 
-      paymentId = orderData.payments.find((p) => p.status === "approved")?.id || null;
-      externalReference = orderData.external_reference;
+      // Tomamos el primer pago 'approved' (o el primero que exista)
+      paymentId =
+        orderData.payments.find((p) => p.status === "approved")?.id ||
+        orderData.payments[0].id ||
+        null;
+      externalReference = orderData.external_reference || null;
     }
 
     if (topic === "payment" && body.data?.id) {
+      // Si el topic es 'payment', ya tenemos el ID de pago directo
       paymentId = body.data.id;
     }
 
+    // Si no tenemos paymentId todavía, reintentamos un par de veces (opcional)
     if (!paymentId) {
-      console.warn("⏳ Esperando a que MercadoPago confirme el pago...");
+      console.warn("⏳ Esperando a que MercadoPago confirme el ID de pago...");
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const paymentResponse = await fetch(
-        `https://api.mercadopago.com/v1/payments/${body.data?.id}`,
-        { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } }
-      );
-
-      const paymentData = await paymentResponse.json();
-      paymentId = paymentData.id || null;
+      if (body.data?.id) {
+        const paymentResponse = await fetch(
+          `https://api.mercadopago.com/v1/payments/${body.data?.id}`,
+          { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } }
+        );
+        const paymentDataTemp = await paymentResponse.json();
+        paymentId = paymentDataTemp.id || null;
+      }
     }
 
     if (!paymentId) {
@@ -69,154 +83,173 @@ export async function POST(request) {
     const paymentData = await fetchWithRetry(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
       { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } },
-      5, 3000
+      5,
+      3000
     );
-
     console.log("📄 Datos del pago recibidos:", JSON.stringify(paymentData, null, 2));
 
     if (!paymentData.id) {
-      console.error("❌ No se pudo obtener el pago.");
+      console.error("❌ No se pudo obtener el pago desde MercadoPago.");
       return new Response("Error obteniendo pago", { status: 400 });
     }
 
+    // Si la merchant_order no traía externalReference, lo sacamos del propio pago
     if (!externalReference) {
       externalReference = paymentData.external_reference;
     }
 
-    const paymentStatus = paymentData.status;
+    // 3. Determinar el status global del pago
+    const paymentStatus = paymentData.status; // "approved", "rejected", "pending", etc.
     const paymentMethod = paymentData.payment_method_id || "No disponible";
 
-    const payerData = {
-      name: paymentData.additional_info?.payer?.first_name || paymentData.payer?.first_name || "No disponible",
-      surname: paymentData.additional_info?.payer?.last_name || paymentData.payer?.last_name || "No disponible",
-      email: paymentData.payer?.email || "No disponible",
-      phone: paymentData.additional_info?.payer?.phone?.number || paymentData.payer?.phone?.number || "No disponible",
-      document: paymentData.payer?.identification?.number || "No disponible",
-      address: paymentData.additional_info?.payer?.address?.street_name || "No disponible",
-    };
-
-    console.log("📢 Datos del cliente correctos:", JSON.stringify(payerData, null, 2));
-
-    let pedidoStatus = "Pendiente";
-    let reservaEstado = "Pendiente";
+    // 4. Mapeamos el estado del pedido vs. estado del pago
+    //    Aquí es tu lógica de negocio. Ejemplo:
+    let pedidoState = "Pendiente";
     if (paymentStatus === "approved") {
-      pedidoStatus = "Pago";
-      reservaEstado = "Confirmada";
+      pedidoState = "Pago"; // o "Completado"
     } else if (paymentStatus === "rejected") {
-      pedidoStatus = "Fallido";
-      reservaEstado = "Cancelada";
+      pedidoState = "Fallido"; // o "Cancelado"
     }
 
-    console.log(`🔎 Verificando si el pedido ${externalReference} ya existe en Strapi...`);
+    // 5. Actualizar el Pedido en Strapi, buscando su numberOrder = externalReference
+    //    p.ej.: numberOrder = "pedido-XYZ"
+    if (externalReference?.startsWith("pedido-")) {
+      const updateOrderPayload = {
+        data: {
+          state: pedidoState,
+          payment_status: paymentStatus, // "approved", "rejected", etc.
+          payment_id: String(paymentId),
+          payment_method: paymentMethod,
+          // Ej. si quieres guardar el monto final
+          // totalPriceOrder: paymentData.transaction_amount,
+        },
+      };
 
-    const orderExistsResponse = await fetch(
-      `${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}`,
-      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      console.log(
+        `🔎 Buscando pedido por numberOrder = ${externalReference}...`
+      );
+      const resBuscarPedido = await fetch(
+        `${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}`,
+        {
+          headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
+        }
+      );
+      const pedidosData = await resBuscarPedido.json();
+
+      if (pedidosData.data && pedidosData.data.length > 0) {
+        const pedidoId = pedidosData.data[0].documentId; // ID numérico interno
+        console.log(
+          `📝 Actualizando el pedido (ID ${pedidoId}) con payload:`,
+          JSON.stringify(updateOrderPayload, null, 2)
+        );
+
+        const updatePedidoRes = await fetch(
+          `${STRAPI_URL}/api/pedidos/${pedidoId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            },
+            body: JSON.stringify(updateOrderPayload),
+          }
+        );
+
+        if (!updatePedidoRes.ok) {
+          const errorText = await updatePedidoRes.text();
+          console.error("❌ Error al actualizar pedido:", errorText);
+        } else {
+          console.log(`✅ Pedido ${externalReference} actualizado correctamente.`);
+        }
+      } else {
+        console.warn(`No se encontró Pedido con numberOrder = ${externalReference}.`);
+      }
+    }
+
+    // 6. Actualizar las Reservas asociadas (todas las que tengan reservationNumber = externalReference)
+    //    Por ejemplo, en el create-preference se guardó: reservationNumber: "pedido-XYZ"
+    let reservaState = "Pendiente";
+    if (paymentStatus === "approved") {
+      reservaState = "Confirmada";
+    } else if (paymentStatus === "rejected") {
+      reservaState = "Cancelada";
+    }
+
+    console.log(
+      `🔎 Buscando reservas con reservationNumber = ${externalReference}`
     );
+    const resBuscarReservas = await fetch(
+      `${STRAPI_URL}/api/reservas?filters[reservationNumber][$eq]=${externalReference}`,
+      {
+        headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
+      }
+    );
+    const reservasData = await resBuscarReservas.json();
 
-    const orderExistsData = await orderExistsResponse.json();
-    if (orderExistsData.data.length > 0) {
-      console.log(`✅ Pedido ${externalReference} ya existe en Strapi. No se creará nuevamente.`);
-      return new Response("Pedido ya existe", { status: 200 });
+    if (reservasData.data && reservasData.data.length > 0) {
+      for (const r of reservasData.data) {
+        const reservaId = r.documentId;
+        const updateReservaPayload = {
+          data: {
+            state: reservaState,
+            payment_status: paymentStatus,
+            payment_id: String(paymentId),
+            payment_method: paymentMethod,
+            // totalPriceReservation: paymentData.transaction_amount // si aplica
+          },
+        };
+
+        console.log(
+          `📝 Actualizando la reserva (ID ${reservaId}) con payload:`,
+          JSON.stringify(updateReservaPayload, null, 2)
+        );
+
+        const updateReservaRes = await fetch(
+          `${STRAPI_URL}/api/reservas/${reservaId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            },
+            body: JSON.stringify(updateReservaPayload),
+          }
+        );
+
+        if (!updateReservaRes.ok) {
+          const errorText = await updateReservaRes.text();
+          console.error(
+            `❌ Error al actualizar la reserva con ID ${reservaId}:`,
+            errorText
+          );
+        } else {
+          console.log(`✅ Reserva (ID ${reservaId}) actualizada correctamente.`);
+        }
+      }
+    } else {
+      console.log("No se encontraron reservas con ese reservationNumber.");
     }
-    
-    console.log(`📧 Enviando correo de confirmación de compra...`);
+
+    // 7. (Opcional) Enviar un correo de confirmación/fallo/lo que requieras
+    //    con la info final. Por ejemplo:
+    /*
+    console.log("📧 Enviando correo de confirmación...");
     await fetch(`${process.env.CURRENT_ENVIRONMENT}/api/sendEmail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        formType: "compraConfirmada",
-        name: paymentData.payer?.first_name || "Cliente",
-        email: paymentData.payer?.email || "No disponible",
-        phone: paymentData.payer?.phone?.number || "No disponible",
+        formType: paymentStatus === "approved"
+          ? "compraConfirmada"
+          : "compraFallida",
         orderId: externalReference,
-        total: paymentData.transaction_amount,
-        date: new Date().toISOString(),
-        orderItems: paymentData.additional_info?.items.map((item) => ({
-          productName: item.title,
-          quantity: item.quantity,
-          unitPrice: item.unit_price,
-        })),
+        paymentStatus,
+        // ...
       }),
     });
+    */
 
-    console.log(`❌ Pedido ${externalReference} no encontrado en Strapi. Creándolo...`);
-
-    const productos = [];
-    const reservas = [];
-
-    paymentData.additional_info.items.forEach((item) => {
-      if (item.title.toLowerCase().includes("plan") || item.unit_price === 0) {
-        const reservationDate = item.reservationData?.date || new Date().toISOString().split("T")[0];
-        const reservationTime = item.reservationData?.hour || "10:30:00.000";
-        const guests = item.reservationData?.persons || item.quantity || 1;
-
-        reservas.push({
-          data: {
-            plan: item.id,
-            guests,
-            reservationDate,
-            reservationTime,
-            state: reservaEstado,
-            payment_status: paymentStatus,
-            customerName: payerData.name,
-            customerLastname: payerData.surname,
-            customerEmail: payerData.email,
-            customerPhone: payerData.phone,
-            customerDocument: payerData.document,
-          },
-        });
-      } else {
-        productos.push({
-          documentId: item.id,
-          title: item.title,
-          quantity: item.quantity,
-        });
-      }
-    });
-
-    console.log("📦 Productos a conectar:", JSON.stringify(productos, null, 2));
-    console.log("📦 Reservas a conectar:", JSON.stringify(reservas, null, 2));
-
-    const orderDataJson = {
-      data: {
-        numberOrder: externalReference,
-        creationDate: new Date().toISOString(),
-        state: pedidoStatus,
-        payment_status: paymentStatus,
-        payment_id: String(paymentId),
-        payment_method: paymentMethod,
-        totalPriceOrder: paymentData.transaction_amount,
-        customerName: payerData.name,
-        customerLastname: payerData.surname,
-        customerEmail: payerData.email,
-        customerPhone: payerData.phone,
-        customerDocument: payerData.document,
-        customerAddress: payerData.address,
-        productos: { connect: productos.map((p) => ({ documentId: p.documentId })) },
-      },
-    };
-
-    console.log("📦 JSON enviado a Strapi para PEDIDO:", JSON.stringify(orderDataJson, null, 2));
-
-    await fetch(`${STRAPI_URL}/api/pedidos`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${STRAPI_TOKEN}`, "Content-Type": "application/json" },
-      body: JSON.stringify(orderDataJson),
-    });
-
-    for (const reserva of reservas) {
-      console.log("📦 JSON enviado a Strapi para RESERVA:", JSON.stringify(reserva, null, 2));
-
-      await fetch(`${STRAPI_URL}/api/reservas`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${STRAPI_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify(reserva),
-      });
-    }
-
+    // Responder OK para que MercadoPago no reintente indefinidamente
     return new Response("OK", { status: 200 });
-
   } catch (error) {
     console.error("❌ Error en Webhook =>", error);
     return new Response("Error en Webhook", { status: 500 });

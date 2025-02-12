@@ -8,8 +8,8 @@ export default function Informationpage() {
   return (
     <main>
       <HeaderImage title="Información" background="/banner-informacion.webp" />
-      <section className="container mx-auto py-16 px-5">
-        <h2 className="text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>
+      <section className="container mx-auto py-8 lg:py-16 px-5">
+        <h2 className="text-3xl lg:text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>
         <div className="text-center mb-8">
           <p>
             <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>

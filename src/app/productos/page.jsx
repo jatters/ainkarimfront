@@ -16,7 +16,7 @@ export default async function productsPage() {
   return (
     <main>
       <HeaderImage title="Vinos" background="/banner-vinos.webp" />
-      <section className="container mx-auto pt-16 pb-14">
+      <section className="container mx-auto py-8 lg:py-16">
         {/* Pasar la lista de productos iniciales a FilterableProducts */}
         <FilterableProducts initialProducts={products.data} />
       </section>

@@ -1,12 +1,11 @@
 "use client";
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
+import  { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
 import Dialog from "@mui/material/Dialog";
 //import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import ListHours from "./ListHours";
@@ -30,9 +29,7 @@ function formatHour(hourString) {
 export default function ModalSchedule({
   title,
   price,
-  schedules,
-  plan,
-  rules,
+  schedules,  
 }) {
   const [open, setOpen] = useState(false);
   const { addToCart } = useContext(CartContext);
@@ -140,7 +137,7 @@ export default function ModalSchedule({
         }`}</DialogTitle>
         <DialogContent>
           <p className="text-center font-semibold mb-5">
-            Diligencia los datos para realizar tu reserva
+            Diligencia los datos de tu reserva
           </p>
           <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
             <div className="flex gap-x-5 gap-y-2 justify-items-center justify-center items-center flex-wrap">

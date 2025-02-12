@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-//import Link from "next/link";
 import { Link } from 'next-view-transitions'
 import { useState } from "react";
 import styles from "./PrettyCheckbox.css"

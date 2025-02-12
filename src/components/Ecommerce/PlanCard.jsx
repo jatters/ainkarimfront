@@ -1,4 +1,3 @@
-//import Link from "next/link";
 import { Link } from "next-view-transitions";
 import ModalSchedule from "./Plans/ModalSchedule";
 import Image from "next/image";
@@ -29,7 +28,7 @@ export default function PlanCard({
         </Link>
       </div>
       <div className="flex w-full px-5 justify-between items-center">
-        <h2 className="text-2xl mb-1 font-bold -text--dark-green uppercase">
+        <h2 className=" text-xl md:text-2xl mb-1 font-bold -text--dark-green uppercase">
           <Link
             className="group-hover:-text--dark-red duration-300"
             href={slug}

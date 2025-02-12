@@ -42,62 +42,16 @@ export default function FilterableProducts({ initialProducts }) {
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
-      <aside>
+      <aside className="col-span-1 hidden xl:block">
         {/* Pasar funciones para manejar cambios al componente de filtros */}
         <ProductsFilter
           onCepasChange={handleCepasChange}
           onCategoriasChange={handleCategoriasChange}
         />
       </aside>
-      <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 row-span-5 px-5">
+      <div className="col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  2xl:grid-cols-4 gap-5 row-span-5 px-5">
         {filteredProducts.map((product) => {
-          const {
-            documentId,
-            slug,
-            title,
-            price,
-            regularPrice,
-            image,
-            categorias_de_producto,
-            isActive,
-            wineCepa,
-          } = product;
-
-          const imageUrl = image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : null;
-
-          const altText = image?.alternativeText
-            ? image.alternativeText
-            : `Imagen ${title}`;
-
-          const categoryName = categorias_de_producto?.name || "Sin categoría";
-
-          return (
-            <ProductCard
-              key={documentId}
-              slug={`/producto/${slug}`}
-              title={title}
-              price={price}
-              regularprice={regularPrice}
-              category={categoryName}
-              image={imageUrl}
-              altimg={altText}
-              product={{
-                documentId,
-                title,
-                price,
-                image: {
-                  url: imageUrl,
-                  alternativeText: altText,
-                },
-                categorias_de_producto,
-                wineCepa,
-                quantity: 1,
-              }}
-              isActive={isActive}
-            />
-          );
+          return <ProductCard key={product.documentId} product={product} />;
         })}
       </div>
     </div>

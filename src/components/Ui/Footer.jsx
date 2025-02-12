@@ -1,5 +1,4 @@
 import Image from "next/image";
-//import Link from "next/link";
 import { Link } from "next-view-transitions";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
@@ -7,7 +6,7 @@ import maps from "@/../public/logo-google-maps.svg";
 export default function Footer() {
   return (
     <footer className="-bg--dark-green text-white">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-12 pt-16 pb-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-5 md:px-12 pt-8 md:pt-16 pb-6 md:pb-12 gap-8">
         <div>
           <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
             EL VIÑEDO
@@ -171,15 +170,15 @@ export default function Footer() {
             OFICINA
           </div>
           <ul
-            className="flex flex-col space-y-2 text-sm"
+            className="flex flex-col space-y-2 text-sm gap-3"
             aria-label="Datos de la oficina del Viñedo Ain Karim"
           >
-            <li className="flex items-center gap-1">
+            <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[gridicons--location] text-xl"></span>
               <span className="font-semibold">Dirección:</span> Av. Calle 127 #
               13A-32 Ofi. 202
             </li>
-            <li className="flex items-center gap-1">
+            <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
               <span className="font-semibold">Teléfono:</span>
               <a
@@ -194,7 +193,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="flex flex-col items-center pb-5">
-        <span className="text-xl font-semibold">Síguenos</span>
+        <span className="text-lg md:text-xl font-semibold">Síguenos</span>
         <ul
           className="flex flex-row  gap-4 my-3"
           aria-label="Redes sociales del Viñedo Ain Karim"
