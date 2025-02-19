@@ -4,11 +4,7 @@ import { Link } from "next-view-transitions";
 import style from "./PrettyCheckbox.css";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
-export default function CheckoutForm({
-  showAddressFields,
-  onFormChange,
-  //onSubmit,
-}) {
+export default function CheckoutForm({ showAddressFields, onFormChange }) {
   const {
     register,
     handleSubmit,
@@ -25,42 +21,12 @@ export default function CheckoutForm({
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  /* const [submitting, setSubmitting] = useState(false);
-  const [response, setResponse] = useState(null);
-
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      setSubmitting(true);
-      const res = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          formType: "contacto",
-          ...data,
-        }),
-      });
-      const result = await res.json();
-      setResponse({
-        message: result.message || t("failure"),
-        name: data.name,
-      });
-      reset();
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-      setResponse({ message: t("failure") });
-    } finally {
-      setSubmitting(false);
-    }
-  }); */
-
   useEffect(() => {
     if (typeof onFormChange === "function") {
       onFormChange({
         isValid,
         formData: watch(),
-        triggerValidation: () => trigger(), // ✅ Función para ejecutar validación manualmente
+        triggerValidation: () => trigger(),
       });
     }
   }, [isValid, watch]);
@@ -794,28 +760,6 @@ export default function CheckoutForm({
             )}
           </>
         )}
-        {/* <div className="mb-6 col-span-2">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
-            disabled={submitting}
-          >
-            {submitting ? "Pagando..." : "Realizar pago"}
-          </button>
-          {response && (
-            <div
-              className={`col-span-2 text-center font-semibold py-4 rounded ${
-                response.message === "Tu mensaje ha sido enviado"
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}
-            >
-              {response.message === "Tu mensaje ha sido enviado"
-                ? `Gracias ${response.name}, el mensaje ha sido enviado.`
-                : response.message}
-            </div>
-          )}
-        </div> */}
       </form>
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "next-view-transitions";
 import Image from "next/image";
 import FormatPrice from "@/components/Ecommerce/FormatPrice";
 import { CartContext } from "@/context/CartContext";
-import {normalizeProductForCart} from "@/components/Ecommerce/NormalizeCartProduct";
+import { normalizeProductForCart } from "@/components/Ecommerce/NormalizeCartProduct";
 
 export default function ProductCard({ product }) {
   // Extraemos las propiedades necesarias del objeto product

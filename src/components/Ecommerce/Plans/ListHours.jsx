@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import FormatHour from "./FormatHour";
 
 export default function ListHours({
@@ -14,19 +14,20 @@ export default function ListHours({
   const handleHourChange = (event) => {
     const newHour = event.target.value;
     setSelectedHour(newHour);
-    onChange(newHour); // Propaga la hora seleccionada hacia el componente padre
+    onChange(newHour);
   };
 
   useEffect(() => {
-    setSelectedHour(value); // Actualizar la hora seleccionada si cambia el valor desde el padre
+    setSelectedHour(value);
   }, [value]);
 
-  // Ordenar los horarios por startTime
-  const horariosSorted = schedules?.sort(
-    (a, b) =>
-      new Date(`1970-01-01T${a.startTime}`) -
-      new Date(`1970-01-01T${b.startTime}`)
-  );
+  const horariosSorted = useMemo(() => {
+    return schedules?.slice().sort(
+      (a, b) =>
+        new Date(`1970-01-01T${a.startTime}`) -
+        new Date(`1970-01-01T${b.startTime}`)
+    );
+  }, [schedules]);
 
   return (
     <div className={`${classNameContainer} `}>
@@ -37,7 +38,7 @@ export default function ListHours({
         value={selectedHour}
         onChange={handleHourChange}
         aria-label="Selecciona un horario"
-        className={`mt-2 p-2 border text-slate-700   border-gray-300 rounded ${classNameInput}`}
+        className={`mt-2 p-2 border text-slate-700 border-gray-300 rounded ${classNameInput}`}
       >
         <option value="">Selecciona un horario</option>
         {horariosSorted?.map((horario, index) => (
@@ -46,9 +47,6 @@ export default function ListHours({
           </option>
         ))}
       </select>
-      {/* {selectedHour && (
-        <p className="mt-2">Has seleccionado el horario: <FormatHour hourString={selectedHour}/></p>
-      )} */}
     </div>
   );
 }

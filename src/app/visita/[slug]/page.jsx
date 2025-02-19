@@ -5,7 +5,6 @@ import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 import { GetSinglePlan } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
-import { normalizeReservationForCart } from "@/components/Ecommerce/NormalizeReservationForCart";
 
 const formatPrice = (price) => {
   if (!price) return "";
@@ -50,7 +49,7 @@ export default async function SinglePlanPage({ params }) {
 
     return (
       <main>
-        <section className="container mx-auto py-8 lg:py-16 px-5">
+        <section className="container mx-auto py-8 lg:py-16 px-2 sm:px-5">
           <div className="text-sm lg:text-base">
             <Link href="/" className="hover:-text--light-green">
               Inicio
@@ -99,13 +98,6 @@ export default async function SinglePlanPage({ params }) {
                   <BlocksRenderer content={planDescription} />
                 </div>
               )}
-              {/* {description && (
-                <ReactMarkdown className="mt-3 mb-5 xl:mb-10 prose">
-                  {description}
-                </ReactMarkdown>
-              )} */}
-
-              {/* <Calendar /> */}
               <ReservationField
                 horarios={horarios}
                 additionalServices={servicios_adicionales}
@@ -114,6 +106,7 @@ export default async function SinglePlanPage({ params }) {
                 image={image}
                 documentId={documentId}
                 rules={reglas_planes}
+                max_reservations={max_reservations}
               />
 
               <PlanRecomendations max_reservations={max_reservations} />
@@ -123,7 +116,9 @@ export default async function SinglePlanPage({ params }) {
       </main>
     );
   } catch (error) {
-    console.error("Error cargando el plan", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error cargando el plan", error);
+    }
     return (
       <div className="container mx-auto py-16 px-5 ">
         Ha ocurrido un error cargando el plan

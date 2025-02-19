@@ -2,16 +2,26 @@ import { Link } from "next-view-transitions";
 import ModalSchedule from "./Plans/ModalSchedule";
 import Image from "next/image";
 
+const formatPrice = (price) => {
+  if (!price) return "";
+  const formatedPrice = String(price);
+  return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
+};
+
 export default function PlanCard({
-  title,
+  name,
+  documentId,
   price,
   slug,
   image,
+  rules,
   altimg,
   experiences,
   onlyadults,
   allowchilds,
-  Schedules,
+  horarios,
+  additionalServices,
+  max_reservations,
 }) {
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
@@ -33,11 +43,11 @@ export default function PlanCard({
             className="group-hover:-text--dark-red duration-300"
             href={slug}
           >
-            {title}
+            {name}
           </Link>
         </h2>
         <div className="flex flex-col items-center">
-          <p className="font-semibold text-base">{price || ""}</p>
+          <p className="font-semibold text-base">{formatPrice(price) || ""}</p>
           <p className="text-xs -text--dark-green">
             {price ? (
               "por persona"
@@ -87,13 +97,22 @@ export default function PlanCard({
       <div className="flex flex-wrap gap-5  justify-center">
         <Link
           href={slug}
-          className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-3 py-2 rounded hover:-bg--dark-green hover:text-white duration-200"
+          className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-4 py-2 rounded hover:-bg--dark-green hover:text-white duration-200"
         >
           <span className="icon-[ph--eye]"></span> Ver
         </Link>
-        {Schedules.length > 0 && (
-          <ModalSchedule title={title} price={price} schedules={Schedules} />
-        )}
+        {horarios.length > 0 && (
+          <ModalSchedule
+            name={name}
+            price={price}
+            image={image}
+            documentId={documentId}
+            rules={rules}
+            horarios={horarios}
+            additionalServices={additionalServices}
+            max_reservations={max_reservations}
+          />
+        )}        
       </div>
     </div>
   );

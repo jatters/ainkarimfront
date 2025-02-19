@@ -83,6 +83,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             department: data.departament,
             address: data.address,
             allowMarketing: data.marketing,
+            confirmed: false
           }),
         }
       );

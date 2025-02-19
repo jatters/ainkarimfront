@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { CartContext } from "@/context/CartContext";
 import ListHours from "./ListHours";
 import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
 import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
 import { normalizeReservationForCart } from "@/components/Ecommerce/NormalizeReservationForCart";
+
+// Hook personalizado para efecto con debounce
+function useDebouncedEffect(effect, deps, delay) {
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
+    return () => clearTimeout(handler);
+  }, [...deps, delay]);
+}
 
 function formatHour(hourString) {
   const [hours, minutes] = hourString.split(":");
@@ -17,6 +25,11 @@ function formatHour(hourString) {
   return `${formattedHour}:${minutes} ${period}`;
 }
 
+function formatTimeForAPI(timeString) {
+  // Conversión simple; se puede ajustar según sea necesario
+  return `${timeString}`;
+}
+
 export default function ReservationField({
   documentId,
   name,
@@ -25,10 +38,9 @@ export default function ReservationField({
   horarios,
   additionalServices,
   rules,
+  max_reservations,
 }) {
   const { addToCart } = useContext(CartContext);
-  const [dateError, setDateError] = useState("");
-  const [hourError, setHourError] = useState("");
   const [reservationData, setReservationData] = useState({
     date: "",
     persons: 1,
@@ -40,7 +52,73 @@ export default function ReservationField({
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
   const [disabledDates, setDisabledDates] = useState([]);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({ date: "", hour: "" });
+  const [availableSpots, setAvailableSpots] = useState(max_reservations);
+  const [isLoadingSpots, setIsLoadingSpots] = useState(false);
+
+  // Uso del token y URL base de la API
+  const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
+  const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+
+  const checkAvailableSpots = useCallback(
+    async (selectedDate, selectedHour) => {
+      if (!selectedDate || !selectedHour) return;
+  
+      setIsLoadingSpots(true);
+      try {
+        const formattedTime = formatTimeForAPI(selectedHour);
+  
+        const response = await fetch(
+          `${API_URL}/api/reservas?filters[reservationDate]=${selectedDate}&filters[reservationTime]=${formattedTime}&filters[plan][documentId][$eq]=${documentId}&populate=*`,          
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (!response.ok) {
+          const errorData = await response.text();
+          throw new Error(
+            `Error fetching reservations: ${response.status} - ${errorData}`
+          );
+        }
+  
+        const data = await response.json();
+  
+        // Solo contamos reservas en estado "Pendiente" o "Confirmada"
+        const validStates = ["Pendiente", "Confirmada"];
+        const totalReservedSpots = data.data
+          .filter((reservation) => validStates.includes(reservation.state))
+          .reduce(
+            (acc, reservation) => acc + (reservation.guests || 0),
+            0
+          );
+  
+        setAvailableSpots(max_reservations - totalReservedSpots);
+      } catch (error) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error checking available spots:", error);
+        }
+        setAvailableSpots(0);
+      } finally {
+        setIsLoadingSpots(false);
+      }
+    },
+    [API_URL, token, max_reservations]
+  );
+  
+
+  // Se aplica debounce para evitar múltiples llamadas consecutivas
+  useDebouncedEffect(
+    () => {
+      checkAvailableSpots(reservationData.date, reservationData.hour);
+    },
+    [reservationData.date, reservationData.hour, checkAvailableSpots],
+    300
+  );
 
   useEffect(() => {
     const today = new Date();
@@ -77,9 +155,7 @@ export default function ReservationField({
     let currentDate = new Date(today);
     while (currentDate <= threeMonthsFromNow) {
       const dayOfWeek = currentDate
-        .toLocaleString("es-CO", {
-          weekday: "long",
-        })
+        .toLocaleString("es-CO", { weekday: "long" })
         .toLowerCase();
 
       if (restrictedDays.includes(dayOfWeek)) {
@@ -99,25 +175,41 @@ export default function ReservationField({
   };
 
   const handleReserve = () => {
-    // Validaciones (fecha, hora, etc.)
-    if (!reservationData.date) { setDateError("Por favor selecciona una fecha disponible."); return; }
-    if (!reservationData.hour) { setHourError("Por favor selecciona una hora disponible."); return; }
-    if (disabledDates.includes(reservationData.date)) { setDateError("La fecha seleccionada no está disponible. Elige otra."); return; }
-    
+    if (!reservationData.date) {
+      setErrors((prev) => ({
+        ...prev,
+        date: "Selecciona una fecha disponible",
+      }));
+      return;
+    }
+    if (!reservationData.hour) {
+      setErrors((prev) => ({ ...prev, hour: "Debes seleccionar una hora." }));
+      return;
+    }
+    if (disabledDates.includes(reservationData.date)) {
+      setErrors((prev) => ({
+        ...prev,
+        date: "La fecha seleccionada no está disponible. Elige otra.",
+      }));
+      return;
+    }
+
     const selectedOptions = {
       date: reservationData.date,
       hour: reservationData.hour,
       persons: reservationData.persons,
-      additionalService: selectedService, // Si se ha seleccionado
+      additionalService: selectedService,
+      availableSpots: availableSpots, // <-- Se añade el valor actual de cupos disponibles
     };
-  
+
     const cartItem = normalizeReservationForCart(
       {
         documentId,
-        name, // o plan.name si lo llamas así
+        name,
         price,
         image,
-        categorias_de_producto:"Plan",
+        categorias_de_producto: "Plan",
+        max_reservations, // Se espera que este valor esté presente en el plan
       },
       selectedOptions
     );
@@ -128,7 +220,7 @@ export default function ReservationField({
   const increasePersons = () => {
     setReservationData((prev) => ({
       ...prev,
-      persons: prev.persons + 1,
+      persons: prev.persons < availableSpots ? prev.persons + 1 : prev.persons,
     }));
   };
 
@@ -141,104 +233,113 @@ export default function ReservationField({
 
   if (horarios && horarios.length > 0) {
     return (
-      <div className="-bg--gray py-5 px-2 sm:px-5 rounded-xl border shadow-md">
-        <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
+      <div className="-bg--gray py-2 px-2 xl:px-5 rounded-xl border shadow-md">
+        <div className="font-bold text-xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
-
-        {/* -- Fila de inputs -- */}
-        <div className="flex gap-x-0 sm:gap-x-3 gap-y-2 justify-center justify-items-center items-center flex-wrap">
-          {/* Fecha (con el DatePicker) */}
-          <div className="py-2 flex-1 mx-auto">
-            <div className="font-bold -text--dark-green text-base flex items-center gap-1 mb-5 ">
+        <div className="flex flex-col md:flex-row gap-3 items-center justify-center">
+          {/* Calendario, selector de hora y cantidad de personas */}
+          <div className="w-full md:w-auto py-2 flex flex-col gap-3 items-center">
+            <div className="font-bold text-base flex items-center gap-1 text-dark-green">
               <span className="icon-[material-symbols--calendar-month-rounded]"></span>
-              Selecciona la fecha:
+              Selecciona la fecha
             </div>
             <CallyDatePicker
               value={reservationData.date}
               onChange={(newDate) => {
                 setReservationData((prev) => ({ ...prev, date: newDate }));
                 if (disabledDates.includes(newDate)) {
-                  setError(
-                    "La fecha seleccionada no está disponible. Por favor, elige otra."
-                  );
+                  setErrors((prev) => ({
+                    ...prev,
+                    date: "Fecha no disponible. Selecciona otra.",
+                  }));
                 } else {
-                  setError("");
+                  setErrors((prev) => ({ ...prev, date: "" }));
                 }
               }}
               min={minDate}
               max={maxDate}
               disallowedDates={disabledDates}
             />
-
-            {dateError && (
-              <div className="text-sm text-red-600 mt-1 pl-12 max-w-64 break-words">{dateError}</div>
+            {errors.date && (
+              <div className="text-sm text-red-600 font-medium">
+                {errors.date}
+              </div>
             )}
           </div>
 
-          {/* Personas */}
-          <div className="flex flex-col gap-y-2 mx-auto">
-            <div className="py-2 flex-1 items-center">
-              <div className="font-bold -text--dark-green text-base flex items-center gap-1">
+          <div className="w-full md:w-64 flex flex-col space-y-4">
+            {/* Campo de Personas */}
+            <div className="flex flex-col">
+              <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
                 <span className="icon-[ion--people]"></span>Personas:
               </div>
-              <div className="flex items-center mt-2">
-                <button
-                  className="-bg--dark-green/70 text-white px-3 py-2 rounded-l focus:outline-none hover:-bg--dark-green duration-200"
-                  onClick={decreasePersons}
-                  aria-label="Disminuir cantidad de personas"
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  readOnly
-                  name="persons"
-                  value={reservationData.persons}
-                  aria-label="Número de personas"
-                  className="appearance-none border -border--dark-green/70 w-full px-3 py-2 h-10 text-gray-700 text-center leading-tight focus:outline-none"
-                />
-                <button
-                  className="-bg--dark-green/70 text-white px-3 py-2 rounded-r focus:outline-none hover:-bg--dark-green duration-200"
-                  onClick={increasePersons}
-                  aria-label="Aumentar cantidad de personas"
-                >
-                  +
-                </button>
+              <div className="mt-2 w-full">
+                <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">
+                  <button
+                    className="-bg--dark-green/70 text-white rounded-l focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                    onClick={decreasePersons}
+                    aria-label="Disminuir cantidad de personas"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    readOnly
+                    name="persons"
+                    value={reservationData.persons}
+                    aria-label="Número de personas"
+                    className="appearance-none border -border--dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-none h-10"
+                  />
+                  <button
+                    className="-bg--dark-green/70 text-white rounded-r focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                    onClick={increasePersons}
+                    aria-label="Aumentar cantidad de personas"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Horas */}
-            {/* <ListHours
-              schedules={horarios}
-              classNameInput="w-full"
-              classNameContainer="py-2 flex-1 items-center"
-              value={reservationData.hour}
-              onChange={(hour) =>
-                setReservationData((prev) => ({ ...prev, hour }))
-              }
-            /> */}
-            <ListHours
-              schedules={horarios}
-              classNameInput="w-full"
-              classNameContainer="py-2 flex-1 items-center"
-              value={reservationData.hour}
-              onChange={(hour) => {
-                setReservationData((prev) => ({ ...prev, hour }));
-                if (!hour) {
-                  setError("Por favor selecciona una hora disponible.");
-                } else {
-                  setError("");
-                }
-              }}
-            />
-            {hourError && (
-              <div className="text-sm text-red-600 pl-1">{hourError}</div>
-            )}
+            {/* Campo de Selección de Hora */}
+            <div className="flex flex-col">
+              <ListHours
+                schedules={horarios}
+                classNameInput="w-full"
+                classNameContainer="flex flex-col"
+                value={reservationData.hour}
+                onChange={(hour) => {
+                  setReservationData((prev) => ({ ...prev, hour }));
+                  if (!hour) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      hour: "Debes seleccionar una hora.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, hour: "" }));
+                  }
+                }}
+              />
+              {errors.hour && (
+                <div className="text-sm font-medium text-red-600 mt-1">
+                  {errors.hour}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Servicios adicionales */}
+        {reservationData.date && reservationData.hour && (
+          <div className="text-center font-semibold mt-4 md:mt-6 bg-white py-3 rounded-md border text-sm">
+            {isLoadingSpots
+              ? "Verificando disponibilidad..."
+              : availableSpots > 0
+              ? `Hay ${availableSpots} lugares disponibles en este horario`
+              : "No hay lugares disponibles en este horario"}
+          </div>
+        )}
+
         {additionalServices && (
           <AdditionalServices
             services={additionalServices}
@@ -246,20 +347,28 @@ export default function ReservationField({
           />
         )}
 
-        {/* Botón Reservar */}
-        <div className="flex justify-center">
+        <div className="flex justify-center flex-col items-center">
           <button
             onClick={handleReserve}
-            className="-bg--dark-green text-white py-3 px-16 mt-5 hover:-bg--light-green duration-300 rounded-md"
+            disabled={availableSpots <= 0 || isLoadingSpots}
+            className={`py-3 px-16 mt-5 rounded-md duration-300 ${
+              availableSpots <= 0 || isLoadingSpots
+                ? "bg-gray-400 cursor-not-allowed"
+                : "-bg--dark-green text-white hover:-bg--light-green"
+            }`}
             aria-label="Reservar"
           >
-            Reservar
+            {isLoadingSpots ? "Verificando..." : "Reservar"}
           </button>
+          {availableSpots <= 0 && (
+            <p className="text-red-500 text-sm mt-2 font-semibold pb-3">
+              No hay cupos disponibles en este horario
+            </p>
+          )}
         </div>
       </div>
     );
   } else {
-    // Si no hay horarios, muestra una sección distinta
     return (
       <div className="-bg--gray py-5 px-5 rounded-xl">
         <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green ">

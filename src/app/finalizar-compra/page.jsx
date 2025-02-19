@@ -9,13 +9,85 @@ import Tooltip from "@mui/material/Tooltip";
 export default function PaymentPage() {
   const { cart, removeFromCart } = useContext(CartContext);
   const [formState, setFormState] = useState({ isValid: false, formData: {} });
+  const [processing, setProcessing] = useState(false);
   /* const handleFormSubmit = (formData) => {
     setFormState({ isValid: true, formData });
   }; */
-
   const handleFormChange = (updatedFormState) => {
     setFormState(updatedFormState);
   };
+  const processOrder = async () => {
+    setProcessing(true);
+    try {
+      const data = formState.formData;
+      let userId = null;
+
+      if (data.register) {
+        console.log("🟢 Registrando usuario...");
+        const registerResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local/register`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: data.document,
+              email: data.email,
+              password: data.password,
+            }),
+          }
+        );
+
+        const registerResult = await registerResponse.json();
+        if (!registerResponse.ok) {
+          throw new Error(
+            registerResult.error?.message || "Error al registrar usuario"
+          );
+        }
+        userId = registerResult.user.id;
+      }
+
+      const customerData = {
+        firstName: data.firstName.toUpperCase(),
+        middleName: data.secondName?.toUpperCase() || "",
+        lastName: data.lastname.toUpperCase(),
+        secondLastName: data.secondSurname?.toUpperCase() || "",
+        documentType: data.documentType,
+        document: data.document,
+        mobile: data.mobiletwo,
+        gender: data.gender || null,
+        bornDate: data.bornDate || null,
+        city: data?.city || null,
+        department: data.departament,
+        address: data.address,
+        email: data.email,
+        allowMarketing: data.marketing,
+        confirmed: false,
+      };
+
+      if (userId) {
+        console.log("🟢 Actualizando datos del usuario...");
+        await fetch(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+            },
+            body: JSON.stringify(customerData),
+          }
+        );
+      }
+
+      return customerData;
+    } catch (error) {
+      console.error("❌ Error en el registro:", error);
+      throw error;
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   const calculateSubtotal = (item) => {
     const price = parseFloat(item.Precio || item.price || 0);
     const additionalPrice = item.additionalService
@@ -50,12 +122,11 @@ export default function PaymentPage() {
     quantity: product.quantity || 1,
     image: product.image ? { url: product.image.url } : null, // ✅ Agregar imagen si existe
   }));
-  
+
   //console.log("🛒 Datos de `orderData` antes de enviar:", orderData);
   //{//console.log("cart es:", cart)}
   //{//console.log("orderdata es:", orderData)}
-  
-  
+
   return (
     <main>
       <div className="container mx-auto py-8 lg:py-16 px-5">
@@ -65,14 +136,13 @@ export default function PaymentPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
           {/* Columna izquierda: Formulario de datos cliente */}
           <div className="col-span-1 mt-6">
-              {orderData.length > 0 && (
-                <CheckoutForm
-                  showAddressFields={cart.some((item) => !item.reservationData)}
-                  orderData={orderData}
-                  onFormChange={handleFormChange}
-                />
-              )}
-            
+            {orderData.length > 0 && (
+              <CheckoutForm
+                showAddressFields={cart.some((item) => !item.reservationData)}
+                //orderData={orderData}
+                onFormChange={handleFormChange}
+              />
+            )}
           </div>
 
           {/* Columna derecha: Resumen del pedido */}
@@ -98,7 +168,7 @@ export default function PaymentPage() {
                   <div
                     key={index}
                     className="grid grid-cols-5 py-3 pl-4 border-b items-center hover:bg-slate-100 duration-200"
-                  >{console.log("El carrito actual es:", cart)}
+                  >                    
                     <div className="col-span-4">
                       <div className="font-bold -text--dark-green">{title}</div>
                       {isReservation ? (
@@ -198,6 +268,7 @@ export default function PaymentPage() {
                   formData={formState.formData}
                   formValid={formState.isValid}
                   triggerValidation={formState.triggerValidation} // ✅ Pasamos la validación al botón
+                  onBeforePayment={processOrder} 
                 />
               </div>
             </div>

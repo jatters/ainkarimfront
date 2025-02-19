@@ -28,14 +28,17 @@ export default async function PlansHome() {
           <PlanCard
             key={plan.id}
             slug={`/visita/${plan.slug}`}
-            title={plan.name}
-            price={formatPrice(plan.price)}
+            name={plan.name}
+            documentId={plan.documentId}  
+            price={plan.price}
             experiences={experienciesList}
             image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.medium.url}`}
             altimg="product"
             onlyadults={plan.onlyAdults}
             allowchilds={plan.allowChilds}
-            Schedules={plan.horarios}
+            horarios={plan.horarios}
+            additionalServices={plan.servicios_adicionales}
+            rules={plan.reglas_planes}
           />
         );
       })}

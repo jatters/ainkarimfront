@@ -12,7 +12,9 @@ export default function CarritoPage() {
 
   const calculateSubtotal = (item) => {
     const unitPrice = parseFloat(item.price) || 0;
-    const additionalPrice = item.additionalService ? parseFloat(item.additionalService.price) || 0 : 0;
+    const additionalPrice = item.additionalService
+      ? parseFloat(item.additionalService.price) || 0
+      : 0;
     const quantity = parseInt(item.quantity, 10) || 1;
     return unitPrice * quantity + additionalPrice;
   };
@@ -22,8 +24,15 @@ export default function CarritoPage() {
   };
 
   const incrementarCantidad = (product) => {
+    if (product.isReservation && product.maxQuantity && product.availableSpots) {
+      const maxAllowed = Math.min(product.maxQuantity, product.availableSpots);
+      if (product.quantity >= maxAllowed) {
+        return; // No permite incrementar más
+      }
+    }
     updateQuantityInCart(product, product.quantity + 1);
   };
+  
 
   const decrementarCantidad = (product) => {
     if (product.quantity > 1) {
@@ -92,7 +101,9 @@ export default function CarritoPage() {
                     // Dado que los datos están normalizados, usamos directamente item.title, item.price, item.quantity y item.image.
                     // Si el producto es variable, concatenamos el título con el nombre de la variación.
                     const displayTitle = item.isReservation
-                      ? `${item.attributes?.name || item.title} - ${item.reservationData.date} - ${
+                      ? `${item.attributes?.name || item.title} - ${
+                          item.reservationData.date
+                        } - ${
                           parseInt(item.reservationData.persons, 10) > 1
                             ? item.reservationData.persons + " personas"
                             : "1 persona"
@@ -106,11 +117,15 @@ export default function CarritoPage() {
                     const imageUrl =
                       typeof item.image === "string"
                         ? item.image
-                        : item.image && item.image.formats && item.image.formats.thumbnail
+                        : item.image &&
+                          item.image.formats &&
+                          item.image.formats.thumbnail
                         ? `${baseurl}${item.image.formats.thumbnail.url}`
                         : null;
-                    const altText = imageUrl ? `Imagen de ${displayTitle}` : "Imagen del producto";
-                    
+                    const altText = imageUrl
+                      ? `Imagen de ${displayTitle}`
+                      : "Imagen del producto";
+
                     return (
                       <tr
                         key={index}
@@ -163,6 +178,16 @@ export default function CarritoPage() {
                             <button
                               className="-bg--dark-green/70 text-white px-2 py-2 rounded-r hover:-bg--dark-green focus:outline-none"
                               onClick={() => incrementarCantidad(item)}
+                              disabled={
+                                item.reservationData &&
+                                item.maxQuantity &&
+                                item.availableSpots &&
+                                item.quantity >=
+                                  Math.min(
+                                    item.maxQuantity,
+                                    item.availableSpots
+                                  )
+                              }
                               aria-label={`Aumentar cantidad de ${displayTitle}`}
                             >
                               +
