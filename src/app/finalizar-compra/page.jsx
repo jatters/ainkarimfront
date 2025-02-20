@@ -56,7 +56,7 @@ export default function PaymentPage() {
         mobile: data.mobiletwo,
         gender: data.gender || null,
         bornDate: data.bornDate || null,
-        city: data?.city || null,
+        city: data?.city,
         department: data.departament,
         address: data.address,
         email: data.email,

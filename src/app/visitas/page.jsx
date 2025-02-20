@@ -1,6 +1,7 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { GetPlans } from "@/components/GetContentApi";
+import Popup from "@/components/Ui/Popup";
 
 export default async function VisitasPage() {
   const plansData = await GetPlans();
@@ -13,6 +14,7 @@ export default async function VisitasPage() {
 
   return (
     <main>
+      <Popup location="plans" />
       <HeaderImage title="Visitas" background="/banner-visitas.webp" />
       <section className="container mx-auto py-8 lg:py-16 px-5">
         <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">

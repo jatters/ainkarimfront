@@ -83,7 +83,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             department: data.departament,
             address: data.address,
             allowMarketing: data.marketing,
-            confirmed: false
+            confirmed: false,
           }),
         }
       );
@@ -134,7 +134,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 },
               })}
               placeholder="Primer Nombre"
-              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.firstName ? "border-red-500" : "-border--light-gray"
               } `}
             />
@@ -166,7 +166,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 },
               })}
               placeholder="Segundo Nombre"
-              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.secondName ? "border-red-500" : "-border--light-gray"
               } `}
             />
@@ -199,7 +199,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 },
               })}
               placeholder="Primer apellido"
-              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.lastname ? "border-red-500" : "-border--light-gray"
               } `}
             />
@@ -232,7 +232,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                 },
               })}
               placeholder="Segundo apellido"
-              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`w-full capitalize px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.secondSurname ? "border-red-500" : "-border--light-gray"
               } `}
             />
@@ -250,7 +250,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <select
               type="select"
               id="documentType"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg  text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.documentType ? "!border-red-500" : ""
               }`}
               {...register("documentType", {
@@ -280,7 +280,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="document"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.legalDocument ? "!border-red-500" : ""
               }`}
               placeholder="Número de Documento"
@@ -316,7 +316,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="email"
               id="email"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.email ? "border-red-500" : "border"
               }`}
               placeholder="Tu correo electrónico"
@@ -344,7 +344,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="mobiletwo"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.mobiletwo ? "!border-red-500" : "border"
               }`}
               placeholder="Número de celular"
@@ -377,7 +377,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <select
               type="select"
               id="gender"
-              className={`mt-1 p-2 py-4 w-full border border-gray-400/40 rounded-lg  text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 py-4 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.gender ? "!border-red-500" : ""
               }`}
               {...register("gender", {
@@ -433,7 +433,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
                   slotProps={{
                     textField: {
                       variant: "outlined",
-                      className: `mt-1 w-full border border-gray-400/40 rounded-lg focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+                      className: `mt-1 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                         errors.bornDate
                           ? "border-red-500"
                           : "border-gray-400/40"
@@ -456,7 +456,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="city"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.city ? "!border-red-500" : ""
               }`}
               placeholder="Ciudad"
@@ -489,8 +489,8 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="departament"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
-                errors.locality ? "!border-red-500" : ""
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                errors.departament ? "!border-red-500" : ""
               }`}
               placeholder="Departamento"
               {...register("departament", {
@@ -521,7 +521,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="address"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.address ? "!border-red-500" : "border"
               }`}
               placeholder="Dirección"
@@ -550,7 +550,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                   errors.password ? "border-red-500" : "border"
                 }`}
                 placeholder="Crea tu contraseña"
@@ -632,7 +632,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : "border"
                 }`}
                 placeholder="Confirma tu contraseña"

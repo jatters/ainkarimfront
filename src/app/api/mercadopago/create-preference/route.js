@@ -89,6 +89,7 @@ export async function POST(req) {
       customerDocument: customer.document,
       customerPhone: customer.mobiletwo,
       customerEmail: customer.email,
+      customerCity: customer.city,
       customerDeparment: customer.departament || "",
       customerAddress: customer.address || "",
       // Guardamos el detalle de los items en formato JSON (para referencia interna)

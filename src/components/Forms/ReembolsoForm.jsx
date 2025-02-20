@@ -47,7 +47,7 @@ export default function ReembolsoForm() {
       <form
         method="POST"
         onSubmit={onSubmit}
-        className="grid grid-cols-2 gap-3"
+        className="grid grid-cols-2 gap-x-3 gap-y-1"
       >
         <div className="mb-3">
           <label htmlFor="name" className="sr-only">
@@ -75,7 +75,7 @@ export default function ReembolsoForm() {
               },
             })}
             placeholder="Nombre"
-            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.name ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -95,11 +95,11 @@ export default function ReembolsoForm() {
             {...register("lastname", {
               required: {
                 value: true,
-                message: "El nombre es requerido",
+                message: "El apellido es requerido",
               },
               minLength: {
                 value: 2,
-                message: "El nombre no es válido",
+                message: "El apellido no es válido",
               },
               maxLength: {
                 value: 30,
@@ -111,7 +111,7 @@ export default function ReembolsoForm() {
               },
             })}
             placeholder="Apellidos"
-            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.lastname ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -128,7 +128,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="phone"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.phone ? "border-red-500" : "border"
             }`}
             placeholder="Celular"
@@ -156,7 +156,7 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="city"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.city ? "!border-red-500" : ""
             }`}
             placeholder="Ciudad"
@@ -188,7 +188,7 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="legalDocument"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.legalDocument ? "!border-red-500" : ""
             }`}
             placeholder="Número de Documento"
@@ -224,7 +224,7 @@ export default function ReembolsoForm() {
           <input
             type="email"
             id="email"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.email ? "border-red-500" : "border"
             }`}
             placeholder="Tu correo electrónico"
@@ -252,7 +252,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="reservation"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.reservation ? "border-red-500" : "border"
             }`}
             placeholder="Número de reserva"
@@ -280,14 +280,14 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="reservationDate"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.reservationDate ? "border-red-500" : "border"
             }`}
             placeholder="Fecha de reserva"
             {...register("reservationDate", {
               required: {
                 value: true,
-                message: "El número de reserva es requerido",
+                message: "La fecha de reserva es requerida",
               },
               pattern: {
                 value: /^\d{7,12}$/,
@@ -308,14 +308,14 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="paymentValue"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.paymentValue ? "border-red-500" : "border"
             }`}
             placeholder="Valor pagado"
-            {...register("reservationDate", {
+            {...register("paymentValue", {
               required: {
                 value: true,
-                message: "El número de reserva es requerido",
+                message: "El valor pagado es requerido",
               },
               pattern: {
                 value: /^\d{7,12}$/,
@@ -336,14 +336,14 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="planName"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.planName ? "border-red-500" : "border"
             }`}
             placeholder="Plan"
             {...register("planName", {
               required: {
                 value: true,
-                message: "El número de reserva es requerido",
+                message: "El nombre del plan es requerido",
               },
               pattern: {
                 value: /^\d{7,12}$/,
@@ -364,18 +364,14 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="paymentMehotd"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.paymentMehotd ? "border-red-500" : "border"
             }`}
             placeholder="Medio de pago"
             {...register("paymentMehotd", {
               required: {
                 value: true,
-                message: "El número de reserva es requerido",
-              },
-              pattern: {
-                value: /^\d{7,12}$/,
-                message: "El número de reserva no es válido",
+                message: "El medio de pago es requerido",
               },
             })}
           />

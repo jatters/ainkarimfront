@@ -116,20 +116,22 @@ export default function ResetPasswordPage() {
         ) : (
           <>
             <div className="relative">
-              <label className="block font-semibold -text--dark-green">Nueva Contraseña</label>
+              <label className="block font-semibold -text--dark-green">
+                Nueva Contraseña
+              </label>
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Nueva contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
+                className="w-full  px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none"
                 required
               />
-               <Tooltip
+              <Tooltip
                 title={
-                  showPassword ?  "Ocultar contraseña" : "Mostrar contraseña" 
-                }                
+                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                }
               >
                 <button
                   type="button"
@@ -163,7 +165,7 @@ export default function ResetPasswordPage() {
                 placeholder="Confirmar contraseña"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
+                className="w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none"
                 required
               />
               <Tooltip
@@ -171,7 +173,7 @@ export default function ResetPasswordPage() {
                   showConfirmPassword
                     ? "Ocultar contraseña"
                     : "Mostrar contraseña"
-                }                
+                }
               >
                 <button
                   type="button"

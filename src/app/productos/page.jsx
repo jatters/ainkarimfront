@@ -1,6 +1,7 @@
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { GetProducts } from "@/components/GetContentApi";
 import FilterableProducts from "@/components/Ecommerce/FilterableProducts";
+import Popup from "@/components/Ui/Popup";
 
 export default async function productsPage() {
   const products = await GetProducts();
@@ -15,6 +16,7 @@ export default async function productsPage() {
 
   return (
     <main>
+      <Popup location="store" />
       <HeaderImage title="Vinos" background="/banner-vinos.webp" />
       <section className="container mx-auto py-8 lg:py-16">
         {/* Pasar la lista de productos iniciales a FilterableProducts */}

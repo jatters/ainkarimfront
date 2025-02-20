@@ -33,8 +33,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
 
   const registerUser = watch("register");
 
-  const isSamePassword = watch("password") === watch("confirmPassword");
-
   return (
     <div className="mx-auto lg:p-8 bg-white shadow-md rounded-lg">
       <form
@@ -67,7 +65,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Primer Nombre"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none  ${
               errors.firstName ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -99,7 +97,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Segundo Nombre"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.secondName ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -131,7 +129,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Primer apellido"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.lastname ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -163,7 +161,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Segundo apellido"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.secondSurname ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -180,7 +178,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <select
             type="select"
             id="documentType"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg  text-gray-700 focus:outline-none focus:-ring--dark-green focus:ring-1 focus:-border--dark-green ${
+            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.documentType ? "!border-red-500" : ""
             }`}
             {...register("documentType", {
@@ -208,7 +206,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="text"
             id="document"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.document ? "!border-red-500" : ""
             }`}
             placeholder="Número de Documento"
@@ -244,8 +242,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="text"
             id="mobiletwo"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-              errors.mobiletwo ? "!border-red-500" : "border"
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              errors.mobiletwo ? "!border-red-500" : ""
             }`}
             placeholder="Número de celular"
             {...register("mobiletwo", {
@@ -273,30 +271,34 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         {showAddressFields && (
           <>
             <div>
-              <label htmlFor="address" className="sr-only">
-                Dirección
+              <label htmlFor="city" className="sr-only">
+                Ciudad
               </label>
               <input
                 type="text"
-                id="address"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-1 focus:-ring--grey-light ${
-                  errors.address ? "!border-red-500" : "border"
+                id="city"
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.city ? "!border-red-500" : ""
                 }`}
-                placeholder="Dirección"
-                {...register("address", {
+                placeholder="Ciudad"
+                {...register("city", {
                   required: {
                     value: true,
-                    message: "La dirección es requerida",
+                    message: "La ciudad es requerida",
                   },
                   minLength: {
-                    value: 10,
-                    message: "La dirección es muy corta",
+                    value: 2,
+                    message: "La ciudad no es valida",
+                  },
+                  pattern: {
+                    value: /^[A-Za-zÀ-ÿ\s]+$/,
+                    message: "La ciudad no es valida",
                   },
                 })}
               />
-              {errors.address && (
+              {errors.city && (
                 <span className="text-sm text-red-600 mt-2 pl-1 block">
-                  {errors.address.message}
+                  {errors.city.message}
                 </span>
               )}
             </div>
@@ -307,8 +309,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <input
                 type="text"
                 id="departament"
-                className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
-                  errors.locality ? "!border-red-500" : ""
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.departament ? "!border-red-500" : ""
                 }`}
                 placeholder="Departamento"
                 {...register("departament", {
@@ -332,6 +334,34 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
+            <div>
+              <label htmlFor="address" className="sr-only">
+                Dirección
+              </label>
+              <input
+                type="text"
+                id="address"
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.address ? "!border-red-500" : "border"
+                }`}
+                placeholder="Dirección"
+                {...register("address", {
+                  required: {
+                    value: true,
+                    message: "La dirección es requerida",
+                  },
+                  minLength: {
+                    value: 10,
+                    message: "La dirección es muy corta",
+                  },
+                })}
+              />
+              {errors.address && (
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
           </>
         )}
         <div className="mb-4">
@@ -341,7 +371,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="email"
             id="email"
-            className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.email ? "border-red-500" : "border"
             }`}
             placeholder="Tu correo electrónico"
@@ -393,7 +423,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                  className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                     errors.password ? "border-red-500" : "border"
                   }`}
                   placeholder="Crea tu contraseña"
@@ -401,6 +431,15 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                     required: {
                       value: true,
                       message: "La contraseña es requerida",
+                    },
+                    minLength: {
+                      value: 8,
+                      message: "La contraseña debe tener al menos 8 caracteres",
+                    },
+                    pattern: {
+                      value: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+                      message:
+                        "Debe incluir al menos una mayúscula, un número y un carácter especial",
                     },
                   })}
                 />
@@ -466,15 +505,18 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
-                  className={`mt-1 p-2 w-full border -border--grey-light/50 rounded-md focus:outline-none focus:ring-2 focus:-ring--grey-light ${
+                  className={`mt-1 p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                     errors.confirmPassword ? "border-red-500" : "border"
                   }`}
                   placeholder="Confirma tu contraseña"
                   {...register("confirmPassword", {
                     required: {
                       value: true,
-                      message: "La contraseña es requerida",
+                      message: "Debes confirmar tu contraseña",
                     },
+                    validate: (value) =>
+                      value === watch("password") ||
+                      "Las contraseñas no coinciden",
                   })}
                 />
                 <Tooltip

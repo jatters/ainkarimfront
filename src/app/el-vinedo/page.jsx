@@ -23,7 +23,7 @@ export default async function vinedoPage() {
       />
       <section className="container mx-auto py-16 px-5 lg:px-10">
         <h2 className="text-2xl lg:text-4xl -text--dark-green text-center mb-14 uppercase">
-          {title}
+          {"Nuestra Historia"}
         </h2>
         {timeline && <Timeline timeline={timeline} />}
       </section>

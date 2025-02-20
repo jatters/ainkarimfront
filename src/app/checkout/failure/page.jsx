@@ -42,7 +42,7 @@ export default function FailurePage({ searchParams }) {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="max-w-screen-lg mx-auto py-16 px-5">
       <h1 className="text-2xl font-bold text-red-600">Pago Rechazado ❌</h1>
       <p>
         Tu pago no se pudo procesar correctamente. Por favor, revisa los
@@ -57,7 +57,8 @@ export default function FailurePage({ searchParams }) {
         <strong>Estado:</strong> {paymentDetails.status}
       </p>
       <p>
-        <strong>Monto:</strong> {paymentDetails.amount.toLocaleString()} COP
+      {paymentDetails.amount ? paymentDetails.amount.toLocaleString() : "No disponible"} COP
+
       </p>
       <p>
         <strong>Fecha:</strong>{" "}
@@ -82,10 +83,10 @@ export default function FailurePage({ searchParams }) {
 
       <div className="mt-6">
         <a
-          href="/checkout"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          href="/finalizar-compra"
+          className="-bg--dark-green text-white px-4 py-2 rounded hover:-bg--light-green duration-200"
         >
-          Intentar de nuevo
+          Intentar pagar de nuevo
         </a>
       </div>
     </div>

@@ -26,19 +26,20 @@ export default async function PlansHome() {
 
         return (
           <PlanCard
-            key={plan.id}
+            key={plan.documentId}
             slug={`/visita/${plan.slug}`}
             name={plan.name}
             documentId={plan.documentId}  
             price={plan.price}
             experiences={experienciesList}
-            image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.medium.url}`}
-            altimg="product"
+            image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.small.url}`}
+            altimg={`Image ${plan.name}`}
             onlyadults={plan.onlyAdults}
             allowchilds={plan.allowChilds}
-            horarios={plan.horarios}
-            additionalServices={plan.servicios_adicionales}
+            horarios={plan.horarios}            
             rules={plan.reglas_planes}
+            additionalServices={plan.servicios_adicionales}
+            max_reservations={plan.max_reservations}
           />
         );
       })}

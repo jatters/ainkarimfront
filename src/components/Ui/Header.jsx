@@ -116,6 +116,15 @@ export default function Header() {
               <li>
                 <Link
                   className="py-2 px-1 hover:-text--light-green duration-200 text-sm"
+                  href="/menu"
+                  onClick={closeMenu}
+                >
+                  Menú
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="py-2 px-1 hover:-text--light-green duration-200 text-sm"
                   href="/el-vinedo"
                   onClick={closeMenu}
                 >
@@ -146,7 +155,7 @@ export default function Header() {
       )}
 
       {/* Menú de escritorio */}
-      <div className="items-center px-12 py-3 justify-between hidden lg:flex">
+      <div className="items-center px-5 py-3 justify-between hidden lg:flex">
         <Link href="/">
           <Image
             src={logo}
@@ -172,6 +181,14 @@ export default function Header() {
                 href="/visitas"
               >
                 Visitas
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
+                href="/menu"
+              >
+                Menú
               </Link>
             </li>
             <li>

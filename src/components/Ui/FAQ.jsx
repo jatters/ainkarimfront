@@ -4,17 +4,19 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { GetFaqs } from "../GetContentApi";
+import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
 export default async function FAQ() {
   const faqs = await GetFaqs();
-  if(!faqs || !faqs.data){
-    console.error("Error fetching FAQS")
-    return(
-      <div>Error cargando preguntas frecuentes</div>
-    )
+  if (!faqs || !faqs.data) {
+    console.error("Error fetching FAQS");
+    return <div>Error cargando preguntas frecuentes</div>;
   }
   return (
-    <div className="max-w-3xl px-5 mx-auto py-10 " aria-label="Preguntas frecuentes">
+    <div
+      className="max-w-3xl px-5 mx-auto py-10 "
+      aria-label="Preguntas frecuentes"
+    >
       {faqs.data.map((faq) => (
         <Accordion key={faq.documentId}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -22,7 +24,11 @@ export default async function FAQ() {
               {faq.title}
             </h3>
           </AccordionSummary>
-          <AccordionDetails>{faq.content}</AccordionDetails>
+          <AccordionDetails>
+            <div className=" [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
+              <BlocksRenderer content={faq.asnwer || ""} />
+            </div>
+          </AccordionDetails>
         </Accordion>
       ))}
     </div>

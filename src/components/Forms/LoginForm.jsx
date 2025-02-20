@@ -54,13 +54,15 @@ export default function LoginForm() {
       className="flex flex-col justify-items-center space-y-4 mt-5 w-full max-w-xs"
       aria-label="Formulario Iniciar sesión"
     >
-      <label htmlFor="email" className="sr-only">Correo</label>
+      <label htmlFor="email" className="sr-only">
+        Correo
+      </label>
       <input
         type="email"
         id="email"
         placeholder="Correo electrónico"
-        aria-label="Correo electrónico"        
-        className="border border-gray-300 px-5 py-3 rounded-md"
+        aria-label="Correo electrónico"
+        className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none px-5 py-3 w-full"
         {...register("email", {
           required: "El correo es requerido",
           pattern: {
@@ -82,13 +84,13 @@ export default function LoginForm() {
             id="password"
             placeholder="Contraseña"
             aria-label="Contraseña"
-            className="border border-gray-300 px-5 py-3 rounded-md w-full"
+            className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none px-5 py-3  w-full"
             {...register("password", {
               required: "La contraseña es requerida",
             })}
           />
           <Tooltip
-            title={showPassword ?  "Ocultar contraseña": "Mostrar contraseña" }            
+            title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
           >
             <button
               type="button"
@@ -126,7 +128,7 @@ export default function LoginForm() {
 
       <button
         type="submit"
-        className="-bg--dark-green py-3 px-4 rounded-md text-white"
+        className="-bg--dark-green py-3 px-4 rounded-md text-white hover:-bg--light-green transition duration-200"
         disabled={loading}
       >
         {loading ? "Iniciando sesión..." : "Iniciar sesión"}

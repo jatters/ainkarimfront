@@ -88,14 +88,6 @@ export default function Footer() {
             <ul className="flex flex-col space-y-2 text-sm">
               <li>
                 <Link
-                  href="/aviso-de-privacidad"
-                  className="hover:-text--light-green duration-200"
-                >
-                  Aviso de Privacidad
-                </Link>
-              </li>
-              <li>
-                <Link
                   className="hover:-text--light-green duration-200"
                   href="/el-vinedo"
                 >
@@ -104,10 +96,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/politica-de-tratamiento-de-datos-personales"
+                  href="/advertencias-y-recomendaciones"
                   className="hover:-text--light-green duration-200"
                 >
-                  Política de tratamiento de datos personales
+                  Advertencias y recomendaciones
                 </Link>
               </li>
               <li>
@@ -120,10 +112,49 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/reglamento"
+                  className="hover:-text--light-green duration-200"
+                >
+                  Reglamento
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/puntos-de-venta"
+                  className="hover:-text--light-green duration-200"
+                >
+                  Puntos de venta
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <nav className="mt-5" role="navigation" aria-label="Legal">
+            <div className="text-xl mb-3 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+              Legal
+            </div>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/aviso-de-privacidad"
+                  className="hover:-text--light-green duration-200"
+                >
+                  Aviso de Privacidad
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/terminos-y-condiciones"
                   className="hover:-text--light-green duration-200"
                 >
                   Términos y condiciones
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politica-de-tratamiento-de-datos-personales"
+                  className="hover:-text--light-green duration-200"
+                >
+                  Política de tratamiento de datos personales
                 </Link>
               </li>
             </ul>
@@ -222,7 +253,7 @@ export default function Footer() {
           </li>
           <li>
             <a
-              className="text-3xl"              
+              className="text-3xl"
               href="https://www.tripadvisor.co/Attraction_Review-g676524-d5888335-Reviews-Vinedo_Ain_Karim-Villa_de_Leyva_Boyaca_Department.html"
               target="_blank"
               rel="noreferrer noopener"

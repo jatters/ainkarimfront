@@ -90,8 +90,8 @@ export default function ContactForm({ ipAddress, useragent }) {
               })}
               placeholder="Nombre"
               aria-label="Ingresa tu nombre"
-              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
-                errors.name ? "border-red-500" : "-border--light-gray"
+              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                errors.name ? "border-red-500" : "border-gray-400/40"
               } `}
             />
             {errors.name && (
@@ -120,7 +120,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 })}
                 placeholder="Correo"
                 aria-label="Ingresa tu correo electrónico"
-                className={`w-full px-3 py-2 border border-gray-400/40/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                   errors.email ? "border-red-500" : "border-gray-400/40"
                 }`}
               />
@@ -149,7 +149,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 })}
                 placeholder="Teléfono"
                 aria-label="Ingresa tu número de teléfono"
-                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none focus:-border--dark-green ${
+                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                   errors.phone ? "border-red-500" : "border-gray-400/40"
                 }`}
               />
@@ -179,7 +179,7 @@ export default function ContactForm({ ipAddress, useragent }) {
               id="message"
               placeholder="Mensaje"   
               aria-label="Escribe tu mensaje"           
-              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:outline-none -border--dark-green ${
+              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.message ? "border-red-500" : "border-gray-400/40"
               }`}
             ></textarea>

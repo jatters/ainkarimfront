@@ -2,10 +2,12 @@ import HeroCoverHome from "@/components/Ui/HeroCoverHome";
 import { Link } from 'next-view-transitions'
 import PlansHome from "@/components/Ui/PlansHome";
 import ProductsHome from "@/components/Ui/ProductsHome";
+import Popup from "@/components/Ui/Popup";
 
 export default function homepage() {
   return (
     <main>
+      <Popup location="home" />
       <HeroCoverHome />
       <section className="container mx-auto py-8 lg:py-16 ">
         <h2 className="text-3xl md:text-5xl font-bold text-center -text--dark-green font-serif">
