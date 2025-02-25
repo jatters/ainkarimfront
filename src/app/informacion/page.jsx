@@ -3,10 +3,76 @@ import FAQ from "@/components/Ui/FAQ";
 import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
+import Script from "next/script";
+
+export async function generateMetadata() {
+  const title = "Información | Viñedo Ain Karim";
+  const description =
+    "Conoce cómo llegar al Viñedo Ain Karim, ubicado en Boyacá, Colombia. Encuentra indicaciones para llegar en automóvil particular o bus colectivo y consulta las preguntas frecuentes.";
+  const canonicalUrl = "https://ainkarim.co/informacion";
+  const imageUrl = "https://ainkarim.co/banner-informacion.webp";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Información - Viñedo Ain Karim",
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
 
 export default function Informationpage() {
+  const jsonLD = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Información - Viñedo Ain Karim",
+    url: "https://ainkarim.co/informacion",
+    description:
+      "Conoce cómo llegar al Viñedo Ain Karim, ubicado en Boyacá, Colombia. Encuentra indicaciones para llegar en automóvil particular o bus colectivo y consulta las preguntas frecuentes.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item: "https://ainkarim.co",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Información",
+          item: "https://ainkarim.co/informacion",
+        },
+      ],
+    },
+  };
+
   return (
     <main>
+      <Script
+        id="json-ld-information"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
       <HeaderImage title="Información" background="/banner-informacion.webp" />
       <section className="container mx-auto py-8 lg:py-16 px-5">
         <h2 className="text-3xl lg:text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>

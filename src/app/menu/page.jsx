@@ -1,7 +1,7 @@
 import React from "react";
 import SliderMenu from "@/components/Ui/SliderMenu";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
-import { Metadata } from "next";
+
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
 
@@ -18,7 +18,7 @@ export const metadata = {
     siteName: "Viñedo Ain Karim",
     images: [
       {
-        url: "/og-menu.jpg", // TODO: Reemplazar
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/og-menu.jpg`, // Actualiza con la URL correcta de la imagen OG
         width: 1200,
         height: 630,
         alt: "Menú del Viñedo Ain Karim",
@@ -26,7 +26,7 @@ export const metadata = {
     ],
   },
   alternates: {
-    canonical: "https://ainkarim.com/menu",
+    canonical: "https://ainkarim.co/menu",
   },
   keywords:
     "menú, restaurante, viñedo, gastronomía, Ain Karim, comida, vinos, experiencia culinaria",
@@ -79,13 +79,19 @@ export default async function MenuPage() {
     );
   }
 
+  const firstImageUrl =
+    images && images.length > 0 && images[0].attributes?.url
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}${images[0].attributes.url}`
+      : "";
+
+  // Definimos el schema JSON‑LD para el menú, utilizando el tipo "Restaurant"
   const menuSchema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     name: "Viñedo Ain Karim",
-    image: images?.[0]?.attributes?.url || "",
-    "@id": "https://ainkarim.com",
-    url: "https://ainkarim.com/menu",
+    image: firstImageUrl,
+    "@id": "https://ainkarim.co",
+    url: "https://ainkarim.co/menu",
     telephone: "+573174319583",
     address: {
       "@type": "PostalAddress",

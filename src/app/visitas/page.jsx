@@ -2,6 +2,42 @@ import PlanCard from "@/components/Ecommerce/PlanCard";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { GetPlans } from "@/components/GetContentApi";
 import Popup from "@/components/Ui/Popup";
+import Script from "next/script";
+
+export async function generateMetadata() {
+  const title = "Visitas | Experiencias en Viñedo Ain Karim";
+  const description =
+    "Descubre y reserva experiencias únicas en Viñedo Ain Karim. Vive visitas, recorridos y momentos inolvidables en nuestro enoturismo en Villa de Leyva.";
+  const canonicalUrl = "https://ainkarim.co/visitas";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: "https://ainkarim.co/banner-visitas.webp",
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["https://ainkarim.co/banner-visitas.webp"],
+    },
+  };
+}
 
 export default async function VisitasPage() {
   const plansData = await GetPlans();
@@ -11,9 +47,34 @@ export default async function VisitasPage() {
       <div className="container mx-auto py-16 px-5">Error cargando planes</div>
     );
   }
+  const jsonLD = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Experiencias de Visitas en Viñedo Ain Karim",
+    itemListElement: plansData.data.map((plan, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://ainkarim.co/visita/${plan.slug}`,
+      name: plan.name,
+      image: plan.image
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.url}`
+        : "",
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "COP",
+        price: plan.price,
+        availability: "https://schema.org/InStock",
+      },
+    })),
+  };
 
   return (
     <main>
+       <Script
+        id="json-ld-plans"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
       <Popup location="plans" />
       <HeaderImage title="Visitas" background="/banner-visitas.webp" />
       <section className="container mx-auto py-8 lg:py-16 px-5">

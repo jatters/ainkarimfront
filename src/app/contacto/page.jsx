@@ -3,9 +3,10 @@ import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 import banner from "@/../public/banner-contacto.webp";
-import { Link } from 'next-view-transitions'
+import { Link } from "next-view-transitions";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
+import Script from "next/script";
 
 export async function getIPAddress() {
   try {
@@ -17,12 +18,95 @@ export async function getIPAddress() {
     return "IP desconocida";
   }
 }
+export async function generateMetadata() {
+  const title = "Contacto | Viñedo Ain Karim";
+  const description =
+    "Ponte en contacto con Viñedo Ain Karim. Escríbenos para solicitar información, realizar reservas o conocer nuestra ubicación en Boyacá, Colombia.";
+  const canonicalUrl = "https://ainkarim.co/contacto";
+  const imageUrl = "https://ainkarim.co/banner-contacto.webp";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Contacto | Viñedo Ain Karim",
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
 
 export default async function contactPage() {
   const ipAddress = await getIPAddress();
   const userAgent = headers().get("user-agent");
+
+  const jsonLD = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contacto | Viñedo Ain Karim",
+    url: "https://ainkarim.co/contacto",
+    description:
+      "Ponte en contacto con Viñedo Ain Karim para solicitar información, hacer reservas o resolver tus consultas. Conoce nuestra ubicación, teléfonos y correo.",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item: "https://ainkarim.co",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Contacto",
+          item: "https://ainkarim.co/contacto",
+        },
+      ],
+    },
+    mainEntity: {
+      "@type": "Organization",
+      name: "Viñedo Ain Karim",
+      url: "https://ainkarim.co",
+      logo: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+57 317 431 9583",
+          contactType: "customer service",
+          email: "ventas@marquesvl.com",
+        },
+        {
+          "@type": "ContactPoint",
+          telephone: "(601) 258 9933",
+          contactType: "office",
+        },
+      ],
+    },
+  };
   return (
     <main>
+      <Script
+        id="json-ld-contact"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
       <HeaderImage title="Contacto" background="/banner-contacto.webp" />
       <section className="container mx-auto pt-8 lg:pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">

@@ -7,7 +7,8 @@ import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVaria
 import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
-import {normalizeProductForCart} from "@/components/Ecommerce/NormalizeCartProduct";
+import { normalizeProductForCart } from "@/components/Ecommerce/NormalizeCartProduct";
+import Script from "next/script";
 
 const formatPrice = (price) => {
   if (!price) return "";
@@ -17,6 +18,7 @@ const formatPrice = (price) => {
 export default function SingleProductPageClient({ productData }) {
   const {
     title,
+    slug,
     categorias_de_producto,
     regularPrice,
     price,
@@ -25,14 +27,40 @@ export default function SingleProductPageClient({ productData }) {
     variaciones,
     isVariable,
   } = productData;
-  const categoryName = categorias_de_producto?.name; 
+  const categoryName = categorias_de_producto?.name;
 
   // Estado para la variación seleccionada (para productos variables)
   const [selectedVariation, setSelectedVariation] = useState(null);
 
   const productImages = createGallery(productData);
 
+  const jsonLD = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: title,
+    description: productDescription ? productDescription : description,
+    image: productImages.map((img) => img.sourceUrl),
+    brand: {
+      "@type": "Brand",
+      name: "Viñedo Ain Karim",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://ainkarim.co/producto/${slug}`,
+      priceCurrency: "COP",
+      price: price,
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+    },
+  };
+
   return (
+    <>
+    <Script
+        id="json-ld-product"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
     <main>
       <section className="container mx-auto py-8 lg:py-16 px-5">
         <div>
@@ -81,7 +109,6 @@ export default function SingleProductPageClient({ productData }) {
                 <sup className="lg:ml-1 text-base">COP</sup>
               </div>
             )}
-            
 
             {productDescription && (
               <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
@@ -112,13 +139,17 @@ export default function SingleProductPageClient({ productData }) {
         </div>
       </section>
     </main>
+    </>
   );
 }
 
 function createGallery(product) {
+  if (!product?.image) {
+    return [];
+  }
   const mainImage = {
     sourceUrl: process.env.NEXT_PUBLIC_SITE_URL + product.image.url,
-    altText: product.image.alternativeText || `Imagen ${product.title}`,
+    altText: product.image.alternativeText || `Imagen ${product.title || ""}`,
   };
 
   let galleryImages = [mainImage];
@@ -127,9 +158,9 @@ function createGallery(product) {
     galleryImages = [
       ...galleryImages,
       ...product.gallery.map((image, index) => ({
-        sourceUrl: process.env.NEXT_PUBLIC_STRAPI_URL + image.url,
+        sourceUrl: process.env.NEXT_PUBLIC_SITE_URL + image.url,
         altText:
-          image.alternativeText || `Imagen ${product.title} ${index + 1}`,
+          image.alternativeText || `Imagen ${product.title || ""} ${index + 1}`,
       })),
     ];
   }
@@ -160,5 +191,3 @@ function AddToCartButton({ product, selectedVariation }) {
     </button>
   );
 }
-
-

@@ -5,6 +5,7 @@ import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 import { GetSinglePlan } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import Script from "next/script";
 
 const formatPrice = (price) => {
   if (!price) return "";
@@ -19,6 +20,52 @@ const extractGallery = (images) => {
     })) || []
   );
 };
+export async function generateMetadata({ params }) {
+  const planData = await GetSinglePlan(params.slug);
+  if (!planData || !planData.data[0]) {
+    return {
+      title: "Plan no encontrado | Viñedo Ain Karim",
+      description: "Información del plan no encontrada.",
+    };
+  }
+  const plan = planData.data[0];
+  const title = plan.name;
+  const description =
+    plan.description || plan.planDescription || "Plan de visita en Viñedo Ain Karim";
+  const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
+  const imageUrl = plan.image
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.url}`
+    : "https://ainkarim.co/default-image.jpg";
+
+  return {
+    title: `${title} | Visita en Viñedo Ain Karim`,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${title} | Visita en Viñedo Ain Karim`,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | Viñedo Ain Karim`,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
 
 export default async function SinglePlanPage({ params }) {
   try {
@@ -47,8 +94,40 @@ export default async function SinglePlanPage({ params }) {
       planDescription,
     } = planData?.data[0];
 
+    const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
+    // Construcción del JSON‑LD para el plan
+    const jsonLD = {
+      "@context": "https://schema.org",
+      "@type": "product",
+      name: name,
+      description:
+        planDescription ||
+        (description ? description.replace(/<\/?[^>]+(>|$)/g, "") : ""),
+      image: image ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}` : "",
+      brand: {
+        "@type": "Organization",
+        name: "Viñedo Ain Karim",
+      },
+      offers: {
+        "@type": "Offer",
+        url: canonicalUrl,
+        priceCurrency: "COP",
+        price: price,
+        availability:
+          Number(price) > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        itemCondition: "https://schema.org/NewCondition",
+      },
+    };
+
     return (
       <main>
+        <Script
+          id="json-ld-plan"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+        />
         <section className="container mx-auto py-8 lg:py-16 px-2 sm:px-5">
           <div className="text-sm lg:text-base">
             <Link href="/" className="hover:-text--light-green">

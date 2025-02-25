@@ -271,7 +271,7 @@ export default function Footer() {
         >
           Desarrollado con ☕ & 💙 por{" "}
           <a
-            href="https://einscube.com"
+            href="https://www.einscube.com/?utm_source=ainkarim"
             target="_blank"
             aria-label="Ir a la página del Desarrollador"
             className="-text--red-cruz hover:-text--grey-dark hover:font-semibold hover:transition-all"

@@ -25,7 +25,7 @@ export default function PlanCard({
 }) {
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
-    <div className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group">
+    <article className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group" itemScope itemType="https://schema.org/Reservation">
       <div className="aspect-video overflow-hidden relative rounded-t-md mb-4">
         <Link href={slug} className="">
           <Image
@@ -114,6 +114,6 @@ export default function PlanCard({
           />
         )}        
       </div>
-    </div>
+    </article>
   );
 }

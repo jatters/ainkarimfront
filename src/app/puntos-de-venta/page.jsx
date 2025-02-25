@@ -1,5 +1,6 @@
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import Script from "next/script";
 
 async function GetDataPage() {
   try {
@@ -22,8 +23,60 @@ async function GetDataPage() {
     console.log(error);
   }
 }
+export async function generateMetadata() {
+  const canonicalUrl = "https://ainkarim.co/puntos-de-venta";
+  let metaTitle = "Puntos de Venta ";
+  let metaDescription =
+    "Encuentra los puntos de venta y almacenes donde adquirir los productos del Viñedo Ain Karim.";
+  let imageUrl = "https://ainkarim.co/banner-puntos-de-venta.webp";
 
-export default async function page() {
+  const pageData = await GetDataPage();
+  if (pageData && pageData.data) {
+    metaTitle = pageData.data.title || metaTitle;
+    if (pageData.data.image && pageData.data.image.url) {
+      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.data.image.url}`;
+    }
+    if (pageData.data.content) {
+      // Extrae un fragmento de texto plano para la descripción
+      const plainText =
+        typeof pageData.data.content === "string"
+          ? pageData.data.content
+          : "";
+      if (plainText) {
+        metaDescription = plainText.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "");
+      }
+    }
+  }
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      url: canonicalUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: metaTitle,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description: metaDescription,
+      images: [imageUrl],
+    },
+  };
+}
+
+
+export default async function PuntosDeVentaPage() {
   const pageData = await GetDataPage();
 
   if (!pageData || !pageData.data) {
@@ -35,9 +88,36 @@ export default async function page() {
     );
   }
   const { title, content, store, image } = pageData.data;
+  const canonicalUrl = "https://ainkarim.co/puntos-de-venta";
+  const imageUrl = image?.url
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
+    : "/banner-puntos-de-venta.webp";
+
+  // JSON‑LD para listar los puntos de venta (ItemList)
+  const jsonLD = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Puntos de Venta - Viñedo Ain Karim",
+    url: canonicalUrl,
+    itemListElement: store.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "LocalBusiness",
+        name: item.name,
+        address: item.address,
+        areaServed: item.city,
+      },
+    })),
+  };
 
   return (
     <main>
+      <Script
+        id="json-ld-puntos-venta"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
       <HeaderImage
         title={title}
         background={

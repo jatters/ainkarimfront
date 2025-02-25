@@ -1,61 +1,35 @@
-"use client";
-import Image from "next/image";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import useAuth from "../hooks/useAuth";
-import { Link } from "next-view-transitions";
-import banner from "../../../public/login-image.webp";
-import LoginForm from "@/components/Forms/LoginForm";
 
-export default function Loginpage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+import LoginPageClient from "@/components/LoginPageClient";
 
-  useEffect(() => {
-    if (!loading && user) {
-      router.push("/mi-cuenta"); 
-    }
-  }, [user, loading, router]);
+export const metadata = {
+  title: "Iniciar Sesión | Viñedo Ain Karim",
+  description:
+    "Inicia sesión en Viñedo Ain Karim para acceder a tu cuenta y disfrutar de nuestras experiencias enoturísticas.",
+  alternates: { canonical: "https://ainkarim.co/iniciar-sesion" },
+  openGraph: {
+    title: "Iniciar Sesión | Viñedo Ain Karim",
+    description:
+      "Inicia sesión en Viñedo Ain Karim para acceder a tu cuenta y disfrutar de nuestras experiencias enoturísticas.",
+    url: "https://ainkarim.co/iniciar-sesion",
+    images: [
+      {
+        url: "https://ainkarim.co/login-image.webp",
+        width: 1200,
+        height: 630,
+        alt: "Iniciar Sesión | Viñedo Ain Karim",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Iniciar Sesión | Viñedo Ain Karim",
+    description:
+      "Inicia sesión en Viñedo Ain Karim para acceder a tu cuenta y disfrutar de nuestras experiencias enoturísticas.",
+    images: ["https://ainkarim.co/login-image.webp"],
+  },
+};
 
-  if (loading) return(<div className="container mx-auto py-16 px-5"><p className="text-center text-2xl py-10">Cargando...</p></div>);
-  if (user) return null; 
-  return (
-    <main>
-      <section className="grid grid-cols-1 lg:grid-cols-2 justify-items-center items-center">
-        <Image
-          src={banner}
-          alt="Banner Login"
-          className="hidden lg:block h-screen object-cover"
-        />
-        <div className="py-20 md:py-10 px-5 flex flex-col justify-center items-center">
-          <h1 className="-text--dark-green text-3xl text-center font-bold">
-            Iniciar Sesión
-          </h1>
-          <p className="font-semibold py-5 text-center">
-            Inicia sesión para acceder a tu cuenta
-          </p>
-          <LoginForm />
-          <div>
-            <p className="text-center py-5">
-              ¿No tienes una cuenta?{" "}
-              <Link
-                href="/registro"
-                className="-text--dark-green font-semibold"
-              >
-                Registrate
-              </Link>
-            </p>
-            <p className="text-center py-5">
-              <Link
-                href={"/recuperar-contrasena"}
-                className="-text--dark-green hover:underline duration-200"
-              >
-                Olvidaste tu contraseña{" "}
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
+export default function LoginPage() {
+  return <LoginPageClient />;
 }
