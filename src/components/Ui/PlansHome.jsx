@@ -31,8 +31,8 @@ export default async function PlansHome() {
             name={plan.name}
             documentId={plan.documentId}  
             price={plan.price}
-            experiences={experienciesList}
-            image={`${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.formats.small.url}`}
+            experiences={experienciesList}            
+            image={plan.image}
             altimg={`Image ${plan.name}`}
             onlyadults={plan.onlyAdults}
             allowchilds={plan.allowChilds}

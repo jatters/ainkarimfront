@@ -144,7 +144,7 @@ export default async function contactPage() {
                     {" "}
                     Horarios:
                   </span>{" "}
-                  Abierto todos los días de 13:00 am a 5:30 pm, excepto los
+                  Abierto todos los días de 10:30 am a 5:30 pm, excepto los
                   martes.
                 </li>
                 <li className="ml-5">Ultimo recorrido 3:30pm</li>

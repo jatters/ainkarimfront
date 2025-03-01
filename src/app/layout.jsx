@@ -224,8 +224,8 @@ export default function RootLayout(props) {
             <Header />
             <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
             <Footer />
+            <Toaster position="bottom-right" />
           </CartProvider>
-          <Toaster position="bottom-left" />
         </body>
       </html>
     </ViewTransitions>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 import { CartContext } from "@/context/CartContext";
-import ConfettiWrapper from "@/components/Ecommerce/ConfettiWrapper"; 
+import ConfettiWrapper from "@/components/Ecommerce/ConfettiWrapper";
 import Link from "next/link";
 
 export default function SuccessPageClient() {
@@ -13,33 +13,27 @@ export default function SuccessPageClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const paymentId = searchParams.get("payment_id");
+
   useEffect(() => {
+    if (!paymentId) {
+      setError("No se encontró el ID del pago.");
+      setLoading(false);
+      return;
+    }
+
     async function fetchPaymentDetails() {
       try {
-        const paymentId = searchParams.get("payment_id");
-        if (!paymentId) {
-          setError("No se encontró el ID del pago.");
-          setLoading(false);
-          return;
-        }
-
         const response = await fetch(`/api/mercadopago/get-payment?payment_id=${paymentId}`);
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(
-            data.error || "Error al obtener los detalles del pago."
-          );
+          throw new Error(data.error || "Error al obtener los detalles del pago.");
         }
 
         setPaymentDetails(data);
-
-        // Limpia el carrito al confirmar
-        if (typeof clearCart === "function") {
-          clearCart();
-        } else {
-          console.warn("⚠️ clearCart no está definido en el contexto.");
-        }
+        // Se limpia el carrito
+        clearCart();
       } catch (error) {
         console.error("Error obteniendo detalles del pago:", error);
         setError(error.message);
@@ -49,7 +43,7 @@ export default function SuccessPageClient() {
     }
 
     fetchPaymentDetails();
-  }, [searchParams, clearCart]);
+  }, [paymentId]);
 
   if (loading) {
     return (
@@ -81,7 +75,7 @@ export default function SuccessPageClient() {
   }
 
   const {
-    id: paymentId,
+    id: paymentIdResponse,
     status,
     amount,
     date,
@@ -104,9 +98,7 @@ export default function SuccessPageClient() {
       </p>
 
       {/* Confetti animation */}
-      <ConfettiWrapper
-        
-      />
+      <ConfettiWrapper />
 
       <div className="mt-6 border-t pt-4">
         <h2 className="text-xl font-semibold text-gray-800">📦 Resumen de tu pedido</h2>
@@ -130,7 +122,7 @@ export default function SuccessPageClient() {
         )}
       </div>
 
-      {/* 💳 Detalles del Pago */}
+      {/* Detalles del Pago */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <span className="text-xl">💳 </span>
@@ -139,15 +131,11 @@ export default function SuccessPageClient() {
           </h2>
         </div>
         <p>
-          <strong>ID del Pago:</strong> {paymentId || "No disponible"}
+          <strong>ID del Pago:</strong> {paymentIdResponse || "No disponible"}
         </p>
         <p>
           <strong>Estado: </strong>
-          <span
-            className={`font-semibold ${
-              status === "approved" ? "text-green-600" : "text-red-600"
-            }`}
-          >
+          <span className={`font-semibold ${status === "approved" ? "text-green-600" : "text-red-600"}`}>
             {status === "approved" ? "Aprobado" : "No disponible"}
           </span>
         </p>
@@ -155,12 +143,10 @@ export default function SuccessPageClient() {
           <strong>Monto:</strong> ${amount?.toLocaleString()} COP
         </p>
         <p>
-          <strong>Método de pago:</strong>{" "}
-          {method?.toUpperCase() || "No disponible"}
+          <strong>Método de pago:</strong> {method?.toUpperCase() || "No disponible"}
         </p>
         <p>
-          <strong>Tarjeta:</strong>{" "}
-          {card?.first_six_digits || "XXXX"}******{card?.last_four_digits || "****"}
+          <strong>Tarjeta:</strong> {card?.first_six_digits || "XXXX"}******{card?.last_four_digits || "****"}
         </p>
         <p>
           <strong>Tipo:</strong>{" "}
@@ -172,7 +158,7 @@ export default function SuccessPageClient() {
         </p>
       </div>
 
-      {/* 👤 Datos del Cliente */}
+      {/* Datos del Cliente */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <h2 className="text-xl font-semibold text-gray-800">👤 Datos de Cliente</h2>

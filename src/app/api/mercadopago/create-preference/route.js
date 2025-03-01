@@ -32,8 +32,7 @@ function convertTimeString(timeStr) {
 }
 
 /**
- * (Ejemplo opcional) Obtener un producto en Strapi, si es que
- * en tu modelo buscas la relación por documentId. Si no lo usas, puedes omitirlo.
+ * (Opcional) Obtener la conexión de un producto en Strapi a partir de su documentId.
  */
 async function getProductConnection(documentId) {
   const res = await fetch(
@@ -58,7 +57,7 @@ export async function POST(req) {
     // Validar datos mínimos
     if (!orderData || orderData.length === 0) {
       return NextResponse.json(
-        { error: "No hay productos en la orden" },
+        { error: "No hay productos o reservas en la orden" },
         { status: 400 }
       );
     }
@@ -69,16 +68,34 @@ export async function POST(req) {
       );
     }
 
-    // Opcional: Si tu modelo de "Pedido" guarda relación con los productos, preparamos el connect:
+    // Determinar si existen productos y/o reservas
+    const hasOrderProducts = orderData.some((item) => !item.isReservation);
+    const hasReservations = orderData.some((item) => item.isReservation);
+
+    // 1. Crear el pedido interno en Strapi
+    // Se crean conexiones solo para los productos (no para reservas)
     const productConnections = [];
-    for (const p of orderData) {
-      const connection = await getProductConnection(p.documentId);
-      if (connection) {
-        productConnections.push(connection);
+    for (const item of orderData) {
+      if (!item.isReservation) {
+        const connection = await getProductConnection(item.documentId);
+        if (connection) {
+          productConnections.push(connection);
+        }
       }
     }
 
-    // 1. Crear el pedido interno en Strapi (inicialmente sin numberOrder)
+    // Calcular el total del pedido.
+    // Para reservas con servicio adicional: (precio base * cantidad) + precio del servicio adicional (solo una vez)
+    const totalPriceOrder = orderData.reduce((total, item) => {
+      const qty = item.quantity || 1;
+      const basePrice = parseFloat(item.price) || 0;
+      if (item.isReservation && item.additionalService && item.additionalService.price) {
+        const additionalPrice = parseFloat(item.additionalService.price);
+        return total + (basePrice * qty + additionalPrice);
+      }
+      return total + (basePrice * qty);
+    }, 0);
+
     const internalOrderPayload = {
       creationDate: new Date().toISOString(),
       customerName: customer.firstName.toUpperCase(),
@@ -92,19 +109,13 @@ export async function POST(req) {
       customerCity: customer.city,
       customerDeparment: customer.departament || "",
       customerAddress: customer.address || "",
-      // Guardamos el detalle de los items en formato JSON (para referencia interna)
       items: JSON.stringify(orderData),
-      totalPriceOrder: orderData.reduce(
-        (total, item) => total + item.price * (item.quantity || 1),
-        0
-      ),
-      // Se asigna null; se actualizará luego
-      numberOrder: null,
-      state: "Borrador",
+      totalPriceOrder: totalPriceOrder,
+      numberOrder: null, // Se actualizará luego con el external_reference
+      state: "Pendiente", // Se crea el pedido con estado "Pendiente"
       payment_status: "Pendiente",
       payment_method: "MercadoPago",
       payment_id: null,
-      // Vinculación de productos (opcional, depende de tu modelo)
       productos: { connect: productConnections },
     };
 
@@ -116,27 +127,21 @@ export async function POST(req) {
       },
       body: JSON.stringify({ data: internalOrderPayload }),
     });
-
     if (!internalOrderRes.ok) {
       throw new Error("Error al crear el pedido interno");
     }
-
     const internalOrderData = await internalOrderRes.json();
-    console.log("Pedido interno creado:", internalOrderData);
+    console.log("✅ Pedido interno creado:", internalOrderData);
 
-    // Supongamos que tu "Pedido" usa 'documentId' como "id" textual
-    // (si no, podrías usar internalOrderData.data.id en vez de documentId)
-    const orderDocumentId = internalOrderData.data.documentId;
+    // Obtener el id incremental y el documentId
+    const orderId = internalOrderData.data.id; // ID incremental (para el número de pedido)
+    const orderDocumentId = internalOrderData.data.documentId; // Usado para el endpoint
+    console.log("✅ Pedido creado. ID:", orderId, "DocumentID:", orderDocumentId);
 
-    // Generamos el externalRef y lo usaremos TANTO en el pedido como en cada reserva
-    const externalRef = `pedido-${orderDocumentId}`;
-
-    // 2. Actualizar el pedido para asignar numberOrder = "pedido-<documentId>"
+    // 2. Generar externalRef usando el formato "P-{orderId}" y actualizar el pedido
+    const externalRef = `P-${orderId}`;
     const updatePayload = { data: { numberOrder: externalRef } };
-    console.log(
-      "Actualizando número de orden interno con payload:",
-      JSON.stringify(updatePayload, null, 2)
-    );
+    // Se actualiza el pedido mediante su documentId
     const updateOrderRes = await fetch(
       `${STRAPI_URL}/api/pedidos/${orderDocumentId}`,
       {
@@ -149,31 +154,70 @@ export async function POST(req) {
       }
     );
     if (!updateOrderRes.ok) {
-      throw new Error("Error al actualizar el número de orden interno");
+      console.error(
+        "❌ Error al actualizar el pedido con numberOrder. Response:",
+        await updateOrderRes.text()
+      );
+      throw new Error("Error al actualizar el pedido interno con numberOrder");
     }
+    console.log("✅ Pedido actualizado con numberOrder:", externalRef);
 
-    // 3. Construir el objeto de preferencia para Mercado Pago
-    //    (puede contener tanto productos como reservas)
-    const items = orderData.map((product) => ({
-      // Podrías hacer "pedido-<id>" o "reserva-<id>", pero aquí sigues usando documentId
-      id: product.documentId ? String(product.documentId) : "sin-id",
-      title: product.title || product.name || "Producto sin nombre",
-      description: product.additionalService
-        ? `Incluye: ${product.additionalService.name}`
-        : "",
-      picture_url: product.image?.url || "https://via.placeholder.com/150",
-      category_id: "services",
-      quantity: product.quantity || 1,
-      currency_id: "COP",
-      unit_price: parseFloat(product.price) || 0,
-    }));
+    // 3. Construir la preferencia para MercadoPago usando externalRef.
+    // Si el item es una reserva y tiene servicio adicional, se crean dos items:
+    // - Uno para el precio base multiplicado por la cantidad.
+    // - Otro para el servicio adicional (cantidad = 1).
+    const mpItems = [];
+    orderData.forEach((item) => {
+      const qty = item.quantity || 1;
+      // Para reservas con servicio adicional
+      if (item.isReservation && item.additionalService && item.additionalService.price) {
+        // Item base de la reserva
+        mpItems.push({
+          id: item.documentId ? String(item.documentId) + "-base" : "sin-id-base",
+          title: item.title || item.name || "Reserva sin nombre",
+          description: "Reserva",
+          picture_url: item.image?.url || "https://via.placeholder.com/150",
+          category_id: "reservas",
+          quantity: qty,
+          currency_id: "COP",
+          unit_price: parseFloat(item.price) || 0,
+        });
+        // Item para el servicio adicional (se suma una sola vez)
+        mpItems.push({
+          id: item.documentId ? String(item.documentId) + "-addon" : "sin-id-addon",
+          title: item.additionalService.name || "Servicio adicional",
+          description: "Servicio adicional",
+          picture_url: item.additionalService.image?.url || "https://via.placeholder.com/150",
+          category_id: "servicios",
+          quantity: 1,
+          currency_id: "COP",
+          unit_price: parseFloat(item.additionalService.price) || 0,
+        });
+      } else {
+        // Para productos o reservas sin servicio adicional
+        mpItems.push({
+          id: item.documentId ? String(item.documentId) : "sin-id",
+          title: item.title || item.name || "Producto sin nombre",
+          description:
+            item.additionalService && !item.isReservation
+              ? `Incluye: ${item.additionalService.name}`
+              : "",
+          picture_url: item.image?.url || "https://via.placeholder.com/150",
+          category_id: item.isReservation ? "reservas" : "services",
+          quantity: qty,
+          currency_id: "COP",
+          unit_price: parseFloat(item.price) || 0,
+        });
+      }
+    });
+    console.log("✅ Items para MercadoPago:", mpItems);
 
     const additionalInfo = orderData
       .map((item) => `${item.quantity}x ${item.title || item.name}`)
       .join(" | ");
 
     const preference = {
-      items,
+      items: mpItems,
       payer: {
         name: customer.firstName.toUpperCase() || "",
         surname: customer.lastname.toUpperCase() || "",
@@ -198,12 +242,12 @@ export async function POST(req) {
         pending: `${process.env.CURRENT_ENVIRONMENT}/checkout/pending`,
       },
       auto_return: "approved",
-      external_reference: externalRef, // <--- USAMOS "pedido-<docId>" como externalRef
+      external_reference: externalRef,
       additional_info: additionalInfo,
       notification_url: `${process.env.CURRENT_ENVIRONMENT}/api/mercadopago/webhook`,
     };
 
-    // 4. Crear la preferencia en Mercado Pago
+    // 4. Crear la preferencia en MercadoPago
     const mercadoPagoRes = await fetch(
       "https://api.mercadopago.com/checkout/preferences",
       {
@@ -215,50 +259,65 @@ export async function POST(req) {
         body: JSON.stringify(preference),
       }
     );
-
     const mpData = await mercadoPagoRes.json();
     if (!mercadoPagoRes.ok) {
       throw new Error(
         `Error al crear preferencia: ${mpData.message || "Desconocido"}`
       );
     }
+    console.log("✅ Preferencia de MercadoPago creada:", mpData);
 
-    // 5. Actualizar nuevamente el pedido con el payment_id (opcional)
+    // 5. Actualizar el pedido con payment_id y demás datos de pago
     const updatedOrderPayload = {
       payment_id: mpData.id,
       payment_method: "MercadoPago",
       state: "Pendiente",
       payment_status: "Pendiente",
     };
-    console.log(
-      "Actualizando pedido interno con payload:",
-      JSON.stringify({ data: updatedOrderPayload }, null, 2)
+    const paymentUpdateRes = await fetch(
+      `${STRAPI_URL}/api/pedidos/${orderDocumentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+        },
+        body: JSON.stringify({ data: updatedOrderPayload }),
+      }
     );
-    await fetch(`${STRAPI_URL}/api/pedidos/${orderDocumentId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-      },
-      body: JSON.stringify({ data: updatedOrderPayload }),
-    });
+    if (!paymentUpdateRes.ok) {
+      console.error(
+        "❌ Error al actualizar el pedido con datos de pago. Response:",
+        await paymentUpdateRes.text()
+      );
+      throw new Error("Error al actualizar el pedido con datos de pago");
+    }
+    console.log("✅ Pedido actualizado con datos de pago");
 
-    // 6. Crear reserva(s) en Strapi (si el carrito incluye items de reserva).
-    //    Aquí es donde asignamos el MISMO "pedido-<documentId>" en `reservationNumber`.
-    for (const product of orderData) {
-      if (product.isReservation && product.reservationData) {
-        const rawTime = product.reservationData.hour || "10:30 am";
+    // 6. Crear reservas para cada ítem que corresponda a una reserva
+    for (const item of orderData) {
+      if (item.isReservation && item.reservationData) {
+        const rawTime = item.reservationData.hour || "10:30 am";
         const reservationTime = convertTimeString(rawTime);
+        const qty = item.quantity || 1;
+        const basePrice = parseFloat(item.price) || 0;
+        // Para reservas con servicio adicional, se suma el precio adicional una sola vez.
+        const totalPriceReservation =
+          item.additionalService && item.additionalService.price
+            ? basePrice * qty + parseFloat(item.additionalService.price)
+            : basePrice * qty;
 
+        // Construir la carga útil de la reserva.
+        // Se vincula la reserva con el pedido creado utilizando el campo "pedidos".
         const reservationPayload = {
           data: {
-            plan: product.documentId, // Depende de tu modelo. A veces es la ID del plan, etc.
-            guests: product.reservationData.persons || product.quantity || 1,
+            plan: item.documentId, // Se asume que este documentId corresponde al plan a reservar.
+            guests: item.reservationData.persons || qty,
             reservationDate:
-              product.reservationData.date ||
+              item.reservationData.date ||
               new Date().toISOString().split("T")[0],
-            reservationTime, // "HH:mm:ss.SSS"
-            state: "Pendiente",      // se actualizará en el webhook
+            reservationTime, // Formato "HH:mm:ss.SSS"
+            state: "Pendiente",
             payment_status: "Pendiente",
             creationDate: new Date().toISOString(),
             customerName: customer.firstName.toUpperCase(),
@@ -269,17 +328,16 @@ export async function POST(req) {
             customerDocument: customer.document,
             customerEmail: customer.email,
             customerPhone: customer.mobiletwo,
-            totalPriceReservation: product.price * product.quantity,
-
-            // **Clave**: le ponemos el MISMO `reservationNumber` que `externalRef`
-            reservationNumber: externalRef,
+            totalPriceReservation: totalPriceReservation,
+            servicios_adicionale: item?.additionalService?.documentId || null,
+            // Vinculación con el pedido a partir del documentId (para acceder al endpoint)
+            pedidos: {
+              connect: [{ documentId: orderDocumentId }],
+            },
+            // Se omite el campo reservationNumber, ya que se generará automáticamente desde un lifecycle en Strapi.
           },
         };
 
-        console.log(
-          "📦 Creando reserva con payload:",
-          JSON.stringify(reservationPayload, null, 2)
-        );
         const reservaRes = await fetch(`${STRAPI_URL}/api/reservas`, {
           method: "POST",
           headers: {
@@ -295,35 +353,12 @@ export async function POST(req) {
         } else {
           const reservaJson = await reservaRes.json();
           console.log(
-            "✅ Reserva creada correctamente. DocumentId:",
-            reservaJson.data.documentId,
-            "ReservationNumber:",
-            reservaJson.data.reservationNumber
+            "✅ Reserva creada correctamente. DocumentID:",
+            reservaJson.data.documentId
           );
         }
       }
     }
-
-    // 7. Enviar correo de confirmación de compra (si lo deseas)
-    console.log("📧 Enviando correo de confirmación de compra...");
-    await fetch(`${process.env.CURRENT_ENVIRONMENT}/api/sendEmail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        formType: "compraConfirmada",
-        name: customer.firstName,
-        email: customer.email,
-        phone: customer.mobiletwo,
-        orderId: externalRef,
-        total: mpData.transaction_amount || 0,
-        date: new Date().toISOString(),
-        orderItems: orderData.map((item) => ({
-          productName: item.title || item.name,
-          quantity: item.quantity,
-          unitPrice: item.price,
-        })),
-      }),
-    });
 
     return NextResponse.json({ id: mpData.id }, { status: 200 });
   } catch (error) {

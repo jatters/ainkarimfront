@@ -6,6 +6,8 @@ import FormatPrice from "@/components/Ecommerce/FormatPrice";
 import { CartContext } from "@/context/CartContext";
 import { normalizeProductForCart } from "@/components/Ecommerce/NormalizeCartProduct";
 import Script from "next/script";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
   // Extraemos las propiedades necesarias del objeto product
@@ -23,9 +25,7 @@ export default function ProductCard({ product }) {
 
   const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
   const categoryName = categorias_de_producto?.name || "Vinos";
-  const imageUrl = image?.url
-    ? `${baseurl}${image.url}`
-    : null;
+  const imageUrl = image?.url ? `${baseurl}${image.url}` : null;
   const altText = image?.alternativeText || `Producto ${title}`;
   const parsedRegularPrice = parseInt(regularPrice, 10);
   const parsedPrice = parseInt(price, 10);
@@ -33,12 +33,65 @@ export default function ProductCard({ product }) {
   // Estado local para la variación seleccionada (solo para productos variables)
   const [selectedVariation, setSelectedVariation] = useState(null);
   const { addToCart } = useContext(CartContext);
+  const router = useRouter();
 
   const handleAddToCart = () => {
     // Para productos variables, no se permite agregar sin selección
     if (isVariable && !selectedVariation) return;
     const cartItem = normalizeProductForCart(product, selectedVariation);
     addToCart(cartItem);
+    toast.custom((t) => {
+      return (
+        <div
+          className={`${
+            t.visible ? "animate-enter" : "animate-leave"
+          } relative max-w-sm w-[290px] bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden`}
+        >
+          <div className="p-2">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 pt-[2px] text-gray-600">
+                <span
+                  className="icon-[gridicons--cart] text-2xl -text--light-green"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ml-2 w-0 flex-1 pt-0.5">
+                <p className="text-sm font-medium text-gray-900">{`Agregaste ${title} al carrito!`}</p>
+                <div className="mt-1 flex justify-end space-x-7">
+                  <button
+                    type="button"
+                    className="bg-white rounded-md text-sm font-medium -text--light-green hover:-text--grey-darkest focus:outline-none "
+                    onClick={() => router.push("/carrito")}
+                  >
+                    Ir a mi carrito
+                  </button>
+                </div>
+              </div>
+              <div className="ml-3 flex-shrink-0 flex">
+                <button
+                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  onClick={() => toast.dismiss(t.id)}
+                >
+                  <span className="sr-only">Cerrar</span>
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
   };
 
   const jsonLD = {
@@ -68,7 +121,6 @@ export default function ProductCard({ product }) {
       },
     },
   };
-  
 
   return (
     <>
@@ -76,7 +128,7 @@ export default function ProductCard({ product }) {
         id={`json-ld-product-${slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
-      />  
+      />
       {isActive && (
         <article
           className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] lg:max-h-[520px] xl:max-h-[480px] 2xl:max-h-[480px] justify-items-center"
@@ -119,7 +171,6 @@ export default function ProductCard({ product }) {
               itemScope
               itemType="https://schema.org/Offer"
             >
-              
               {isOnSale ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-400 line-through">

@@ -99,9 +99,10 @@ export default async function VisitasPage() {
                 documentId={plan.documentId}
                 price={plan.price}
                 experiences={experienciesList}
-                image={`${process.env.NEXT_PUBLIC_SITE_URL}${
+                /* image={`${process.env.NEXT_PUBLIC_SITE_URL}${
                   plan.image?.formats.small.url || plan.image.url
-                }`}
+                }`} */
+                image={plan.image}
                 altimg={
                   plan.image.alternativeText || `Imagen ${plan.name} `
                 }

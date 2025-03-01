@@ -23,13 +23,21 @@ export default function PlanCard({
   additionalServices,
   max_reservations,
 }) {
+  const imageUrl = image?.formats?.small?.url
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.small.url}`
+    : "";
+  
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
-    <article className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group" itemScope itemType="https://schema.org/Reservation">
+    <article
+      className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
+      itemScope
+      itemType="https://schema.org/Reservation"
+    >
       <div className="aspect-video overflow-hidden relative rounded-t-md mb-4">
         <Link href={slug} className="">
           <Image
-            src={image}
+            src={imageUrl}
             alt={altimg}
             className=" rounded-t-md mb-3 aspect-video group-hover:scale-105 duration-200"
             width={490}
@@ -101,6 +109,7 @@ export default function PlanCard({
         >
           <span className="icon-[ph--eye]"></span> Ver
         </Link>
+        
         {horarios.length > 0 && (
           <ModalSchedule
             name={name}
@@ -112,7 +121,7 @@ export default function PlanCard({
             additionalServices={additionalServices}
             max_reservations={max_reservations}
           />
-        )}        
+        )}
       </div>
     </article>
   );

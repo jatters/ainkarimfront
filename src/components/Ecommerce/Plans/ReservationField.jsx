@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import AdditionalServices from "./AdditionalServices";
 import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
 import { normalizeReservationForCart } from "@/components/Ecommerce/NormalizeReservationForCart";
+import toast from "react-hot-toast";
 
 // Hook personalizado para efecto con debounce
 function useDebouncedEffect(effect, deps, delay) {
@@ -24,9 +25,17 @@ function formatHour(hourString) {
   const period = hour >= 12 ? "pm" : "am";
   return `${formattedHour}:${minutes} ${period}`;
 }
+const formatFecha = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString + "T00:00:00Z");
+  const month = date.toLocaleString("es-CO", { month: "long" });
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+  const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
+  return `${monthCapitalized} ${day} de ${year}`;
+};
 
 function formatTimeForAPI(timeString) {
-  // Conversión simple; se puede ajustar según sea necesario
   return `${timeString}`;
 }
 
@@ -63,13 +72,13 @@ export default function ReservationField({
   const checkAvailableSpots = useCallback(
     async (selectedDate, selectedHour) => {
       if (!selectedDate || !selectedHour) return;
-  
+
       setIsLoadingSpots(true);
       try {
         const formattedTime = formatTimeForAPI(selectedHour);
-  
+
         const response = await fetch(
-          `${API_URL}/api/reservas?filters[reservationDate]=${selectedDate}&filters[reservationTime]=${formattedTime}&filters[plan][documentId][$eq]=${documentId}&populate=*`,          
+          `${API_URL}/api/reservas?filters[reservationDate]=${selectedDate}&filters[reservationTime]=${formattedTime}&filters[plan][documentId][$eq]=${documentId}&populate=*`,
           {
             method: "GET",
             headers: {
@@ -78,25 +87,22 @@ export default function ReservationField({
             },
           }
         );
-  
+
         if (!response.ok) {
           const errorData = await response.text();
           throw new Error(
             `Error fetching reservations: ${response.status} - ${errorData}`
           );
         }
-  
+
         const data = await response.json();
-  
+
         // Solo contamos reservas en estado "Pendiente" o "Confirmada"
         const validStates = ["Pendiente", "Confirmada"];
         const totalReservedSpots = data.data
           .filter((reservation) => validStates.includes(reservation.state))
-          .reduce(
-            (acc, reservation) => acc + (reservation.guests || 0),
-            0
-          );
-  
+          .reduce((acc, reservation) => acc + (reservation.guests || 0), 0);
+
         setAvailableSpots(max_reservations - totalReservedSpots);
       } catch (error) {
         if (process.env.NODE_ENV !== "production") {
@@ -109,7 +115,6 @@ export default function ReservationField({
     },
     [API_URL, token, max_reservations]
   );
-  
 
   // Se aplica debounce para evitar múltiples llamadas consecutivas
   useDebouncedEffect(
@@ -215,6 +220,56 @@ export default function ReservationField({
     );
     addToCart(cartItem);
     router.push("/carrito");
+    toast.custom((t) => {
+      return (
+        <div
+          className={`${
+            t.visible ? "animate-enter" : "animate-leave"
+          } relative max-w-sm w-[290px] bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden`}
+        >
+          <div className="p-2">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 pt-[2px] text-gray-600">
+                <span
+                  className="icon-[bx--calendar] -text--light-green"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ml-2 w-0 flex-1 pt-0.5">
+                <p className="text-sm font-medium text-gray-900">{`Agregaste al carrito una reserva para ${formatFecha(
+                  reservationData.date
+                )}, a las ${formatHour(reservationData.hour)}, para ${
+                  reservationData.persons > 1
+                    ? `${reservationData.persons} personas`
+                    : `${reservationData.persons} persona`
+                } en el ${name}`}</p>
+                <div className="mt-1 flex justify-end space-x-7"></div>
+              </div>
+              <div className="ml-3 flex-shrink-0 flex">
+                <button
+                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  onClick={() => toast.dismiss(t.id)}
+                >
+                  <span className="sr-only">Cerrar</span>
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
   };
 
   const increasePersons = () => {

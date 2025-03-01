@@ -5,8 +5,8 @@ const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
 /**
- * Opcional: reintenta la misma fetch varias veces si falla,
- * útil porque a veces MercadoPago tarda en reflejar la info del pago.
+ * Reintenta una misma fetch varias veces en caso de fallo,
+ * útil cuando MercadoPago tarda en reflejar la info del pago.
  */
 async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
   for (let i = 0; i < retries; i++) {
@@ -20,7 +20,7 @@ async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
 
 export async function POST(request) {
   try {
-    // 1. Parsear los parámetros de la URL y el body
+    // 1. Parsear parámetros del body y query string
     const body = await request.json();
     console.log("🔔 Webhook MercadoPago recibido =>", JSON.stringify(body, null, 2));
 
@@ -30,10 +30,9 @@ export async function POST(request) {
     let paymentId = null;
     let externalReference = null;
 
-    // 2. Dependiendo del 'topic', buscamos la info en MP
-    //    (merchant_order o payment).
+    // 2. Según el 'topic', obtenemos info de MP
     if (topic === "merchant_order" && queryId) {
-      console.log(`🔍 Buscando detalles de la orden: ${queryId}`);
+      console.log(`🔍 Buscando detalles de la merchant_order: ${queryId}`);
       const orderData = await fetchWithRetry(
         `https://api.mercadopago.com/merchant_orders/${queryId}`,
         { headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` } },
@@ -55,15 +54,13 @@ export async function POST(request) {
     }
 
     if (topic === "payment" && body.data?.id) {
-      // Si el topic es 'payment', ya tenemos el ID de pago directo
       paymentId = body.data.id;
     }
 
-    // Si no tenemos paymentId todavía, reintentamos un par de veces (opcional)
+    // Si aún no tenemos paymentId, reintentamos obtenerlo
     if (!paymentId) {
       console.warn("⏳ Esperando a que MercadoPago confirme el ID de pago...");
       await new Promise((resolve) => setTimeout(resolve, 3000));
-
       if (body.data?.id) {
         const paymentResponse = await fetch(
           `https://api.mercadopago.com/v1/payments/${body.data?.id}`,
@@ -93,43 +90,42 @@ export async function POST(request) {
       return new Response("Error obteniendo pago", { status: 400 });
     }
 
-    // Si la merchant_order no traía externalReference, lo sacamos del propio pago
+    // Si la merchant_order no trae externalReference, lo sacamos del propio pago
     if (!externalReference) {
       externalReference = paymentData.external_reference;
     }
 
-    // 3. Determinar el status global del pago
+    // 3. Determinar el estado global del pago
     const paymentStatus = paymentData.status; // "approved", "rejected", "pending", etc.
     const paymentMethod = paymentData.payment_method_id || "No disponible";
 
-    // 4. Mapeamos el estado del pedido vs. estado del pago
-    //    Aquí es tu lógica de negocio. Ejemplo:
+    // 4. Mapear estados para pedido y reserva según el pago
     let pedidoState = "Pendiente";
+    let reservaState = "Pendiente";
     if (paymentStatus === "approved") {
-      pedidoState = "Pago"; // o "Completado"
+      pedidoState = "Pago";
+      reservaState = "Confirmada";
     } else if (paymentStatus === "rejected") {
-      pedidoState = "Fallido"; // o "Cancelado"
+      pedidoState = "Cancelado";
+      reservaState = "Cancelada";
     }
 
-    // 5. Actualizar el Pedido en Strapi, buscando su numberOrder = externalReference
-    //    p.ej.: numberOrder = "pedido-XYZ"
-    if (externalReference?.startsWith("pedido-")) {
+    // 5. Actualizar el Pedido en Strapi
+    // Ahora el externalReference de pedidos tiene el prefijo "P-"
+    if (externalReference?.startsWith("P-")) {
       const updateOrderPayload = {
         data: {
           state: pedidoState,
-          payment_status: paymentStatus, // "approved", "rejected", etc.
+          payment_status: paymentStatus,
           payment_id: String(paymentId),
           payment_method: paymentMethod,
-          // Ej. si quieres guardar el monto final
-          // totalPriceOrder: paymentData.transaction_amount,
+          // Puedes incluir otros campos si es necesario
         },
       };
 
-      console.log(
-        `🔎 Buscando pedido por numberOrder = ${externalReference}...`
-      );
+      console.log(`🔎 Buscando pedido por numberOrder = ${externalReference}...`);
       const resBuscarPedido = await fetch(
-        `${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}`,
+        `${STRAPI_URL}/api/pedidos?filters[numberOrder][$eq]=${externalReference}&populate=reservas`,
         {
           headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
         }
@@ -137,14 +133,17 @@ export async function POST(request) {
       const pedidosData = await resBuscarPedido.json();
 
       if (pedidosData.data && pedidosData.data.length > 0) {
-        const pedidoId = pedidosData.data[0].documentId; // ID numérico interno
+        // Se asume que se encuentra un único pedido
+        const pedidoRecord = pedidosData.data[0];
+        const orderDocumentId = pedidoRecord.documentId; // Usamos el documentId para actualizar
+
         console.log(
-          `📝 Actualizando el pedido (ID ${pedidoId}) con payload:`,
+          `📝 Actualizando el pedido (DocumentID ${orderDocumentId}) con payload:`,
           JSON.stringify(updateOrderPayload, null, 2)
         );
 
         const updatePedidoRes = await fetch(
-          `${STRAPI_URL}/api/pedidos/${pedidoId}`,
+          `${STRAPI_URL}/api/pedidos/${orderDocumentId}`,
           {
             method: "PUT",
             headers: {
@@ -161,94 +160,61 @@ export async function POST(request) {
         } else {
           console.log(`✅ Pedido ${externalReference} actualizado correctamente.`);
         }
-      } else {
-        console.warn(`No se encontró Pedido con numberOrder = ${externalReference}.`);
-      }
-    }
 
-    // 6. Actualizar las Reservas asociadas (todas las que tengan reservationNumber = externalReference)
-    //    Por ejemplo, en el create-preference se guardó: reservationNumber: "pedido-XYZ"
-    let reservaState = "Pendiente";
-    if (paymentStatus === "approved") {
-      reservaState = "Confirmada";
-    } else if (paymentStatus === "rejected") {
-      reservaState = "Cancelada";
-    }
+        // 6. Actualizar reservas asociadas al pedido (si existen)
+        // Dado que el pedido tiene una relación con reservas, aprovechamos el populate=reservas
+        if (pedidoRecord.reservas && Array.isArray(pedidoRecord.reservas) && pedidoRecord.reservas.length > 0) {
+          for (const reserva of pedidoRecord.reservas) {
+            const reservaDocumentId = reserva.documentId;
+            const updateReservaPayload = {
+              data: {
+                state: reservaState,
+                payment_status: paymentStatus,
+                payment_id: String(paymentId),
+                payment_method: paymentMethod,
+                // Puedes actualizar totalPriceReservation u otros campos si es necesario
+              },
+            };
 
-    console.log(
-      `🔎 Buscando reservas con reservationNumber = ${externalReference}`
-    );
-    const resBuscarReservas = await fetch(
-      `${STRAPI_URL}/api/reservas?filters[reservationNumber][$eq]=${externalReference}`,
-      {
-        headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
-      }
-    );
-    const reservasData = await resBuscarReservas.json();
+            console.log(
+              `📝 Actualizando la reserva (DocumentID ${reservaDocumentId}) con payload:`,
+              JSON.stringify(updateReservaPayload, null, 2)
+            );
 
-    if (reservasData.data && reservasData.data.length > 0) {
-      for (const r of reservasData.data) {
-        const reservaId = r.documentId;
-        const updateReservaPayload = {
-          data: {
-            state: reservaState,
-            payment_status: paymentStatus,
-            payment_id: String(paymentId),
-            payment_method: paymentMethod,
-            // totalPriceReservation: paymentData.transaction_amount // si aplica
-          },
-        };
+            const updateReservaRes = await fetch(
+              `${STRAPI_URL}/api/reservas/${reservaDocumentId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                },
+                body: JSON.stringify(updateReservaPayload),
+              }
+            );
 
-        console.log(
-          `📝 Actualizando la reserva (ID ${reservaId}) con payload:`,
-          JSON.stringify(updateReservaPayload, null, 2)
-        );
-
-        const updateReservaRes = await fetch(
-          `${STRAPI_URL}/api/reservas/${reservaId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-            },
-            body: JSON.stringify(updateReservaPayload),
+            if (!updateReservaRes.ok) {
+              const errorText = await updateReservaRes.text();
+              console.error(
+                `❌ Error al actualizar la reserva con DocumentID ${reservaDocumentId}:`,
+                errorText
+              );
+            } else {
+              console.log(`✅ Reserva (DocumentID ${reservaDocumentId}) actualizada correctamente.`);
+            }
           }
-        );
-
-        if (!updateReservaRes.ok) {
-          const errorText = await updateReservaRes.text();
-          console.error(
-            `❌ Error al actualizar la reserva con ID ${reservaId}:`,
-            errorText
-          );
         } else {
-          console.log(`✅ Reserva (ID ${reservaId}) actualizada correctamente.`);
+          console.log("ℹ️ No se encontraron reservas asociadas a este pedido.");
         }
+      } else {
+        console.warn(`No se encontró pedido con numberOrder = ${externalReference}.`);
       }
     } else {
-      console.log("No se encontraron reservas con ese reservationNumber.");
+      console.warn("El external_reference no corresponde a un pedido con prefijo 'P-'.");
     }
 
-    // 7. (Opcional) Enviar un correo de confirmación/fallo/lo que requieras
-    //    con la info final. Por ejemplo:
-    /*
-    console.log("📧 Enviando correo de confirmación...");
-    await fetch(`${process.env.CURRENT_ENVIRONMENT}/api/sendEmail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        formType: paymentStatus === "approved"
-          ? "compraConfirmada"
-          : "compraFallida",
-        orderId: externalReference,
-        paymentStatus,
-        // ...
-      }),
-    });
-    */
+   
 
-    // Responder OK para que MercadoPago no reintente indefinidamente
     return new Response("OK", { status: 200 });
   } catch (error) {
     console.error("❌ Error en Webhook =>", error);
