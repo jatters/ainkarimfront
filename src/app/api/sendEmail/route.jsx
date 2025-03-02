@@ -1,16 +1,45 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+async function GetMailData() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/el-vinedo`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Error al obtener datos de envío");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function POST(request) {
+  const SendData = await GetMailData();
+  if (!SendData) {
+    return NextResponse.json(
+      { message: "Error al obtener datos de envío" },
+      { status: 500 }
+    );
+  }
+
+  const mailTo = SendData?.data?.contactEmail;
+
   try {
     const {
       formType,
       name,
       email,
       phone,
-      orderId,
-      orderItems = [],
-      total,
       message,
       user_agent,
       uuid,
@@ -32,8 +61,6 @@ export async function POST(request) {
     });
 
     let subject;
-    let subjectAdmin, subjectClient;
-    let htmlContentAdmin, htmlContentClient;
     let htmlContent;
 
     switch (formType) {
@@ -120,145 +147,13 @@ export async function POST(request) {
         </div>
       </div>
     `;
+        console.log("mailTo", mailTo);
         await transporter.sendMail({
           from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
-          to: process.env.MAIL_TO,
+          to: mailTo || "jatt.jatt@gmai.com",
           subject,
           html: htmlContent,
         });
-        break;
-      // NUEVO TEMPLATE: Confirmación de compra
-      case "compraConfirmada":
-        // Ajusta el `subject` y contenido según tu preferencia
-        // ✉️ **Correo para el Administrador**
-        subjectAdmin = `🔔 Nueva Compra/Reserva en Viñedo Ain Karim - Pedido #${orderId}`;
-        htmlContentAdmin = `
-          <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #333;">
-          
-            <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 20px;">
-              <div style="text-align: center; margin-bottom: 20px; background-color: #000; padding: 15px 0;">
-                <img src="https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo viñedo Ain Karim" style="width: 350px; height: auto;"/>
-              </div>
-              <h2 style="color: #062f1d; text-align: center;"> Nueva Orden Recibida</h2>
-              <p><strong>Número de Orden:</strong> ${orderId}</p>
-              <p><strong>Fecha:</strong> ${
-                date ? new Date(date).toLocaleString("es-CO") : "No disponible"
-              }</p>
-              <p><strong>Total Pagado:</strong> $${(
-                total || 0
-              ).toLocaleString()} COP</p>
-              <h3>👤 Cliente</h3>
-              <p><strong>Nombre:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Teléfono:</strong> ${phone || "No disponible"}</p>
-
-              <h3>📦 Productos/Reservas</h3>
-              <table style="width:100%; border-collapse: collapse;">
-                <thead>
-                  <tr style="background-color: #f2f2f2;">
-                    <th style="text-align: left; padding: 8px;">Producto</th>
-                    <th style="text-align: center; padding: 8px;">Cantidad</th>
-                    <th style="text-align: right; padding: 8px;">Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${
-                    orderItems.length > 0
-                      ? orderItems
-                          .map(
-                            (item) => `
-                            <tr style="border-bottom: 1px solid #ddd;">
-                              <td style="padding: 8px;">${
-                                item.productName || "Producto"
-                              }</td>
-                              <td style="text-align: center; padding: 8px;">${
-                                item.quantity || 1
-                              }</td>
-                              <td style="text-align: right; padding: 8px;">$${(
-                                item.unitPrice || 0
-                              ).toLocaleString()} COP</td>
-                            </tr>
-                          `
-                          )
-                          .join("")
-                      : `<tr><td colspan="3" style="padding: 8px; text-align:center;">No se encontraron productos en la orden.</td></tr>`
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-
-        // ✉️ **Correo para el Cliente**
-        subjectClient = `🎉 Tu compra en Ain Karim ha sido confirmada - Pedido #${orderId}`;
-        htmlContentClient = `
-          <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #333;">
-          <div style="text-align: center; margin-bottom: 20px; background-color: #000; padding: 15px 0;">
-            <img src="https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo viñedo Ain Karim" style="width: 350px; height: auto;"/>
-          </div>
-            <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 20px;">
-              <h2 style="color: #062f1d; text-align: center;">🎉 ¡Gracias por tu compra, ${name}!</h2>
-              <p>Tu orden ha sido confirmada con éxito.</p>
-              <p><strong>Número de Orden:</strong> ${orderId}</p>
-              <p><strong>Fecha:</strong> ${
-                date ? new Date(date).toLocaleString("es-CO") : "No disponible"
-              }</p>
-              <p><strong>Total Pagado:</strong> $${(
-                total || 0
-              ).toLocaleString()} COP</p>
-
-              <h3>📦 Productos/Reservas</h3>
-              <table style="width:100%; border-collapse: collapse;">
-                <thead>
-                  <tr style="background-color: #f2f2f2;">
-                    <th style="text-align: left; padding: 8px;">Producto</th>
-                    <th style="text-align: center; padding: 8px;">Cantidad</th>
-                    <th style="text-align: right; padding: 8px;">Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${
-                    orderItems.length > 0
-                      ? orderItems
-                          .map(
-                            (item) => `
-                            <tr style="border-bottom: 1px solid #ddd;">
-                              <td style="padding: 8px;">${
-                                item.productName || "Producto"
-                              }</td>
-                              <td style="text-align: center; padding: 8px;">${
-                                item.quantity || 1
-                              }</td>
-                              <td style="text-align: right; padding: 8px;">$${(
-                                item.unitPrice || 0
-                              ).toLocaleString()} COP</td>
-                            </tr>
-                          `
-                          )
-                          .join("")
-                      : `<tr><td colspan="3" style="padding: 8px; text-align:center;">No se encontraron productos en la orden.</td></tr>`
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-
-        // Enviar correos
-        await transporter.sendMail({
-          from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
-          to: process.env.ADMIN_MAIL,
-          subject: subjectAdmin,
-          html: htmlContentAdmin,
-        });
-
-        await transporter.sendMail({
-          from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
-          to: email,
-          subject: subjectClient,
-          html: htmlContentClient,
-        });
-
         break;
 
       default:
@@ -268,53 +163,6 @@ export async function POST(request) {
         );
     }
 
-    /*  const mailOptions = {
-      from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
-      to: process.env.MAIL_TO,
-      subject,
-      html: htmlContent,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    // Registra el envío en Strapi
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/correos`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
-        },
-        body: JSON.stringify({
-          data: {
-            formName: "Contacto",
-            userName: name,
-            fromMail: email,
-            phone: phone,
-            message: message,
-            user_agent: user_agent,
-            uuid: uuid,
-            ipAddress: ip_address,
-            allowresponse: terms,
-            allowMarketing: marketing,
-            date: date, // Enviamos la fecha en ISO 8601
-          },
-        }),
-      }
-    );
-
-    return NextResponse.json(
-      { name: name, message: "Tu mensaje ha sido enviado" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error al enviar el correo:", error);
-    return NextResponse.json(
-      { message: "Error al enviar tu mensaje" },
-      { status: 500 }
-    );
-  } */
     return NextResponse.json(
       { message: "Correo enviado correctamente" },
       { status: 200 }

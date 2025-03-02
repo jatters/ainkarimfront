@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from 'next-view-transitions'
+import { Link } from "next-view-transitions";
 import { useState } from "react";
-import styles from "./PrettyCheckbox.css"
+import styles from "./PrettyCheckbox.css";
 
 export default function ReembolsoForm() {
   const {
@@ -138,7 +138,7 @@ export default function ReembolsoForm() {
                 message: "El número de celular es requerido",
               },
               pattern: {
-                value: /^\d{7,12}$/,
+                value: /^\d{10,12}$/,
                 message: "El número de celular no es válido",
               },
             })}
@@ -171,7 +171,7 @@ export default function ReembolsoForm() {
               },
               pattern: {
                 value: /^[A-Za-zÀ-ÿ\s]+$/,
-                message: "El nombre no es válido",
+                message: "El nombre de ciudad no es válido",
               },
             })}
           />
@@ -262,8 +262,8 @@ export default function ReembolsoForm() {
                 message: "El número de reserva es requerido",
               },
               pattern: {
-                value: /^\d{7,12}$/,
-                message: "El número de reserva no es válido",
+                value: /^R-\d{4,5}$/,
+                message: "El número de reserva no es válido.",
               },
             })}
           />
@@ -288,10 +288,6 @@ export default function ReembolsoForm() {
               required: {
                 value: true,
                 message: "La fecha de reserva es requerida",
-              },
-              pattern: {
-                value: /^\d{7,12}$/,
-                message: "El número de reserva no es válido",
               },
             })}
           />
@@ -318,8 +314,8 @@ export default function ReembolsoForm() {
                 message: "El valor pagado es requerido",
               },
               pattern: {
-                value: /^\d{7,12}$/,
-                message: "El número de reserva no es válido",
+                value: /^\d{5,12}$/,
+                message: "Solo debe ingresar números.",
               },
             })}
           />
@@ -346,8 +342,8 @@ export default function ReembolsoForm() {
                 message: "El nombre del plan es requerido",
               },
               pattern: {
-                value: /^\d{7,12}$/,
-                message: "El número de reserva no es válido",
+                value: /^[A-Za-zÀ-ÿ\s]+$/,
+                message: "El nombre del plan no es válido",
               },
             })}
           />
@@ -457,13 +453,12 @@ export default function ReembolsoForm() {
               e-mail, teléfono, o mensajería instantánea.
             </span>
           </label>
-
-          {errors.terms && (
-            <span className="text-sm text-red-600 mt-1">
-              Este campo es requerido
-            </span>
-          )}
         </div>
+        {errors.terms && (
+          <span className="text-sm text-red-600 mt-1">
+            Este campo es requerido
+          </span>
+        )}
 
         <div className="mb-6 col-span-2">
           <button

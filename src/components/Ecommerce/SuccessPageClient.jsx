@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 import { CartContext } from "@/context/CartContext";
 import ConfettiWrapper from "@/components/Ecommerce/ConfettiWrapper";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 export default function SuccessPageClient() {
   const searchParams = useSearchParams();
@@ -24,15 +24,18 @@ export default function SuccessPageClient() {
 
     async function fetchPaymentDetails() {
       try {
-        const response = await fetch(`/api/mercadopago/get-payment?payment_id=${paymentId}`);
+        const response = await fetch(
+          `/api/mercadopago/get-payment?payment_id=${paymentId}`
+        );
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || "Error al obtener los detalles del pago.");
+          throw new Error(
+            data.error || "Error al obtener los detalles del pago."
+          );
         }
 
         setPaymentDetails(data);
-        // Se limpia el carrito
         clearCart();
       } catch (error) {
         console.error("Error obteniendo detalles del pago:", error);
@@ -82,6 +85,7 @@ export default function SuccessPageClient() {
     method,
     payer,
     card,
+    order,
     items = [],
   } = paymentDetails;
 
@@ -91,7 +95,8 @@ export default function SuccessPageClient() {
         ¡Gracias{" "}
         <span className="capitalize font-bold">
           {payer?.name || "Cliente"} {payer?.surname || ""}
-        </span>! 🎉
+        </span>
+        ! 🎉
       </h1>
       <p className="text-center text-gray-600 mt-2">
         Tu pago ha sido procesado con éxito.
@@ -101,7 +106,9 @@ export default function SuccessPageClient() {
       <ConfettiWrapper />
 
       <div className="mt-6 border-t pt-4">
-        <h2 className="text-xl font-semibold text-gray-800">📦 Resumen de tu pedido</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          📦 Resumen de tu pedido
+        </h2>
         {items.length > 0 ? (
           <ul className="mt-3 space-y-2">
             {items.map((item, index) => (
@@ -110,15 +117,20 @@ export default function SuccessPageClient() {
                   {item.quantity}x {item.title || "Producto"}
                 </span>
                 <span className="font-semibold">
-                  ${parseInt(item.unit_price).toLocaleString()} <sup>COP</sup>
+                  ${parseInt(item.unit_price * item.quantity).toLocaleString()}{" "}
+                  <sup>COP</sup>
                 </span>
               </li>
             ))}
+            <li className="flex justify-between  pb-2">
+              <span className="font-semibold">Total:</span>
+              <span className="font-semibold">
+                ${amount?.toLocaleString()} <sup>COP</sup>
+              </span>
+            </li>
           </ul>
         ) : (
-          <p className="text-gray-500 mt-2">
-            No hay información del pedido.
-          </p>
+          <p className="text-gray-500 mt-2">No hay información del pedido.</p>
         )}
       </div>
 
@@ -134,8 +146,15 @@ export default function SuccessPageClient() {
           <strong>ID del Pago:</strong> {paymentIdResponse || "No disponible"}
         </p>
         <p>
+          <strong>Pedido:</strong> {order.external_reference || "No disponible"}
+        </p>
+        <p>
           <strong>Estado: </strong>
-          <span className={`font-semibold ${status === "approved" ? "text-green-600" : "text-red-600"}`}>
+          <span
+            className={`font-semibold ${
+              status === "approved" ? "text-green-600" : "text-red-600"
+            }`}
+          >
             {status === "approved" ? "Aprobado" : "No disponible"}
           </span>
         </p>
@@ -143,15 +162,23 @@ export default function SuccessPageClient() {
           <strong>Monto:</strong> ${amount?.toLocaleString()} COP
         </p>
         <p>
-          <strong>Método de pago:</strong> {method?.toUpperCase() || "No disponible"}
+          <strong>Método de pago:</strong>{" "}
+          {method.id?.toUpperCase() || "No disponible"}
         </p>
-        <p>
-          <strong>Tarjeta:</strong> {card?.first_six_digits || "XXXX"}******{card?.last_four_digits || "****"}
-        </p>
-        <p>
-          <strong>Tipo:</strong>{" "}
-          {card?.tags?.includes("credit") ? "Tarjeta de Crédito" : "Tarjeta de Débito"}
-        </p>
+        {card && (
+          <>
+            <p>
+              <strong>Tarjeta:</strong> ******
+              {card?.last_four_digits || "****"}
+            </p>
+            <p>
+              <strong>Tipo:</strong>{" "}
+              {card?.tags?.includes("credit")
+                ? "Tarjeta de Crédito"
+                : "Tarjeta de Débito"}
+            </p>
+          </>
+        )}
         <p>
           <strong>Fecha de compra:</strong>{" "}
           {date ? new Date(date).toLocaleString("es-CO") : "No disponible"}
@@ -161,7 +188,9 @@ export default function SuccessPageClient() {
       {/* Datos del Cliente */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
-          <h2 className="text-xl font-semibold text-gray-800">👤 Datos de Cliente</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            👤 Datos de Cliente
+          </h2>
         </div>
         <p>
           <strong>Nombre:</strong>{" "}
@@ -171,9 +200,7 @@ export default function SuccessPageClient() {
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <span className="lowercase">
-            {payer?.email || "No disponible"}
-          </span>
+          <span className="lowercase">{payer?.email || "No disponible"}</span>
         </p>
         <p>
           <strong>Teléfono:</strong> {payer?.phone || "No disponible"}

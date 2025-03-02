@@ -26,60 +26,154 @@ export default function FailurePage({ searchParams }) {
   }, [searchParams.payment_id]);
 
   if (loading) {
-    return <p>Cargando detalles del pago...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-700">
+          Cargando detalles del pago...
+        </p>
+      </div>
+    );
   }
 
   if (!paymentDetails) {
     return (
       <div className="container mx-auto p-6">
         <h1 className="text-2xl font-bold text-red-600">Pago Rechazado ❌</h1>
-        <p>
+        <p className="text-gray-700">
           No se encontraron detalles del pago. Por favor, intenta nuevamente más
           tarde.
         </p>
       </div>
     );
   }
+  const {
+    id: paymentIdResponse,
+    status,
+    amount,
+    date,
+    method,
+    payer,
+    card,
+    order,
+    items = [],
+  } = paymentDetails;
 
   return (
-    <div className="max-w-screen-lg mx-auto py-16 px-5">
+    <div className="max-w-3xl mx-auto py-16 shadow-lg px-5 rounded-t-lg text-gray-700 mt-10">
       <h1 className="text-2xl font-bold text-red-600">Pago Rechazado ❌</h1>
-      <p>
-        Tu pago no se pudo procesar correctamente. Por favor, revisa los
-        detalles y vuelve a intentarlo.
+      <p className="mt-5">
+        {payer?.name ? (
+          <>
+            <span className="font-bold">
+              {payer.name} {payer.surname || ""}
+            </span>{" "}
+            tu
+          </>
+        ) : (
+          "Tu"
+        )}{" "}
+        pago no se pudo procesar correctamente. Por favor, revisa los detalles y
+        vuelve a intentarlo.
       </p>
-
-      <h2 className="text-xl font-semibold mt-6">Detalles del Pago:</h2>
-      <p>
-        <strong>ID del Pago:</strong> {paymentDetails.id}
-      </p>
-      <p>
-        <strong>Estado:</strong> {paymentDetails.status}
-      </p>
-      <p>
-      {paymentDetails.amount ? paymentDetails.amount.toLocaleString() : "No disponible"} COP
-
-      </p>
-      <p>
-        <strong>Fecha:</strong>{" "}
-        {paymentDetails.date
-          ? new Date(paymentDetails.date).toLocaleString("es-CO")
-          : "No disponible"}
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6">Resumen del Pedido:</h2>
-      {paymentDetails.items?.length > 0 ? (
-        <ul className="mt-2 list-disc list-inside">
-          {paymentDetails.items.map((item, index) => (
-            <li key={index}>
-              {item.quantity}x {item.title} -{" "}
-              {parseInt(item.unit_price).toLocaleString()} COP
+      <div className="mt-6 border-t pt-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          📦 Resumen de tu pedido
+        </h2>
+        {items.length > 0 ? (
+          <ul className="mt-3 space-y-2">
+            {items.map((item, index) => (
+              <li key={index} className="flex justify-between border-b pb-2">
+                <span>
+                  {item.quantity}x {item.title || "Producto"}
+                </span>
+                <span className="font-semibold">
+                  ${parseInt(item.unit_price * item.quantity).toLocaleString()}{" "}
+                  <sup>COP</sup>
+                </span>
+              </li>
+            ))}
+            <li className="flex justify-between  pb-2">
+              <span className="font-semibold">Total:</span>
+              <span className="font-semibold">
+                ${amount?.toLocaleString()} <sup>COP</sup>
+              </span>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No hay información del pedido.</p>
-      )}
+          </ul>
+        ) : (
+          <p className="text-gray-500 mt-2">No hay información del pedido.</p>
+        )}
+      </div>
+      {/* Detalles del Pago */}
+      <div className="mt-6 border-t pt-4">
+        <div className="flex items-center mb-3">
+          <span className="text-xl">💳 </span>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Detalles del Pago
+          </h2>
+        </div>
+        <p>
+          <strong>ID del Pago:</strong> {paymentIdResponse || "No disponible"}
+        </p>
+        <p>
+          <strong>Pedido:</strong> {order.external_reference || "No disponible"}
+        </p>
+        <p>
+          <strong>Estado: </strong>
+          <span
+            className={`font-semibold ${
+              status === "in_process" ? "text-yellow-500" : "text-red-600"
+            }`}
+          >
+            {status === "in_process" ? "En proceso" : "No disponible"}
+          </span>
+        </p>
+        <p>
+          <strong>Monto:</strong> ${amount?.toLocaleString()} COP
+        </p>
+        <p>
+          <strong>Método de pago:</strong>{" "}
+          {method.id?.toUpperCase() || "No disponible"}
+        </p>
+        {card && (
+          <>
+            <p>
+              <strong>Tarjeta:</strong> ******
+              {card?.last_four_digits || "****"}
+            </p>
+            <p>
+              <strong>Tipo:</strong>{" "}
+              {card?.tags?.includes("credit")
+                ? "Tarjeta de Crédito"
+                : "Tarjeta de Débito"}
+            </p>
+          </>
+        )}
+        <p>
+          <strong>Fecha de compra:</strong>{" "}
+          {date ? new Date(date).toLocaleString("es-CO") : "No disponible"}
+        </p>
+      </div>
+      {/* Datos del Cliente */}
+      <div className="mt-6 border-t pt-4">
+        <div className="flex items-center mb-3">
+          <h2 className="text-xl font-semibold text-gray-800">
+            👤 Datos de Cliente
+          </h2>
+        </div>
+        <p>
+          <strong>Nombre:</strong>{" "}
+          <span className="capitalize">
+            {payer?.name || "Cliente"} {payer?.surname || ""}
+          </span>
+        </p>
+        <p>
+          <strong>Email:</strong>{" "}
+          <span className="lowercase">{payer?.email || "No disponible"}</span>
+        </p>
+        <p>
+          <strong>Teléfono:</strong> {payer?.phone || "No disponible"}
+        </p>
+      </div>
 
       <div className="mt-6">
         <a
