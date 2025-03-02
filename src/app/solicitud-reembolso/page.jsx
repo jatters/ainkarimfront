@@ -67,8 +67,8 @@ export default function ReembolsoPage() {
   };
   return (
     <main>
-       {/* Inyección de JSON‑LD para SEO */}
-       <Script
+      {/* Inyección de JSON‑LD para SEO */}
+      <Script
         id="json-ld-reembolso"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
@@ -77,11 +77,16 @@ export default function ReembolsoPage() {
         title="Solicitud de Reembolso"
         background="/banner-contacto.webp"
       />
-      <section className="container mx-auto py-16 px5">        
+      <section className="container mx-auto pt-10 pb-16 px-5">
         <p className="max-w-screen-md mx-auto mb-10 text-center">
           Diligencia el siguiente formulario para realizar la solicitu del
           tramite de tu dinero, es importante tener en cuenta que el tiempo
           estimado para realizar la devolución de tu dinero es de 15 días:
+        </p>
+        <p className="max-w-screen-md mx-auto mb-10 text-center">
+          <strong>
+            El dinero será devuelto al pagador de la reserva directamente.
+          </strong>
         </p>
         <ReembolsoForm />
       </section>

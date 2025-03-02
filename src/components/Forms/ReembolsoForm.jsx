@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "next-view-transitions";
 import { useState } from "react";
 import styles from "./PrettyCheckbox.css";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ReembolsoForm() {
   const {
@@ -15,7 +16,9 @@ export default function ReembolsoForm() {
 
   const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
-
+  const uuid = uuidv4();
+  
+  
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
@@ -25,8 +28,9 @@ export default function ReembolsoForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          formType: "contacto",
-          ...data,
+          formType: "Reembolso",
+          ...data,          
+          uuid: uuid,
         }),
       });
       const result = await res.json();
@@ -47,11 +51,11 @@ export default function ReembolsoForm() {
       <form
         method="POST"
         onSubmit={onSubmit}
-        className="grid grid-cols-2 gap-x-3 gap-y-1"
+        className="grid grid-cols-2 gap-x-3 gap-y-3"
       >
-        <div className="mb-3">
+        <div className="col-span-2">
           <label htmlFor="name" className="sr-only">
-            Nombres
+            Nombre y apellido
           </label>
           <input
             type="text"
@@ -74,8 +78,8 @@ export default function ReembolsoForm() {
                 message: "El nombre no es válido",
               },
             })}
-            placeholder="Nombre"
-            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            placeholder="Nombre y apellido"
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.name ? "border-red-500" : "-border--light-gray"
             } `}
           />
@@ -85,99 +89,31 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-3">
-          <label htmlFor="lastname" className="sr-only">
-            Apellidos
-          </label>
-          <input
-            type="text"
-            id="lastname"
-            {...register("lastname", {
-              required: {
-                value: true,
-                message: "El apellido es requerido",
-              },
-              minLength: {
-                value: 2,
-                message: "El apellido no es válido",
-              },
-              maxLength: {
-                value: 30,
-                message: "El nombre no es válido",
-              },
-              pattern: {
-                value: /^[A-Za-zÀ-ÿ\s]+$/,
-                message: "El nombre no es válido",
-              },
-            })}
-            placeholder="Apellidos"
-            className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.lastname ? "border-red-500" : "-border--light-gray"
-            } `}
-          />
-          {errors.lastname && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
-              {errors.lastname.message}
-            </span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="phone" className="sr-only">
-            Celular
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.phone ? "border-red-500" : "border"
-            }`}
-            placeholder="Celular"
-            {...register("phone", {
-              required: {
-                value: true,
-                message: "El número de celular es requerido",
-              },
-              pattern: {
-                value: /^\d{10,12}$/,
-                message: "El número de celular no es válido",
-              },
-            })}
-          />
-          {errors.phone && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.phone.message}
-            </span>
-          )}
-        </div>
         <div>
-          <label htmlFor="city" className="sr-only">
-            Ciudad
+          <label htmlFor="documentType" className="sr-only">
+            Tipo de Documento
           </label>
-          <input
-            type="text"
-            id="city"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.city ? "!border-red-500" : ""
+          <select
+            type="select"
+            id="documentType"
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              errors.documentType ? "!border-red-500" : ""
             }`}
-            placeholder="Ciudad"
-            {...register("city", {
+            {...register("documentType", {
               required: {
                 value: true,
-                message: "La ciudad es requerida",
-              },
-              minLength: {
-                value: 2,
-                message: "El nombre de ciudad es muy corto",
-              },
-              pattern: {
-                value: /^[A-Za-zÀ-ÿ\s]+$/,
-                message: "El nombre de ciudad no es válido",
+                message: "Tipo de documento es requerido",
               },
             })}
-          />
-          {errors.city && (
+          >
+            <option value="Cédula">Cédula</option>
+            <option value="Cédula de extranjería">Cedula de extranjeria</option>
+            <option value="NIT">NIT</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+          {errors.documentType && (
             <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.city.message}
+              {errors.documentType.message}
             </span>
           )}
         </div>
@@ -188,7 +124,7 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="legalDocument"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
               errors.legalDocument ? "!border-red-500" : ""
             }`}
             placeholder="Número de Documento"
@@ -217,7 +153,35 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-4">
+        <div>
+          <label htmlFor="phone" className="sr-only">
+            Celular
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              errors.phone ? "border-red-500" : "border"
+            }`}
+            placeholder="Celular"
+            {...register("phone", {
+              required: {
+                value: true,
+                message: "El número de celular es requerido",
+              },
+              pattern: {
+                value: /^\d{10,12}$/,
+                message: "El número de celular no es válido",
+              },
+            })}
+          />
+          {errors.phone && (
+            <span className="text-sm text-red-600 mt-2 pl-1 block">
+              {errors.phone.message}
+            </span>
+          )}
+        </div>
+        <div>
           <label htmlFor="email" className="sr-only">
             Correo
           </label>
@@ -245,7 +209,7 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-4">
+        <div>
           <label htmlFor="reservation" className="sr-only">
             Número de reserva
           </label>
@@ -273,7 +237,7 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-4">
+        <div>
           <label htmlFor="reservationDate" className="sr-only">
             Fecha de reserva
           </label>
@@ -297,35 +261,7 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="paymentValue" className="sr-only">
-            Valor pagado
-          </label>
-          <input
-            type="tel"
-            id="paymentValue"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.paymentValue ? "border-red-500" : "border"
-            }`}
-            placeholder="Valor pagado"
-            {...register("paymentValue", {
-              required: {
-                value: true,
-                message: "El valor pagado es requerido",
-              },
-              pattern: {
-                value: /^\d{5,12}$/,
-                message: "Solo debe ingresar números.",
-              },
-            })}
-          />
-          {errors.paymentValue && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.paymentValue.message}
-            </span>
-          )}
-        </div>
-        <div className="mb-4">
+        <div>
           <label htmlFor="planName" className="sr-only">
             Plan
           </label>
@@ -353,7 +289,35 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="mb-4">
+        <div>
+          <label htmlFor="paymentValue" className="sr-only">
+            Valor pagado
+          </label>
+          <input
+            type="tel"
+            id="paymentValue"
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              errors.paymentValue ? "border-red-500" : "border"
+            }`}
+            placeholder="Valor pagado"
+            {...register("paymentValue", {
+              required: {
+                value: true,
+                message: "El valor pagado es requerido",
+              },
+              pattern: {
+                value: /^\d{5,12}$/,
+                message: "Solo debe ingresar números.",
+              },
+            })}
+          />
+          {errors.paymentValue && (
+            <span className="text-sm text-red-600 mt-2 pl-1 block">
+              {errors.paymentValue.message}
+            </span>
+          )}
+        </div>
+        <div>
           <label htmlFor="paymentMehotd" className="sr-only">
             Medio de pago
           </label>
@@ -377,7 +341,7 @@ export default function ReembolsoForm() {
             </span>
           )}
         </div>
-        <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
+        <div className="max-h-20 mt-5 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
           <div className="space-y-3">
             <div className="font-semibold text-center mb-5">
               AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES

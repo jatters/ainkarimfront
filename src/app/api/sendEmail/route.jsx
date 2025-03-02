@@ -33,6 +33,7 @@ export async function POST(request) {
   }
 
   const mailTo = SendData?.data?.contactEmail;
+  const ventasEmail = SendData?.data?.ventasEmail;
 
   try {
     const {
@@ -40,6 +41,13 @@ export async function POST(request) {
       name,
       email,
       phone,
+      reservation,
+      reservationDate,
+      paymentValue,
+      planName,
+      paymentMehotd,
+      documentType,
+      legalDocument,
       message,
       user_agent,
       uuid,
@@ -147,10 +155,87 @@ export async function POST(request) {
         </div>
       </div>
     `;
-        console.log("mailTo", mailTo);
         await transporter.sendMail({
           from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
-          to: mailTo || "jatt.jatt@gmai.com",
+          to: mailTo || "ventas@marquesvl.com",
+          subject,
+          html: htmlContent,
+        });
+        break;
+      case "Reembolso":
+        subject = `Solicitud de reembolso en la reserva de ${reservation}`;
+        htmlContent = `
+        <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333;">
+          <div style="max-width: 600px; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 20px; background-color: #000; padding: 15px 0;">
+              <img src="https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo viñedo Ain Karim" style="width: 350px; height: auto;"/>
+            </div>
+            <div>
+              <p style="text-align:right; font-size:12px"><strong>ID:</strong> ${uuid}</p>
+            </div>
+            <!-- Title -->
+            <h2 style="color: #062f1d; font-size: 18px; margin-top: 0; text-align: center;">
+              Has recibido una solicitud de reembolso, con la siguiente información:
+            </h2>
+  
+            <!-- Info with Icons -->
+            <div style="margin-bottom: 20px;">
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Nombre:</strong> ${name}                 
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Celular:</strong> ${phone}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Correo:</strong> ${email}                
+              </p>              
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Tipo de documento:</strong> ${documentType}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Documento:</strong> ${legalDocument}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Número de reserva:</strong> ${reservation}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Fecha de reserva:</strong> ${reservationDate}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Plan:</strong> ${planName}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Valor pagado:</strong> ${paymentValue}                
+              </p>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+                <strong>Método de pago:</strong> ${paymentMehotd}                
+              </p>           
+              ${
+                terms
+                  ? `<p>                  
+                      Autorizo el tratamiento de mis datos para responder a mi
+                      mensaje y/o requerimiento presentado por este medio, lo que
+                      implica la autorización de contacto a través de e-mail,
+                      teléfono, o mensajería instantánea: <strong style="color:#0ead0e">Si Autorizo</strong>
+                  </p>`
+                  : `<p>                  
+                      Autorizo el tratamiento de mis datos para responder a mi
+                      mensaje y/o requerimiento presentado por este medio, lo que
+                      implica la autorización de contacto a través de e-mail,
+                      teléfono, o mensajería instantánea: <strong style="color:#b70b0b">No Autorizo</strong>
+                  </p>`
+              }              
+            </div>
+            <!-- Footer Text -->
+            <p style="font-size: 14px; line-height: 1.5; color: #6c757d; text-align: center; margin-top: 20px;">
+              Este mensaje fue enviado desde la web de Ainkarim.co
+            </p>          
+          </div>
+        </div>
+      `;
+        await transporter.sendMail({
+          from: `"Viñedo Ain Karim" <${process.env.SMTP_EMAIL}>`,
+          to: ventasEmail || "ventas@marquesvl.com",
           subject,
           html: htmlContent,
         });
