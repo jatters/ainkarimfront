@@ -5,6 +5,7 @@ import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
 import Tooltip from "@mui/material/Tooltip";
+import Head from "next/head";
 
 export default function PaymentPage() {
   const { cart, removeFromCart } = useContext(CartContext);
@@ -128,153 +129,160 @@ export default function PaymentPage() {
   //{//console.log("orderdata es:", orderData)}
 
   return (
-    <main>
-      <div className="container mx-auto py-8 lg:py-16 px-5">
-        <h1 className="font-bold text-center text-2xl lg:text-4xl uppercase -text--dark-green">
-          FINALIZAR COMPRA
-        </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
-          {/* Columna izquierda: Formulario de datos cliente */}
-          <div className="col-span-1 mt-6">
-            {orderData.length > 0 && (
-              <CheckoutForm
-                showAddressFields={cart.some((item) => !item.reservationData)}
-                //orderData={orderData}
-                onFormChange={handleFormChange}
-              />
-            )}
-          </div>
+    <>
+      <main>
+        <div className="container mx-auto py-8 lg:py-16 px-5">
+          <h1 className="font-bold text-center text-2xl lg:text-4xl uppercase -text--dark-green">
+            FINALIZAR COMPRA
+          </h1>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
+            {/* Columna izquierda: Formulario de datos cliente */}
+            <div className="mt-6">
+              {orderData.length > 0 && (
+                <CheckoutForm
+                  showAddressFields={cart.some((item) => !item.reservationData)}
+                  //orderData={orderData}
+                  onFormChange={handleFormChange}
+                />
+              )}
+            </div>
 
-          {/* Columna derecha: Resumen del pedido */}
-          <div className="col-span-1">
-            <h2 className="font-bold text-2xl mb-6 -text--dark-green">
-              TU PEDIDO
-            </h2>
-            <div className="bg-white rounded-lg py-4 px-5 border">
-              {cart.map((product, index) => {
-                const isReservation = !!product.reservationData;
+            {/* Columna derecha: Resumen del pedido */}
+            <div className="col-span-1">
+              <h2 className="font-bold text-2xl mb-6 -text--dark-green">
+                TU PEDIDO
+              </h2>
+              <div className="bg-white rounded-lg py-4 px-5 border">
+                {cart.map((product, index) => {
+                  const isReservation = !!product.reservationData;
 
-                const title =
-                  product.title || product.attributes?.title || "Sin título";
-                const pricePerUnit = parseFloat(
-                  product.Precio || product.price || 0
-                );
-                const quantity =
-                  product.reservationData?.persons || product.quantity || 1;
+                  const title =
+                    product.title || product.attributes?.title || "Sin título";
+                  const pricePerUnit = parseFloat(
+                    product.Precio || product.price || 0
+                  );
+                  const quantity =
+                    product.reservationData?.persons || product.quantity || 1;
 
-                const subtotalPrice = calculateSubtotal(product);
+                  const subtotalPrice = calculateSubtotal(product);
 
-                return (
-                  <div
-                    key={index}
-                    className="grid grid-cols-5 py-3 pl-4 border-b items-center hover:bg-slate-100 duration-200"
-                  >                    
-                    <div className="col-span-4">
-                      <div className="font-bold -text--dark-green">{title}</div>
-                      {isReservation ? (
-                        <div className="text-sm text-gray-600">
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Fecha:
-                            </span>{" "}
-                            {product.reservationData?.date || "N/A"}
-                          </div>
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Hora:
-                            </span>{" "}
-                            {product.reservationData?.hour || "N/A"}
-                          </div>
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Personas:
-                            </span>{" "}
-                            {product.reservationData?.persons || "N/A"}
-                          </div>
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Precio por persona:
-                            </span>{" "}
-                            {formatPrice(pricePerUnit)}
-                          </div>
-                          {product.additionalService && (
+                  return (
+                    <div
+                      key={index}
+                      className="grid grid-cols-5 py-3 pl-4 gap-5 border-b items-center hover:bg-slate-100 duration-200"
+                    >
+                      <div className="col-span-4">
+                        <div className="font-bold -text--dark-green">
+                          {title}
+                        </div>
+                        {isReservation ? (
+                          <div className="text-sm text-gray-600">
                             <div>
                               <span className="font-semibold -text--dark-green">
-                                Adicional:
+                                Fecha:
                               </span>{" "}
-                              {product.additionalService.name} -{" "}
-                              {formatPrice(product.additionalService.price)}
+                              {product.reservationData?.date || "N/A"}
                             </div>
-                          )}
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Subtotal:
-                            </span>{" "}
-                            {formatPrice(subtotalPrice)}
+                            <div>
+                              <span className="font-semibold -text--dark-green">
+                                Hora:
+                              </span>{" "}
+                              {product.reservationData?.hour || "N/A"}
+                            </div>
+                            <div>
+                              <span className="font-semibold -text--dark-green">
+                                Personas:
+                              </span>{" "}
+                              {product.reservationData?.persons || "N/A"}
+                            </div>
+                            <div>
+                              <span className="font-semibold -text--dark-green">
+                                Precio por persona:
+                              </span>{" "}
+                              {formatPrice(pricePerUnit)}
+                            </div>
+                            {product.additionalService && (
+                              <div>
+                                <span className="font-semibold -text--dark-green">
+                                  Adicional:
+                                </span>{" "}
+                                {product.additionalService.name} -{" "}
+                                {formatPrice(product.additionalService.price)}
+                              </div>
+                            )}
+                            <div>
+                              <span className="font-semibold -text--dark-green">
+                                Subtotal:
+                              </span>{" "}
+                              {formatPrice(subtotalPrice)}
+                            </div>
                           </div>
+                        ) : (
+                          <>
+                            <div className="text-sm">
+                              <span className="font-semibold -text--dark-green">
+                                Precio unitario:
+                              </span>{" "}
+                              {`${formatPrice(pricePerUnit)} x ${quantity}`}
+                            </div>
+                            <div>
+                              <span className="font-semibold -text--dark-green">
+                                Valor:
+                              </span>{" "}
+                              {formatPrice(subtotalPrice)}
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="col-span-2 sm:col-span-1 sm:text-center gap-5">
+                        <div className="mb-5 sm:mb-1">
+                          {quantity} {quantity > 1 ? "unidades" : "unidad"}
                         </div>
-                      ) : (
-                        <>
-                          <div className="text-sm">
-                            <span className="font-semibold -text--dark-green">
-                              Precio unitario:
-                            </span>{" "}
-                            {`${formatPrice(pricePerUnit)} x ${quantity}`}
-                          </div>
-                          <div>
-                            <span className="font-semibold -text--dark-green">
-                              Valor:
-                            </span>{" "}
-                            {formatPrice(subtotalPrice)}
-                          </div>
-                        </>
-                      )}
+                        <div>
+                          <Tooltip
+                            title="Eliminar producto"
+                            placement="top"
+                            arrow
+                          >
+                            <button onClick={() => removeFromCart(product)}>
+                              <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300 hidden sm:block" />
+                              <span className="-text--light-red font-semibold sm:hidden">
+                                Eliminar
+                              </span>
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </div>
                     </div>
+                  );
+                })}
 
-                    <div className="col-span-1 text-center">
-                      <div>
-                        <Tooltip
-                          title="Eliminar producto"
-                          placement="top"
-                          arrow
-                        >
-                          <button onClick={() => removeFromCart(product)}>
-                            <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300" />
-                          </button>
-                        </Tooltip>
-                      </div>
-                      <div>
-                        {quantity} {quantity > 1 ? "unidades" : "unidad"}
-                      </div>
-                    </div>
+                {/* Total */}
+                <div className="grid grid-cols-4 py-8 border-t">
+                  <div className="col-span-2">
+                    <div className="font-bold text-xl">Total</div>
                   </div>
-                );
-              })}
-
-              {/* Total */}
-              <div className="grid grid-cols-4 py-8 border-t">
-                <div className="col-span-2">
-                  <div className="font-bold text-xl">Total</div>
+                  <div className="col-span-2 text-right text-xl">
+                    <div>{formatPrice(calculateTotal())}</div>
+                  </div>
                 </div>
-                <div className="col-span-2 text-right text-xl">
-                  <div>{formatPrice(calculateTotal())}</div>
-                </div>
-              </div>
 
-              {/* Botón de pago Mercado Pago */}
-              <div>
-                <CheckoutButton
-                  orderData={cart}
-                  formData={formState.formData}
-                  formValid={formState.isValid}
-                  triggerValidation={formState.triggerValidation} // ✅ Pasamos la validación al botón
-                  onBeforePayment={processOrder} 
-                />
+                {/* Botón de pago Mercado Pago */}
+                <div>
+                  <CheckoutButton
+                    orderData={cart}
+                    formData={formState.formData}
+                    formValid={formState.isValid}
+                    triggerValidation={formState.triggerValidation} // ✅ Pasamos la validación al botón
+                    onBeforePayment={processOrder}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

@@ -7,7 +7,7 @@ export async function generateMetadata() {
   const title = "Solicitud de Reembolso | Viñedo Ain Karim";
   const description =
     "Completa el formulario para solicitar la devolución de tu dinero. El proceso de reembolso tarda hasta 15 días.";
-  const canonicalUrl = "https://ainkarim.co/reembolso";
+  const canonicalUrl = "https://ainkarim.co/solicitud-reembolso";
   const imageUrl = "https://ainkarim.co/banner-reembolso.webp"; // Asegúrate de que esta imagen exista
 
   return {

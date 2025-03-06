@@ -34,16 +34,16 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
   const registerUser = watch("register");
 
   return (
-    <div className="mx-auto lg:p-8 bg-white shadow-md rounded-lg">
+    <div className="mx-auto lg:p-8 bg-white">      
       <form
         //onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 lg:grid-cols-2 sm:gap-2 gap-3"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
       >
         {/* <form
         onSubmit={onSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-3"
       > */}
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="firstName" className="sr-only">
             Primer nombre
           </label>
@@ -75,7 +75,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="secondName" className="sr-only">
             Segundo Nombre
           </label>
@@ -107,7 +107,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="lastname" className="sr-only">
             Primer apellido
           </label>
@@ -139,7 +139,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="secondSurname" className="sr-only">
             Segundo apellido
           </label>
@@ -171,7 +171,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="documentType" className="sr-only">
             Tipo de Documento
           </label>
@@ -199,7 +199,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="document" className="sr-only">
             Número de Documento
           </label>
@@ -235,7 +235,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2  sm:col-span-1">
           <label htmlFor="mobiletwo" className="sr-only">
             Celular
           </label>
@@ -270,7 +270,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         </div>
         {showAddressFields && (
           <>
-            <div>
+            <div className="col-span-2  sm:col-span-1">
               <label htmlFor="city" className="sr-only">
                 Ciudad
               </label>
@@ -302,7 +302,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
-            <div>
+            <div className="col-span-2  sm:col-span-1">
               <label htmlFor="departament" className="sr-only">
                 Departamento
               </label>
@@ -334,7 +334,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
-            <div>
+            <div className="col-span-2  sm:col-span-1">
               <label htmlFor="address" className="sr-only">
                 Dirección
               </label>
@@ -364,7 +364,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             </div>
           </>
         )}
-        <div className="mb-4">
+        <div className="mb-4 col-span-2  sm:col-span-1">
           <label htmlFor="email" className="sr-only">
             Correo
           </label>

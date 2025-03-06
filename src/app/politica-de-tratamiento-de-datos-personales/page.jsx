@@ -93,7 +93,7 @@ export default async function PersonalInformationPage() {
     );
   }
   const { title, content, image, politica } = pageData.data;
-  const canonicalUrl = "https://ainkarim.co/politica-dato-personal";
+  const canonicalUrl = "https://ainkarim.co/politica-de-tratamiento-de-datos-personales";
   const imageUrl = image?.url
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
     : "/banner-puntos-de-venta.webp";

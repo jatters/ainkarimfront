@@ -35,7 +35,7 @@ export default function PlanCard({
       itemType="https://schema.org/Reservation"
     >
       <div className="aspect-video overflow-hidden relative rounded-t-md mb-4">
-        <Link href={slug} className="">
+        <Link href={slug} className="" aria-label={`Ver ${name}`}>
           <Image
             src={imageUrl}
             alt={altimg}

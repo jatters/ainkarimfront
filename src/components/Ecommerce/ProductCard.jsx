@@ -173,7 +173,7 @@ export default function ProductCard({ product }) {
             >
               {isOnSale ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-400 line-through">
+                  <span className="text-sm text-gray-600 line-through">
                     <FormatPrice price={parsedRegularPrice} />
                   </span>
                   <span

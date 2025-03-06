@@ -66,7 +66,7 @@ export default function Header() {
         </Link>
         {/* Íconos de carrito y usuario */}
         <div className="flex items-center gap-1 sm:gap-3">
-          <Link href="/iniciar-sesion">
+          <Link href="/iniciar-sesion" aria-label="Iniciar sesión">
             <IconButton aria-label="iniciar sesión" sx={{ color: "#ffffff" }}>
               <span
                 className="icon-[solar--user-bold-duotone] hover:-text--light-green hover:scale-110 duration-300"
@@ -76,7 +76,7 @@ export default function Header() {
             </IconButton>
           </Link>
 
-          <Link href="/carrito">
+          <Link href="/carrito" aria-label="Ir al carrito">
             <IconButton aria-label="carrito" sx={{ color: "#ffffff" }}>
               <StyledBadge badgeContent={cartCount} color="error">
                 <ShoppingCartIcon />

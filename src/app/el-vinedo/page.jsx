@@ -20,7 +20,7 @@ export async function generateMetadata() {
   const metaTitle = `${title} `;
   const description =
     "Conoce la historia de Viñedo Ain Karim, nuestros proyectos en viticultura, y nuestro compromiso filantrópico.";
-  const canonicalUrl = "https://ainkarim.co/nosotros";
+  const canonicalUrl = "https://ainkarim.co/el-vinedo";
   const imageUrl = cover
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${cover.url}`
     : "https://ainkarim.co/default-cover.jpg";

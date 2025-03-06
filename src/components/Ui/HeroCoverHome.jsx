@@ -15,6 +15,9 @@ export default function HeroCoverHome() {
         autoPlay
         loop
         muted
+        aria-label="Video de vinícola"
+        role="img"
+        aria-hidden="true"                
       >
         <source src="/wine-cover.mp4" type="video/mp4" />
       </video>
