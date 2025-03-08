@@ -91,6 +91,7 @@ export default async function SinglePlanPage({ params }) {
       horarios,
       servicios_adicionales,
       reglas_planes,
+      unitPlan,
       planDescription,
     } = planData?.data[0];
 
@@ -151,7 +152,7 @@ export default async function SinglePlanPage({ params }) {
               {Number(price) > 0 && (
                 <div className="text-2xl font-semibold">
                   {formatPrice(price)}{" "}
-                  <sup className="font-normal text-base">por persona</sup>{" "}
+                  <sup className="font-normal text-base">por {unitPlan.toLowerCase()}</sup>{" "}
                 </div>
               )}
               {onlyAdults && (
@@ -169,7 +170,7 @@ export default async function SinglePlanPage({ params }) {
               {Number(max_reservations) > 0 && (
                 <div className="flex items-center gap-1 py-3 text-slate-600">
                   <span className="icon-[fluent--people-add-20-regular] text-3xl" />
-                  Máximo {max_reservations} personas por reserva.
+                  Máximo {max_reservations} {unitPlan.toLowerCase()}s por reserva.
                 </div>
               )}
               {planDescription && (
@@ -186,9 +187,10 @@ export default async function SinglePlanPage({ params }) {
                 documentId={documentId}
                 rules={reglas_planes}
                 max_reservations={max_reservations}
+                unitPlan={unitPlan}
               />
 
-              <PlanRecomendations max_reservations={max_reservations} />
+              <PlanRecomendations max_reservations={max_reservations} unitPlan={unitPlan} />
             </div>
           </div>
         </section>

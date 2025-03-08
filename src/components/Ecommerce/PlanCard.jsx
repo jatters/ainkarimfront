@@ -22,6 +22,7 @@ export default function PlanCard({
   horarios,
   additionalServices,
   max_reservations,
+  unitPlan,
 }) {
   const imageUrl = image?.formats?.small?.url
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.small.url}`
@@ -58,7 +59,7 @@ export default function PlanCard({
           <p className="font-semibold text-base">{formatPrice(price) || ""}</p>
           <p className="text-xs -text--dark-green">
             {price ? (
-              "por persona"
+              `por ${unitPlan.toLowerCase()}`
             ) : (
               <span className="break-normal">Ingresa para ver más</span>
             )}
@@ -115,6 +116,7 @@ export default function PlanCard({
             name={name}
             price={price}
             image={image}
+            unitPlan={unitPlan}
             documentId={documentId}
             rules={rules}
             horarios={horarios}

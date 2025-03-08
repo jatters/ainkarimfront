@@ -36,7 +36,8 @@ export default async function PlansHome() {
             altimg={`Image ${plan.name}`}
             onlyadults={plan.onlyAdults}
             allowchilds={plan.allowChilds}
-            horarios={plan.horarios}            
+            horarios={plan.horarios}   
+            unitPlan={plan.unitPlan}         
             rules={plan.reglas_planes}
             additionalServices={plan.servicios_adicionales}
             max_reservations={plan.max_reservations}

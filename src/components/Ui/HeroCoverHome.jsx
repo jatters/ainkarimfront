@@ -13,6 +13,8 @@ export default function HeroCoverHome() {
       <video
         className="absolute top-0 left-0 z-0 object-cover w-full h-full"
         autoPlay
+        playsInline
+        webkit-playsinline="true"
         loop
         muted
         aria-label="Video de vinícola"
@@ -30,10 +32,10 @@ export default function HeroCoverHome() {
         <p className="text-lg md:text-xl lg:text-2xl mb-8">
           Dónde vivirás una experiencia vinícola inolvidable
         </p>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-center mb-8 px-5 ">
+        <div className="flex flex-col md:flex-row gap-4  items-center justify-center mb-8 px-5 ">
           <Link
             href="/visitas"
-            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base mr-4 hover:-bg--light-green transition duration-200 "
+            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200 "
           >
             <span className="icon-[uil--schedule] text-lg" />
             Ver Planes

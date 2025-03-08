@@ -54,6 +54,7 @@ export default function ModalSchedule({
   name,
   image,
   price,
+  unitPlan,
   horarios,
   additionalServices,
   rules,
@@ -216,6 +217,7 @@ export default function ModalSchedule({
       persons: reservationData.persons,
       additionalService: selectedService,
       availableSpots: availableSpots,
+      unitPlan
     };
 
     const cartItem = normalizeReservationForCart(
@@ -224,6 +226,7 @@ export default function ModalSchedule({
         name,
         price,
         image,
+        unitPlan,
         categorias_de_producto: "Plan",
         max_reservations,
       },
@@ -359,7 +362,7 @@ export default function ModalSchedule({
               <div className="w-full md:w-64 flex flex-col space-y-4">
                 <div className="flex flex-col">
                   <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
-                    <span className="icon-[ion--people]"></span>Personas:
+                    <span className="icon-[ion--people]"></span>{unitPlan}s:
                   </div>
                   <div className="mt-2 w-full">
                     <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">

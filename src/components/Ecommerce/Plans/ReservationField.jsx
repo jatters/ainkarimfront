@@ -47,6 +47,7 @@ export default function ReservationField({
   horarios,
   additionalServices,
   rules,
+  unitPlan,
   max_reservations,
 }) {
   const { addToCart } = useContext(CartContext);
@@ -204,7 +205,8 @@ export default function ReservationField({
       hour: reservationData.hour,
       persons: reservationData.persons,
       additionalService: selectedService,
-      availableSpots: availableSpots, // <-- Se añade el valor actual de cupos disponibles
+      availableSpots: availableSpots,       // <-- Se añade el valor actual de cupos disponibles      
+      unitPlan
     };
 
     const cartItem = normalizeReservationForCart(
@@ -213,6 +215,7 @@ export default function ReservationField({
         name,
         price,
         image,
+        unitPlan,
         categorias_de_producto: "Plan",
         max_reservations, // Se espera que este valor esté presente en el plan
       },
@@ -327,7 +330,7 @@ export default function ReservationField({
             {/* Campo de Personas */}
             <div className="flex flex-col">
               <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
-                <span className="icon-[ion--people]"></span>Personas:
+                <span className="icon-[ion--people]"></span>{unitPlan}s:
               </div>
               <div className="mt-2 w-full">
                 <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">
@@ -360,7 +363,7 @@ export default function ReservationField({
             {/* Campo de Selección de Hora */}
             <div className="flex flex-col">
               <ListHours
-                schedules={horarios}
+                schedules={horarios}                
                 classNameInput="w-full"
                 classNameContainer="flex flex-col"
                 value={reservationData.hour}

@@ -1,6 +1,6 @@
 import { Link } from "next-view-transitions";
 
-export default function PlanRecomendations({ max_reservations }) {
+export default function PlanRecomendations({ max_reservations, unitPlan }) {
   return (
     <div className="p-5 border -border--dark-green rounded-md mt-8 group">
       <div className="flex items-center text-2xl font-bold gap-2 pt-2 pb-4">
@@ -25,7 +25,7 @@ export default function PlanRecomendations({ max_reservations }) {
             </a>
           </li>
           <li>
-            Si es un grupo de más de {max_reservations} personas, por favor
+            Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}s, por favor
             solicite información al correo{" "}
             <a
               href="mailto:ventas@marquesvl.com"

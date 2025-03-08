@@ -4,6 +4,18 @@ import { Link } from "next-view-transitions";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function formatDate(dateString) {
+  // Se asume que dateString viene en formato "YYYY-MM-DD"
+  const date = new Date(dateString + "T00:00:00");
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = capitalize(date.toLocaleString("es-ES", { month: "long" }));
+  const year = date.getFullYear();
+  return `${month} ${day} de ${year}`;
+}
+
 export default function CarritoPage() {
   const { cart, removeFromCart, updateQuantityInCart } =
     useContext(CartContext);
@@ -31,7 +43,7 @@ export default function CarritoPage() {
     ) {
       const maxAllowed = Math.min(product.maxQuantity, product.availableSpots);
       if (product.quantity >= maxAllowed) {
-        return; // No permite incrementar más
+        return;
       }
     }
     updateQuantityInCart(product, product.quantity + 1);
@@ -99,16 +111,17 @@ export default function CarritoPage() {
                   </tr>
                 </thead>
                 <tbody>
+                  {console.log(cart)}
                   {cart.map((item, index) => {
                     // Dado que los datos están normalizados, usamos directamente item.title, item.price, item.quantity y item.image.
                     // Si el producto es variable, concatenamos el título con el nombre de la variación.
                     const displayTitle = item.isReservation
                       ? `${item.attributes?.name || item.title} - ${
-                          item.reservationData.date
+                          formatDate(item.reservationData.date)
                         } - ${
                           parseInt(item.reservationData.persons, 10) > 1
-                            ? item.reservationData.persons + " personas"
-                            : "1 persona"
+                            ? `${item.reservationData.persons} ${item.unitPlan}s`
+                            : `1 ${item.unitPlan}`
                         } - ${item.reservationData.hour}`
                       : item.isVariable && item.variation
                       ? `${item.title} - ${item.variation.name}`
@@ -223,11 +236,11 @@ export default function CarritoPage() {
                 // Si el producto es variable, concatenamos el título con el nombre de la variación.
                 const displayTitle = item.isReservation
                   ? `${item.attributes?.name || item.title} - ${
-                      item.reservationData.date
+                      formatDate(item.reservationData.date)
                     } - ${
                       parseInt(item.reservationData.persons, 10) > 1
-                        ? item.reservationData.persons + " personas"
-                        : "1 persona"
+                        ? item.reservationData.persons + ` ${item.unitPlan}s`
+                        : `1 ${item.unitPlan}`
                     } - ${item.reservationData.hour}`
                   : item.isVariable && item.variation
                   ? `${item.title} - ${item.variation.name}`

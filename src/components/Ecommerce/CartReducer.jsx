@@ -122,6 +122,7 @@ export const actionTypes = {
         const currentAvailable = product.availableSpots ?? Infinity;
         const maxAllowed = Math.min(planMax, currentAvailable);
         const adjustedQuantity = newQuantity > maxAllowed ? maxAllowed : newQuantity;
+        const unitPlan = product.unitPlan;
   
         const updatedItem = {
           ...item,
@@ -135,7 +136,8 @@ export const actionTypes = {
           updatedItem.originalName || updatedItem.title,
           updatedItem.reservationData.date,
           adjustedQuantity,
-          updatedItem.reservationData.hour
+          updatedItem.reservationData.hour,
+          unitPlan
         );
         return updatedItem;
       }
@@ -155,12 +157,12 @@ export const actionTypes = {
   }
   
   // --- Función para rearmar el título de la reserva (puedes adaptarla a tu gusto) ---
-  function buildReservationTitle(originalName, date, persons, hour) {
+  function buildReservationTitle(originalName, date, persons, hour, unitPlan) {
     const baseName = originalName.includes(" - ")
       ? originalName.split(" - ")[0]
       : originalName;
     return `${baseName} - ${date} - ${
-      persons > 1 ? `${persons} personas` : "1 persona"
+      persons > 1 ? `${persons} ${unitPlan}s` : `1 ${unitPlan}`
     } - ${hour}`;
   }
   

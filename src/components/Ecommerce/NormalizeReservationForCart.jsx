@@ -8,6 +8,19 @@ function formatHour(hourString) {
   return `${formattedHour}:${minutes} ${period}`;
 }
 
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function formatDate(dateString) {
+  // Se asume que dateString viene en formato "YYYY-MM-DD"
+  const date = new Date(dateString + "T00:00:00");
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = capitalize(date.toLocaleString("es-ES", { month: "long" }));
+  const year = date.getFullYear();
+  return `${month} ${day} de ${year}`;
+}
+
+
 export function normalizeReservationForCart(plan, selectedOptions = {}) {
   const originalName =
     plan.name || (plan.attributes && plan.attributes.name) || "Sin nombre";
@@ -24,17 +37,20 @@ export function normalizeReservationForCart(plan, selectedOptions = {}) {
     persons = 1,
     additionalService = null,
     availableSpots,
+    unitPlan,
   } = selectedOptions;
   const formattedHour = hour ? formatHour(hour) : "";
+  const formattedDate = date ? formatDate(date) : "";
 
   // Construimos el título normalizado
-  const normalizedTitle = `${originalName} - ${date} - ${
-    persons > 1 ? persons + " personas" : "1 persona"
+  const normalizedTitle = `${originalName} - ${formattedDate} - ${
+    persons > 1 ? persons + ` ${plan.unitPlan}s` : `1 ${plan.unitPlan}`
   } - ${formattedHour}`;
 
   return {
     documentId,
     title: normalizedTitle,
+    unitPlan,
     originalName,
     price: parseFloat(price) || 0,
     quantity: persons, 

@@ -182,7 +182,7 @@ export async function POST(request) {
             );
 
             const updateReservaRes = await fetch(
-              `${STRAPI_URL}/api/reservas/${reservaDocumentId}`,
+              `${STRAPI_URL}/api/reservas/${reservaDocumentId}?populate=*`,
               {
                 method: "PUT",
                 headers: {

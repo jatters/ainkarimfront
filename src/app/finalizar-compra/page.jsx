@@ -146,7 +146,7 @@ export default function PaymentPage() {
                 />
               )}
             </div>
-
+              {console.log("finalizar compra cart",cart)}  
             {/* Columna derecha: Resumen del pedido */}
             <div className="col-span-1">
               <h2 className="font-bold text-2xl mb-6 -text--dark-green">
@@ -191,13 +191,13 @@ export default function PaymentPage() {
                             </div>
                             <div>
                               <span className="font-semibold -text--dark-green">
-                                Personas:
+                                {`${product.unitPlan}s`}:
                               </span>{" "}
                               {product.reservationData?.persons || "N/A"}
                             </div>
                             <div>
                               <span className="font-semibold -text--dark-green">
-                                Precio por persona:
+                                Precio por {`${product?.unitPlan.toLowerCase()}` || "unidad"}:
                               </span>{" "}
                               {formatPrice(pricePerUnit)}
                             </div>

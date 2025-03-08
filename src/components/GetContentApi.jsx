@@ -28,7 +28,7 @@ const fetchData = async (endpoint) => {
 //Get content of plans for home
 export async function GetPlansForHome() {
   return await fetchData(    
-    `planes?filters[showInHome][$eq]=true[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[fields][7]=max_reservations&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[populate][reglas_planes][fields]&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&pagination[limit]=4`
+    `planes?filters[showInHome][$eq]=true&[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[fields][7]=max_reservations&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[populate][reglas_planes][fields]&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&pagination[limit]=4&[fields][8]=isActive&[fields][9]=unitPlan`
   );
 }
 
@@ -49,14 +49,14 @@ export async function GetProducts() {
 //Get content of plans for plans page
 export async function GetPlans() {
   return await fetchData(
-    `planes?[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[fields][7]=max_reservations&[populate][reglas_planes][fields]&[populate][servicios_adicionales][fields]=name,price&sort[1]=order`
+    `planes?[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[fields][7]=max_reservations&[populate][reglas_planes][fields]&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&[fields][8]=isActive&[fields][9]=unitPlan`
   );
 }
 
 //Get single plans
 export async function GetSinglePlan(slug) {
   return await fetchData(
-    `planes?filters[slug][$eq]=${slug}&populate=image&populate=gallery&populate=servicios_adicionales&populate=horarios&populate=reglas_planes`
+    `planes?filters[slug][$eq]=${slug}&populate=image&populate=gallery&populate=servicios_adicionales&populate=horarios&populate=reglas_planes&[field]=unitPlan`
   );
 }
 
