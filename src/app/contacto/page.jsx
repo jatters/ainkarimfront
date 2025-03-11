@@ -176,7 +176,7 @@ export default async function contactPage() {
                     {" "}
                     Teléfono:
                   </span>
-                  <a href="tel:6012589933"> (601) 258 9933</a>
+                  <a href="tel:6012589933"> (601) 915 6635</a>
                 </li>
                 <li>
                   <span className="icon-[mdi--moped] -text--dark-green"></span>

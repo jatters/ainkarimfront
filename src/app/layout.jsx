@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { GoogleTagManager } from '@next/third-parties/google'
 import { Toaster } from "react-hot-toast";
 import { ViewTransitions } from "next-view-transitions";
 import contactPage from "./contacto/page";
@@ -217,9 +218,11 @@ export default function RootLayout(props) {
   return (
     <ViewTransitions>
       <html lang="es">
+
         <body
           className={`${montserrat.variable} ${marcellus.variable} antialiased`}
         >
+          <GoogleTagManager gtmId="GTM-KCRVM32" />
           <CartProvider>
             <Header />
             <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>

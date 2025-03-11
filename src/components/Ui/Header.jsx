@@ -119,7 +119,7 @@ export default function Header() {
                   href="/menu"
                   onClick={closeMenu}
                 >
-                  Menú
+                  Carta
                 </Link>
               </li>
               <li>
@@ -188,7 +188,7 @@ export default function Header() {
                 className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
                 href="/menu"
               >
-                Menú
+                Carta
               </Link>
             </li>
             <li>

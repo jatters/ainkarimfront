@@ -53,9 +53,9 @@ export default function Footer() {
               <span className="font-semibold">Teléfono: </span>
               <a
                 className="hover:-text--light-green duration-200"
-                href="tel:6012589933"
-              >
-                (601) 258 9933 Opción 2
+                href="tel:6019156635"
+              >                
+                (601) 915 6635
               </a>
             </li>
             <li className="flex flex-wrap gap-1 items-center">
@@ -214,9 +214,9 @@ export default function Footer() {
               <span className="font-semibold">Teléfono:</span>
               <a
                 className="hover:-text--light-green duration-200"
-                href="tel:6012589933"
+                href="tel:6019156635"
               >
-                (601) 258 9933
+                (601) 915 6635
               </a>
             </li>
             <li className="flex items-center gap-1">Bogotá, Colombia.</li>
