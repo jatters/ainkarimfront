@@ -32,6 +32,20 @@ export async function GetPlansForHome() {
   );
 }
 
+//Get plans for sitemap
+export async function GetPlansForSitemap() {
+  return await fetchData(
+    `planes?filters[isActive][$eq]=true&[fields][0]=slug&[fields][1]=updatedAt`
+  );
+}
+
+//Get products for sitemap
+export async function GetProductsForSitemap() {
+  return await fetchData(
+    `productos?filters[isActive][$eq]=true&[fields][0]=slug&[fields][1]=updatedAt`
+  );
+}
+
 //Get content of products for home
 export async function GetProductsForHome() {
   return await fetchData(
