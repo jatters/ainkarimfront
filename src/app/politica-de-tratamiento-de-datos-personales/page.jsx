@@ -37,7 +37,7 @@ const extractPlainText = (content) => {
 
 // Metadatos dinámicos para la página
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/politica-dato-personal";
+  const canonicalUrl = "https://ainkarim.co/politica-de-tratamiento-de-datos-personales";
   let metaTitle = "Política de Tratamientos de Datos Personales";
   let metaDescription =
     "Conoce cómo tratamos y protegemos tus datos personales en Viñedo Ain Karim.";

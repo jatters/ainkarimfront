@@ -17,7 +17,7 @@ export async function generateMetadata() {
     };
   }
   const { title, cover } = data.data;
-  const metaTitle = `${title} `;
+  const metaTitle = `Conoce ${title} `;
   const description =
     "Conoce la historia de Viñedo Ain Karim, nuestros proyectos en viticultura, y nuestro compromiso filantrópico.";
   const canonicalUrl = "https://ainkarim.co/el-vinedo";

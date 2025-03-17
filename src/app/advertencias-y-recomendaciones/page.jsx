@@ -24,7 +24,7 @@ async function GetPageData() {
   }
 }
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendacion";
+  const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendaciones";
   const metaDescription =
     "Consulta las advertencias y recomendaciones importantes para tu visita a Viñedo Ain Karim.";
   let title = "Advertencias y Recomendaciones";

@@ -6,11 +6,11 @@ import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
 
 export const metadata = {
-  title: "Menú | Viñedo Ain Karim",
+  title: "Carta | Viñedo Ain Karim",
   description:
     "Explora nuestro menú de temporada con platillos únicos y deliciosas opciones gastronómicas en el Viñedo Ain Karim. Descubre sabores auténticos y experiencias culinarias memorables.",
   openGraph: {
-    title: "Menú | Viñedo Ain Karim",
+    title: "Carta | Viñedo Ain Karim",
     description:
       "Explora nuestro menú de temporada con platillos únicos y deliciosas opciones gastronómicas en el Viñedo Ain Karim.",
     type: "website",
