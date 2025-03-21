@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
-  // Extraemos las propiedades necesarias del objeto product
   const {
     slug,
     title,
@@ -30,7 +29,7 @@ export default function ProductCard({ product }) {
   const parsedRegularPrice = parseInt(regularPrice, 10);
   const parsedPrice = parseInt(price, 10);
   const isOnSale = parsedRegularPrice > parsedPrice;
-  // Estado local para la variación seleccionada (solo para productos variables)
+
   const [selectedVariation, setSelectedVariation] = useState(null);
   const { addToCart } = useContext(CartContext);
   const router = useRouter();
@@ -98,7 +97,7 @@ export default function ProductCard({ product }) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: title,
-    url: `https://ainkarim.co/producto/${slug}`, // Agregado para definir la URL del producto
+    url: `https://ainkarim.co/producto/${slug}`,
     description: `Compra ${title}, parte de la selección exclusiva de Viñedo Ain Karim.`,
     image: imageUrl,
     category: categoryName,
@@ -110,7 +109,12 @@ export default function ProductCard({ product }) {
       "@type": "Offer",
       url: `https://ainkarim.co/producto/${slug}`,
       priceCurrency: "COP",
-      price: parsedPrice,
+      price: isOnSale ? parsedPrice : parsedRegularPrice, // Asegúrate de que price sea un número
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: isOnSale ? parsedPrice : parsedRegularPrice, // Asegúrate de que price sea un número
+        priceCurrency: "COP",
+      },
       availability: isActive
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",

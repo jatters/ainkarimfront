@@ -90,12 +90,15 @@ export default async function VisitasPage() {
               alt: `Icono ${experiencia.name}`,
               iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon?.url}`,
             }));
+            if (!plan.isActive) return null;
             
             return (      
-              <>
-              {plan.isActive && (
+              <article className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
+               key={plan.documentId}
+               itemScope
+      itemType="https://schema.org/Reservation" 
+               >
                 <PlanCard
-                key={plan.documentId}
                 slug={`/visita/${plan.slug}`}
                 name={plan.name}
                 documentId={plan.documentId}
@@ -116,8 +119,7 @@ export default async function VisitasPage() {
                 additionalServices={plan.servicios_adicionales}
                 max_reservations={plan.max_reservations}
               />
-              )}
-              </>
+              </article>
             );
           })}
         </div>

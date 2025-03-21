@@ -27,14 +27,10 @@ export default function PlanCard({
   const imageUrl = image?.formats?.small?.url
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.small.url}`
     : "";
-  
+
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
-    <article
-      className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
-      itemScope
-      itemType="https://schema.org/Reservation"
-    >
+    <>      
       <div className="aspect-video overflow-hidden relative rounded-t-md mb-4">
         <Link href={slug} className="" aria-label={`Ver ${name}`}>
           <Image
@@ -66,7 +62,6 @@ export default function PlanCard({
           </p>
         </div>
       </div>
-
       <ul
         className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}
         aria-label="Caracteristicas del plan"
@@ -110,7 +105,7 @@ export default function PlanCard({
         >
           <span className="icon-[ph--eye]"></span> Ver
         </Link>
-        
+
         {horarios.length > 0 && (
           <ModalSchedule
             name={name}
@@ -125,6 +120,6 @@ export default function PlanCard({
           />
         )}
       </div>
-    </article>
+    </>
   );
 }
