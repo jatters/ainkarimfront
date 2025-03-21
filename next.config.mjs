@@ -54,7 +54,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/wp-content/uploads/",
+        source: "/wp-content/uploads",
         destination: "/",
         permanent: true,
       },
@@ -64,12 +64,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/page/4/",
+        source: "/page/4",
         destination: "/productos",
         permanent: true,
       },
       {
-        source: "/tienda/",
+        source: "/tienda",
         destination: "/productos",
         permanent: true,
       },
@@ -89,7 +89,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/categoria/maridajes/page/2/",
+        source: "/categoria/maridajes/page/2",
         destination: "/productos",
         permanent: true,
       },
@@ -104,7 +104,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/categoria/souvenirs/page/2/",
+        source: "/categoria/souvenirs/page/2",
         destination: "/productos",
         permanent: true,
       },
@@ -134,7 +134,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/categoria/vinos/page/2/",
+        source: "/categoria/vinos/page/2",
         destination: "/productos",
         permanent: true,
       },
@@ -149,12 +149,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/faq/",
+        source: "/faq",
         destination: "/preguntas-frecuentes",
         permanent: true,
       },
       {
-        source: "/planes-del-vinedo/",
+        source: "/planes-del-vinedo",
         destination: "/visitas",
         permanent: true,
       },
@@ -164,7 +164,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/politica-privacidad/",
+        source: "/politica-privacidad",
         destination: "/politica-de-tratamiento-de-datos-personales",
         permanent: true,
       },
@@ -174,32 +174,32 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/portfolio/",
+        source: "/portfolio",
         destination: "/",
         permanent: true,
       },
       {
-        source: "/portfolio/lorem-ipsum/",
+        source: "/portfolio/lorem-ipsum",
         destination: "/",
         permanent: true,
       },
       {
-        source: "/portfolio/portfolio-big/",
+        source: "/portfolio/portfolio-big",
         destination: "/",
         permanent: true,
       },
       {
-        source: "/portfolio/vimeo-video/",
+        source: "/portfolio/vimeo-video",
         destination: "/",
         permanent: true,
       },
       {
-        source: "/preguntas-frecuentes/puntos-de-venta-villa-de-leyva/",
+        source: "/preguntas-frecuentes/puntos-de-venta-villa-de-leyva",
         destination: "/puntos-de-venta",
         permanent: true,
       },
       {
-        source: "/producto/complemento-cumpleanos/",
+        source: "/producto/complemento-cumpleanos",
         destination: "/productos",
         permanent: true,
       },
@@ -209,12 +209,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/puntos-de-venta-/",
+        source: "/puntos-de-venta-",
         destination: "/puntos-de-venta",
         permanent: true,
       },
       {
-        source: "/puntos-de-venta-villa-de-leyva/",
+        source: "/puntos-de-venta-villa-de-leyva",
         destination: "/puntos-de-venta",
         permanent: true,
       },
@@ -224,22 +224,22 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/solicitud-de-reembolso/",
+        source: "/solicitud-de-reembolso",
         destination: "/solicitud-reembolso",
         permanent: true,
       },
       {
-        source: "/tienda/",
+        source: "/tienda",
         destination: "/productos",
         permanent: true,
       },
       {
-        source: "/tienda/page/1/",
+        source: "/tienda/page/1",
         destination: "/productos",
         permanent: true,
       },
       {
-        source: "/producto/plan-marques-2/",
+        source: "/producto/plan-marques-2",
         destination: "/productos",
         permanent: true,
       },
