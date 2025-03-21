@@ -15,7 +15,7 @@ export default async function PlansHome() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-center  mt-10 gap-x-4 mx-5 gap-y-7">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center  mt-10 gap-x-2 gap-y-7">
       {plansData.data.slice(0, 4).map((plan) => {
         const experienciesList = plan.experiencias.map((experiencia) => ({
           id: experiencia.documentId,
@@ -25,23 +25,29 @@ export default async function PlansHome() {
         }));
 
         return (
-          <PlanCard
+          <article
+            className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
             key={plan.documentId}
-            slug={`/visita/${plan.slug}`}
-            name={plan.name}
-            documentId={plan.documentId}  
-            price={plan.price}
-            experiences={experienciesList}            
-            image={plan.image}
-            altimg={`Image ${plan.name}`}
-            onlyadults={plan.onlyAdults}
-            allowchilds={plan.allowChilds}
-            horarios={plan.horarios}   
-            unitPlan={plan.unitPlan}         
-            rules={plan.reglas_planes}
-            additionalServices={plan.servicios_adicionales}
-            max_reservations={plan.max_reservations}
-          />
+            itemScope
+            itemType="https://schema.org/Reservation"
+          >
+            <PlanCard
+              slug={`/visita/${plan.slug}`}
+              name={plan.name}
+              documentId={plan.documentId}
+              price={plan.price}
+              experiences={experienciesList}
+              image={plan.image}
+              altimg={`Image ${plan.name}`}
+              onlyadults={plan.onlyAdults}
+              allowchilds={plan.allowChilds}
+              horarios={plan.horarios}
+              unitPlan={plan.unitPlan}
+              rules={plan.reglas_planes}
+              additionalServices={plan.servicios_adicionales}
+              max_reservations={plan.max_reservations}
+            />
+          </article>
         );
       })}
     </div>

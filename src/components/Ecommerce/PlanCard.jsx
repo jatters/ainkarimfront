@@ -30,7 +30,7 @@ export default function PlanCard({
 
   const numColumns = experiences.length === 1 ? 1 : 4;
   return (
-    <>      
+    <>
       <div className="aspect-video overflow-hidden relative rounded-t-md mb-4">
         <Link href={slug} className="" aria-label={`Ver ${name}`}>
           <Image
@@ -43,7 +43,7 @@ export default function PlanCard({
         </Link>
       </div>
       <div className="flex w-full px-5 justify-between items-center">
-        <h2 className=" text-xl md:text-2xl mb-1 font-bold -text--dark-green uppercase">
+        <h2 className=" text-xl md:text-xl xl:text-lg 2xl:text-2xl xl:mb-1 font-bold -text--dark-green uppercase">
           <Link
             className="group-hover:-text--dark-red duration-300"
             href={slug}
@@ -85,17 +85,15 @@ export default function PlanCard({
         ))}
       </ul>
       {onlyadults === true && (
-        <div className="flex gap-1 mb-5 text-slate-600 font-medium ">
+        <div className="flex gap-1 items-center mb-5 text-slate-600 font-medium ">
           <span className="icon-[uil--18-plus] text-2xl"></span>
-          <span>Solo para mayores de edad</span>
+          <span className="text-sm">Solo para mayores de edad</span>
         </div>
       )}
       {allowchilds === true && (
-        <div className="flex gap-1 mb-5 text-slate-600 font-medium">
-          <span className="text-center">
-            <span className="icon-[material-symbols--child-care-outline] text-2xl -mb-2"></span>
-            Ingreso de menores de edad permitido sin costo
-          </span>
+        <div className="flex items-center mb-5 gap-1 text-slate-600 font-medium">
+          <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>
+          <span className="text-center text-sm">Ingreso gratuito para menores</span>
         </div>
       )}
       <div className="flex flex-wrap gap-5  justify-center">
