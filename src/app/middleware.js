@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-    console.log("⏩ Middleware interceptando:", req.nextUrl.pathname);
   const token = req.cookies.get("token");
 
   const isAuthRoute = req.nextUrl.pathname.startsWith("/mi-cuenta");
@@ -14,5 +13,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/mi-cuenta/:path*"], 
+  matcher: ["/mi-cuenta/:path*"],
 };

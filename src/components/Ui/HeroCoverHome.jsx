@@ -27,7 +27,7 @@ export default function HeroCoverHome() {
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20 w-full text-white">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold mb-6 uppercase font-serif">
-          Explora Ain Karim
+          Visita Ain Karim
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl mb-8">
           Dónde vivirás una experiencia vinícola inolvidable

@@ -20,7 +20,7 @@ async function GetAvisoPrivacidadData() {
 
     return res.json();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 // Función auxiliar para extraer texto plano de bloques o strings

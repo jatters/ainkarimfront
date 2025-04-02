@@ -2,8 +2,21 @@ import Image from "next/image";
 import { Link } from "next-view-transitions";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
+import { GetCompanyInfo } from "../GetContentApi";
 
-export default function Footer() {
+const formatPhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) return "";
+  const cleaned = phoneNumber.toString().replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return `(${match[1]}) ${match[2]} ${match[3]}`;
+  }
+  return phoneNumber;
+};
+
+export default async function Footer() {
+  const companyInfo = await GetCompanyInfo();
+
   return (
     <footer className="-bg--dark-green text-white">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-5 md:px-12 pt-8 md:pt-16 pb-6 md:pb-12 gap-8">
@@ -18,65 +31,67 @@ export default function Footer() {
             <li>
               <div className="flex flex-wrap gap-1 items-center">
                 <span className="icon-[gridicons--location] text-xl"></span>
-                <span className="font-semibold">Ubicación: </span> Km 10 Vía
-                Villa de Leyva - Santa Sofía
+                {companyInfo?.data?.vinedoAddress && (
+                  <>
+                    <span className="font-semibold">Ubicación: </span>{" "}
+                    {companyInfo?.data?.vinedoAddress}
+                  </>
+                )}
               </div>
               <div className="flex flex-wrap gap-2 justify-center mt-3 mb-3">
-                <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
-                  <a
-                    className="flex flex-col items-center"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    aria-label="Abrir ubicación en Google Maps"
-                    href="https://www.google.com/maps/place/Viñedo+Ain+Karim/@5.6539568,-73.5901023,17z/data=!3m1!4b1!4m6!3m5!1s0x8e41d09be8b159e5:0x4b74ccd285409a6d!8m2!3d5.6539515!4d-73.5875274!16s%2Fg%2F11c42mqkdf?entry=ttu"
-                  >
-                    <Image src={maps} alt="Logo Google Maps" width={15} />
-                    <span>Abrir en Google Maps</span>
-                  </a>
-                </div>
-                <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
-                  <a
-                    className="flex flex-col items-center"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    aria-label="Abrir ubicación en Waze"
-                    href="https://ul.waze.com/ul?preview_venue_id=187695161.1877017141.11201163&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
-                  >
-                    <Image src={waze} alt="Logo Waze" width={84} />
-                    <span>Abrir en Waze</span>
-                  </a>
-                </div>
+                {companyInfo?.data?.linkGoogleMaps && (
+                  <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
+                    <a
+                      className="flex flex-col items-center"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="Abrir ubicación en Google Maps"
+                      href={companyInfo?.data?.linkGoogleMaps}
+                    >
+                      <Image src={maps} alt="Logo Google Maps" width={15} />
+                      <span>Abrir en Google Maps</span>
+                    </a>
+                  </div>
+                )}
+                {companyInfo?.data?.linkWaze && (
+                  <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
+                    <a
+                      className="flex flex-col items-center"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="Abrir ubicación en Waze"
+                      href={companyInfo?.data?.linkWaze}
+                    >
+                      <Image src={waze} alt="Logo Waze" width={84} />
+                      <span>Abrir en Waze</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </li>
             <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[mdi--phone] text-xl"></span>
               <span className="font-semibold">Teléfono: </span>
-              <a
-                className="hover:-text--light-green duration-200"
-                href="tel:6019156635"
-              >                
-                (601) 915 6635
-              </a>
-            </li>
-            <li className="flex flex-wrap gap-1 items-center">
-              <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
-              <span className="font-semibold">Información: </span>
-              <a
-                className="hover:-text--light-green duration-200"
-                href="tel:3174319583"
-              >
-                317 431 9583
-              </a>
+              {companyInfo?.data?.vinedoPhone && (
+                <a
+                  className="hover:-text--light-green duration-200"
+                  href={`tel:${companyInfo?.data?.vinedoPhone}`}
+                >
+                  {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                </a>
+              )}
             </li>
             <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[material-symbols--mail] text-xl"></span>
               <span className="font-semibold">Correo: </span>
-              <a
-                className="hover:-text--light-green duration-200"
-                href="mailto:ventas@marquesvl.com"
-              >
-                ventas@marquesvl.com
-              </a>
+              {companyInfo?.data?.contactEmail && (
+                <a
+                  className="hover:-text--light-green duration-200"
+                  href={`mailto:${companyInfo?.data?.contactEmail}`}
+                >
+                  {companyInfo?.data?.contactEmail}
+                </a>
+              )}
             </li>
           </ul>
         </div>
@@ -168,31 +183,54 @@ export default function Footer() {
             className="flex flex-col space-y-2 text-sm"
             aria-label="Horarios de atención del Viñedo Ain Karim"
           >
+            {companyInfo?.data?.open && (
+              <li>
+                <span className="font-semibold">Apertura:</span>{" "}
+                {companyInfo?.data?.open}
+              </li>
+            )}
+            {companyInfo?.data?.lastTour && (
+              <li>
+                <span className="font-semibold">Último recorrido:</span>{" "}
+                {companyInfo?.data?.lastTour}
+              </li>
+            )}
+            {companyInfo?.data?.close && (
+              <li>
+                <span className="font-semibold">Cierre:</span>{" "}
+                {companyInfo?.data?.close}
+              </li>
+            )}
             <li>
-              <span className="font-semibold">Lunes:</span> 10:30 am a 5:30 pm
+              <div className="h-[1px] bg-white w-20 my-2" />
             </li>
             <li>
-              <span className="font-semibold">Martes:</span> Cerrado
+              <span className="font-semibold">Lunes:</span>{" "}
+              {companyInfo?.data?.monday}
             </li>
             <li>
-              <span className="font-semibold">Miércoles:</span> 10:30 am a 5:30
-              pm
+              <span className="font-semibold">Martes:</span>{" "}
+              {companyInfo?.data?.tuesday}
             </li>
             <li>
-              <span className="font-semibold">Jueves:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Miércoles:</span>{" "}
+              {companyInfo?.data?.wednesday}
             </li>
             <li>
-              <span className="font-semibold">Viernes:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Jueves:</span>{" "}
+              {companyInfo?.data?.thursday}
             </li>
             <li>
-              <span className="font-semibold">Sábado:</span> 10:30 am a 5:30 pm
+              <span className="font-semibold">Viernes:</span>{" "}
+              {companyInfo?.data?.friday}
             </li>
             <li>
-              <span className="font-semibold">Domingo y festivos:</span> 10:30
-              am a 5:30 pm
+              <span className="font-semibold">Sábado:</span>{" "}
+              {companyInfo?.data?.saturday}
             </li>
             <li>
-              <span className="font-semibold">Último recorrido:</span> 3:30pm
+              <span className="font-semibold">Domingo y festivos:</span>{" "}
+              {companyInfo?.data?.sunday}
             </li>
           </ul>
         </div>
@@ -206,20 +244,21 @@ export default function Footer() {
           >
             <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[gridicons--location] text-xl"></span>
-              <span className="font-semibold">Dirección:</span> Av. Calle 127 #
-              13A-32 Ofi. 202
+              <span className="font-semibold">Dirección:</span>{" "}
+              {companyInfo?.data?.officeAddress}
             </li>
             <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
               <span className="font-semibold">Teléfono:</span>
-              <a
-                className="hover:-text--light-green duration-200"
-                href="tel:6019156635"
-              >
-                (601) 915 6635
-              </a>
+              {companyInfo?.data?.vinedoPhone && (
+                <a
+                  className="hover:-text--light-green duration-200"
+                  href={`tel:${companyInfo?.data?.vinedoPhone}`}
+                >
+                  {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                </a>
+              )}
             </li>
-            <li className="flex items-center gap-1">Bogotá, Colombia.</li>
           </ul>
         </div>
       </div>
@@ -229,39 +268,45 @@ export default function Footer() {
           className="flex flex-row  gap-4 my-3"
           aria-label="Redes sociales del Viñedo Ain Karim"
         >
-          <li>
-            <a
-              className="text-3xl"
-              href="https://www.instagram.com/vinedoainkarim"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Ir a perfil de Instagram del Viñedo Ain Karim"
-            >
-              <span className="icon-[mdi--instagram] hover:-text--light-green hover:scale-110 duration-200"></span>
-            </a>
-          </li>
-          <li>
-            <a
-              className="text-3xl"
-              href="https://web.facebook.com/Vinedoainkarim"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Ir a perfil de Facebook del Viñedo Ain Karim"
-            >
-              <span className="icon-[carbon--logo-facebook] hover:-text--light-green hover:scale-110 duration-200"></span>
-            </a>
-          </li>
-          <li>
-            <a
-              className="text-3xl"
-              href="https://www.tripadvisor.co/Attraction_Review-g676524-d5888335-Reviews-Vinedo_Ain_Karim-Villa_de_Leyva_Boyaca_Department.html"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Ir a perfil de Tripadvisor"
-            >
-              <span className="icon-[simple-icons--tripadvisor] hover:-text--light-green hover:scale-110 duration-200"></span>
-            </a>
-          </li>
+          {companyInfo?.data?.instagram && (
+            <li>
+              <a
+                className="text-3xl"
+                href={companyInfo?.data?.instagram}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Ir a perfil de Instagram del Viñedo Ain Karim"
+              >
+                <span className="icon-[mdi--instagram] hover:-text--light-green hover:scale-110 duration-200"></span>
+              </a>
+            </li>
+          )}
+          {companyInfo?.data?.facebook && (
+            <li>
+              <a
+                className="text-3xl"
+                href={companyInfo?.data?.facebook}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Ir a perfil de Facebook del Viñedo Ain Karim"
+              >
+                <span className="icon-[carbon--logo-facebook] hover:-text--light-green hover:scale-110 duration-200"></span>
+              </a>
+            </li>
+          )}
+          {companyInfo?.data?.tripAdvisor && (
+            <li>
+              <a
+                className="text-3xl"
+                href={companyInfo?.data?.tripAdvisor}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Ir a perfil de Tripadvisor"
+              >
+                <span className="icon-[simple-icons--tripadvisor] hover:-text--light-green hover:scale-110 duration-200"></span>
+              </a>
+            </li>
+          )}
         </ul>
       </div>
       <div className="bg-white text-black">
@@ -271,7 +316,7 @@ export default function Footer() {
         >
           Desarrollado con ☕ & 💙 por{" "}
           <a
-            href="https://www.einscube.com/?utm_source=ainkarim"
+            href="https://einscube.com/?utm_source=ainkarim"
             target="_blank"
             aria-label="Ir a la página del Desarrollador"
             className="-text--red-cruz hover:-text--grey-dark hover:font-semibold hover:transition-all"

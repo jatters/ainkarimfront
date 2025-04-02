@@ -20,7 +20,7 @@ async function GetDataPage() {
 
     return res.json();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export async function generateMetadata() {

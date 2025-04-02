@@ -7,6 +7,7 @@ import { Link } from "next-view-transitions";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
 import Script from "next/script";
+import { GetCompanyInfo } from "@/components/GetContentApi";
 
 export async function getIPAddress() {
   try {
@@ -18,6 +19,17 @@ export async function getIPAddress() {
     return "IP desconocida";
   }
 }
+
+const formatPhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) return "";
+  const cleaned = phoneNumber.toString().replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return `(${match[1]}) ${match[2]} ${match[3]}`;
+  }
+  return phoneNumber;
+};
+
 export async function generateMetadata() {
   const title = "Contacto | Viñedo Ain Karim";
   const description =
@@ -54,7 +66,14 @@ export async function generateMetadata() {
 
 export default async function contactPage() {
   const ipAddress = await getIPAddress();
-  const userAgent = headers().get("user-agent");
+  const userAgent = await (await headers()).get("user-agent");
+  const companyInfo = await GetCompanyInfo();
+
+  if (!companyInfo) {
+    return (
+      <div>Lo sentimos, no se pudo cargar la información de la empresa.</div>
+    );
+  }
 
   const jsonLD = {
     "@context": "https://schema.org",
@@ -128,7 +147,7 @@ export default async function contactPage() {
                     {" "}
                     Ubicación:
                   </span>{" "}
-                  Km 10 Vía Villa de Leyva – Santa Sofía
+                  {companyInfo?.data?.vinedoAddress}
                 </li>
                 <li>
                   <span className="icon-[material-symbols--phonelink-ring-rounded] -text--dark-green"></span>
@@ -136,7 +155,9 @@ export default async function contactPage() {
                     {" "}
                     Teléfono:
                   </span>{" "}
-                  <a href="tel:3174319583">317 431 9583</a>
+                  <a href={`tel:${companyInfo?.data?.vinedoPhone}`}>
+                    {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  </a>
                 </li>
                 <li>
                   <span className="icon-[solar--clock-square-broken] -text--dark-green"></span>
@@ -144,16 +165,16 @@ export default async function contactPage() {
                     {" "}
                     Horarios:
                   </span>{" "}
-                  Abierto todos los días de 10:30 am a 5:30 pm, excepto los
+                  Abierto todos los días de 10:30 am a 5:00 pm, excepto los
                   martes.
                 </li>
                 <li className="ml-5">Ultimo recorrido 3:30pm</li>
                 <li>
                   <span className="icon-[ion--mail-outline] -text--dark-green"></span>
                   <span className="font-bold -text--dark-green"> Correo:</span>
-                  <a href="mailto:ventas@marquesvl.com">
+                  <a href={`mailto:${companyInfo?.data?.contactEmail}`}>
                     {" "}
-                    ventas@marquesvl.com
+                    {companyInfo?.data?.contactEmail}
                   </a>
                 </li>
               </ul>
@@ -168,7 +189,7 @@ export default async function contactPage() {
                   <span className="font-bold -text--dark-green">
                     Dirección:
                   </span>{" "}
-                  Av. Calle 127 # 13A-32 Ofi. 202 | Bogotá, Colombia
+                  {companyInfo?.data?.officeAddress}
                 </li>
                 <li>
                   <span className="icon-[material-symbols-light--phone-in-talk] -text--dark-green"></span>
@@ -176,12 +197,9 @@ export default async function contactPage() {
                     {" "}
                     Teléfono:
                   </span>
-                  <a href="tel:6012589933"> (601) 915 6635</a>
-                </li>
-                <li>
-                  <span className="icon-[mdi--moped] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green"> Pedidos:</span>
-                  <a href="tel:3175182745"> 317 518 2745</a>
+                  <a href={`tel:${companyInfo?.data?.vinedoPhone}`}>
+                    {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  </a>
                 </li>
               </ul>
             </div>
@@ -196,8 +214,8 @@ export default async function contactPage() {
           <div className="flex flex-col gap-5 flex-wrap items-center">
             <div className="flex items-center flex-wrap justify-center gap-1 text-center">
               <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
-              <span className="font-bold -text--dark-green">Ubicación:</span> Km
-              10 Vía Villa de Leyva – Santa Sofía
+              <span className="font-bold -text--dark-green">Ubicación:</span>{" "}
+              {companyInfo?.data?.vinedoAddress}
             </div>
             <div className="flex flex-wrap gap-5 justify-center">
               <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
@@ -206,7 +224,7 @@ export default async function contactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Abrir ubicación en Google Maps"
-                  href="https://www.google.com/maps/place/Viñedo+Ain+Karim/@5.6539568,-73.5901023,17z/data=!3m1!4b1!4m6!3m5!1s0x8e41d09be8b159e5:0x4b74ccd285409a6d!8m2!3d5.6539515!4d-73.5875274!16s%2Fg%2F11c42mqkdf?entry=ttu"
+                  href={companyInfo?.data?.linkGoogleMaps}
                 >
                   <Image src={maps} alt="Logo Google Maps" width={15} />
                   <span>Abrir en Google Maps</span>
@@ -218,7 +236,7 @@ export default async function contactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Abrir ubicación en Waze"
-                  href="https://ul.waze.com/ul?preview_venue_id=187695161.1877017141.11201163&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
+                  href={companyInfo?.data?.linkWaze}
                 >
                   <Image src={waze} alt="Logo Waze" width={84} />
                   <span>Abrir en Waze</span>

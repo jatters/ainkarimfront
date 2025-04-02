@@ -94,3 +94,17 @@ export async function GetAboutUs() {
     `nosotro?populate[timeline][populate][image][fields]=url,alternativeText&populate[viticultura][populate][image][fields]=url,alternativeText&populate[filantropia][populate][image][fields]=url,alternativeText&populate[slider][populate][image][fields]=url,alternativeText&populate[cover][fields]=url,alternativeText`
   );
 }
+
+//Get Company info
+export async function GetCompanyInfo() {
+  return await fetchData(
+    `el-vinedo?populate=*`
+  );
+}
+
+//Get Active Coupons
+export async function GetCoupons(couponCode) {
+  return await fetchData(
+    `promociones?populate=*&filters[coupon][isActive][$eq]=true&filters[coupon][code][$eq]=${couponCode}`
+  );
+}

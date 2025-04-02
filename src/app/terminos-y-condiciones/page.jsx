@@ -21,10 +21,10 @@ async function GetDataPage() {
 
     return res.json();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
-// Función para extraer texto plano si el contenido no es un string
+
 const extractPlainText = (content) => {
   if (!content) return "";
   if (typeof content === "string") return content;

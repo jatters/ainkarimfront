@@ -1,6 +1,9 @@
 import { Link } from "next-view-transitions";
 
-export default function PlanRecomendations({ max_reservations, unitPlan }) {
+export default function PlanRecomendations({ max_reservations, unitPlan, contactEmail, ventasEmail }) {
+  if (!contactEmail) {
+    return null;
+  }
   return (
     <div className="p-5 border -border--dark-green rounded-md mt-8 group">
       <div className="flex items-center text-2xl font-bold gap-2 pt-2 pb-4">
@@ -15,26 +18,26 @@ export default function PlanRecomendations({ max_reservations, unitPlan }) {
           <li>
             Para reprogramación de su reserva, envíe un correo a{" "}
             <a
-              href="mailto:ventas@marquesvl.com"
+              href={`mailto:${ventasEmail}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Ventas del Viñedo Ain Karim"
               className="hover:-text--light-green hover:underline duration-200"
             >
-              ventas@marquesvl.com
+              {ventasEmail}
             </a>
           </li>
           <li>
             Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}s, por favor
             solicite información al correo{" "}
             <a
-              href="mailto:ventas@marquesvl.com"
+              href={`mailto:${contactEmail}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Viñedo Ain Karim"
               className="hover:-text--light-green hover:underline duration-200"
             >
-              ventas@marquesvl.com.
+              {contactEmail}
             </a>
           </li>
         </ul>

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { cartReducer, actionTypes } from "@/components/Ecommerce/CartReducer";
 
 export const CartContext = createContext();
@@ -8,6 +8,7 @@ const initialState = [];
 
 export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, initialState);
+  const [coupon, setCoupon] = useState(null);
 
   // Cargar carrito desde localStorage en el primer render
   useEffect(() => {
@@ -23,6 +24,26 @@ export function CartProvider({ children }) {
       console.error("Error parsing cart data from localStorage:", error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      const storedCoupon = localStorage.getItem("coupon");
+      if (storedCoupon) {
+        setCoupon(JSON.parse(storedCoupon));
+      }
+    } catch (error) {
+      console.error("Error parsing coupon data from localStorage:", error);
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    if (coupon) {
+      localStorage.setItem("coupon", JSON.stringify(coupon));
+    } else {
+      localStorage.removeItem("coupon");
+    }
+  }, [coupon]);
 
   // Guardar carrito en localStorage cada vez que cambie
   useEffect(() => {
@@ -70,6 +91,8 @@ export function CartProvider({ children }) {
         updateQuantityInCart,
         clearCart,
         incrementarCantidad,
+        coupon,
+        setCoupon
       }}
     >
       {children}

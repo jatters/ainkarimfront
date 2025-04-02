@@ -6,14 +6,13 @@ import Image from "next/image";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
 import Tooltip from "@mui/material/Tooltip";
 import Head from "next/head";
+import CouponInput from "@/components/Ecommerce/CouponInput";
 
 export default function PaymentPage() {
-  const { cart, removeFromCart } = useContext(CartContext);
+  const { cart, removeFromCart, coupon } = useContext(CartContext);
   const [formState, setFormState] = useState({ isValid: false, formData: {} });
   const [processing, setProcessing] = useState(false);
-  /* const handleFormSubmit = (formData) => {
-    setFormState({ isValid: true, formData });
-  }; */
+
   const handleFormChange = (updatedFormState) => {
     setFormState(updatedFormState);
   };
@@ -24,7 +23,6 @@ export default function PaymentPage() {
       let userId = null;
 
       if (data.register) {
-        console.log("🟢 Registrando usuario...");
         const registerResponse = await fetch(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local/register`,
           {
@@ -66,7 +64,6 @@ export default function PaymentPage() {
       };
 
       if (userId) {
-        console.log("🟢 Actualizando datos del usuario...");
         await fetch(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/${userId}`,
           {
@@ -99,6 +96,13 @@ export default function PaymentPage() {
   };
 
   const calculateTotal = () => {
+    if (coupon) {
+      return (
+        cart.reduce((total, item) => total + calculateSubtotal(item), 0) -
+        cart.reduce((total, item) => total + calculateSubtotal(item), 0) *
+          (coupon.percent / 100)
+      );
+    }
     return cart.reduce((total, item) => total + calculateSubtotal(item), 0);
   };
 
@@ -111,7 +115,6 @@ export default function PaymentPage() {
 
   const baseurl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-  // orderData se usa para registrar/mostrar info de lo que se va a pagar
   const orderData = cart.map((product) => ({
     id: product.documentId ? String(product.documentId) : "sin-id",
     name: product.title || product.attributes?.title || "Producto sin nombre",
@@ -121,12 +124,14 @@ export default function PaymentPage() {
     price: parseFloat(product.Precio || product.price || 0),
     additionalService: product.additionalService || null,
     quantity: product.quantity || 1,
-    image: product.image ? { url: product.image.url } : null, // ✅ Agregar imagen si existe
+    image: product.image ? { url: product.image.url } : null,
   }));
-
-  //console.log("🛒 Datos de `orderData` antes de enviar:", orderData);
-  //{//console.log("cart es:", cart)}
-  //{//console.log("orderdata es:", orderData)}
+  const subtotal = cart.reduce(
+    (total, item) => total + calculateSubtotal(item),
+    0
+  );
+  const discountValue = coupon ? subtotal * (coupon.percent / 100) : 0;
+  const total = subtotal - discountValue;
 
   return (
     <>
@@ -136,17 +141,15 @@ export default function PaymentPage() {
             FINALIZAR COMPRA
           </h1>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
-            {/* Columna izquierda: Formulario de datos cliente */}
             <div className="mt-6">
               {orderData.length > 0 && (
                 <CheckoutForm
                   showAddressFields={cart.some((item) => !item.reservationData)}
-                  //orderData={orderData}
                   onFormChange={handleFormChange}
                 />
               )}
             </div>
-              {console.log("finalizar compra cart",cart)}  
+
             {/* Columna derecha: Resumen del pedido */}
             <div className="col-span-1">
               <h2 className="font-bold text-2xl mb-6 -text--dark-green">
@@ -197,7 +200,10 @@ export default function PaymentPage() {
                             </div>
                             <div>
                               <span className="font-semibold -text--dark-green">
-                                Precio por {`${product?.unitPlan.toLowerCase()}` || "unidad"}:
+                                Precio por{" "}
+                                {`${product?.unitPlan.toLowerCase()}` ||
+                                  "unidad"}
+                                :
                               </span>{" "}
                               {formatPrice(pricePerUnit)}
                             </div>
@@ -259,24 +265,49 @@ export default function PaymentPage() {
                 })}
 
                 {/* Total */}
+                {coupon && (
+                  <div className="my-3">
+                    <div className="grid grid-cols-4">
+                      <div className="col-span-2">
+                        <div className="font-bold text-lg">Subtotal</div>
+                      </div>
+                      <div className="col-span-2 text-right text-lg">
+                        {formatPrice(subtotal)}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4">
+                      <div className="col-span-2">
+                        <div className="font-bold text-lg">Descuento</div>
+                      </div>
+                      <div className="col-span-2 text-right text-lg">
+                        {"-"}
+
+                        {formatPrice(discountValue)}
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-4 py-8 border-t">
                   <div className="col-span-2">
                     <div className="font-bold text-xl">Total</div>
                   </div>
                   <div className="col-span-2 text-right text-xl">
-                    <div>{formatPrice(calculateTotal())}</div>
+                    <div>{formatPrice(total)}</div>
                   </div>
                 </div>
 
-                {/* Botón de pago Mercado Pago */}
                 <div>
                   <CheckoutButton
                     orderData={cart}
                     formData={formState.formData}
                     formValid={formState.isValid}
-                    triggerValidation={formState.triggerValidation} // ✅ Pasamos la validación al botón
+                    triggerValidation={formState.triggerValidation}
                     onBeforePayment={processOrder}
+                    coupon={coupon}
                   />
+                </div>
+                <div className="mt-8">
+                  <CouponInput />
                 </div>
               </div>
             </div>

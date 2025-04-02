@@ -51,8 +51,7 @@ export default async function FaqPage() {
       "@type": "Question",
       name: faq.title,
       acceptedAnswer: {
-        "@type": "Answer",
-        // Asegúrate de que la propiedad que contiene la respuesta sea un string.
+        "@type": "Answer",        
         text: typeof faq.asnwer === "string" ? faq.asnwer : "",
       },
     })),

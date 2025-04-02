@@ -7,7 +7,7 @@ import { Tooltip } from "@mui/material";
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const token = searchParams.get("code"); // 🔥 Obtiene el token de la URL
+  const token = searchParams.get("code");
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,7 +22,6 @@ export default function ResetPasswordPage() {
     setShowConfirmPassword(!showConfirmPassword);
 
   useEffect(() => {
-    console.log("📢 Token recibido desde la URL:", token);
     if (!token) {
       setErrorMessage("El código de recuperación no es válido o ha expirado.");
     }
@@ -47,8 +46,6 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      console.log("🔹 Enviando solicitud a Strapi con token:", token);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/reset-password`,
         {
@@ -57,7 +54,7 @@ export default function ResetPasswordPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            code: token, // 🔥 Token de validación de Strapi
+            code: token,
             password: password,
             passwordConfirmation: confirmPassword,
           }),
@@ -65,7 +62,6 @@ export default function ResetPasswordPage() {
       );
 
       const result = await response.json();
-      console.log("📢 Respuesta de Strapi:", result);
 
       if (!response.ok) {
         if (result.error?.message === "Incorrect code provided") {
@@ -81,7 +77,7 @@ export default function ResetPasswordPage() {
         "Contraseña restablecida correctamente. Redirigiendo al inicio de sesión..."
       );
       setTimeout(() => {
-        router.push("/iniciar-sesion"); // 🔥 Redirigir al login
+        router.push("/iniciar-sesion");
       }, 3000);
     } catch (error) {
       console.error("❌ Error:", error);

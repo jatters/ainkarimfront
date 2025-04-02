@@ -61,7 +61,7 @@ async function GetMenuData() {
 
     return res.json();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -84,7 +84,7 @@ export default async function MenuPage() {
       ? `${process.env.NEXT_PUBLIC_SITE_URL}${images[0].attributes.url}`
       : "";
 
-  // Definimos el schema JSON‑LD para el menú, utilizando el tipo "Restaurant"
+  
   const menuSchema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",

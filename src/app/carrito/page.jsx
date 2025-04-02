@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { Link } from "next-view-transitions";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
+import CouponInput from "@/components/Ecommerce/CouponInput";
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -17,7 +18,7 @@ function formatDate(dateString) {
 }
 
 export default function CarritoPage() {
-  const { cart, removeFromCart, updateQuantityInCart } =
+  const { cart, removeFromCart, updateQuantityInCart, coupon } =
     useContext(CartContext);
 
   const baseurl = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -32,6 +33,13 @@ export default function CarritoPage() {
   };
 
   const calculateTotal = () => {
+    if (coupon) {
+      return (
+        cart.reduce((total, item) => total + calculateSubtotal(item), 0) -
+        cart.reduce((total, item) => total + calculateSubtotal(item), 0) *
+          (coupon.percent / 100)
+      );
+    }
     return cart.reduce((total, item) => total + calculateSubtotal(item), 0);
   };
 
@@ -111,14 +119,11 @@ export default function CarritoPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log(cart)}
                   {cart.map((item, index) => {
-                    // Dado que los datos están normalizados, usamos directamente item.title, item.price, item.quantity y item.image.
-                    // Si el producto es variable, concatenamos el título con el nombre de la variación.
                     const displayTitle = item.isReservation
-                      ? `${item.attributes?.name || item.title} - ${
-                          formatDate(item.reservationData.date)
-                        } - ${
+                      ? `${item.attributes?.name || item.title} - ${formatDate(
+                          item.reservationData.date
+                        )} - ${
                           parseInt(item.reservationData.persons, 10) > 1
                             ? `${item.reservationData.persons} ${item.unitPlan}s`
                             : `1 ${item.unitPlan}`
@@ -128,7 +133,6 @@ export default function CarritoPage() {
                       : item.title || "Sin título";
                     const subtotal = calculateSubtotal(item);
 
-                    // La imagen ya es una URL completa.
                     const imageUrl =
                       typeof item.image === "string"
                         ? item.image
@@ -157,7 +161,9 @@ export default function CarritoPage() {
                             />
                           )}
                           <span className="inline-block break-words max-w-xs text-left">
-                            <span className="font-semibold -text--dark-green">{displayTitle}</span>
+                            <span className="font-semibold -text--dark-green">
+                              {displayTitle}
+                            </span>
                             {item.additionalService && (
                               <div className="text-sm text-gray-600">
                                 <div>
@@ -232,12 +238,10 @@ export default function CarritoPage() {
             }
             <div className="lg:hidden">
               {cart.map((item, index) => {
-                // Dado que los datos están normalizados, usamos directamente item.title, item.price, item.quantity y item.image.
-                // Si el producto es variable, concatenamos el título con el nombre de la variación.
                 const displayTitle = item.isReservation
-                  ? `${item.attributes?.name || item.title} - ${
-                      formatDate(item.reservationData.date)
-                    } - ${
+                  ? `${item.attributes?.name || item.title} - ${formatDate(
+                      item.reservationData.date
+                    )} - ${
                       parseInt(item.reservationData.persons, 10) > 1
                         ? item.reservationData.persons + ` ${item.unitPlan}s`
                         : `1 ${item.unitPlan}`
@@ -247,7 +251,6 @@ export default function CarritoPage() {
                   : item.title || "Sin título";
                 const subtotal = calculateSubtotal(item);
 
-                // La imagen ya es una URL completa.
                 const imageUrl =
                   typeof item.image === "string"
                     ? item.image
@@ -364,6 +367,12 @@ export default function CarritoPage() {
                 </Link>
               </div>
               <div className="flex flex-col items-end mt-4 md:mt-0">
+                {coupon && (
+                  <div className="text-xl font-bold">
+                    Descuento: -{" "}
+                    {formatPrice(calculateTotal() * (coupon.percent / 100))}
+                  </div>
+                )}
                 <div className="text-xl font-bold">
                   Total: {formatPrice(calculateTotal())}
                 </div>
@@ -371,6 +380,10 @@ export default function CarritoPage() {
             </div>
           </div>
         )}
+
+        <div className="mt-4 max-w-[400px]">
+          <CouponInput />
+        </div>
       </section>
     </main>
   );

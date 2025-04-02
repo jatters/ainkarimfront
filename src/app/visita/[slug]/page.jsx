@@ -2,7 +2,7 @@ import { Link } from "next-view-transitions";
 import PlanGallery from "@/components/Ecommerce/PlanGallery";
 import ReactMarkdown from "react-markdown";
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
-import { GetSinglePlan } from "@/components/GetContentApi";
+import { GetSinglePlan, GetCompanyInfo } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
@@ -31,7 +31,9 @@ export async function generateMetadata({ params }) {
   const plan = planData.data[0];
   const title = plan.name;
   const description =
-    plan.description || plan.planDescription || "Plan de visita en Viñedo Ain Karim";
+    plan.description ||
+    plan.planDescription ||
+    "Plan de visita en Viñedo Ain Karim";
   const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
   const imageUrl = plan.image
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.url}`
@@ -66,15 +68,23 @@ export async function generateMetadata({ params }) {
   };
 }
 
-
 export default async function SinglePlanPage({ params }) {
   try {
+    const companyInfo = await GetCompanyInfo();
     const planData = await GetSinglePlan(params.slug);
     if (!planData || !planData.data[0]) {
       console.error("Error fetching plan data");
       return (
         <div className="container mx-auto py-16 px-5">
           Error cargando información del plan
+        </div>
+      );
+    }
+    if (!companyInfo || !companyInfo.data) {
+      console.error("Error fetching company info");
+      return (
+        <div className="container mx-auto py-16 px-5">
+          Error cargando información del Viñedo Ain Karim
         </div>
       );
     }
@@ -94,6 +104,8 @@ export default async function SinglePlanPage({ params }) {
       unitPlan,
       planDescription,
     } = planData?.data[0];
+
+    const { contactEmail, ventasEmail } = companyInfo?.data;
 
     const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
     // Construcción del JSON‑LD para el plan
@@ -152,7 +164,9 @@ export default async function SinglePlanPage({ params }) {
               {Number(price) > 0 && (
                 <div className="text-2xl font-semibold">
                   {formatPrice(price)}{" "}
-                  <sup className="font-normal text-base">por {unitPlan.toLowerCase()}</sup>{" "}
+                  <sup className="font-normal text-base">
+                    por {unitPlan.toLowerCase()}
+                  </sup>{" "}
                 </div>
               )}
               {onlyAdults && (
@@ -170,14 +184,15 @@ export default async function SinglePlanPage({ params }) {
               {Number(max_reservations) > 0 && (
                 <div className="flex items-center gap-1 py-3 text-slate-600">
                   <span className="icon-[fluent--people-add-20-regular] text-3xl" />
-                  Máximo {max_reservations} {unitPlan.toLowerCase()}s por reserva.
+                  Máximo {max_reservations} {unitPlan.toLowerCase()}s por
+                  reserva.
                 </div>
               )}
               {planDescription && (
                 <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
                   <BlocksRenderer content={planDescription} />
                 </div>
-              )}              
+              )}
               <ReservationField
                 horarios={horarios}
                 additionalServices={servicios_adicionales}
@@ -188,9 +203,15 @@ export default async function SinglePlanPage({ params }) {
                 rules={reglas_planes}
                 max_reservations={max_reservations}
                 unitPlan={unitPlan}
+                contactEmail={contactEmail}
               />
 
-              <PlanRecomendations max_reservations={max_reservations} unitPlan={unitPlan} />
+              <PlanRecomendations
+                max_reservations={max_reservations}
+                unitPlan={unitPlan}
+                contactEmail={contactEmail}
+                ventasEmail={ventasEmail}
+              />
             </div>
           </div>
         </section>
