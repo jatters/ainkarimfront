@@ -10,10 +10,11 @@ import Checkbox from "@mui/material/Checkbox";
 export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
   return (
     <div className="px-5 space-y-5">
-      {/* Secciones de filtro para vinos */}
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <span className="font-semibold capitalize -text--dark-green">Cepa</span>
+          <span className="font-semibold capitalize -text--dark-green">
+            Cepa
+          </span>
         </AccordionSummary>
         <AccordionDetails>
           <FormGroup>
@@ -33,11 +34,13 @@ export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
             )}
           </FormGroup>
         </AccordionDetails>
-      </Accordion>    
+      </Accordion>
 
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <span className="font-semibold capitalize -text--dark-green">Categorías</span>
+          <span className="font-semibold capitalize -text--dark-green">
+            Categorías
+          </span>
         </AccordionSummary>
         <AccordionDetails>
           <FormGroup>
@@ -58,7 +61,6 @@ export default function ProductsFilter({ onCepasChange, onCategoriasChange }) {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-
     </div>
   );
 }

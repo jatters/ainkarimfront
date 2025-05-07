@@ -1,6 +1,5 @@
 import { Link } from "next-view-transitions";
 import PlanGallery from "@/components/Ecommerce/PlanGallery";
-import ReactMarkdown from "react-markdown";
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 import { GetSinglePlan, GetCompanyInfo } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
@@ -21,32 +20,34 @@ const extractGallery = (images) => {
   );
 };
 export async function generateMetadata({ params }) {
-  const planData = await GetSinglePlan(params.slug);
-  if (!planData || !planData.data[0]) {
+  const { slug } = await params;
+  const planData = await GetSinglePlan(slug);
+
+  if (!planData) {
     return {
       title: "Plan no encontrado | Viñedo Ain Karim",
       description: "Información del plan no encontrada.",
     };
   }
-  const plan = planData.data[0];
+  const plan = planData;
   const title = plan.name;
   const description =
     plan.description ||
     plan.planDescription ||
     "Plan de visita en Viñedo Ain Karim";
-  const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
+  const canonicalUrl = `https://ainkarim.co/visita/${slug}`;
   const imageUrl = plan.image
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.url}`
     : "https://ainkarim.co/default-image.jpg";
 
   return {
-    title: `${title} | Visita en Viñedo Ain Karim`,
+    title: `${title}`,
     description,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${title} | Visita en Viñedo Ain Karim`,
+      title: `${title}`,
       description,
       url: canonicalUrl,
       images: [
@@ -69,10 +70,12 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function SinglePlanPage({ params }) {
+  const { slug } = await params;
+
   try {
     const companyInfo = await GetCompanyInfo();
-    const planData = await GetSinglePlan(params.slug);
-    if (!planData || !planData.data[0]) {
+    const planData = await GetSinglePlan(slug);
+    if (!planData) {
       console.error("Error fetching plan data");
       return (
         <div className="container mx-auto py-16 px-5">
@@ -80,7 +83,7 @@ export default async function SinglePlanPage({ params }) {
         </div>
       );
     }
-    if (!companyInfo || !companyInfo.data) {
+    if (!companyInfo) {
       console.error("Error fetching company info");
       return (
         <div className="container mx-auto py-16 px-5">
@@ -103,12 +106,12 @@ export default async function SinglePlanPage({ params }) {
       reglas_planes,
       unitPlan,
       planDescription,
-    } = planData?.data[0];
+    } = planData;
 
-    const { contactEmail, ventasEmail } = companyInfo?.data;
+    const { contactEmail, ventasEmail } = companyInfo;
 
-    const canonicalUrl = `https://ainkarim.co/visita/${params.slug}`;
-    // Construcción del JSON‑LD para el plan
+    const canonicalUrl = `https://ainkarim.co/visita/${slug}`;
+
     const jsonLD = {
       "@context": "https://schema.org",
       "@type": "product",
@@ -146,11 +149,11 @@ export default async function SinglePlanPage({ params }) {
             <Link href="/" className="hover:-text--light-green">
               Inicio
             </Link>{" "}
-            /{" "}
+            ›{" "}
             <Link href="/visitas" className="hover:-text--light-green">
               Visitas
             </Link>{" "}
-            / <span className="capitalize">{name}</span>
+            › <span className="capitalize font-medium">{name}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-3 gap-y-9">
             <div className="max-w-3xl">
@@ -218,13 +221,11 @@ export default async function SinglePlanPage({ params }) {
       </main>
     );
   } catch (error) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("Error cargando el plan", error);
-    }
-    return (
-      <div className="container mx-auto py-16 px-5 ">
-        Ha ocurrido un error cargando el plan
-      </div>
-    );
+    console.error("Error cargando el plan", error);
   }
+  return (
+    <div className="container mx-auto py-16 px-5 ">
+      Ha ocurrido un error cargando el plan
+    </div>
+  );
 }

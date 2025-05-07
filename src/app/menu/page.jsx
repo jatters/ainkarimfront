@@ -1,9 +1,9 @@
 import React from "react";
 import SliderMenu from "@/components/Ui/SliderMenu";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
-
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { GetPage } from "@/components/GetContentApi";
 
 export const metadata = {
   title: "Carta | Viñedo Ain Karim",
@@ -18,7 +18,7 @@ export const metadata = {
     siteName: "Viñedo Ain Karim",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/og-menu.jpg`, // Actualiza con la URL correcta de la imagen OG
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/og-menu.jpg`,
         width: 1200,
         height: 630,
         alt: "Menú del Viñedo Ain Karim",
@@ -43,34 +43,12 @@ export const metadata = {
   },
 };
 
-async function GetMenuData() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/menu?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener el menú");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export default async function MenuPage() {
-  const data = await GetMenuData();
+  const data = await GetPage({ page: "menu" });
 
-  const { title, content, images, cover } = data.data;
+  const { title, content, images, cover } = data;
 
-  if (!data || !data.data) {
+  if (!data) {
     console.error("Error fetching menu");
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -80,11 +58,10 @@ export default async function MenuPage() {
   }
 
   const firstImageUrl =
-    images && images.length > 0 && images[0].attributes?.url
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}${images[0].attributes.url}`
+    images && images.length > 0 && images[0].url
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}${images[0].url}`
       : "";
 
-  
   const menuSchema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",

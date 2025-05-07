@@ -4,13 +4,8 @@ const nextConfig = {
     MP_PUBLIC_KEY: process.env.NEXT_PUBLIC_MP_PUBLIC_KEY,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "manager.ainkarim.co",
-        port: "",
-        pathname: "/**",
-      },
       {
         protocol: "https",
         hostname: "ainkarim.co",
@@ -21,6 +16,12 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
         port: "1337",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "dev.einscube.com",
+        port: "",
         pathname: "/**",
       },
     ],
@@ -245,6 +246,50 @@ const nextConfig = {
       },
     ];
   },
+  /* async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; " +
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; " +
+              "connect-src 'self' https://analytics.google.com https://www.google-analytics.com https://www.googleadservices.com; " +
+              "img-src 'self' data: https://ainkarim.co https://www.google.com.co https://www.googletagmanager.com; " +
+              "style-src 'self' 'unsafe-inline'; " +
+              "frame-src 'self' https://td.doubleclick.net;" +
+              "worker-src 'self' data: blob: https://dev.einscube.com https://ainkarim.co;",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer-when-downgrade",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "geolocation=(self), microphone=(), camera=()",
+          },
+        ],
+      },
+    ];
+  }, */
 };
 
 export default nextConfig;

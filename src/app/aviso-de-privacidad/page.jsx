@@ -1,29 +1,8 @@
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { GetPage } from "@/components/GetContentApi";
 
-async function GetAvisoPrivacidadData() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/aviso-de-privacidad?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener la información de la página");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
-// Función auxiliar para extraer texto plano de bloques o strings
 const extractPlainText = (content) => {
   if (!content) return "";
   if (typeof content === "string") return content;
@@ -42,13 +21,13 @@ export async function generateMetadata() {
     "Consulta nuestro aviso de privacidad y conoce cómo protegemos tus datos personales.";
   let imageUrl = "https://ainkarim.co/banner-puntos-de-venta.webp";
 
-  const avisoPrivacidad = await GetAvisoPrivacidadData();
-  if (avisoPrivacidad && avisoPrivacidad.data) {
-    metaTitle = avisoPrivacidad.data.title || metaTitle;
-    if (avisoPrivacidad.data.image && avisoPrivacidad.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${avisoPrivacidad.data.image.url}`;
+  const avisoPrivacidad = await GetPage({ page: "aviso-de-privacidad" });
+  if (avisoPrivacidad) {
+    metaTitle = avisoPrivacidad.title || metaTitle;
+    if (avisoPrivacidad.image && avisoPrivacidad.image.url) {
+      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${avisoPrivacidad.image.url}`;
     }
-    const plainText = extractPlainText(avisoPrivacidad.data.content);
+    const plainText = extractPlainText(avisoPrivacidad.content);
     if (plainText) {
       metaDescription = plainText
         .substring(0, 150)
@@ -84,9 +63,9 @@ export async function generateMetadata() {
 }
 
 export default async function AvisoPrivacidadPage() {
-  const avisoPrivacidad = await GetAvisoPrivacidadData();
+  const avisoPrivacidad = await GetPage({ page: "aviso-de-privacidad" });
 
-  if (!avisoPrivacidad || !avisoPrivacidad.data) {
+  if (!avisoPrivacidad) {
     console.error("Error fetching menu");
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -95,14 +74,13 @@ export default async function AvisoPrivacidadPage() {
     );
   }
 
-  const { title, content, image } = avisoPrivacidad.data;
+  const { title, content, image } = avisoPrivacidad;
   const canonicalUrl = "https://ainkarim.co/aviso-de-privacidad";
   const imageUrl = image?.url
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
     : "/banner-puntos-de-venta.webp";
   const plainText = extractPlainText(content);
 
-  // JSON‑LD para estructurar el contenido como un artículo
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -118,7 +96,7 @@ export default async function AvisoPrivacidadPage() {
       name: "Viñedo Ain Karim",
       logo: {
         "@type": "ImageObject",
-        url: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+        url: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       },
     },
     mainEntityOfPage: {

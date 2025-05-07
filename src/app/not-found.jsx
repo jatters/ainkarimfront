@@ -4,10 +4,10 @@ import { Link } from "next-view-transitions";
 export const metadata = {
   title: "404 - Página no encontrada",
   description: "La página que estás buscando no existe o ha sido movida.",
-  
+
   openGraph: {
     title: "404 - Página no encontrada",
-    description: "La página que estás buscando no existe o ha sido movida.",  
+    description: "La página que estás buscando no existe o ha sido movida.",
     type: "website",
   },
   twitter: {

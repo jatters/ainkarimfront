@@ -102,7 +102,6 @@ export default function SuccessPageClient() {
         Tu pago ha sido procesado con éxito.
       </p>
 
-      {/* Confetti animation */}
       <ConfettiWrapper />
 
       <div className="mt-6 border-t pt-4">
@@ -134,7 +133,6 @@ export default function SuccessPageClient() {
         )}
       </div>
 
-      {/* Detalles del Pago */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <span className="text-xl">💳 </span>
@@ -185,7 +183,6 @@ export default function SuccessPageClient() {
         </p>
       </div>
 
-      {/* Datos del Cliente */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <h2 className="text-xl font-semibold text-gray-800">

@@ -1,28 +1,8 @@
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { GetPage } from "@/components/GetContentApi";
 
-async function GetPageData() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/advertencia-y-recomendacion?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener información de la página");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
 export async function generateMetadata() {
   const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendaciones";
   const metaDescription =
@@ -30,11 +10,11 @@ export async function generateMetadata() {
   let title = "Advertencias y Recomendaciones";
   let imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/banner-puntos-de-venta.webp`;
 
-  const pageData = await GetPageData();
-  if (pageData && pageData.data) {
-    title = pageData.data.title || title;
-    if (pageData.data.image && pageData.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.data.image.url}`;
+  const pageData = await GetPage({ page: "advertencia-y-recomendacion" });
+  if (pageData) {
+    title = pageData.title || title;
+    if (pageData.image && pageData.image.url) {
+      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.image.url}`;
     }
   }
 
@@ -67,15 +47,11 @@ export async function generateMetadata() {
 
 const extractPlainText = (blocks) => {
   if (!blocks) return "";
-  // Si es un string, lo devolvemos directamente
   if (typeof blocks === "string") return blocks;
-  // Si es un array, intentamos extraer el contenido
   if (Array.isArray(blocks)) {
     return blocks
       .map((block) => {
-        // Si el bloque es un string, lo usamos
         if (typeof block === "string") return block;
-        // Si el bloque es un objeto, asumimos que puede tener una propiedad 'text', 'content' o 'body'
         return block.text || block.content || block.body || "";
       })
       .join(" ");
@@ -84,9 +60,9 @@ const extractPlainText = (blocks) => {
 };
 
 export default async function AdvertenciasPage() {
-  const pageData = await GetPageData();
+  const pageData = await GetPage({ page: "advertencia-y-recomendacion" });
 
-  if (!pageData || !pageData.data) {
+  if (!pageData) {
     console.error("Error al obtener la página de advertencias");
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -94,12 +70,13 @@ export default async function AdvertenciasPage() {
       </div>
     );
   }
-  const { title, content, image } = pageData.data;
+  const { title, content, image } = pageData;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
   const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendacion";
   const imageUrl = image?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-    : `${process.env.NEXT_PUBLIC_SITE_URL}/banner-puntos-de-venta.webp`;
+    ? `${baseUrl}${image.url}`
+    : `${baseUrl}/banner-puntos-de-venta.webp`;
 
   const plainText = extractPlainText(content);
   const metaDescription = plainText
@@ -125,7 +102,7 @@ export default async function AdvertenciasPage() {
       name: "Viñedo Ain Karim",
       logo: {
         "@type": "ImageObject",
-        url: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+        url: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       },
     },
     mainEntityOfPage: {
@@ -144,9 +121,7 @@ export default async function AdvertenciasPage() {
       <HeaderImage
         title={title}
         background={
-          image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : "/banner-puntos-de-venta.webp"
+          image?.url ? `${baseUrl}${image.url}` : "/banner-puntos-de-venta.webp"
         }
       />
       <section className="max-w-screen-lg mx-auto pt-8 pb-12 px-5">

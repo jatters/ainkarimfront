@@ -9,7 +9,6 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 function formatDate(dateString) {
-  // Se asume que dateString viene en formato "YYYY-MM-DD"
   const date = new Date(dateString + "T00:00:00");
   const day = date.getDate().toString().padStart(2, "0");
   const month = capitalize(date.toLocaleString("es-ES", { month: "long" }));
@@ -378,12 +377,11 @@ export default function CarritoPage() {
                 </div>
               </div>
             </div>
+            <div className="mt-4 max-w-[400px]">
+              <CouponInput />
+            </div>
           </div>
         )}
-
-        <div className="mt-4 max-w-[400px]">
-          <CouponInput />
-        </div>
       </section>
     </main>
   );

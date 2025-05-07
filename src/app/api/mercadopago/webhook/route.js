@@ -116,7 +116,7 @@ export async function POST(request) {
 
       if (pedidosData.data && pedidosData.data.length > 0) {
         const pedidoRecord = pedidosData.data[0];
-        const orderDocumentId = pedidoRecord.documentId; // Usamos el documentId para actualizar
+        const orderDocumentId = pedidoRecord.documentId;
 
         const updatePedidoRes = await fetch(
           `${STRAPI_URL}/api/pedidos/${orderDocumentId}`,

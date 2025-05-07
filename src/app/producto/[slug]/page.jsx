@@ -1,11 +1,11 @@
-// Archivo: src/app/producto/[slug]/page.jsx (componente de servidor)
 import SingleProductPageClient from "@/components/Ecommerce/SingleProduct/SingleProductPageClient";
 import { GetSingleProduct } from "@/components/GetContentApi";
 
-
 export async function generateMetadata({ params }) {
-  const productData = await GetSingleProduct(params.slug);
-  const product = productData?.data?.[0];
+  const { slug } = await params;
+
+  const productData = await GetSingleProduct(slug);
+  const product = productData;
 
   if (!product) {
     return {
@@ -15,8 +15,11 @@ export async function generateMetadata({ params }) {
   }
 
   const title = product.title;
-  const description = product.description || product.productDescription || "Producto de Viñedo Ain Karim";
-  const canonicalUrl = `https://ainkarim.co/producto/${params.slug}`;
+  const description =
+    product.description ||
+    product.productDescription ||
+    "Producto de Viñedo Ain Karim";
+  const canonicalUrl = `https://ainkarim.co/producto/${product.slug}`;
 
   return {
     title: `${title} `,
@@ -30,7 +33,9 @@ export async function generateMetadata({ params }) {
       url: canonicalUrl,
       images: [
         {
-          url: product.image ? `https://ainkarim.co${product.image.url}` : "https://ainkarim.co/default-image.jpg",
+          url: product.image
+            ? `https://ainkarim.co${product.image.url}`
+            : "https://ainkarim.co/default-image.jpg",
           width: 1200,
           height: 630,
           alt: title,
@@ -43,20 +48,23 @@ export async function generateMetadata({ params }) {
       title: `${title} `,
       description,
       images: [
-        product.image ? `https://ainkarim.co${product.image.url}` : "https://ainkarim.co/default-image.jpg",
+        product.image
+          ? `https://ainkarim.co${product.image.url}`
+          : "https://ainkarim.co/default-image.jpg",
       ],
     },
   };
 }
 
 export default async function SingleProductPage({ params }) {
-  const productData = await GetSingleProduct(params.slug);
+  const { slug } = await params;
+  const productData = await GetSingleProduct(slug);
 
-  if (!productData || !productData.data?.[0]) {
+  if (!productData) {
     return (
       <div className="container mx-auto py-16">Producto no encontrado</div>
     );
   }
-
-  return <SingleProductPageClient productData={productData.data[0]} />;
+  
+  return <SingleProductPageClient productData={productData} />;
 }

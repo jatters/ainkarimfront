@@ -17,8 +17,7 @@ export default function ReembolsoForm() {
   const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
   const uuid = uuidv4();
-  
-  
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
@@ -29,7 +28,7 @@ export default function ReembolsoForm() {
         },
         body: JSON.stringify({
           formType: "Reembolso",
-          ...data,          
+          ...data,
           uuid: uuid,
         }),
       });
@@ -435,12 +434,12 @@ export default function ReembolsoForm() {
           {response && (
             <div
               className={`col-span-2 text-center font-semibold py-4 rounded ${
-                response.message === "Tu mensaje ha sido enviado"
+                response.message === "Correo enviado correctamente"
                   ? "text-green-600"
                   : "text-red-600"
               }`}
             >
-              {response.message === "Tu mensaje ha sido enviado"
+              {response.message === "Correo enviado correctamente"
                 ? `Gracias ${response.name}, el mensaje ha sido enviado.`
                 : response.message}
             </div>

@@ -5,56 +5,57 @@ import {
 
 export default async function sitemap() {
   const urls = [];
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const pages = [
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/` },
+  const staticPages = [
+    { url: `${baseUrl}/` },
     {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/advertencias-y-recomendaciones`,
+      url: `${baseUrl}/advertencias-y-recomendaciones`,
     },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/aviso-de-privacidad` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/contacto` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/el-vinedo` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/informacion` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/menu` },
+    { url: `${baseUrl}/aviso-de-privacidad` },
+    { url: `${baseUrl}/contacto` },
+    { url: `${baseUrl}/el-vinedo` },
+    { url: `${baseUrl}/informacion` },
+    { url: `${baseUrl}/menu` },
     {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/politica-de-tratamiento-de-datos-personales`,
+      url: `${baseUrl}/politica-de-tratamiento-de-datos-personales`,
     },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/preguntas-frecuentes` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/productos` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/puntos-de-venta` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/registro` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/reglamento` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/solicitud-reembolso` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/terminos-y-condiciones` },
-    { url: `${process.env.NEXT_PUBLIC_SITE_URL}/visitas` },
+    { url: `${baseUrl}/preguntas-frecuentes` },
+    { url: `${baseUrl}/productos` },
+    { url: `${baseUrl}/puntos-de-venta` },
+    { url: `${baseUrl}/registro` },
+    { url: `${baseUrl}/reglamento` },
+    { url: `${baseUrl}/solicitud-reembolso` },
+    { url: `${baseUrl}/terminos-y-condiciones` },
+    { url: `${baseUrl}/visitas` },
   ];
 
-  pages.forEach((page) => {
+  staticPages.forEach((page) => {
     urls.push({
       url: page.url,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 1,
+      priority: 0.8,
     });
   });
 
   const plans = await GetPlansForSitemap();
   const products = await GetProductsForSitemap();
 
-  plans.data.forEach((plan) => {
+  plans.forEach((plan) => {
     const planDate = new Date(plan.updatedAt);
     urls.push({
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/visita/${plan.slug}`,
+      url: `${baseUrl}/visita/${plan.slug}`,
       lastModified: planDate,
       changeFrequency: "monthly",
       priority: 0.8,
     });
   });
 
-  products.data.forEach((product) => {
+  products.forEach((product) => {
     const productDate = new Date(product.updatedAt);
     urls.push({
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/producto/${product.slug}`,
+      url: `${baseUrl}/producto/${product.slug}`,
       lastModified: productDate,
       changeFrequency: "monthly",
       priority: 0.8,

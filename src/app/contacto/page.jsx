@@ -2,8 +2,6 @@ import ContactForm from "@/components/Forms/ContactForm";
 import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
-import banner from "@/../public/banner-contacto.webp";
-import { Link } from "next-view-transitions";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
 import Script from "next/script";
@@ -103,7 +101,7 @@ export default async function contactPage() {
       "@type": "Organization",
       name: "Viñedo Ain Karim",
       url: "https://ainkarim.co",
-      logo: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+      logo: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       contactPoint: [
         {
           "@type": "ContactPoint",
@@ -147,7 +145,7 @@ export default async function contactPage() {
                     {" "}
                     Ubicación:
                   </span>{" "}
-                  {companyInfo?.data?.vinedoAddress}
+                  {companyInfo?.vinedoAddress}
                 </li>
                 <li>
                   <span className="icon-[material-symbols--phonelink-ring-rounded] -text--dark-green"></span>
@@ -155,8 +153,8 @@ export default async function contactPage() {
                     {" "}
                     Teléfono:
                   </span>{" "}
-                  <a href={`tel:${companyInfo?.data?.vinedoPhone}`}>
-                    {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  <a href={`tel:${companyInfo?.vinedoPhone}`}>
+                    {formatPhoneNumber(companyInfo?.vinedoPhone)}
                   </a>
                 </li>
                 <li>
@@ -172,9 +170,9 @@ export default async function contactPage() {
                 <li>
                   <span className="icon-[ion--mail-outline] -text--dark-green"></span>
                   <span className="font-bold -text--dark-green"> Correo:</span>
-                  <a href={`mailto:${companyInfo?.data?.contactEmail}`}>
+                  <a href={`mailto:${companyInfo?.contactEmail}`}>
                     {" "}
-                    {companyInfo?.data?.contactEmail}
+                    {companyInfo?.contactEmail}
                   </a>
                 </li>
               </ul>
@@ -189,7 +187,7 @@ export default async function contactPage() {
                   <span className="font-bold -text--dark-green">
                     Dirección:
                   </span>{" "}
-                  {companyInfo?.data?.officeAddress}
+                  {companyInfo?.officeAddress}
                 </li>
                 <li>
                   <span className="icon-[material-symbols-light--phone-in-talk] -text--dark-green"></span>
@@ -197,8 +195,8 @@ export default async function contactPage() {
                     {" "}
                     Teléfono:
                   </span>
-                  <a href={`tel:${companyInfo?.data?.vinedoPhone}`}>
-                    {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  <a href={`tel:${companyInfo?.vinedoPhone}`}>
+                    {formatPhoneNumber(companyInfo?.vinedoPhone)}
                   </a>
                 </li>
               </ul>
@@ -215,7 +213,7 @@ export default async function contactPage() {
             <div className="flex items-center flex-wrap justify-center gap-1 text-center">
               <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
               <span className="font-bold -text--dark-green">Ubicación:</span>{" "}
-              {companyInfo?.data?.vinedoAddress}
+              {companyInfo?.vinedoAddress}
             </div>
             <div className="flex flex-wrap gap-5 justify-center">
               <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
@@ -224,7 +222,7 @@ export default async function contactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Abrir ubicación en Google Maps"
-                  href={companyInfo?.data?.linkGoogleMaps}
+                  href={companyInfo?.linkGoogleMaps}
                 >
                   <Image src={maps} alt="Logo Google Maps" width={15} />
                   <span>Abrir en Google Maps</span>
@@ -236,7 +234,7 @@ export default async function contactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Abrir ubicación en Waze"
-                  href={companyInfo?.data?.linkWaze}
+                  href={companyInfo?.linkWaze}
                 >
                   <Image src={waze} alt="Logo Waze" width={84} />
                   <span>Abrir en Waze</span>

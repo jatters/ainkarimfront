@@ -1,28 +1,8 @@
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
+import { GetPage } from "@/components/GetContentApi";
 
-async function GetReglamentoData() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/reglamento?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener el menú");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
 const extractPlainText = (content) => {
   if (!content) return "";
   if (typeof content === "string") return content;
@@ -34,19 +14,21 @@ const extractPlainText = (content) => {
   return "";
 };
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/reglamento";
+  const canonicalUrl = `${baseUrl}/reglamento`;
   let metaTitle = "Reglamento";
   let metaDescription = "Conoce las normas y reglamento del Viñedo Ain Karim.";
-  let imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/banner-puntos-de-venta.webp`;
+  let imageUrl = `${baseUrl}/banner-puntos-de-venta.webp`;
 
-  const reglamento = await GetReglamentoData();
-  if (reglamento && reglamento.data) {
-    metaTitle = reglamento.data.title || metaTitle;
-    if (reglamento.data.image && reglamento.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${reglamento.data.image.url}`;
+  const reglamento = await GetPage({ page: "reglamento" });
+  if (reglamento) {
+    metaTitle = reglamento.title || metaTitle;
+    if (reglamento.image && reglamento.image.url) {
+      imageUrl = `${baseUrl}${reglamento.image.url}`;
     }
-    const plainText = extractPlainText(reglamento.data.content);
+    const plainText = extractPlainText(reglamento.content);
     if (plainText) {
       metaDescription = plainText
         .substring(0, 150)
@@ -82,9 +64,9 @@ export async function generateMetadata() {
 }
 
 export default async function ReglamentoPage() {
-  const reglamento = await GetReglamentoData();
+  const reglamento = await GetPage({ page: "reglamento" });
 
-  if (!reglamento || !reglamento.data) {
+  if (!reglamento) {
     console.error("Error fetching menu");
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -92,15 +74,14 @@ export default async function ReglamentoPage() {
       </div>
     );
   }
-  const { title, content, image } = reglamento.data;
-  const canonicalUrl = "https://ainkarim.co/reglamento";
+  const { title, content, image } = reglamento;
+  const canonicalUrl = `${baseUrl}/reglamento`;
   const imageUrl = image?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
+    ? `${baseUrl}${image.url}`
     : "/banner-puntos-de-venta.webp";
 
   const plainText = extractPlainText(content);
 
-  // JSON‑LD para estructurar el reglamento (tipo Article)
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -116,7 +97,7 @@ export default async function ReglamentoPage() {
       name: "Viñedo Ain Karim",
       logo: {
         "@type": "ImageObject",
-        url: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+        url: `${baseUrl}/uploads/logo_ainkarim_9987562b80.png`,
       },
     },
     mainEntityOfPage: {
@@ -135,9 +116,7 @@ export default async function ReglamentoPage() {
       <HeaderImage
         title={title}
         background={
-          image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : "/banner-puntos-de-venta.webp"
+          image?.url ? `${baseUrl}${image.url}` : "/banner-puntos-de-venta.webp"
         }
       />
       <section className="max-w-screen-lg mx-auto pt-8 pb-12 px-5">

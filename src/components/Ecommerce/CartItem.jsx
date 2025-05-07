@@ -1,8 +1,12 @@
-// components/CartItem.jsx
 import React from "react";
 import Image from "next/image";
 
-const CartItem = ({ product, removeFromCart, calculateSubtotal, formatPrice }) => {
+const CartItem = ({
+  product,
+  removeFromCart,
+  calculateSubtotal,
+  formatPrice,
+}) => {
   const isReservation = !!product.reservationData;
   const {
     id,
@@ -19,7 +23,9 @@ const CartItem = ({ product, removeFromCart, calculateSubtotal, formatPrice }) =
   const displayQuantity = quantity;
   const subtotalPrice = calculateSubtotal(product);
 
-  const imageUrl = image?.formats?.thumbnail?.url ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.thumbnail.url}` : null;
+  const imageUrl = image?.formats?.thumbnail?.url
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.thumbnail.url}`
+    : null;
   const altText = isReservation
     ? "Imagen no disponible para reservas"
     : image?.alternativeText || "Imagen del producto";
@@ -46,7 +52,6 @@ const CartItem = ({ product, removeFromCart, calculateSubtotal, formatPrice }) =
         <div className="font-bold -text--dark-green">{title}</div>
         {isReservation ? (
           <div className="text-sm text-gray-600">
-            {/* Información específica de la reserva */}
             <div>
               <span className="font-semibold -text--dark-green">Fecha:</span>{" "}
               {reservationData?.date || "N/A"}
@@ -60,13 +65,18 @@ const CartItem = ({ product, removeFromCart, calculateSubtotal, formatPrice }) =
               {reservationData?.persons || "N/A"}
             </div>
             <div>
-              <span className="font-semibold -text--dark-green">Precio por persona:</span>{" "}
+              <span className="font-semibold -text--dark-green">
+                Precio por persona:
+              </span>{" "}
               {formatPrice(displayPrice)}
             </div>
             {additionalService && (
               <div>
-                <span className="font-semibold -text--dark-green">Adicional:</span>{" "}
-                {additionalService.name} - {formatPrice(additionalService.price)}
+                <span className="font-semibold -text--dark-green">
+                  Adicional:
+                </span>{" "}
+                {additionalService.name} -{" "}
+                {formatPrice(additionalService.price)}
               </div>
             )}
             <div>
@@ -89,7 +99,10 @@ const CartItem = ({ product, removeFromCart, calculateSubtotal, formatPrice }) =
       </div>
       <div className="col-span-1 text-center">
         <div>
-          <button onClick={() => removeFromCart(product)} aria-label={`Eliminar ${title}`}>
+          <button
+            onClick={() => removeFromCart(product)}
+            aria-label={`Eliminar ${title}`}
+          >
             <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300" />
           </button>
         </div>

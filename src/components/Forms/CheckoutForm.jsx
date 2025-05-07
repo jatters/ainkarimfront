@@ -34,15 +34,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
   const registerUser = watch("register");
 
   return (
-    <div className="mx-auto lg:p-8 bg-white">      
-      <form
-        //onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-      >
-        {/* <form
-        onSubmit={onSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-3"
-      > */}
+    <div className="mx-auto lg:p-8 bg-white">
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2  sm:col-span-1">
           <label htmlFor="firstName" className="sr-only">
             Primer nombre

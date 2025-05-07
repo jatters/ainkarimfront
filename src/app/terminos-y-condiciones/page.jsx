@@ -1,29 +1,7 @@
-import { Link } from "next-view-transitions";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
-
-async function GetDataPage() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/termino-y-condicion?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener el menú");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { GetPage } from "@/components/GetContentApi";
 
 const extractPlainText = (content) => {
   if (!content) return "";
@@ -36,20 +14,22 @@ const extractPlainText = (content) => {
   return "";
 };
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/terminos-y-condiciones";
+  const canonicalUrl = `${baseUrl}/terminos-y-condiciones`;
   let metaTitle = "Términos y Condiciones ";
   let metaDescription =
     "Lee nuestros términos y condiciones para el uso del sitio y servicios de Viñedo Ain Karim.";
-  let imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/banner-puntos-de-venta.webp`;
+  let imageUrl = `${baseUrl}/banner-puntos-de-venta.webp`;
 
-  const pageData = await GetDataPage();
-  if (pageData && pageData.data) {
-    metaTitle = pageData.data.title || metaTitle;
-    if (pageData.data.image && pageData.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.data.image.url}`;
+  const pageData = await GetPage({ page: "termino-y-condicion" });
+  if (pageData) {
+    metaTitle = pageData.title || metaTitle;
+    if (pageData.image && pageData.image.url) {
+      imageUrl = `${baseUrl}${pageData.image.url}`;
     }
-    const plainText = extractPlainText(pageData.data.content);
+    const plainText = extractPlainText(pageData.content);
     if (plainText) {
       metaDescription = plainText
         .substring(0, 150)
@@ -85,9 +65,9 @@ export async function generateMetadata() {
 }
 
 export default async function PolicyPricacyPage() {
-  const pageData = await GetDataPage();
+  const pageData = await GetPage({ page: "termino-y-condicion" });
 
-  if (!pageData || !pageData.data) {
+  if (!pageData) {
     console.error(pageData);
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -96,16 +76,15 @@ export default async function PolicyPricacyPage() {
     );
   }
 
-  const { title, content, image } = pageData.data;
+  const { title, content, image } = pageData;
 
-  const canonicalUrl = "https://ainkarim.co/terminos-y-condiciones";
+  const canonicalUrl = `${baseUrl}/terminos-y-condiciones`;
   const imageUrl = image?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
+    ? `${baseUrl}${image.url}`
     : "/banner-puntos-de-venta.webp";
 
   const plainText = extractPlainText(content);
 
-  // JSON‑LD para estructurar la página como un artículo
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -121,7 +100,7 @@ export default async function PolicyPricacyPage() {
       name: "Viñedo Ain Karim",
       logo: {
         "@type": "ImageObject",
-        url: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+        url: `${baseUrl}/logo_ainkarim_9987562b80.png`,
       },
     },
     mainEntityOfPage: {
@@ -140,9 +119,7 @@ export default async function PolicyPricacyPage() {
       <HeaderImage
         title={title}
         background={
-          image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : "/banner-puntos-de-venta.webp"
+          image?.url ? `${baseUrl}${image.url}` : "/banner-puntos-de-venta.webp"
         }
       />
       <section className="max-w-screen-lg mx-auto pt-8 pb-12 px-5 prose">

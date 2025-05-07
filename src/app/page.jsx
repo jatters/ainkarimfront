@@ -89,7 +89,7 @@ const jsonLD = {
   "@type": "Winery",
   name: "Viñedo Ain Karim",
   url: "https://ainkarim.co",
-  logo: "https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png",
+  logo: "https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png",
   image: "https://ainkarim.co/images/viñedo-ainkarim-og.jpg",
   description:
     "Viñedo Ain Karim, ubicado en Villa de Leyva, ofrece catas de vino, recorridos guiados y experiencias gastronómicas en un ambiente espectacular.",
@@ -206,7 +206,7 @@ const jsonLD = {
     "@type": "Organization",
     name: "Viñedo Ain Karim",
     url: "https://ainkarim.co",
-    logo: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+    logo: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",

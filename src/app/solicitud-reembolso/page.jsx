@@ -2,13 +2,12 @@ import ReembolsoForm from "@/components/Forms/ReembolsoForm";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import Script from "next/script";
 
-// Metadatos dinámicos para la página de reembolso
 export async function generateMetadata() {
   const title = "Solicitud de Reembolso | Viñedo Ain Karim";
   const description =
     "Completa el formulario para solicitar la devolución de tu dinero. El proceso de reembolso tarda hasta 15 días.";
   const canonicalUrl = "https://ainkarim.co/solicitud-reembolso";
-  const imageUrl = "https://ainkarim.co/banner-reembolso.webp"; // Asegúrate de que esta imagen exista
+  const imageUrl = "https://ainkarim.co/banner-reembolso.webp";
 
   return {
     title,
@@ -39,7 +38,7 @@ export async function generateMetadata() {
 
 export default function ReembolsoPage() {
   const canonicalUrl = "https://ainkarim.co/reembolso";
-  // JSON‑LD para estructurar la página (tipo WebPage) e incluir breadcrumbs
+
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -67,7 +66,6 @@ export default function ReembolsoPage() {
   };
   return (
     <main>
-      {/* Inyección de JSON‑LD para SEO */}
       <Script
         id="json-ld-reembolso"
         type="application/ld+json"

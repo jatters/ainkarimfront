@@ -10,7 +10,6 @@ export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, initialState);
   const [coupon, setCoupon] = useState(null);
 
-  // Cargar carrito desde localStorage en el primer render
   useEffect(() => {
     try {
       const storedCart = localStorage.getItem("cart");
@@ -35,7 +34,6 @@ export function CartProvider({ children }) {
       console.error("Error parsing coupon data from localStorage:", error);
     }
   }, []);
-  
 
   useEffect(() => {
     if (coupon) {
@@ -45,7 +43,6 @@ export function CartProvider({ children }) {
     }
   }, [coupon]);
 
-  // Guardar carrito en localStorage cada vez que cambie
   useEffect(() => {
     if (cart.length > 0) {
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -54,7 +51,6 @@ export function CartProvider({ children }) {
     }
   }, [cart]);
 
-  // Acciones que exponemos en el contexto
   const addToCart = (product) => {
     dispatch({ type: actionTypes.ADD_ITEM, payload: product });
   };
@@ -74,10 +70,7 @@ export function CartProvider({ children }) {
     dispatch({ type: actionTypes.CLEAR_CART });
   };
 
-  // Ejemplo de una función para incrementar en 1 la cantidad
   const incrementarCantidad = (product) => {
-    // Aquí ya podrías meter la lógica para no exceder maxQuantity si lo deseas,
-    // o delegarla a handleUpdateQuantity
     const newQuantity = (product.quantity || 1) + 1;
     updateQuantityInCart(product, newQuantity);
   };
@@ -92,7 +85,7 @@ export function CartProvider({ children }) {
         clearCart,
         incrementarCantidad,
         coupon,
-        setCoupon
+        setCoupon,
       }}
     >
       {children}

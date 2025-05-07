@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import FormatHour from "./FormatHour";
 
 export default function ListHours({
-  schedules,
+  horarios,
   classNameInput = "",
   classNameContainer = "",
   value,
@@ -22,12 +22,12 @@ export default function ListHours({
   }, [value]);
 
   const horariosSorted = useMemo(() => {
-    return schedules?.slice().sort(
+    return horarios?.slice().sort(
       (a, b) =>
         new Date(`1970-01-01T${a.startTime}`) -
         new Date(`1970-01-01T${b.startTime}`)
     );
-  }, [schedules]);
+  }, [horarios]);
 
   return (
     <div className={`${classNameContainer} `}>

@@ -1,49 +1,29 @@
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
+import { GetPage } from "@/components/GetContentApi";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-async function GetDataPage() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/puntos-de-venta?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Error al obtener el menú");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(error);
-  }
-}
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/puntos-de-venta";
+  const canonicalUrl = `${baseUrl}/puntos-de-venta`;
   let metaTitle = "Puntos de Venta ";
   let metaDescription =
     "Encuentra los puntos de venta y almacenes donde adquirir los productos del Viñedo Ain Karim.";
-  let imageUrl = "https://ainkarim.co/banner-puntos-de-venta.webp";
+  let imageUrl = `${baseUrl}/banner-puntos-de-venta.webp`;
 
-  const pageData = await GetDataPage();
-  if (pageData && pageData.data) {
-    metaTitle = pageData.data.title || metaTitle;
-    if (pageData.data.image && pageData.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.data.image.url}`;
+  const pageData = await GetPage({ page: "puntos-de-venta" });
+  if (pageData) {
+    metaTitle = pageData.title || metaTitle;
+    if (pageData.image && pageData.image.url) {
+      imageUrl = `${baseUrl}${pageData.image.url}`;
     }
-    if (pageData.data.content) {
-      // Extrae un fragmento de texto plano para la descripción
+    if (pageData.content) {
       const plainText =
-        typeof pageData.data.content === "string"
-          ? pageData.data.content
-          : "";
+        typeof pageData.content === "string" ? pageData.content : "";
       if (plainText) {
-        metaDescription = plainText.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "");
+        metaDescription = plainText
+          .substring(0, 150)
+          .replace(/<\/?[^>]+(>|$)/g, "");
       }
     }
   }
@@ -75,11 +55,10 @@ export async function generateMetadata() {
   };
 }
 
-
 export default async function PuntosDeVentaPage() {
-  const pageData = await GetDataPage();
+  const pageData = await GetPage({ page: "puntos-de-venta" });
 
-  if (!pageData || !pageData.data) {
+  if (!pageData) {
     console.error("Error al obtener la página de puntos de venta");
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -87,13 +66,12 @@ export default async function PuntosDeVentaPage() {
       </div>
     );
   }
-  const { title, content, store, image } = pageData.data;
-  const canonicalUrl = "https://ainkarim.co/puntos-de-venta";
+  const { title, content, store, image } = pageData;
+  const canonicalUrl = `${baseUrl}/puntos-de-venta`;
   const imageUrl = image?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
+    ? `${baseUrl}${image.url}`
     : "/banner-puntos-de-venta.webp";
 
-  // JSON‑LD para listar los puntos de venta (ItemList)
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -118,14 +96,7 @@ export default async function PuntosDeVentaPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
       />
-      <HeaderImage
-        title={title}
-        background={
-          image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : "/banner-puntos-de-venta.webp"
-        }
-      />
+      <HeaderImage title={title} background={imageUrl} />
       <section className="container mx-auto pt-8 pb-12 px-5">
         {content && (
           <div className="mx-auto max-w-screen-lg [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">

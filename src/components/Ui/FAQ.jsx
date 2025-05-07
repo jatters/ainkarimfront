@@ -8,7 +8,7 @@ import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
 export default async function FAQ() {
   const faqs = await GetFaqs();
-  if (!faqs || !faqs.data) {
+  if (!faqs) {
     console.error("Error fetching FAQS");
     return <div>Error cargando preguntas frecuentes</div>;
   }
@@ -17,7 +17,7 @@ export default async function FAQ() {
       className="max-w-3xl px-5 mx-auto py-10 "
       aria-label="Preguntas frecuentes"
     >
-      {faqs.data.map((faq) => (
+      {faqs.map((faq) => (
         <Accordion key={faq.documentId}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <h3 className="font-bold -text--dark-green hover:-text--light-green duration-200">

@@ -33,7 +33,6 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
     setSubmitting(true);
 
     try {
-      // 1️⃣ Registro del usuario en Strapi
       const registerResponse = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local/register`,
         {
@@ -57,17 +56,15 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
         );
       }
 
-      // Capturamos el ID del usuario registrado
       const userId = registerResult.user.id;
 
-      // 2️⃣ Actualización de los datos adicionales
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/${userId}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`, // Token necesario para modificar el usuario
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
           },
           body: JSON.stringify({
             firstName: data.firstName.toUpperCase(),

@@ -4,7 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import Header from "@/components/Ui/Header";
 import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleTagManager } from "@next/third-parties/google";
 import { Toaster } from "react-hot-toast";
 import { ViewTransitions } from "next-view-transitions";
 import contactPage from "./contacto/page";
@@ -48,7 +48,7 @@ export const metadata = {
     "Visitas guiadas viñedo",
   ],
   authors: [
-    { name: "Eisncube", url: "https://einscube.com" },
+    { name: "Einscube", url: "https://einscube.com" },
     { name: "Javier Tenjo" },
   ],
   creator: "Javier Tenjo",
@@ -115,21 +115,14 @@ export const metadata = {
     statusBarStyle: "black-translucent",
     title: "Viñedo Ain Karim",
   },
-  manifest: "/site.webmanifest",
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/icons/apple-touch-icon.png",
-  },
+  manifest: "/manifest.webmanifest",   
 
-  itunesApp: "app-id=123456789",
-
-  // Metadatos LocalBusiness para mejorar el SEO local
   structuredData: {
     "@context": "https://schema.org",
     "@type": "Winery",
     name: "Viñedo Ain Karim",
     url: "https://ainkarim.co",
-    logo: "https://manager.ainkarim.co/uploads/logo_ain_karim_9987562b80.png",
+    logo: "https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png",
     image: "https://ainkarim.co/uploads/vinedo_e0e861760e.webp",
     description:
       "Viñedo Ain Karim, ubicado en Villa de Leyva, ofrece catas de vino, recorridos guiados y experiencias gastronómicas en un ambiente espectacular.",
@@ -190,7 +183,7 @@ export const metadata = {
       "@type": "Organization",
       name: "Viñedo Ain Karim",
       url: "https://ainkarim.co",
-      logo: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+      logo: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer service",
@@ -217,8 +210,7 @@ export const metadata = {
 export default function RootLayout(props) {
   return (
     <ViewTransitions>
-      <html lang="es">
-
+      <html lang="es" suppressHydrationWarning="true">
         <body
           className={`${montserrat.variable} ${marcellus.variable} antialiased`}
         >

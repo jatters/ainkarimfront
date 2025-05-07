@@ -14,12 +14,12 @@ import ListHours from "./ListHours";
 import AdditionalServices from "@/components/Ecommerce/Plans/AdditionalServices";
 import { normalizeReservationForCart } from "../NormalizeReservationForCart";
 import toast from "react-hot-toast";
+import { GetUsedSpotsInPlan } from "@/components/GetContentApi";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// Hook de debounce
 function useDebouncedEffect(effect, deps, delay) {
   useEffect(() => {
     const handler = setTimeout(() => effect(), delay);
@@ -44,10 +44,6 @@ const formatFecha = (dateString) => {
   const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
   return `${monthCapitalized} ${day} de ${year}`;
 };
-
-function formatTimeForAPI(timeString) {
-  return `${timeString}`;
-}
 
 export default function ModalSchedule({
   documentId,
@@ -79,51 +75,30 @@ export default function ModalSchedule({
 
   const { addToCart } = useContext(CartContext);
 
-  const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-  const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-
   const checkAvailableSpots = useCallback(
     async (selectedDate, selectedHour) => {
       if (!selectedDate || !selectedHour) return;
 
       setIsLoadingSpots(true);
       try {
-        const formattedTime = formatTimeForAPI(selectedHour);
-        const url = `${API_URL}/api/reservas?filters[reservationDate]=${selectedDate}&filters[reservationTime]=${formattedTime}&filters[plan][documentId][$eq]=${documentId}&populate=*`;
-
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.text();
-          console.error(
-            "ModalSchedule - Error fetching reservations:",
-            errorData
-          );
-          throw new Error(
-            `Error fetching reservations: ${response.status} - ${errorData}`
-          );
-        }
-        const data = await response.json();
-
-        const validStates = ["Pendiente", "Confirmada"];
-        const totalReservedSpots = data.data
-          .filter((reservation) => validStates.includes(reservation.state))
-          .reduce((acc, reservation) => acc + (reservation.guests || 0), 0);
-
+        const data = await GetUsedSpotsInPlan(
+          selectedDate,
+          selectedHour,
+          documentId
+        );
+        const totalReservedSpots = data.reduce(
+          (acc, reservation) => acc + (reservation.guests || 0),
+          0
+        );
         setAvailableSpots(max_reservations - totalReservedSpots);
       } catch (error) {
+        console.error("Error checking available spots:", error);
         setAvailableSpots(0);
       } finally {
         setIsLoadingSpots(false);
       }
     },
-    [API_URL, token, max_reservations, documentId]
+    [documentId, max_reservations]
   );
 
   useDebouncedEffect(
@@ -217,7 +192,7 @@ export default function ModalSchedule({
       persons: reservationData.persons,
       additionalService: selectedService,
       availableSpots: availableSpots,
-      unitPlan
+      unitPlan,
     };
 
     const cartItem = normalizeReservationForCart(
@@ -362,7 +337,8 @@ export default function ModalSchedule({
               <div className="w-full md:w-64 flex flex-col space-y-4">
                 <div className="flex flex-col">
                   <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
-                    <span className="icon-[ion--people]"></span>{unitPlan}s:
+                    <span className="icon-[ion--people]"></span>
+                    {unitPlan}s:
                   </div>
                   <div className="mt-2 w-full">
                     <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">
@@ -394,7 +370,7 @@ export default function ModalSchedule({
 
                 <div className="flex flex-col">
                   <ListHours
-                    schedules={horarios}
+                    horarios={horarios}
                     classNameInput="w-full"
                     classNameContainer="flex flex-col"
                     value={reservationData.hour}

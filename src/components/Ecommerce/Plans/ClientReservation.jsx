@@ -1,4 +1,4 @@
-"use client"; // Necesario porque usaremos hooks aquí
+"use client";
 import { useState } from "react";
 import SpecialServices from "@/components/Ecommerce/Plans/SpecialServices";
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
@@ -15,7 +15,7 @@ export default function ClientReservation({ plan }) {
       <ReservationField
         schedules={plan.horarios.data}
         plan={plan}
-        selectedService={selectedService} 
+        selectedService={selectedService}
       />
     </div>
   );

@@ -40,18 +40,18 @@ export async function generateMetadata() {
 
 export default async function FaqPage() {
   const faqs = await GetFaqs();
-  if (!faqs || !faqs.data) {
+  if (!faqs) {
     console.error("Error fetching FAQS");
     return <>Error cargando preguntas frecuentes</>;
   }
   const faqStructuredData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.data.map((faq) => ({
+    mainEntity: faqs.map((faq) => ({
       "@type": "Question",
       name: faq.title,
       acceptedAnswer: {
-        "@type": "Answer",        
+        "@type": "Answer",
         text: typeof faq.asnwer === "string" ? faq.asnwer : "",
       },
     })),
@@ -71,7 +71,7 @@ export default async function FaqPage() {
         background="/banner-contacto.webp"
       />
       <section className="container mx-auto pt-8 pb-12 px-5">
-        <FAQ faqs={faqs} />
+        <FAQ />
       </section>
     </main>
   );

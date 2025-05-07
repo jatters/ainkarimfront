@@ -24,7 +24,9 @@ export default function ProductCard({ product }) {
 
   const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
   const categoryName = categorias_de_producto?.name || "Vinos";
-  const imageUrl = image?.url ? `${baseurl}${image.url}` : null;
+  const imageUrl = image?.formats?.small?.url
+    ? `${baseurl}${image.formats.small.url}`
+    : null;
   const altText = image?.alternativeText || `Producto ${title}`;
   const parsedRegularPrice = parseInt(regularPrice, 10);
   const parsedPrice = parseInt(price, 10);
@@ -35,7 +37,6 @@ export default function ProductCard({ product }) {
   const router = useRouter();
 
   const handleAddToCart = () => {
-    // Para productos variables, no se permite agregar sin selección
     if (isVariable && !selectedVariation) return;
     const cartItem = normalizeProductForCart(product, selectedVariation);
     addToCart(cartItem);
@@ -109,10 +110,10 @@ export default function ProductCard({ product }) {
       "@type": "Offer",
       url: `https://ainkarim.co/producto/${slug}`,
       priceCurrency: "COP",
-      price: isOnSale ? parsedPrice : parsedRegularPrice, // Asegúrate de que price sea un número
+      price: isOnSale ? parsedPrice : parsedRegularPrice,
       priceSpecification: {
         "@type": "UnitPriceSpecification",
-        price: isOnSale ? parsedPrice : parsedRegularPrice, // Asegúrate de que price sea un número
+        price: isOnSale ? parsedPrice : parsedRegularPrice,
         priceCurrency: "COP",
       },
       availability: isActive
@@ -144,7 +145,7 @@ export default function ProductCard({ product }) {
               OFERTA %
             </div>
           )}
-          {/* Asignamos una altura fija al contenedor de imagen y evitamos que se encoja */}
+
           <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100 flex-shrink-0">
             <Link href={`/producto/${slug}`}>
               <Image
@@ -200,7 +201,6 @@ export default function ProductCard({ product }) {
             </div>
             <div className="flex-1"></div>
 
-            {/* Bloque de variaciones: para productos variables se usa un contenedor con scroll horizontal */}
             {isVariable &&
               Array.isArray(variaciones) &&
               variaciones.length > 0 && (
@@ -223,11 +223,10 @@ export default function ProductCard({ product }) {
                 </div>
               )}
 
-            {/* Contenedor de botones */}
             <div className="flex gap-3 mt-auto w-full justify-center pb-5">
               <Link
                 href={`/producto/${slug}`}
-                className="text-sm border border-green-800 text-green-800 px-3 flex items-center gap-1 py-1 rounded-md transition-colors duration-200 hover:bg-green-800 hover:text-white"
+                className="text-sm border border-green-800 text-green-800 px-4 py-2 flex items-center gap-1 rounded-md transition-colors duration-200 hover:bg-green-800 hover:text-white"
                 aria-label={`Ver producto ${title}`}
               >
                 Ver
@@ -235,7 +234,7 @@ export default function ProductCard({ product }) {
               <button
                 onClick={handleAddToCart}
                 disabled={isVariable && !selectedVariation}
-                className={`text-sm text-white px-3 py-1 rounded-md transition-colors duration-200 ${
+                className={`text-sm text-white px-4 py-2 rounded-md transition-colors duration-200 ${
                   isVariable && !selectedVariation
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-700 hover:bg-green-800"

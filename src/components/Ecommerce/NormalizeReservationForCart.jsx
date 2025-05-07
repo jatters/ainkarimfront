@@ -12,14 +12,12 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 function formatDate(dateString) {
-  // Se asume que dateString viene en formato "YYYY-MM-DD"
   const date = new Date(dateString + "T00:00:00");
   const day = date.getDate().toString().padStart(2, "0");
   const month = capitalize(date.toLocaleString("es-ES", { month: "long" }));
   const year = date.getFullYear();
   return `${month} ${day} de ${year}`;
 }
-
 
 export function normalizeReservationForCart(plan, selectedOptions = {}) {
   const originalName =
@@ -30,7 +28,6 @@ export function normalizeReservationForCart(plan, selectedOptions = {}) {
     : null;
   const categoryName = categorias_de_producto?.name || "Plan";
 
-  // Extraemos las opciones seleccionadas, incluyendo availableSpots
   const {
     date = "",
     hour = "",
@@ -42,7 +39,6 @@ export function normalizeReservationForCart(plan, selectedOptions = {}) {
   const formattedHour = hour ? formatHour(hour) : "";
   const formattedDate = date ? formatDate(date) : "";
 
-  // Construimos el título normalizado
   const normalizedTitle = `${originalName} - ${formattedDate} - ${
     persons > 1 ? persons + ` ${plan.unitPlan}s` : `1 ${plan.unitPlan}`
   } - ${formattedHour}`;
@@ -53,7 +49,7 @@ export function normalizeReservationForCart(plan, selectedOptions = {}) {
     unitPlan,
     originalName,
     price: parseFloat(price) || 0,
-    quantity: persons, 
+    quantity: persons,
     image: normalizedImage,
     category: categoryName,
     attributes: plan,
@@ -70,6 +66,6 @@ export function normalizeReservationForCart(plan, selectedOptions = {}) {
     maxQuantity: plan.max_reservations
       ? parseInt(plan.max_reservations, 10)
       : undefined,
-    availableSpots, 
+    availableSpots,
   };
 }

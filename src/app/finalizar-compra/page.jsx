@@ -2,10 +2,8 @@
 import React, { useContext, useState } from "react";
 import CheckoutForm from "@/components/Forms/CheckoutForm";
 import { CartContext } from "@/context/CartContext";
-import Image from "next/image";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
 import Tooltip from "@mui/material/Tooltip";
-import Head from "next/head";
 import CouponInput from "@/components/Ecommerce/CouponInput";
 
 export default function PaymentPage() {
@@ -150,7 +148,6 @@ export default function PaymentPage() {
               )}
             </div>
 
-            {/* Columna derecha: Resumen del pedido */}
             <div className="col-span-1">
               <h2 className="font-bold text-2xl mb-6 -text--dark-green">
                 TU PEDIDO
@@ -264,7 +261,6 @@ export default function PaymentPage() {
                   );
                 })}
 
-                {/* Total */}
                 {coupon && (
                   <div className="my-3">
                     <div className="grid grid-cols-4">

@@ -1,27 +1,22 @@
 import PlanCard from "@/components/Ecommerce/PlanCard";
 import { GetPlansForHome } from "../GetContentApi";
 
-const formatPrice = (price) => {
-  if (!price) return "";
-  const formatedPrice = String(price);
-  return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
-};
-
 export default async function PlansHome() {
   const plansData = await GetPlansForHome();
-  if (!plansData || !plansData.data) {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!plansData) {
     console.error("Error fetching plans for home");
-    return <p>Error cargando planes</p>;
+    return <p className="text-center my-10">Error cargando planes</p>;
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center  mt-10 gap-x-2 gap-y-7">
-      {plansData.data.slice(0, 4).map((plan) => {
+      {plansData.slice(0, 4).map((plan) => {
         const experienciesList = plan.experiencias.map((experiencia) => ({
           id: experiencia.documentId,
           name: experiencia.name,
           alt: `Icono ${experiencia.name}`,
-          iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon.url}`,
+          iconurl: `${baseUrl}${experiencia.icon.url}`,
         }));
 
         return (
@@ -34,7 +29,7 @@ export default async function PlansHome() {
             <PlanCard
               slug={`/visita/${plan.slug}`}
               name={plan.name}
-              documentId={plan.documentId}
+              planId={plan.documentId}
               price={plan.price}
               experiences={experienciesList}
               image={plan.image}

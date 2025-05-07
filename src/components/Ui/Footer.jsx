@@ -31,36 +31,36 @@ export default async function Footer() {
             <li>
               <div className="flex flex-wrap gap-1 items-center">
                 <span className="icon-[gridicons--location] text-xl"></span>
-                {companyInfo?.data?.vinedoAddress && (
+                {companyInfo?.vinedoAddress && (
                   <>
                     <span className="font-semibold">Ubicación: </span>{" "}
-                    {companyInfo?.data?.vinedoAddress}
+                    {companyInfo?.vinedoAddress}
                   </>
                 )}
               </div>
               <div className="flex flex-wrap gap-2 justify-center mt-3 mb-3">
-                {companyInfo?.data?.linkGoogleMaps && (
+                {companyInfo?.linkGoogleMaps && (
                   <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
                     <a
                       className="flex flex-col items-center"
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label="Abrir ubicación en Google Maps"
-                      href={companyInfo?.data?.linkGoogleMaps}
+                      href={companyInfo?.linkGoogleMaps}
                     >
                       <Image src={maps} alt="Logo Google Maps" width={15} />
                       <span>Abrir en Google Maps</span>
                     </a>
                   </div>
                 )}
-                {companyInfo?.data?.linkWaze && (
+                {companyInfo?.linkWaze && (
                   <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
                     <a
                       className="flex flex-col items-center"
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label="Abrir ubicación en Waze"
-                      href={companyInfo?.data?.linkWaze}
+                      href={companyInfo?.linkWaze}
                     >
                       <Image src={waze} alt="Logo Waze" width={84} />
                       <span>Abrir en Waze</span>
@@ -72,24 +72,24 @@ export default async function Footer() {
             <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[mdi--phone] text-xl"></span>
               <span className="font-semibold">Teléfono: </span>
-              {companyInfo?.data?.vinedoPhone && (
+              {companyInfo?.vinedoPhone && (
                 <a
                   className="hover:-text--light-green duration-200"
-                  href={`tel:${companyInfo?.data?.vinedoPhone}`}
+                  href={`tel:${companyInfo?.vinedoPhone}`}
                 >
-                  {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  {formatPhoneNumber(companyInfo?.vinedoPhone)}
                 </a>
               )}
             </li>
             <li className="flex flex-wrap gap-1 items-center">
               <span className="icon-[material-symbols--mail] text-xl"></span>
               <span className="font-semibold">Correo: </span>
-              {companyInfo?.data?.contactEmail && (
+              {companyInfo?.contactEmail && (
                 <a
                   className="hover:-text--light-green duration-200"
-                  href={`mailto:${companyInfo?.data?.contactEmail}`}
+                  href={`mailto:${companyInfo?.contactEmail}`}
                 >
-                  {companyInfo?.data?.contactEmail}
+                  {companyInfo?.contactEmail}
                 </a>
               )}
             </li>
@@ -183,22 +183,22 @@ export default async function Footer() {
             className="flex flex-col space-y-2 text-sm"
             aria-label="Horarios de atención del Viñedo Ain Karim"
           >
-            {companyInfo?.data?.open && (
+            {companyInfo?.open && (
               <li>
                 <span className="font-semibold">Apertura:</span>{" "}
-                {companyInfo?.data?.open}
+                {companyInfo?.open}
               </li>
             )}
-            {companyInfo?.data?.lastTour && (
+            {companyInfo?.lastTour && (
               <li>
                 <span className="font-semibold">Último recorrido:</span>{" "}
-                {companyInfo?.data?.lastTour}
+                {companyInfo?.lastTour}
               </li>
             )}
-            {companyInfo?.data?.close && (
+            {companyInfo?.close && (
               <li>
                 <span className="font-semibold">Cierre:</span>{" "}
-                {companyInfo?.data?.close}
+                {companyInfo?.close}
               </li>
             )}
             <li>
@@ -206,31 +206,31 @@ export default async function Footer() {
             </li>
             <li>
               <span className="font-semibold">Lunes:</span>{" "}
-              {companyInfo?.data?.monday}
+              {companyInfo?.monday}
             </li>
             <li>
               <span className="font-semibold">Martes:</span>{" "}
-              {companyInfo?.data?.tuesday}
+              {companyInfo?.tuesday}
             </li>
             <li>
               <span className="font-semibold">Miércoles:</span>{" "}
-              {companyInfo?.data?.wednesday}
+              {companyInfo?.wednesday}
             </li>
             <li>
               <span className="font-semibold">Jueves:</span>{" "}
-              {companyInfo?.data?.thursday}
+              {companyInfo?.thursday}
             </li>
             <li>
               <span className="font-semibold">Viernes:</span>{" "}
-              {companyInfo?.data?.friday}
+              {companyInfo?.friday}
             </li>
             <li>
               <span className="font-semibold">Sábado:</span>{" "}
-              {companyInfo?.data?.saturday}
+              {companyInfo?.saturday}
             </li>
             <li>
               <span className="font-semibold">Domingo y festivos:</span>{" "}
-              {companyInfo?.data?.sunday}
+              {companyInfo?.sunday}
             </li>
           </ul>
         </div>
@@ -245,17 +245,17 @@ export default async function Footer() {
             <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[gridicons--location] text-xl"></span>
               <span className="font-semibold">Dirección:</span>{" "}
-              {companyInfo?.data?.officeAddress}
+              {companyInfo?.officeAddress}
             </li>
             <li className="flex items-center gap-1 flex-wrap">
               <span className="icon-[basil--mobile-phone-outline] text-xl"></span>
               <span className="font-semibold">Teléfono:</span>
-              {companyInfo?.data?.vinedoPhone && (
+              {companyInfo?.vinedoPhone && (
                 <a
                   className="hover:-text--light-green duration-200"
-                  href={`tel:${companyInfo?.data?.vinedoPhone}`}
+                  href={`tel:${companyInfo?.vinedoPhone}`}
                 >
-                  {formatPhoneNumber(companyInfo?.data?.vinedoPhone)}
+                  {formatPhoneNumber(companyInfo?.vinedoPhone)}
                 </a>
               )}
             </li>
@@ -268,11 +268,11 @@ export default async function Footer() {
           className="flex flex-row  gap-4 my-3"
           aria-label="Redes sociales del Viñedo Ain Karim"
         >
-          {companyInfo?.data?.instagram && (
+          {companyInfo?.instagram && (
             <li>
               <a
                 className="text-3xl"
-                href={companyInfo?.data?.instagram}
+                href={companyInfo?.instagram}
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Instagram del Viñedo Ain Karim"
@@ -281,11 +281,11 @@ export default async function Footer() {
               </a>
             </li>
           )}
-          {companyInfo?.data?.facebook && (
+          {companyInfo?.facebook && (
             <li>
               <a
                 className="text-3xl"
-                href={companyInfo?.data?.facebook}
+                href={companyInfo?.facebook}
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Facebook del Viñedo Ain Karim"
@@ -294,11 +294,11 @@ export default async function Footer() {
               </a>
             </li>
           )}
-          {companyInfo?.data?.tripAdvisor && (
+          {companyInfo?.tripAdvisor && (
             <li>
               <a
                 className="text-3xl"
-                href={companyInfo?.data?.tripAdvisor}
+                href={companyInfo?.tripAdvisor}
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Tripadvisor"

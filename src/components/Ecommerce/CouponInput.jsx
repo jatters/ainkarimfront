@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useContext } from "react";
-
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -25,32 +24,25 @@ export default function CouponInput() {
     try {
       const response = await GetCoupons(couponCode);
 
-      if (response && response.data && response.data.length > 0) {
-        const fetchedCoupon = response.data[0];
+      if (response && response.coupon) {
+        const couponData = response.coupon;
 
-        if (fetchedCoupon && fetchedCoupon.coupon) {
-          const couponData = fetchedCoupon.coupon;
+        if (couponData.code.toUpperCase() !== couponCode.toUpperCase()) {
+          setError("El código del cupón no es válido.");
+          setLoading(false);
+          return;
+        }
 
-          if (couponData.code.toUpperCase() !== couponCode.toUpperCase()) {
-            setError("El código del cupón no es válido.");
+        if (couponData.endDate) {
+          const expirationDate = new Date(couponData.endDate);
+          if (new Date() > expirationDate) {
+            setError("El cupón ha expirado");
             setLoading(false);
             return;
           }
-
-          if (couponData.endDate) {
-            const expirationDate = new Date(couponData.endDate);
-            if (new Date() > expirationDate) {
-              setError("El cupón ha expirado");
-              setLoading(false);
-              return;
-            }
-          }
-          setCoupon(couponData);
-          setLoading(false);
-        } else {
-          setError("El cupón no es válido");
-          setLoading(false);
         }
+        setCoupon(couponData);
+        setLoading(false);
       } else {
         setError("El cupón no es válido");
         setLoading(false);

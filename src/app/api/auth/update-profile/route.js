@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken"; // 📌 Instala con `npm install jsonwebtoken`
+import jwt from "jsonwebtoken";
 
 export async function PUT(req) {
   try {

@@ -8,15 +8,14 @@ import Script from "next/script";
 
 export async function generateMetadata() {
   const data = await GetAboutUs();
-  // Si no se encuentra información, se usan valores por defecto
-  if (!data || !data.data) {
+  if (!data) {
     return {
-      title: "Nosotros ",
+      title: "El Vinedo",
       description:
         "Conoce la historia, proyectos y compromiso social de Viñedo Ain Karim.",
     };
   }
-  const { title, cover } = data.data;
+  const { title, cover } = data;
   const metaTitle = `Conoce ${title} `;
   const description =
     "Conoce la historia de Viñedo Ain Karim, nuestros proyectos en viticultura, y nuestro compromiso filantrópico.";
@@ -56,18 +55,17 @@ export async function generateMetadata() {
 
 export default async function vinedoPage() {
   const data = await GetAboutUs();
-  if (!data || !data.data) {
+  if (!data) {
     console.error("Error fetching about us info page");
     return <div>Error cargando la información</div>;
   }
 
-  const { title, timeline, viticultura, filantropia, slider, cover } =
-    data.data;
+  const { title, timeline, viticultura, filantropia, slider, cover } = data;
 
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    url: "https://ainkarim.co/nosotros",
+    url: "https://ainkarim.co/el-vinedo",
     name: title,
     description:
       "Conoce la historia de Viñedo Ain Karim, nuestros proyectos en viticultura y nuestro compromiso filantrópico.",
@@ -75,7 +73,7 @@ export default async function vinedoPage() {
       "@type": "Organization",
       name: "Viñedo Ain Karim",
       url: "https://ainkarim.co",
-      logo: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+      logo: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       contactPoint: {
         "@type": "ContactPoint",
         telephone: "+57 317 431 9583",

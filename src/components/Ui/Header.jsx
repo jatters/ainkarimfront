@@ -10,8 +10,6 @@ import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PersonIcon from "@mui/icons-material/Person";
-import Avatar from "@mui/material/Avatar";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -23,11 +21,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     color: "white",
   },
 }));
-
-// Supongamos que tienes alguna forma de saber si el usuario está logeado y sus datos.
-// cambiar según el estado real
-const userProfileImage = ""; // URL de la imagen del usuario, si está logeado
-const userName = "Usuario"; // Nombre o iniciales
 
 export default function Header() {
   const { cart } = useContext(CartContext);
@@ -46,7 +39,6 @@ export default function Header() {
     <header className="sticky top-0 z-50 shadow-xl bg-black">
       {/* Versión móvil */}
       <div className="lg:hidden bg-black flex items-center justify-between px-1 sm:px-5 py-4">
-        {/* Botón de menú */}
         <button onClick={toggleMenu} aria-label="Abrir menú">
           {isMenuOpen ? (
             <CloseIcon className="text-white text-2xl ml-2 sm:ml-0" />
@@ -54,7 +46,7 @@ export default function Header() {
             <MenuIcon className="text-white text-2xl ml-2 sm:ml-0" />
           )}
         </button>
-        {/* Logo */}
+
         <Link href="/">
           <Image
             src={logo}
@@ -62,9 +54,10 @@ export default function Header() {
             width={256}
             height={56}
             className="invert h-14 w-64"
+            priority={true}
           />
         </Link>
-        {/* Íconos de carrito y usuario */}
+
         <div className="flex items-center gap-1 sm:gap-3">
           <Link href="/iniciar-sesion" aria-label="Iniciar sesión">
             <IconButton aria-label="iniciar sesión" sx={{ color: "#ffffff" }}>
@@ -86,7 +79,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Menú desplegable para móvil */}
       {isMenuOpen && (
         <div className="lg:hidden bg-black absolute top-16 left-0 w-full z-40 mt-3">
           <nav
@@ -163,6 +155,7 @@ export default function Header() {
             width={256}
             height={56}
             className="invert grow-0 shrink h-14 w-64"
+            priority={true}
           />
         </Link>
         <nav role="navigation" aria-label="Menú de navegación">

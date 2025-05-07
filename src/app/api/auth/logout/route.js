@@ -5,8 +5,7 @@ export async function POST() {
 
   
   response.cookies.set("jwt", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,    
     sameSite: "strict",
     maxAge: 0, 
     path: "/",

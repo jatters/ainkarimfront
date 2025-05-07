@@ -5,24 +5,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
-
-async function getPageData() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/politica-dato-personal?populate=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { GetPage } from "@/components/GetContentApi";
 
 const extractPlainText = (content) => {
   if (!content) return "";
@@ -35,23 +18,26 @@ const extractPlainText = (content) => {
   return "";
 };
 
-// Metadatos dinámicos para la página
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export async function generateMetadata() {
-  const canonicalUrl = "https://ainkarim.co/politica-de-tratamiento-de-datos-personales";
+  const canonicalUrl = `${baseUrl}/politica-de-tratamiento-de-datos-personales`;
   let metaTitle = "Política de Tratamientos de Datos Personales";
   let metaDescription =
     "Conoce cómo tratamos y protegemos tus datos personales en Viñedo Ain Karim.";
-  let imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/banner-puntos-de-venta.webp`;
+  let imageUrl = `${baseUrl}/banner-puntos-de-venta.webp`;
 
-  const pageData = await getPageData();
-  if (pageData && pageData.data) {
-    metaTitle = pageData.data.title || metaTitle;
-    if (pageData.data.image && pageData.data.image.url) {
-      imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${pageData.data.image.url}`;
+  const pageData = await GetPage({ page: "politica-dato-personal" });
+  if (pageData) {
+    metaTitle = pageData.title || metaTitle;
+    if (pageData.image && pageData.image.url) {
+      imageUrl = `${baseUrl}${pageData.image.url}`;
     }
-    const plainText = extractPlainText(pageData.data.content);
+    const plainText = extractPlainText(pageData.content);
     if (plainText) {
-      metaDescription = plainText.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "");
+      metaDescription = plainText
+        .substring(0, 150)
+        .replace(/<\/?[^>]+(>|$)/g, "");
     }
   }
 
@@ -83,8 +69,8 @@ export async function generateMetadata() {
 }
 
 export default async function PersonalInformationPage() {
-  const pageData = await getPageData();
-  if (!pageData || !pageData.data) {
+  const pageData = await GetPage({ page: "politica-dato-personal" });
+  if (!pageData) {
     console.error(pageData);
     return (
       <div className="container mx-auto py-16 px-5 text-center">
@@ -92,16 +78,14 @@ export default async function PersonalInformationPage() {
       </div>
     );
   }
-  const { title, content, image, politica } = pageData.data;
-  const canonicalUrl = "https://ainkarim.co/politica-de-tratamiento-de-datos-personales";
+  const { title, content, image, politica } = pageData;
+  const canonicalUrl = `${baseUrl}/politica-de-tratamiento-de-datos-personales`;
   const imageUrl = image?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
+    ? `${baseUrl}${image.url}`
     : "/banner-puntos-de-venta.webp";
 
-  // Extraer texto plano para la descripción del JSON‑LD
   const plainText = extractPlainText(content);
 
-  // JSON‑LD para estructurar la página como un artículo
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -117,7 +101,7 @@ export default async function PersonalInformationPage() {
       name: "Viñedo Ain Karim",
       logo: {
         "@type": "ImageObject",
-        url: "https://manager.ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
+        url: "https://ainkarim.co/uploads/logo_ainkarim_9987562b80.png",
       },
     },
     mainEntityOfPage: {
@@ -136,9 +120,7 @@ export default async function PersonalInformationPage() {
       <HeaderImage
         title={title}
         background={
-          image?.url
-            ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}`
-            : "/banner-puntos-de-venta.webp"
+          image?.url ? `${baseUrl}${image.url}` : "/banner-puntos-de-venta.webp"
         }
       />
       <section className="max-w-screen-lg mx-auto pt-8 pb-12 px-5 prose">

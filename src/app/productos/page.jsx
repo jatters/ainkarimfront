@@ -50,7 +50,7 @@ export const metadata = {
 
 export default async function productsPage() {
   const products = await GetProducts();
-  if (!products || !products.data) {
+  if (!products) {
     console.error("Error loading products");
     return (
       <div className="container mx-auto py-16 px-5">
@@ -63,9 +63,8 @@ export default async function productsPage() {
     <main>
       <Popup location="store" />
       <HeaderImage title="Vinos" background="/banner-vinos.webp" />
-      <section className="container mx-auto py-8 lg:py-16">
-        {/* Pasar la lista de productos iniciales a FilterableProducts */}
-        <FilterableProducts initialProducts={products.data} />
+      <section className="container mx-auto py-8 lg:py-16" aria-label="Productos">
+        <FilterableProducts initialProducts={products} />
       </section>
     </main>
   );

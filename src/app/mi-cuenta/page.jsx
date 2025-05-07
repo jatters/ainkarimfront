@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@mui/material";
@@ -18,8 +17,6 @@ export default function MyAccountPage() {
   const [updating, setUpdating] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  // Estado para guardar errores específicos de cada campo
   const [errors, setErrors] = useState({});
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -63,21 +60,19 @@ export default function MyAccountPage() {
 
   if (!formData) return null;
 
-  // Maneja cambios en los inputs
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // Limpia el error específico de ese campo si el usuario reescribe
+
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = (data) => {
     const newErrors = {};
 
-    // Valida que sea mayor de 18 años
     const today = new Date();
     const birthDate = new Date(data.bornDate);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -85,7 +80,6 @@ export default function MyAccountPage() {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    // Campos obligatorios
     if (!data.firstName.trim()) {
       newErrors.firstName = "El nombre es obligatorio.";
     } else if (!/^[A-Za-zÁÉÍÓÚáéíóúüÜñÑ\s]+$/.test(data.firstName.trim())) {
@@ -138,17 +132,15 @@ export default function MyAccountPage() {
     return newErrors;
   };
 
-  // Maneja el envío del formulario
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
     setUpdating(true);
 
-    // Primero validamos
     const dataToValidate = {
       ...formData,
-      // Dejamos en minúsculas/mixto mientras validamos
+
       firstName: formData.firstName.trim(),
       middleName: formData.middleName.trim(),
       lastName: formData.lastName.trim(),
@@ -162,7 +154,6 @@ export default function MyAccountPage() {
       return;
     }
 
-    // Si no hay errores, normalizamos datos finales (nombres en mayúsculas)
     const finalData = {
       ...formData,
       firstName: formData.firstName.toUpperCase(),
@@ -173,7 +164,6 @@ export default function MyAccountPage() {
       password: password || undefined,
     };
 
-    // Valida coincidencia de contraseñas si se cambia
     if (password && password !== confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden.");
       setUpdating(false);
@@ -232,7 +222,6 @@ export default function MyAccountPage() {
 
       <div className="mx-auto bg-white shadow-md border border-slate-100 rounded-md p-6 mt-8">
         {!editMode ? (
-          // Vista de solo lectura
           <div className="grid grid-cols-1 gap-3">
             <p>
               <span className="font-semibold">Nombre:</span>{" "}
@@ -298,12 +287,10 @@ export default function MyAccountPage() {
             </div>
           </div>
         ) : (
-          // Formulario de edición
           <form
             onSubmit={handleUpdateProfile}
             className="grid grid-cols-2 gap-5 items-center"
           >
-            {/* Nombre */}
             <div>
               <label className="block font-semibold">Nombre</label>
               <input
@@ -320,7 +307,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Segundo Nombre */}
             <div>
               <label className="block font-semibold">Segundo Nombre</label>
               <input
@@ -337,7 +323,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Apellido */}
             <div>
               <label className="block font-semibold">Apellido</label>
               <input
@@ -354,7 +339,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Segundo Apellido */}
             <div>
               <label className="block font-semibold">Segundo Apellido</label>
               <input
@@ -371,7 +355,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block font-semibold">Correo Electrónico</label>
               <input
@@ -388,7 +371,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Tipo de Documento (No editable) */}
             <div>
               <label className="block font-semibold">Tipo de Documento</label>
               <input
@@ -400,7 +382,6 @@ export default function MyAccountPage() {
               />
             </div>
 
-            {/* Documento (No editable) */}
             <div>
               <label className="block font-semibold">Documento</label>
               <input
@@ -412,7 +393,6 @@ export default function MyAccountPage() {
               />
             </div>
 
-            {/* Género */}
             <div>
               <label className="block font-semibold">Género</label>
               <select
@@ -433,7 +413,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Celular */}
             <div>
               <label className="block font-semibold">Celular</label>
               <input
@@ -450,7 +429,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Fecha de nacimiento */}
             <div>
               <label className="block font-semibold">Fecha de nacimiento</label>
               <input
@@ -467,7 +445,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Ciudad */}
             <div>
               <label className="block font-semibold">Ciudad</label>
               <input
@@ -484,7 +461,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Departamento */}
             <div>
               <label className="block font-semibold">Departamento</label>
               <input
@@ -501,7 +477,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Dirección */}
             <div>
               <label className="block font-semibold">Dirección</label>
               <input
@@ -518,7 +493,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Autorización Marketing */}
             <div className="flex items-center">
               <label className="block font-semibold mr-2">
                 Autorizas a recibir mensajes de marketing
@@ -545,7 +519,6 @@ export default function MyAccountPage() {
               </div>
             </div>
 
-            {/* Nueva Contraseña */}
             <div className="relative">
               <label className="block font-semibold">Nueva Contraseña</label>
               <input
@@ -554,7 +527,7 @@ export default function MyAccountPage() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  // Limpiar error general al reescribir
+
                   setErrorMessage("");
                 }}
                 className="w-full border px-3 py-2 rounded-md"
@@ -586,16 +559,17 @@ export default function MyAccountPage() {
               </Tooltip>
             </div>
 
-            {/* Confirmar Contraseña */}
             <div className="relative">
-              <label className="block font-semibold">Confirmar Contraseña</label>
+              <label className="block font-semibold">
+                Confirmar Contraseña
+              </label>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
-                  // Limpiar error general al reescribir
+
                   setErrorMessage("");
                 }}
                 className="w-full border px-3 py-2 rounded-md"
@@ -629,7 +603,6 @@ export default function MyAccountPage() {
               </Tooltip>
             </div>
 
-            {/* Mensajes de error o éxito generales */}
             <div className="flex flex-col gap-2 col-span-2">
               {errorMessage && (
                 <p className="text-red-500 font-semibold">{errorMessage}</p>
@@ -639,7 +612,6 @@ export default function MyAccountPage() {
               )}
             </div>
 
-            {/* Botones de acción */}
             <div className="flex gap-5 justify-end col-span-2">
               <button
                 type="button"

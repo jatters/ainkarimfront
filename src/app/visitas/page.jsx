@@ -5,7 +5,7 @@ import Popup from "@/components/Ui/Popup";
 import Script from "next/script";
 
 export async function generateMetadata() {
-  const title = "Visitas | Experiencias en Viñedo Ain Karim";
+  const title = "Experiencias en Viñedo Ain Karim";
   const description =
     "Descubre y reserva experiencias únicas en Viñedo Ain Karim. Vive visitas, recorridos y momentos inolvidables en nuestro enoturismo en Villa de Leyva.";
   const canonicalUrl = "https://ainkarim.co/visitas";
@@ -41,17 +41,19 @@ export async function generateMetadata() {
 
 export default async function VisitasPage() {
   const plansData = await GetPlans();
-  if (!plansData || !plansData.data) {
-    console.error("Error fetching plans data");
+  if (!plansData) {
+    console.error("Error fetching plans");
     return (
-      <div className="container mx-auto py-16 px-5">Error cargando planes</div>
+      <div className="container mx-auto py-16 px-5">
+        Error cargando planes, intenta más tarde
+      </div>
     );
   }
   const jsonLD = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Experiencias de Visitas en Viñedo Ain Karim",
-    itemListElement: plansData.data.map((plan, index) => ({
+    itemListElement: plansData.map((plan, index) => ({
       "@type": "ListItem",
       position: index + 1,
       url: `https://ainkarim.co/visita/${plan.slug}`,
@@ -70,7 +72,7 @@ export default async function VisitasPage() {
 
   return (
     <main>
-       <Script
+      <Script
         id="json-ld-plans"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
@@ -83,42 +85,54 @@ export default async function VisitasPage() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center mt-10 gap-x-4 gap-y-7">
-          {plansData.data.map((plan) => {
+          {plansData.map((plan) => {            
+            const planId = plan.documentId
+            const name = plan.name
+            const slug = `/visita/${plan.slug}`;
+            const price = plan.price
+            const planUnit = plan.unitPlan;
+            const planImage = plan.image;
+            const planAltImg = plan.image.alternativeText || `Imagen ${plan.name} `;    
+            const onlyAdults = plan.onlyAdults;
+            const allowChilds = plan.allowChilds;
+            const horarios = plan.horarios;
+            const rules = plan.reglas_planes;
+            const additionalServices = plan.servicios_adicionales;
+            const maxReservations = plan.max_reservations;    
+            
             const experienciesList = plan.experiencias.map((experiencia) => ({
               id: experiencia.documentId,
               name: experiencia.name,
               alt: `Icono ${experiencia.name}`,
               iconurl: `${process.env.NEXT_PUBLIC_SITE_URL}${experiencia.icon?.url}`,
             }));
-            if (!plan.isActive) return null;
             
-            return (      
-              <article className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
-               key={plan.documentId}
-               itemScope
-      itemType="https://schema.org/Reservation" 
-               >
+            
+
+            if (!plan.isActive) return null;
+            return (
+              <article
+                className="flex flex-col pb-9 items-center shadow-lg rounded-md hover:shadow-slate-300 group"
+                key={plan.documentId}
+                itemScope
+                itemType="https://schema.org/Reservation"
+              >
                 <PlanCard
-                slug={`/visita/${plan.slug}`}
-                name={plan.name}
-                documentId={plan.documentId}
-                price={plan.price}
-                experiences={experienciesList}
-                unitPlan={plan.unitPlan}
-                /* image={`${process.env.NEXT_PUBLIC_SITE_URL}${
-                  plan.image?.formats.small.url || plan.image.url
-                }`} */
-                image={plan.image}
-                altimg={
-                  plan.image.alternativeText || `Imagen ${plan.name} `
-                }
-                onlyadults={plan.onlyAdults}
-                allowchilds={plan.allowChilds}
-                horarios={plan.horarios}
-                rules={plan.reglas_planes}
-                additionalServices={plan.servicios_adicionales}
-                max_reservations={plan.max_reservations}
-              />
+                  slug={slug}
+                  name={name}
+                  planId={planId}
+                  price={price}
+                  experiences={experienciesList}
+                  unitPlan={planUnit}
+                  image={planImage}
+                  altimg={planAltImg}
+                  onlyadults={onlyAdults}
+                  allowchilds={allowChilds}
+                  horarios={horarios}
+                  rules={rules}
+                  additionalServices={additionalServices}
+                  max_reservations={maxReservations}
+                />
               </article>
             );
           })}

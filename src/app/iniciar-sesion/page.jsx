@@ -1,4 +1,3 @@
-
 import LoginPageClient from "@/components/LoginPageClient";
 
 export const metadata = {

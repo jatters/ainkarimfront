@@ -9,7 +9,6 @@ export default function SliderMenu({ images }) {
   const mainSwiperRef = useRef(null);
   const thumbsSwiperRef = useRef(null);
 
-  // Aseguramos que Swiper esté bien registrado y cargado
   useEffect(() => {
     if (mainSwiperRef.current && thumbsSwiperRef.current) {
       const mainSwiper = mainSwiperRef.current.swiper;

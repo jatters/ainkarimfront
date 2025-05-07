@@ -27,11 +27,10 @@ export default function useAuth() {
     fetchUser();
   }, []);
 
-  
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    setUser(null); 
-    router.push("/iniciar-sesion"); 
+    setUser(null);
+    router.push("/iniciar-sesion");
   };
 
   return { user, loading, logout };

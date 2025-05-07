@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { CartContext } from "@/context/CartContext";
 import ListHours from "./ListHours";
@@ -8,8 +7,8 @@ import AdditionalServices from "./AdditionalServices";
 import CallyDatePicker from "@/components/Ecommerce/Plans/Calendar";
 import { normalizeReservationForCart } from "@/components/Ecommerce/NormalizeReservationForCart";
 import toast from "react-hot-toast";
+import { GetUsedSpotsInPlan } from "@/components/GetContentApi";
 
-// Hook personalizado para efecto con debounce
 function useDebouncedEffect(effect, deps, delay) {
   useEffect(() => {
     const handler = setTimeout(() => effect(), delay);
@@ -25,7 +24,7 @@ function formatHour(hourString) {
   const period = hour >= 12 ? "pm" : "am";
   return `${formattedHour}:${minutes} ${period}`;
 }
-const formatFecha = (dateString) => {
+const formatDateForToast = (dateString) => {
   if (!dateString) return "";
   const date = new Date(dateString + "T00:00:00Z");
   const month = date.toLocaleString("es-CO", { month: "long" });
@@ -34,10 +33,6 @@ const formatFecha = (dateString) => {
   const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
   return `${monthCapitalized} ${day} de ${year}`;
 };
-
-function formatTimeForAPI(timeString) {
-  return `${timeString}`;
-}
 
 export default function ReservationField({
   documentId,
@@ -67,58 +62,32 @@ export default function ReservationField({
   const [availableSpots, setAvailableSpots] = useState(max_reservations);
   const [isLoadingSpots, setIsLoadingSpots] = useState(false);
 
-  // Uso del token y URL base de la API
-  const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-  const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
-
   const checkAvailableSpots = useCallback(
     async (selectedDate, selectedHour) => {
       if (!selectedDate || !selectedHour) return;
 
       setIsLoadingSpots(true);
       try {
-        const formattedTime = formatTimeForAPI(selectedHour);
-
-        const response = await fetch(
-          `${API_URL}/api/reservas?filters[reservationDate]=${selectedDate}&filters[reservationTime]=${formattedTime}&filters[plan][documentId][$eq]=${documentId}&populate=*`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const data = await GetUsedSpotsInPlan(
+          selectedDate,
+          selectedHour,
+          documentId
         );
-
-        if (!response.ok) {
-          const errorData = await response.text();
-          throw new Error(
-            `Error fetching reservations: ${response.status} - ${errorData}`
-          );
-        }
-
-        const data = await response.json();
-
-        // Solo contamos reservas en estado "Pendiente" o "Confirmada"
-        const validStates = ["Pendiente", "Confirmada"];
-        const totalReservedSpots = data.data
-          .filter((reservation) => validStates.includes(reservation.state))
-          .reduce((acc, reservation) => acc + (reservation.guests || 0), 0);
-
+        const totalReservedSpots = data.reduce(
+          (acc, reservation) => acc + (reservation.guests || 0),
+          0
+        );
         setAvailableSpots(max_reservations - totalReservedSpots);
       } catch (error) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Error checking available spots:", error);
-        }
+        console.error("Error checking available spots:", error);
         setAvailableSpots(0);
       } finally {
         setIsLoadingSpots(false);
       }
     },
-    [API_URL, token, max_reservations]
+    [documentId, max_reservations]
   );
 
-  // Se aplica debounce para evitar múltiples llamadas consecutivas
   useDebouncedEffect(
     () => {
       checkAvailableSpots(reservationData.date, reservationData.hour);
@@ -141,7 +110,6 @@ export default function ReservationField({
 
     const restrictedDates = [];
 
-    // Reglas de rango de fechas
     rules.forEach((regla) => {
       if (regla.isRangeData) {
         let current = new Date(regla.rangeDateFrom);
@@ -154,7 +122,6 @@ export default function ReservationField({
       }
     });
 
-    // Reglas de días restringidos
     const restrictedDays = rules
       .filter((regla) => regla.isDayRestric)
       .map((regla) => regla.day.toLowerCase());
@@ -166,9 +133,8 @@ export default function ReservationField({
         .toLowerCase();
 
       if (restrictedDays.includes(dayOfWeek)) {
-        restrictedDates.push(formatDate(currentDate));
+        restrictedDates.push(formatDate(currentDate));        
       }
-
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
@@ -193,6 +159,7 @@ export default function ReservationField({
       setErrors((prev) => ({ ...prev, hour: "Debes seleccionar una hora." }));
       return;
     }
+
     if (disabledDates.includes(reservationData.date)) {
       setErrors((prev) => ({
         ...prev,
@@ -206,7 +173,7 @@ export default function ReservationField({
       hour: reservationData.hour,
       persons: reservationData.persons,
       additionalService: selectedService,
-      availableSpots: availableSpots, // <-- Se añade el valor actual de cupos disponibles
+      availableSpots: availableSpots,
       unitPlan,
     };
 
@@ -218,7 +185,7 @@ export default function ReservationField({
         image,
         unitPlan,
         categorias_de_producto: "Plan",
-        max_reservations, // Se espera que este valor esté presente en el plan
+        max_reservations,
       },
       selectedOptions
     );
@@ -241,7 +208,7 @@ export default function ReservationField({
                 />
               </div>
               <div className="ml-2 w-0 flex-1 pt-0.5">
-                <p className="text-sm font-medium text-gray-900">{`Agregaste al carrito una reserva para ${formatFecha(
+                <p className="text-sm font-medium text-gray-900">{`Agregaste al carrito una reserva para ${formatDateForToast(
                   reservationData.date
                 )}, a las ${formatHour(reservationData.hour)}, para ${
                   reservationData.persons > 1
@@ -297,7 +264,6 @@ export default function ReservationField({
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
         <div className="flex flex-col md:flex-row gap-3 items-center justify-center">
-          {/* Calendario, selector de hora y cantidad de personas */}
           <div className="w-full md:w-auto py-2 flex flex-col gap-3 items-center">
             <div className="font-bold text-base flex items-center gap-1 text-dark-green">
               <span className="icon-[material-symbols--calendar-month-rounded]"></span>
@@ -328,7 +294,6 @@ export default function ReservationField({
           </div>
 
           <div className="w-full md:w-64 flex flex-col space-y-4">
-            {/* Campo de Personas */}
             <div className="flex flex-col">
               <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
                 <span className="icon-[ion--people]"></span>
@@ -362,10 +327,9 @@ export default function ReservationField({
               </div>
             </div>
 
-            {/* Campo de Selección de Hora */}
             <div className="flex flex-col">
               <ListHours
-                schedules={horarios}
+                horarios={horarios}
                 classNameInput="w-full"
                 classNameContainer="flex flex-col"
                 value={reservationData.hour}
@@ -446,19 +410,6 @@ export default function ReservationField({
             {contactEmail}
           </a>
         </div>
-        {/* <div className="flex items-center gap-1 pb-6 -text--dark-green">
-          <span className="icon-[akar-icons--whatsapp-fill]"></span>
-          <span className="font-bold">Whatsapp:</span>
-          <a
-            href="https://api.whatsapp.com/send?phone=573183490389"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Iniciar chat por Whatsapp con el Viñedo Ain Karim"
-            className="hover:-text--light-green duration-200"
-          >
-            318 349 0389
-          </a>
-        </div> */}
       </div>
     );
   }

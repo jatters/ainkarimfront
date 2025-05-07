@@ -3,11 +3,9 @@
 import React, { useEffect, useRef } from "react";
 import style from "./Calendar.css";
 
-// Hook para inicializar el calendario "cally"
 function useCallyCalendar(disallowedDates, onChange) {
   const calendarRef = useRef(null);
 
-  // Función para formatear la fecha en formato YYYY-MM-DD
   const formatDateYYYYMMDD = (dateObj) => {
     const year = dateObj.getUTCFullYear();
     const month = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
@@ -44,7 +42,13 @@ function useCallyCalendar(disallowedDates, onChange) {
   return calendarRef;
 }
 
-export default function CallyDatePicker({ value, onChange, min, max, disallowedDates }) {
+export default function CallyDatePicker({
+  value,
+  onChange,
+  min,
+  max,
+  disallowedDates,
+}) {
   const calendarRef = useCallyCalendar(disallowedDates, onChange);
 
   return (

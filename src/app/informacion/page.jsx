@@ -80,7 +80,7 @@ export default function Informationpage() {
           <p>
             <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
             <span className="font-bold -text--dark-green">Ubicación:</span> Km
-            10 Vía Villa de Leyva – Santa Sofía
+            10 Vía Villa de Leyva - Santa Sofía
           </p>
           <p>Boyacá - Colombia</p>
         </div>
@@ -126,7 +126,7 @@ export default function Informationpage() {
             <ul className="list-disc">
               <li>
                 Desde el municipio de villa de Leyva, se debe tomar la vía Villa
-                de Leyva – Santa Sofía, estamos ubicados a 10 km, tomando un
+                de Leyva - Santa Sofía, estamos ubicados a 10 km, tomando un
                 desvío hacia Sutamarchán.
               </li>
               <li>

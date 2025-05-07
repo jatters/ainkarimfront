@@ -108,7 +108,6 @@ export default function PendingPage({ searchParams }) {
         )}
       </div>
 
-      {/* Detalles del Pago */}
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <span className="text-xl">💳 </span>
@@ -158,7 +157,7 @@ export default function PendingPage({ searchParams }) {
           {date ? new Date(date).toLocaleString("es-CO") : "No disponible"}
         </p>
       </div>
-      {/* Datos del Cliente */}
+
       <div className="mt-6 border-t pt-4">
         <div className="flex items-center mb-3">
           <h2 className="text-xl font-semibold text-gray-800">

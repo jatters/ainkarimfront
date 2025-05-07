@@ -8,9 +8,11 @@ const formatPrice = (price) => {
   return `$${Number(formatedPrice).toLocaleString("es-CO")}`;
 };
 
+const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export default function PlanCard({
-  name,
-  documentId,
+  planId,
+  name,  
   price,
   slug,
   image,
@@ -25,7 +27,7 @@ export default function PlanCard({
   unitPlan,
 }) {
   const imageUrl = image?.formats?.small?.url
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.formats.small.url}`
+    ? `${baseurl}${image.formats.small.url}`
     : "";
 
   const numColumns = experiences.length === 1 ? 1 : 4;
@@ -93,7 +95,9 @@ export default function PlanCard({
       {allowchilds === true && (
         <div className="flex items-center mb-5 gap-1 text-slate-600 font-medium">
           <span className="icon-[material-symbols--child-care-outline] text-2xl"></span>
-          <span className="text-center text-sm">Ingreso gratuito para menores</span>
+          <span className="text-center text-sm">
+            Ingreso gratuito para menores
+          </span>
         </div>
       )}
       <div className="flex flex-wrap gap-5  justify-center">
@@ -110,7 +114,7 @@ export default function PlanCard({
             price={price}
             image={image}
             unitPlan={unitPlan}
-            documentId={documentId}
+            documentId={planId}
             rules={rules}
             horarios={horarios}
             additionalServices={additionalServices}

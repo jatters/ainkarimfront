@@ -29,7 +29,7 @@ export default function CheckoutButton({
 
       if (!customerData || !customerData.email) {
         throw new Error(
-          "❌ Los datos del cliente son inválidos o están incompletos."
+          "Los datos del cliente son inválidos o están incompletos."
         );
       }
 

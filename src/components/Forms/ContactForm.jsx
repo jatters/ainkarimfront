@@ -1,15 +1,8 @@
 "use client";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import Stack from "@mui/material/Stack";
-
 import { useForm } from "react-hook-form";
-import { Link } from 'next-view-transitions'
+import { Link } from "next-view-transitions";
 import { useState } from "react";
 import style from "./PrettyCheckbox.css";
-import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
 export default function ContactForm({ ipAddress, useragent }) {
@@ -25,7 +18,7 @@ export default function ContactForm({ ipAddress, useragent }) {
 
   const uuid = uuidv4();
   const ip = ipAddress;
-  const date = new Date().toISOString(); 
+  const date = new Date().toISOString();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -135,7 +128,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 Teléfono
               </label>
               <input
-                type="text"                
+                type="text"
                 id="phone"
                 {...register("phone", {
                   required: {
@@ -177,8 +170,8 @@ export default function ContactForm({ ipAddress, useragent }) {
               })}
               rows="4"
               id="message"
-              placeholder="Mensaje"   
-              aria-label="Escribe tu mensaje"           
+              placeholder="Mensaje"
+              aria-label="Escribe tu mensaje"
               className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
                 errors.message ? "border-red-500" : "border-gray-400/40"
               }`}
@@ -311,12 +304,12 @@ export default function ContactForm({ ipAddress, useragent }) {
             {response && (
               <div
                 className={`col-span-2 text-center font-semibold py-4 rounded ${
-                  response.message === "Tu mensaje ha sido enviado"
+                  response.message === "Correo enviado correctamente"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                {response.message === "Tu mensaje ha sido enviado"
+                {response.message === "Correo enviado correctamente"
                   ? `Gracias ${response.name}, el mensaje ha sido enviado.`
                   : response.message}
               </div>

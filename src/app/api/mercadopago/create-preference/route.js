@@ -154,59 +154,7 @@ export async function POST(req) {
       throw new Error("Error al actualizar el pedido interno con numberOrder");
     }
     const mpItems = [];
-    /* orderData.forEach((item) => {
-      const qty = item.quantity || 1;
 
-      if (
-        item.isReservation &&
-        item.additionalService &&
-        item.additionalService.price
-      ) {
-        mpItems.push({
-          id: item.documentId
-            ? String(item.documentId) + "-base"
-            : "sin-id-base",
-          title: item.title || item.name || "Reserva sin nombre",
-          description: "Reserva",
-          picture_url: item.image?.url || "https://via.placeholder.com/150",
-          category_id: "reservas",
-          quantity: qty,
-          currency_id: "COP",
-          unit_price: parseFloat(item.price) || 0,
-        });
-
-        mpItems.push({
-          id: item.documentId
-            ? String(item.documentId) + "-addon"
-            : "sin-id-addon",
-          title: item.additionalService.name || "Servicio adicional",
-          description: "Servicio adicional",
-          picture_url:
-            item.additionalService.image?.url ||
-            "https://via.placeholder.com/150",
-          category_id: "servicios",
-          quantity: 1,
-          currency_id: "COP",
-          //unit_price: parseFloat(item.additionalService.price) || 0,
-          unit_price: -discountValue,
-        });
-      } else {
-        mpItems.push({
-          id: item.documentId ? String(item.documentId) : "sin-id",
-          title: item.title || item.name || "Producto sin nombre",
-          description:
-            item.additionalService && !item.isReservation
-              ? `Incluye: ${item.additionalService.name}`
-              : "",
-          picture_url: item.image?.url || "https://via.placeholder.com/150",
-          category_id: item.isReservation ? "reservas" : "services",
-          quantity: qty,
-          currency_id: "COP",
-          //unit_price: parseFloat(item.price) || 0,
-          unit_price: -discountValue,
-        });
-      }
-    }); */
     orderData.forEach((item) => {
       const qty = item.quantity || 1;
 

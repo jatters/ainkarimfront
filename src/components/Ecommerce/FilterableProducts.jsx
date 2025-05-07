@@ -4,11 +4,9 @@ import ProductCard from "@/components/Ecommerce/ProductCard";
 import ProductsFilter from "@/components/Ecommerce/ProductsFilter";
 
 export default function FilterableProducts({ initialProducts }) {
-  // Estados para filtros seleccionados
   const [selectedCepas, setSelectedCepas] = useState([]);
   const [selectedCategorias, setSelectedCategorias] = useState([]);
 
-  // Funciones para actualizar filtros
   const handleCepasChange = (cepa, checked) => {
     setSelectedCepas((prev) =>
       checked ? [...prev, cepa] : prev.filter((item) => item !== cepa)
@@ -21,16 +19,13 @@ export default function FilterableProducts({ initialProducts }) {
     );
   };
 
-  // Filtrar productos usando useMemo para optimización
   const filteredProducts = useMemo(() => {
     return initialProducts.filter((product) => {
-      // Filtrar por cepa si se han seleccionado cepas
       const matchCepa =
         selectedCepas.length === 0 ||
         (product.wineCepa && selectedCepas.includes(product.wineCepa)) ||
-        false; // Ajustar según la estructura de cepa
+        false;
 
-      // Filtrar por categoría si se han seleccionado categorías
       const matchCategoria =
         selectedCategorias.length === 0 ||
         (product.categorias_de_producto &&
@@ -43,7 +38,6 @@ export default function FilterableProducts({ initialProducts }) {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
       <aside className="col-span-1 hidden xl:block">
-        {/* Pasar funciones para manejar cambios al componente de filtros */}
         <ProductsFilter
           onCepasChange={handleCepasChange}
           onCategoriasChange={handleCategoriasChange}

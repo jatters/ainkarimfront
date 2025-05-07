@@ -26,7 +26,7 @@ export default function LoginForm() {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
-        credentials: "include", // 🔥 Necesario para enviar y recibir cookies
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: data.email,
@@ -38,7 +38,6 @@ export default function LoginForm() {
         throw new Error("Correo o contraseña incorrectos");
       }
 
-      // Redirigir al usuario a /mi-cuenta después del login exitoso
       router.push("/mi-cuenta");
     } catch (error) {
       console.error("Error en el login:", error);
