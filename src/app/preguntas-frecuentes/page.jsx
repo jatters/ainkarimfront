@@ -37,6 +37,17 @@ export async function generateMetadata() {
     },
   };
 }
+function richTextToPlainText(richText) {
+  if (!Array.isArray(richText)) return '';
+
+  return richText
+    .map((block) => {
+      if (!block.children || !Array.isArray(block.children)) return '';
+      return block.children.map((child) => child.text || '').join('');
+    })
+    .join('\n'); // agrega salto de línea entre párrafos
+}
+
 
 export default async function FaqPage() {
   const faqs = await GetFaqs();
@@ -52,7 +63,7 @@ export default async function FaqPage() {
       name: faq.title,
       acceptedAnswer: {
         "@type": "Answer",
-        text: typeof faq.asnwer === "string" ? faq.asnwer : "",
+        text: richTextToPlainText(faq.asnwer),
       },
     })),
   };
