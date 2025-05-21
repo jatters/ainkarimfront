@@ -403,7 +403,7 @@ export default function ModalSchedule({
                   : "No hay lugares disponibles en este horario"}
               </div>
             )}
-            {additionalServices && (
+            {additionalServices.length > 0 && (
               <AdditionalServices
                 services={additionalServices}
                 onSelectService={handleServiceSelect}

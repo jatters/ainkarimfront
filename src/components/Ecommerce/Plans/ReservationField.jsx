@@ -133,7 +133,7 @@ export default function ReservationField({
         .toLowerCase();
 
       if (restrictedDays.includes(dayOfWeek)) {
-        restrictedDates.push(formatDate(currentDate));        
+        restrictedDates.push(formatDate(currentDate));
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -364,7 +364,7 @@ export default function ReservationField({
           </div>
         )}
 
-        {additionalServices && (
+        {additionalServices.length > 0 && (
           <AdditionalServices
             services={additionalServices}
             onSelectService={handleServiceSelect}
