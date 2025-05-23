@@ -15,6 +15,7 @@ import AdditionalServices from "@/components/Ecommerce/Plans/AdditionalServices"
 import { normalizeReservationForCart } from "../NormalizeReservationForCart";
 import toast from "react-hot-toast";
 import { GetUsedSpotsInPlan } from "@/components/GetContentApi";
+import { addMonths } from "date-fns";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -62,6 +63,7 @@ export default function ModalSchedule({
     persons: 1,
     hour: "",
   });
+  const [blockedTimeRanges, setBlockedTimeRanges] = useState({});
   const [selectedService, setSelectedService] = useState(null);
   const router = useRouter();
   const [minDate, setMinDate] = useState("");
@@ -109,43 +111,103 @@ export default function ModalSchedule({
     300
   );
 
+  const formatYMD = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   useEffect(() => {
+    const disabledSet = new Set();
+    const timeRanges = {};
     const today = new Date();
-    const threeMonthsFromNow = new Date();
-    threeMonthsFromNow.setMonth(today.getMonth() + 3);
-    const formatDate = (date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
+    const threeMonths = addMonths(today, 3);
+
+    // 1) limites del datepicker
+    setMinDate(formatYMD(today));
+    setMaxDate(formatYMD(threeMonths));
+
+    // helpers
+    const blockWeekday = (dayName) => {
+      const mapDow = {
+        domingo: 0,
+        lunes: 1,
+        martes: 2,
+        miercoles: 3,
+        jueves: 4,
+        viernes: 5,
+        sabado: 6,
+      };
+      const target = mapDow[dayName.toLowerCase()];
+      let cur = new Date(today);
+      while (cur <= threeMonths) {
+        if (cur.getDay() === target) disabledSet.add(formatYMD(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
     };
-    const restrictedDates = [];
-    rules.forEach((regla) => {
-      if (regla.isRangeData) {
-        let current = new Date(regla.rangeDateFrom);
-        const until = new Date(regla.rangeDateUntil);
-        while (current <= until) {
-          restrictedDates.push(formatDate(current));
-          current.setDate(current.getDate() + 1);
+
+    const blockDateRange = (from, to) => {
+      let cur = toLocalDate(from);
+      const until = toLocalDate(to);
+
+      while (cur <= until) {
+        disabledSet.add(formatYMD(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
+    };
+
+    const toLocalDate = (ymd) => {
+      const [year, month, day] = ymd.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    const blockTimeRange = (fromYMD, toYMD, fromHour, toHour) => {
+      let cur = toLocalDate(fromYMD);
+      const end = toLocalDate(toYMD);
+      while (cur <= end) {
+        const ymd = formatYMD(cur);
+        // añade el rango al objeto
+        if (!timeRanges[ymd]) timeRanges[ymd] = [];
+        // convierte "14:00:00.000" → "14:00"
+        const from = fromHour.slice(0,5);
+        const to   = toHour.slice(0,5);
+        timeRanges[ymd].push({ from, to });
+        cur.setDate(cur.getDate() + 1);
+      }
+    };
+
+    // 2) recorre tus reglas dinámicas
+    rules.forEach((rule) => {
+      if (!rule.isActive) return; // tu flag real de activación
+      (rule.Reglas || []).forEach((comp) => {
+        switch (comp.__component) {
+          case "reglas.dia-restringido":
+            blockWeekday(comp.restrictedDay);
+            break;
+
+          case "reglas.regla-rango-de-fecha":
+            blockDateRange(comp.startDate, comp.endDate);
+            break;
+
+          case "reglas.rango-de-hora":
+            blockTimeRange(
+              comp.startDate,
+              comp.endDate,
+              comp.startTime,
+              comp.endTime
+            );
+            break;
+
+          default:
+            console.warn("Componente desconocido:", comp.__component);
         }
-      }
+      });
     });
-    const restrictedDays = rules
-      .filter((regla) => regla.isDayRestric)
-      .map((regla) => regla.day.toLowerCase());
-    let currentDate = new Date(today);
-    while (currentDate <= threeMonthsFromNow) {
-      const dayOfWeek = currentDate
-        .toLocaleString("es-CO", { weekday: "long" })
-        .toLowerCase();
-      if (restrictedDays.includes(dayOfWeek)) {
-        restrictedDates.push(formatDate(currentDate));
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    setMinDate(formatDate(today));
-    setMaxDate(formatDate(threeMonthsFromNow));
-    setDisabledDates(restrictedDates);
+
+    // 3) fija tu estado de fechas deshabilitadas
+    setDisabledDates(Array.from(disabledSet));
+    setBlockedTimeRanges(timeRanges);
   }, [rules]);
 
   const handleServiceSelect = (service) => {
@@ -371,6 +433,9 @@ export default function ModalSchedule({
                 <div className="flex flex-col">
                   <ListHours
                     horarios={horarios}
+                    blockedRanges={
+                      blockedTimeRanges[reservationData.date] || []
+                    }
                     classNameInput="w-full"
                     classNameContainer="flex flex-col"
                     value={reservationData.hour}
