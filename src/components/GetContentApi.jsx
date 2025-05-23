@@ -131,8 +131,8 @@ export async function GetPlans() {
 //Get Single plans
 export async function GetSinglePlan(slug) {
   try {
-    const res = await fetchData(
-      `planes?filters[slug][$eq]=${slug}&populate=image&populate=gallery&populate=servicios_adicionales&populate=horarios&populate=reglas_planes&[field]=unitPlan`
+    const res = await fetchData(      
+      `planes?filters[slug][$eq]=${slug}&[fields][0]=name &[fields][1]=price&[fields][2]=planDescription&[fields][3]=max_reservations&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=unitPlan&[fields][7]=SEODescription&[populate][horarios][fields][0]=startTime&[populate][horarios][fields][1]=endTime&[populate]=servicios_adicionales&[populate][gallery][fields][0]=alternativeText&[populate][gallery][fields][1]=url&[populate][reglas_planes][populate]=Reglas`
     );
     if (!res || !res.data) {
       console.error("Error fetching plan data");

@@ -4,7 +4,8 @@ import FormatHour from "./FormatHour";
 
 export default function ListHours({
   horarios,
-  classNameInput = "",
+  blockedRanges = [],
+  classNameInput = "",  
   classNameContainer = "",
   value,
   onChange,
@@ -17,17 +18,31 @@ export default function ListHours({
     onChange(newHour);
   };
 
+  const filtros = useMemo(() => {
+    // convierte cada rango a minutos para comparar fácil
+    return blockedRanges.map(({from, to}) => {
+      const [h1,m1] = from.split(':').map(Number);
+      const [h2,m2] = to.split(':').map(Number);
+      return { from: h1*60 + m1, to: h2*60 + m2 };
+    });
+  }, [blockedRanges]);
+
   useEffect(() => {
     setSelectedHour(value);
   }, [value]);
 
-  const horariosSorted = useMemo(() => {
-    return horarios?.slice().sort(
-      (a, b) =>
-        new Date(`1970-01-01T${a.startTime}`) -
-        new Date(`1970-01-01T${b.startTime}`)
-    );
-  }, [horarios]);
+  const horariosFiltrados = useMemo(() => {
+    return horarios
+      .map(h => {
+        const [hH,mM] = h.startTime.slice(0,5).split(':').map(Number);
+        return { ...h, minutes: hH*60 + mM };
+      })
+      .filter(h => {
+        // si cae en algún rango bloqueado, lo omitimos
+        return !filtros.some(r => h.minutes >= r.from && h.minutes <= r.to);
+      })
+      .sort((a,b) => a.minutes - b.minutes);
+  }, [horarios, filtros]);
 
   return (
     <div className={`${classNameContainer} `}>
@@ -41,7 +56,7 @@ export default function ListHours({
         className={`mt-2 p-2 border text-slate-700 border-gray-300 rounded ${classNameInput}`}
       >
         <option value="">Selecciona un horario</option>
-        {horariosSorted?.map((horario, index) => (
+        {horariosFiltrados?.map((horario, index) => (
           <option key={index} value={horario.startTime}>
             <FormatHour hourString={horario.startTime} />
           </option>

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
         {
           url: product.image
             ? `https://ainkarim.co${product.image.url}`
-            : "https://ainkarim.co/default-image.jpg",
+            : "https://manager.ainkarim.co/uploads/pedidos_7d60bc71fd.jpg",
           width: 1200,
           height: 630,
           alt: title,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
       images: [
         product.image
           ? `https://ainkarim.co${product.image.url}`
-          : "https://ainkarim.co/default-image.jpg",
+          : "https://manager.ainkarim.co/uploads/pedidos_7d60bc71fd.jpg",
       ],
     },
   };

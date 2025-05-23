@@ -22,7 +22,7 @@ export async function generateMetadata() {
   const canonicalUrl = "https://ainkarim.co/el-vinedo";
   const imageUrl = cover
     ? `${process.env.NEXT_PUBLIC_SITE_URL}${cover.url}`
-    : "https://ainkarim.co/default-cover.jpg";
+    : "https://manager.ainkarim.co/uploads/pedidos_7d60bc71fd.jpg";
 
   return {
     title: metaTitle,

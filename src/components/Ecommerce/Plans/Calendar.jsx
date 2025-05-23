@@ -3,6 +3,14 @@
 import React, { useEffect, useRef } from "react";
 import style from "./Calendar.css";
 
+function today() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function useCallyCalendar(disallowedDates, onChange) {
   const calendarRef = useRef(null);
 
@@ -50,14 +58,17 @@ export default function CallyDatePicker({
   disallowedDates,
 }) {
   const calendarRef = useCallyCalendar(disallowedDates, onChange);
+  const zonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <div className="calendar-container relative">
+      {/* {console.log("zonaHoraria", zonaHoraria)}
+      {console.log("value", today())} */}
       <calendar-date
         ref={calendarRef}
-        locale="es"
-        value={value || ""}
-        min={min || ""}
+        locale="es-CO"
+        //value={today()}
+        min={today()}
         max={max || ""}
         first-day-of-week="0"
       >

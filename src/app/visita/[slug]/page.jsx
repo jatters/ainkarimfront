@@ -21,34 +21,31 @@ const extractGallery = (images) => {
 };
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const planData = await GetSinglePlan(slug);
+  const plan = await GetSinglePlan(slug);
 
-  if (!planData) {
+  if (!plan) {
     return {
       title: "Plan no encontrado | Viñedo Ain Karim",
       description: "Información del plan no encontrada.",
     };
   }
-  const plan = planData;
-  const title = plan.name;
-  const description =
-    plan.description ||
-    plan.planDescription ||
-    "Plan de visita en Viñedo Ain Karim";
+
+  const { name: title, gallery, SEODescription } = plan;
+
   const canonicalUrl = `https://ainkarim.co/visita/${slug}`;
-  const imageUrl = plan.image
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}${plan.image.url}`
-    : "https://ainkarim.co/default-image.jpg";
+  const imageUrl = gallery?.[0]
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}${gallery[0].url}`
+    : "https://manager.ainkarim.co/uploads/pedidos_7d60bc71fd.jpg";
 
   return {
-    title: `${title}`,
-    description,
+    title,
+    description: SEODescription || "Plan de visita en Viñedo Ain Karim",
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${title}`,
-      description,
+      title,
+      description: SEODescription || "Plan de visita en Viñedo Ain Karim",
       url: canonicalUrl,
       images: [
         {
@@ -63,7 +60,7 @@ export async function generateMetadata({ params }) {
     twitter: {
       card: "summary_large_image",
       title: `${title} | Viñedo Ain Karim`,
-      description,
+      description: SEODescription || "Plan de visita en Viñedo Ain Karim",
       images: [imageUrl],
     },
   };
@@ -74,8 +71,8 @@ export default async function SinglePlanPage({ params }) {
 
   try {
     const companyInfo = await GetCompanyInfo();
-    const planData = await GetSinglePlan(slug);
-    if (!planData) {
+    const plan = await GetSinglePlan(slug);
+    if (!plan) {
       console.error("Error fetching plan data");
       return (
         <div className="container mx-auto py-16 px-5">
@@ -91,12 +88,12 @@ export default async function SinglePlanPage({ params }) {
         </div>
       );
     }
+
     const {
       documentId,
-      name,
+      name: title,
       gallery,
       price,
-      description,
       max_reservations,
       image,
       onlyAdults,
@@ -106,7 +103,8 @@ export default async function SinglePlanPage({ params }) {
       reglas_planes,
       unitPlan,
       planDescription,
-    } = planData;
+      SEODescription,
+    } = plan;
 
     const { contactEmail, ventasEmail } = companyInfo;
 
@@ -115,11 +113,11 @@ export default async function SinglePlanPage({ params }) {
     const jsonLD = {
       "@context": "https://schema.org",
       "@type": "product",
-      name: name,
-      description:
-        planDescription ||
-        (description ? description.replace(/<\/?[^>]+(>|$)/g, "") : ""),
-      image: image ? `${process.env.NEXT_PUBLIC_SITE_URL}${image.url}` : "",
+      name: title,
+      description: SEODescription || "Plan de visita en Viñedo Ain Karim",
+      image: gallery?.[0]
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}${gallery[0].url}`
+        : "https://manager.ainkarim.co/uploads/pedidos_7d60bc71fd.jpg",
       brand: {
         "@type": "Organization",
         name: "Viñedo Ain Karim",
@@ -144,8 +142,8 @@ export default async function SinglePlanPage({ params }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
         />
-        <section className="container mx-auto py-8 lg:py-16 px-2 sm:px-5">
-          <div className="text-sm lg:text-base">
+        <section className="container mx-auto py-5 md:py-8 lg:pt-10 lg:pb-16 px-2 sm:px-5">
+          <div className="text-sm lg:text-base px-3 lg:px-10">
             <Link href="/" className="hover:-text--light-green">
               Inicio
             </Link>{" "}
@@ -153,23 +151,20 @@ export default async function SinglePlanPage({ params }) {
             <Link href="/visitas" className="hover:-text--light-green">
               Visitas
             </Link>{" "}
-            › <span className="capitalize font-medium">{name}</span>
+            › <span className="capitalize font-medium">{title}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-3 gap-y-9">
-            <div className="max-w-3xl">
-              <PlanGallery images={extractGallery(gallery)} />
-            </div>
+            <PlanGallery images={extractGallery(gallery)} />
             <div className="px-0 md:px-5">
-              <h1 className="-text--dark-green text-2xl lg:text-5xl font-bold mb-3 uppercase">
-                {name}
+              <h1 className="-text--dark-green text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 uppercase">
+                {title}
               </h1>
-
               {Number(price) > 0 && (
                 <div className="text-2xl font-semibold">
                   {formatPrice(price)}{" "}
                   <sup className="font-normal text-base">
                     por {unitPlan.toLowerCase()}
-                  </sup>{" "}
+                  </sup>
                 </div>
               )}
               {onlyAdults && (
@@ -192,17 +187,17 @@ export default async function SinglePlanPage({ params }) {
                 </div>
               )}
               {planDescription && (
-                <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
+                <div className="prose mb-4 [&>img]:mx-auto [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside">
                   <BlocksRenderer content={planDescription} />
                 </div>
               )}
               <ReservationField
+                documentId={documentId}
+                name={title}
+                image={image}
+                price={price}
                 horarios={horarios}
                 additionalServices={servicios_adicionales}
-                price={price}
-                name={name}
-                image={image}
-                documentId={documentId}
                 rules={reglas_planes}
                 max_reservations={max_reservations}
                 unitPlan={unitPlan}
