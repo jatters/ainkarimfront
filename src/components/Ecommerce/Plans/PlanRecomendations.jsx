@@ -19,11 +19,7 @@ export default function PlanRecomendations({
         <p>Evite contratiempos:</p>
         <ul className="list-disc list-inside">
           <li>Procure llegar 15 minutos antes de su reserva programada.</li>
-          <li>No podrá reprogramar su horario de reserva en el mismo día.</li>
-          <li>
-            No está permitido el consumo de alimentos y bebidas dentro del
-            Viñedo que no hayan sido adquiridos en el mismo.
-          </li>
+          <li>No podrá reprogramar su horario de reserva en el mismo día.</li>          
           <li>
             Para reprogramación de su reserva, envíe un correo a{" "}
             <a
@@ -35,6 +31,10 @@ export default function PlanRecomendations({
             >
               {ventasEmail}
             </a>
+          </li>
+          <li>
+            No está permitido el consumo de alimentos y bebidas dentro del
+            Viñedo que no hayan sido adquiridos en el mismo.
           </li>
           <li>
             Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}
