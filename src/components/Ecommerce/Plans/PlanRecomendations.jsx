@@ -1,6 +1,11 @@
 import { Link } from "next-view-transitions";
 
-export default function PlanRecomendations({ max_reservations, unitPlan, contactEmail, ventasEmail }) {
+export default function PlanRecomendations({
+  max_reservations,
+  unitPlan,
+  contactEmail,
+  ventasEmail,
+}) {
   if (!contactEmail) {
     return null;
   }
@@ -16,6 +21,10 @@ export default function PlanRecomendations({ max_reservations, unitPlan, contact
           <li>Procure llegar 15 minutos antes de su reserva programada.</li>
           <li>No podrá reprogramar su horario de reserva en el mismo día.</li>
           <li>
+            No está permitido el consumo de alimentos y bebidas dentro del
+            Viñedo que no hayan sido adquiridos en el mismo.
+          </li>
+          <li>
             Para reprogramación de su reserva, envíe un correo a{" "}
             <a
               href={`mailto:${ventasEmail}`}
@@ -28,8 +37,8 @@ export default function PlanRecomendations({ max_reservations, unitPlan, contact
             </a>
           </li>
           <li>
-            Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}s, por favor
-            solicite información al correo{" "}
+            Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}
+            s, por favor solicite información al correo{" "}
             <a
               href={`mailto:${contactEmail}`}
               target="_blank"
