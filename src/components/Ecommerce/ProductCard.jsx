@@ -8,6 +8,7 @@ import { normalizeProductForCart } from "@/components/Ecommerce/NormalizeCartPro
 import Script from "next/script";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Tooltip } from "@mui/material";
 
 export default function ProductCard({ product }) {
   const {
@@ -17,9 +18,11 @@ export default function ProductCard({ product }) {
     regularPrice,
     image,
     categorias_de_producto,
+    cepas_de_vino,
     isActive,
     isVariable,
     variaciones,
+    outOfStock,
   } = product;
 
   const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -37,6 +40,7 @@ export default function ProductCard({ product }) {
   const router = useRouter();
 
   const handleAddToCart = () => {
+    if (outOfStock) return;
     if (isVariable && !selectedVariation) return;
     const cartItem = normalizeProductForCart(product, selectedVariation);
     addToCart(cartItem);
@@ -146,6 +150,12 @@ export default function ProductCard({ product }) {
             </div>
           )}
 
+          {outOfStock && (
+            <div className="absolute top-3 left-4 bg-black/50 text-white text-xs py-2 px-3 flex items-center justify-center rounded-xl font-bold group-hover:bg-black/70 duration-200 z-10">
+              Agotado
+            </div>
+          )}
+
           <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100 flex-shrink-0">
             <Link href={`/producto/${slug}`}>
               <Image
@@ -223,7 +233,7 @@ export default function ProductCard({ product }) {
                 </div>
               )}
 
-            <div className="flex gap-3 mt-auto w-full justify-center pb-5">
+            <div className="flex  gap-3 mt-auto w-full justify-center pb-5">
               <Link
                 href={`/producto/${slug}`}
                 className="text-sm border border-green-800 text-green-800 px-4 py-2 flex items-center gap-1 rounded-md transition-colors duration-200 hover:bg-green-800 hover:text-white"
@@ -231,18 +241,36 @@ export default function ProductCard({ product }) {
               >
                 Ver
               </Link>
-              <button
-                onClick={handleAddToCart}
-                disabled={isVariable && !selectedVariation}
-                className={`text-sm text-white px-4 py-2 rounded-md transition-colors duration-200 ${
-                  isVariable && !selectedVariation
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800"
-                }`}
-                aria-label="Añadir a carrito"
+              <Tooltip
+                title={
+                  outOfStock
+                    ? "Producto agotado"
+                    : isVariable && !selectedVariation
+                    ? "Selecciona una variación"
+                    : ""
+                }
+                placement="top"
+                arrow
               >
-                Añadir a carrito
-              </button>
+                <span>
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={(isVariable && !selectedVariation) || outOfStock}
+                    className={`text-sm text-white px-4 py-2 rounded-md transition-colors duration-200 ${
+                      (isVariable && !selectedVariation) || outOfStock
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-green-700 hover:bg-green-800"
+                    }`}
+                    aria-label={
+                      isVariable && !selectedVariation
+                        ? "Selecciona una variación"
+                        : "Agregar al carrito"
+                    }
+                  >
+                    Añadir a carrito
+                  </button>
+                </span>
+              </Tooltip>
             </div>
           </div>
         </article>

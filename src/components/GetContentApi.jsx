@@ -98,7 +98,7 @@ export async function GetProductsForHome() {
 export async function GetProducts() {
   try {
     const res = await fetchData(
-      `productos?populate[image][fields]=alternativeText,formats&populate[categorias_de_producto][fields]=name&populate=variaciones&sort=title:desc&[fields][0]=title&[fields][1]=slug&[fields][2]=isActive&[fields][3]=isVariable&[fields][4]=price&[fields][5]=regularPrice`
+      `productos?fields[0]=title&fields[1]=slug&fields[2]=isActive&fields[3]=isVariable&fields[4]=price&fields[5]=regularPrice&fields[6]=outOfStock&populate=cepas_de_vino&populate=image&populate=categorias_de_producto&populate=variaciones&sort=title:desc`
     );
     if (!res || !res.data) {
       console.error("Error fetching products");
@@ -131,7 +131,7 @@ export async function GetPlans() {
 //Get Single plans
 export async function GetSinglePlan(slug) {
   try {
-    const res = await fetchData(      
+    const res = await fetchData(
       `planes?filters[slug][$eq]=${slug}&[fields][0]=name &[fields][1]=price&[fields][2]=planDescription&[fields][3]=max_reservations&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=unitPlan&[fields][7]=SEODescription&[populate][horarios][fields][0]=startTime&[populate][horarios][fields][1]=endTime&[populate]=servicios_adicionales&[populate][gallery][fields][0]=alternativeText&[populate][gallery][fields][1]=url&[populate][reglas_planes][populate]=Reglas`
     );
     if (!res || !res.data) {
@@ -158,6 +158,38 @@ export async function GetSingleProduct(slug) {
     return res.data[0];
   } catch (error) {
     console.error("Error fetching product data:", error);
+    return null;
+  }
+}
+
+//Get Cepas
+export async function GetCepas() {
+  try {
+    const res = await fetchData(
+      `cepas-de-vinos?populate=productos&fields[0]=name&sort=name:asc`
+    );
+    if (!res || !res.data) {
+      console.error("Error fetching cepas");
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching cepas:", error);
+    return null;
+  }
+}
+
+//Get Product Categories
+export async function GetProductCategories() {
+  try {
+    const res = await fetchData(`productcategories?sort=name:asc`);
+    if (!res || !res.data) {
+      console.error("Error fetching product categories");
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching product categories:", error);
     return null;
   }
 }

@@ -3,9 +3,10 @@ import { GetProducts } from "@/components/GetContentApi";
 import FilterableProducts from "@/components/Ecommerce/FilterableProducts";
 import Popup from "@/components/Ui/Popup";
 import Script from "next/script";
+import { GetCepas, GetProductCategories } from "@/components/GetContentApi";
 
 export const metadata = {
-  title: "Vinos de Viñedo Ain Karim | Compra los mejores vinos colombianos",
+  title: "Compra los mejores vinos colombianos",
   description:
     "Explora la selección de vinos de Viñedo Ain Karim. Encuentra vinos tintos, blancos y espumosos, disponibles para compra online. Envío a toda Colombia.",
   keywords: [
@@ -48,8 +49,13 @@ export const metadata = {
   },
 };
 
-export default async function productsPage() {
-  const products = await GetProducts();
+export default async function ProductsPage() {
+  const [products, cepas, categorias] = await Promise.all([
+    GetProducts(),
+    GetCepas(),
+    GetProductCategories(),
+  ]);
+
   if (!products) {
     console.error("Error loading products");
     return (
@@ -64,8 +70,13 @@ export default async function productsPage() {
       <Popup location="store" />
       <HeaderImage title="Vinos" background="/banner-vinos.webp" />
       <section className="container mx-auto py-8 lg:py-16" aria-label="Productos">
-        <FilterableProducts initialProducts={products} />
+        <FilterableProducts
+          initialProducts={products}
+          cepas={cepas}
+          categorias={categorias}
+        />
       </section>
     </main>
   );
 }
+

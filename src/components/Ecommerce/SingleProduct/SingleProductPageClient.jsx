@@ -27,6 +27,7 @@ export default function SingleProductPageClient({ productData }) {
     productDescription,
     variaciones,
     isVariable,
+    outOfStock,
   } = productData;
   const categoryName = categorias_de_producto?.name;
 
@@ -44,12 +45,12 @@ export default function SingleProductPageClient({ productData }) {
       "@type": "Brand",
       name: "Viñedo Ain Karim",
     },
-    offers: {
+offers: {
       "@type": "Offer",
       url: `https://ainkarim.co/producto/${slug}`,
       priceCurrency: "COP",
       price: price,
-      availability: "https://schema.org/InStock",
+      availability: outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
     },
   };
@@ -90,7 +91,7 @@ export default function SingleProductPageClient({ productData }) {
                 <div className="italic mb-2 -text--dark-red">
                   {categoryName}
                 </div>
-              </div>
+              </div>              
 
               {regularPrice > price ? (
                 <div className="text-2xl font-semibold mb-5 flex gap-3 ">
@@ -109,12 +110,18 @@ export default function SingleProductPageClient({ productData }) {
                   <sup className="lg:ml-1 text-base">COP</sup>
                 </div>
               )}
+              {outOfStock && (
+                <div className="text-red-600 my-4 font-medium ">
+                  Producto agotado
+                </div>
+              )}
 
               {productDescription && (
                 <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
                   <BlocksRenderer content={productDescription} />
                 </div>
               )}
+              
 
               {isVariable && variaciones && variaciones.length > 0 && (
                 <div className="mb-4">
@@ -127,10 +134,16 @@ export default function SingleProductPageClient({ productData }) {
               )}
 
               <div className="mt-10 lg:mt-0">
-                <AddToCartButton
-                  product={productData}
-                  selectedVariation={selectedVariation}
-                />
+                {outOfStock ? (
+                  <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded-md" disabled>
+                    Producto agotado
+                  </button>
+                ) : (
+                  <AddToCartButton
+                    product={productData}
+                    selectedVariation={selectedVariation}
+                  />
+                )}
               </div>
             </div>
           </div>
