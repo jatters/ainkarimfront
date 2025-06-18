@@ -291,7 +291,6 @@ export default function PaymentPage() {
                     <div>{formatPrice(total)}</div>
                   </div>
                 </div>
-
                 <div>
                   <CheckoutButton
                     orderData={cart}
@@ -301,6 +300,7 @@ export default function PaymentPage() {
                     onBeforePayment={processOrder}
                     coupon={coupon}
                   />
+                  {console.log(coupon)}
                 </div>
                 <div className="mt-8">
                   <CouponInput />

@@ -35,8 +35,6 @@ const formatDateForToast = (dateString) => {
   return `${monthCapitalized} ${day} de ${year}`;
 };
 
-
-
 export default function ReservationField({
   documentId,
   name,
@@ -81,15 +79,20 @@ export default function ReservationField({
           (acc, reservation) => acc + (reservation.guests || 0),
           0
         );
-        setAvailableSpots(max_reservations - totalReservedSpots);
+        const horarioSeleccionado = horarios.find(
+          (h) => h.startTime === selectedHour
+        );
+
+        const capacidadHorario = horarioSeleccionado?.capacity || 0;
+
+        setAvailableSpots(capacidadHorario - totalReservedSpots);
       } catch (error) {
-        console.error("Error checking available spots:", error);
         setAvailableSpots(0);
       } finally {
         setIsLoadingSpots(false);
       }
     },
-    [documentId, max_reservations]
+    [documentId, horarios, reservationData.hour]
   );
 
   useDebouncedEffect(
@@ -107,19 +110,15 @@ export default function ReservationField({
     return `${y}-${m}-${d}`;
   };
 
-  //console.log("rules →", rules);
-
   useEffect(() => {
     const disabledSet = new Set();
     const timeRanges = {};
     const today = new Date();
     const threeMonths = addMonths(today, 3);
 
-    // 1) limites del datepicker
     setMinDate(formatYMD(today));
     setMaxDate(formatYMD(threeMonths));
 
-    // helpers
     const blockWeekday = (dayName) => {
       const mapDow = {
         domingo: 0,
@@ -149,7 +148,7 @@ export default function ReservationField({
     };
 
     const toLocalDate = (ymd) => {
-      const [year, month, day] = ymd.split('-').map(Number);
+      const [year, month, day] = ymd.split("-").map(Number);
       return new Date(year, month - 1, day);
     };
 
@@ -158,19 +157,16 @@ export default function ReservationField({
       const end = toLocalDate(toYMD);
       while (cur <= end) {
         const ymd = formatYMD(cur);
-        // añade el rango al objeto
         if (!timeRanges[ymd]) timeRanges[ymd] = [];
-        // convierte "14:00:00.000" → "14:00"
-        const from = fromHour.slice(0,5);
-        const to   = toHour.slice(0,5);
+        const from = fromHour.slice(0, 5);
+        const to = toHour.slice(0, 5);
         timeRanges[ymd].push({ from, to });
         cur.setDate(cur.getDate() + 1);
       }
     };
 
-    // 2) recorre tus reglas dinámicas
     rules.forEach((rule) => {
-      if (!rule.isActive) return; // tu flag real de activación
+      if (!rule.isActive) return;
       (rule.Reglas || []).forEach((comp) => {
         switch (comp.__component) {
           case "reglas.dia-restringido":
@@ -196,12 +192,9 @@ export default function ReservationField({
       });
     });
 
-    // 3) fija tu estado de fechas deshabilitadas
     setDisabledDates(Array.from(disabledSet));
     setBlockedTimeRanges(timeRanges);
   }, [rules]);
-
-  //console.log("disabledDates →", disabledDates);
 
   const handleServiceSelect = (service) => {
     setSelectedService(service);

@@ -108,6 +108,8 @@ export async function POST(req) {
       customerAddress: customer.address || "",
       items: JSON.stringify(orderData),
       totalPriceOrder: finalTotalPriceOrder,
+      coupon: coupon ? coupon.code : null,
+      discount: coupon ? totalPriceOrder * (coupon.percent / 100) : 0,
       numberOrder: null,
       state: "Pendiente",
       payment_status: "Pendiente",
@@ -309,6 +311,11 @@ export async function POST(req) {
           item.additionalService && item.additionalService.price
             ? basePrice * qty + parseFloat(item.additionalService.price)
             : basePrice * qty;
+        const reservationDiscount = coupon?.percent
+          ? totalPriceReservation * (coupon.percent / 100)
+          : 0;
+        const finalTotalPriceReservation =
+          totalPriceReservation - reservationDiscount;
 
         const reservationPayload = {
           data: {
@@ -329,7 +336,7 @@ export async function POST(req) {
             customerDocument: customer.document,
             customerEmail: customer.email,
             customerPhone: customer.mobiletwo,
-            totalPriceReservation: totalPriceReservation,
+            totalPriceReservation: finalTotalPriceReservation,
             servicios_adicionale: item?.additionalService?.documentId || null,
 
             pedidos: {

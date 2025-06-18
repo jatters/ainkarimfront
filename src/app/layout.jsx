@@ -210,7 +210,7 @@ export const metadata = {
 export default function RootLayout(props) {
   return (
     <ViewTransitions>
-      <html lang="es" suppressHydrationWarning="true">
+      <html lang="es" >
         <body
           className={`${montserrat.variable} ${marcellus.variable} antialiased`}
         >

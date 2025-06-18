@@ -31,7 +31,9 @@ export default function RecoverPassword() {
         throw new Error(result.message);
       }
 
-      setMessage("Correo enviado con instrucciones para recuperar tu contraseña.");
+      setMessage(
+        "Correo enviado con instrucciones para recuperar tu contraseña."
+      );
       reset();
     } catch (error) {
       setErrorMessage(error.message);
@@ -41,7 +43,10 @@ export default function RecoverPassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="my-10 flex flex-col items-center gap-3 justify-center">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="my-10 flex flex-col items-center gap-3 justify-center"
+    >
       <div className="flex  w-full min-w-64">
         <label htmlFor="email" className="sr-only">
           Correo
@@ -72,9 +77,15 @@ export default function RecoverPassword() {
       </div>
 
       {message && <p className="text-green-600 text-center">{message}</p>}
-      {errorMessage && <p className="text-red-600 text-center">{errorMessage}</p>}
+      {errorMessage && (
+        <p className="text-red-600 text-center">{errorMessage}</p>
+      )}
 
-      <button type="submit" className="-bg--dark-green text-white py-2 px-4 rounded-md hover:-bg--light-green transition duration-200" disabled={loading}>
+      <button
+        type="submit"
+        className="-bg--dark-green text-white py-2 px-4 rounded-md hover:-bg--light-green transition duration-200"
+        disabled={loading}
+      >
         {loading ? "Enviando..." : "Recuperar contraseña"}
       </button>
     </form>

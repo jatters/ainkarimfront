@@ -77,31 +77,36 @@ export default function ModalSchedule({
 
   const { addToCart } = useContext(CartContext);
 
-  const checkAvailableSpots = useCallback(
-    async (selectedDate, selectedHour) => {
-      if (!selectedDate || !selectedHour) return;
-
-      setIsLoadingSpots(true);
-      try {
-        const data = await GetUsedSpotsInPlan(
-          selectedDate,
-          selectedHour,
-          documentId
-        );
-        const totalReservedSpots = data.reduce(
-          (acc, reservation) => acc + (reservation.guests || 0),
-          0
-        );
-        setAvailableSpots(max_reservations - totalReservedSpots);
-      } catch (error) {
-        console.error("Error checking available spots:", error);
-        setAvailableSpots(0);
-      } finally {
-        setIsLoadingSpots(false);
-      }
-    },
-    [documentId, max_reservations]
-  );
+    const checkAvailableSpots = useCallback(
+      async (selectedDate, selectedHour) => {
+        if (!selectedDate || !selectedHour) return;
+  
+        setIsLoadingSpots(true);
+        try {
+          const data = await GetUsedSpotsInPlan(
+            selectedDate,
+            selectedHour,
+            documentId
+          );
+          const totalReservedSpots = data.reduce(
+            (acc, reservation) => acc + (reservation.guests || 0),
+            0
+          );
+          const horarioSeleccionado = horarios.find(
+            (h) => h.startTime === selectedHour
+          );
+  
+          const capacidadHorario = horarioSeleccionado?.capacity || 0;
+  
+          setAvailableSpots(capacidadHorario - totalReservedSpots);
+        } catch (error) {
+          setAvailableSpots(0);
+        } finally {
+          setIsLoadingSpots(false);
+        }
+      },
+      [documentId, horarios, reservationData.hour]
+    );
 
   useDebouncedEffect(
     () => {

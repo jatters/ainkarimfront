@@ -29,7 +29,7 @@ const fetchData = async (endpoint) => {
 export async function GetPlansForHome() {
   try {
     const res = await fetchData(
-      `planes?filters[showInHome][$eq]=true&[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[fields][7]=max_reservations&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[populate][reglas_planes][populate]=Reglas&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&pagination[limit]=4&[fields][8]=isActive&[fields][9]=unitPlan`
+      `planes?filters[showInHome][$eq]=true&[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[fields][7]=max_reservations&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime,capacity&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[populate][reglas_planes][populate]=Reglas&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&pagination[limit]=4&[fields][8]=isActive&[fields][9]=unitPlan`
     );
 
     if (!res || !res.data) {
@@ -115,7 +115,7 @@ export async function GetProducts() {
 export async function GetPlans() {
   try {
     const res = await fetchData(
-      `planes?[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[fields][7]=max_reservations&[populate][reglas_planes][populate]=Reglas&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&[fields][8]=isActive&[fields][9]=unitPlan`
+      `planes?[fields][0]=documentId&[fields][1]=slug&[fields][2]=name&[fields][3]=price&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=order&[populate][image][fields]=formats&[populate][horarios][fields]=startTime,endTime,capacity&[populate][experiencias][fields]=name&[populate][experiencias][populate][icon][fields]=url&[fields][7]=max_reservations&[populate][reglas_planes][populate]=Reglas&[populate][servicios_adicionales][fields]=name,price&sort[1]=order&[fields][8]=isActive&[fields][9]=unitPlan`
     );
     if (!res || !res.data) {
       console.error("Error fetching plans");
@@ -132,7 +132,7 @@ export async function GetPlans() {
 export async function GetSinglePlan(slug) {
   try {
     const res = await fetchData(
-      `planes?filters[slug][$eq]=${slug}&[fields][0]=name &[fields][1]=price&[fields][2]=planDescription&[fields][3]=max_reservations&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=unitPlan&[fields][7]=SEODescription&[populate][horarios][fields][0]=startTime&[populate][horarios][fields][1]=endTime&[populate]=servicios_adicionales&[populate][gallery][fields][0]=alternativeText&[populate][gallery][fields][1]=url&[populate][reglas_planes][populate]=Reglas`
+      `planes?filters[slug][$eq]=${slug}&[fields][0]=name &[fields][1]=price&[fields][2]=planDescription&[fields][3]=max_reservations&[fields][4]=onlyAdults&[fields][5]=allowChilds&[fields][6]=unitPlan&[fields][7]=SEODescription&[populate][horarios][fields][0]=startTime&[populate][horarios][fields][1]=endTime&[populate][horarios][fields][2]=capacity&[populate]=servicios_adicionales&[populate][gallery][fields][0]=alternativeText&[populate][gallery][fields][1]=url&[populate][reglas_planes][populate]=Reglas`
     );
     if (!res || !res.data) {
       console.error("Error fetching plan data");
@@ -252,7 +252,7 @@ export async function GetUsedSpotsInPlan(selectedDate, selectedHour, planId) {
     );
 
     if (!response) {
-      throw new Error("Respuesta nula de la API");
+      throw new Error("Error to get used spots in plan");
     }
     return response.data || [];
   } catch (error) {

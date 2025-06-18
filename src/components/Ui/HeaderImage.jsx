@@ -1,4 +1,4 @@
-import Breadcumbs from "./Breadcrumbs";
+import Breadcrumbs from "./Breadcrumbs";
 
 export default function HeaderImage({ title = "", background = "" }) {
   return (
@@ -10,7 +10,7 @@ export default function HeaderImage({ title = "", background = "" }) {
         {title}
       </h1>
       <span className="text-white text-center">
-        <Breadcumbs title={title} />
+        <Breadcrumbs title={title} />
       </span>
     </section>
   );

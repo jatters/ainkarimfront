@@ -143,7 +143,7 @@ export default async function SinglePlanPage({ params }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
         />
         <section className="container mx-auto py-5 md:py-8 lg:pt-10 lg:pb-16 px-2 sm:px-5">
-          <div className="text-sm lg:text-base px-3 lg:px-10">
+          <div className="text-sm flex gap-2">
             <Link href="/" className="hover:-text--light-green">
               Inicio
             </Link>{" "}
@@ -191,6 +191,7 @@ export default async function SinglePlanPage({ params }) {
                   <BlocksRenderer content={planDescription} />
                 </div>
               )}
+              
               <ReservationField
                 documentId={documentId}
                 name={title}

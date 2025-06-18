@@ -4,6 +4,7 @@ import { Link } from "next-view-transitions";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 import CouponInput from "@/components/Ecommerce/CouponInput";
+import Tooltip from "@mui/material/Tooltip";
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -30,17 +31,14 @@ export default function CarritoPage() {
     const quantity = parseInt(item.quantity, 10) || 1;
     return unitPrice * quantity + additionalPrice;
   };
-
-  const calculateTotal = () => {
-    if (coupon) {
-      return (
-        cart.reduce((total, item) => total + calculateSubtotal(item), 0) -
-        cart.reduce((total, item) => total + calculateSubtotal(item), 0) *
-          (coupon.percent / 100)
-      );
-    }
-    return cart.reduce((total, item) => total + calculateSubtotal(item), 0);
-  };
+  const subtotal = cart.reduce((sum, item) => sum + calculateSubtotal(item), 0);
+  const rawPercent = Number(coupon?.percent) || 0;
+  const rate = Math.min(
+    Math.max(rawPercent > 1 ? rawPercent / 100 : rawPercent, 0),
+    1
+  );
+  const descuento = coupon ? subtotal * rate : 0;
+  const total = Math.max(subtotal - descuento, 0);
 
   const incrementarCantidad = (product) => {
     if (
@@ -336,14 +334,22 @@ export default function CarritoPage() {
                         </button>
                       </div>
 
-                      <button
-                        onClick={() => removeFromCart(item)}
-                        aria-label={`Eliminar ${displayTitle}`}
+                      <Tooltip
+                        title={`Eliminar ${item.title}`}
+                        placement="top"
+                        arrow
                       >
-                        <span className="text-sm font-medium -text--light-red">
-                          Eliminar
+                        <span>
+                          <button
+                            onClick={() => removeFromCart(item)}
+                            aria-label={`Eliminar ${displayTitle}`}
+                          >
+                            <span className="text-sm font-medium -text--light-red">
+                              Eliminar
+                            </span>
+                          </button>
                         </span>
-                      </button>
+                      </Tooltip>
                     </div>
                   </div>
                 );
@@ -366,14 +372,19 @@ export default function CarritoPage() {
                 </Link>
               </div>
               <div className="flex flex-col items-end mt-4 md:mt-0">
+                <div className="text-gray-600">
+                  <span className="font-semibold">Subtotal: </span>
+                  {formatPrice(subtotal)}
+                </div>
                 {coupon && (
-                  <div className="text-xl font-bold">
-                    Descuento: -{" "}
-                    {formatPrice(calculateTotal() * (coupon.percent / 100))}
+                  <div className="text-gray-600">
+                    <span className="font-semibold">Descuento: - </span>
+                    {formatPrice(descuento)}
                   </div>
                 )}
-                <div className="text-xl font-bold">
-                  Total: {formatPrice(calculateTotal())}
+                <div className="text-gray-600 text-lg">
+                  <span className="font-semibold">Total: </span>
+                  {formatPrice(total)}
                 </div>
               </div>
             </div>

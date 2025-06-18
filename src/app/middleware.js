@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const token = req.cookies.get("token");
+  const token = req.cookies.get("jwt");
 
   const isAuthRoute = req.nextUrl.pathname.startsWith("/mi-cuenta");
 

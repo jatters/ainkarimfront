@@ -61,9 +61,7 @@ export default function CallyDatePicker({
   const zonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
-    <div className="calendar-container relative">
-      {/* {console.log("zonaHoraria", zonaHoraria)}
-      {console.log("value", today())} */}
+    <div className="calendar-container relative">      
       <calendar-date
         ref={calendarRef}
         locale="es-CO"

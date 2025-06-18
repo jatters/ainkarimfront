@@ -64,9 +64,9 @@ offers: {
       />
       <main>
         <section className="container mx-auto py-8 lg:py-16 px-5">
-          <div>
-            <Link href="/">Inicio</Link> /{" "}
-            <Link href="/productos">Productos</Link> /{" "}
+          <div className="text-sm flex gap-2">
+            <Link href="/" className="hover:-text--light-green">Inicio</Link> ›{" "}
+            <Link href="/productos" className="hover:-text--light-green">Productos</Link> ›{" "}
             <span className="capitalize">{title}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 gap-x-5 gap-y-5 lg:gap-y-9">
