@@ -11,6 +11,8 @@ export default function CheckoutButton({
   triggerValidation,
   onBeforePayment,
   coupon,
+  discount,
+  total,
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -40,6 +42,8 @@ export default function CheckoutButton({
           orderData,
           customer: formData,
           coupon,
+          discount,
+          total,
         }),
       });
 
@@ -58,15 +62,15 @@ export default function CheckoutButton({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mt-8">
       <button
         onClick={handlePayment}
-        className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition ${
+        className={`-bg--light-green text-white py-2 rounded-lg w-full hover:-bg--dark-green duration-200 font-medium transition ${
           loading ? "opacity-50" : ""
         }`}
         disabled={loading}
       >
-        {loading ? "Generando orden de pago..." : "Pagar con Mercado Pago"}
+        {loading ? "Redirigiendo al pago..." : "Paga ahora"}
       </button>
     </div>
   );

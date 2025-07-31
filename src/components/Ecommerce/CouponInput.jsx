@@ -2,7 +2,7 @@
 import React, { useState, useContext } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { GetCoupons } from "../GetContentApi";
 import { CartContext } from "../../context/CartContext";
 
@@ -22,12 +22,12 @@ export default function CouponInput() {
     setError("");
 
     try {
-      const response = await GetCoupons(couponCode);
-
+      const cleanCode = couponCode.trim();
+      const response = await GetCoupons(cleanCode);
+      
       if (response && response.coupon) {
         const couponData = response.coupon;
-
-        if (couponData.code.toUpperCase() !== couponCode.toUpperCase()) {
+        if (couponData.code.toUpperCase() !== cleanCode.toUpperCase()) {
           setError("El código del cupón no es válido.");
           setLoading(false);
           return;
@@ -61,20 +61,22 @@ export default function CouponInput() {
 
   if (coupon) {
     return (
-      <div className="flex flex-wrap items-center gap-y-3 gap-1">
+      <div className="flex justify-center flex-col flex-wrap items-center gap-y-3 gap-1">
         <Stack direction="row" spacing={1}>
           <Chip
-            icon={<LocalOfferIcon />}
-            label={coupon.code.toUpperCase()}
+            label={`Código: ${coupon.code.toUpperCase()}`}
             onDelete={handleDeleteCoupon}
+            color="success"
           />
         </Stack>
         {coupon.description && (
-          <span
-            className="coupon-description text-sm block "
-            style={{ color: "green" }}
-          >
-            {coupon.description}
+          <span className="coupon-description text-sm text-lime-700 font-medium flex items-center gap-1">
+            <span
+              className="icon-[ri--discount-percent-fill] text-base"
+              role="img"
+              aria-hidden="true"
+            />
+            Descuento: {coupon.percent}%{/* {coupon.description} */}
           </span>
         )}
       </div>
@@ -83,31 +85,42 @@ export default function CouponInput() {
 
   return (
     <>
-      <div className="flex items-center gap-2 flex-wrap justify-center">
+      <div className="relative flex items-center border border-gray-300 rounded-lg overflow-hidden w-full max-w-sm mx-auto">
+        <div className="absolute left-3">
+          <span
+            className="icon-[streamline--discount-percent-coupon-solid] text-gray-400"
+            role="img"
+            aria-hidden="true"
+          />
+        </div>
         <input
           type="text"
           name="couponCode"
           id="couponCode"
-          placeholder="¿Tienes un cupón?"
-          value={couponCode}
+          placeholder="Código de descuento"
+          value={couponCode}          
           onChange={(e) => setCouponCode(e.target.value)}
-          className="px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:-ring--dark-green w-full sm:w-auto"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleApplyCoupon();
+            }
+          }}
+          className="pl-10 pr-3 py-2 text-gray-700 focus:outline-none focus:ring-0 w-full text-xs lg:text-sm "
+          style={{ border: "none" }}
         />
         <button
           onClick={handleApplyCoupon}
           disabled={loading}
-          className="-bg--dark-green text-white px-4 py-2 rounded-md flex-1 whitespace-nowrap hover:-bg--grey-darkest duration-200"
+          className="-bg--dark-green text-white px-4 py-2 whitespace-nowrap font-medium hover:-bg--light-green hover:text-white duration-200"
         >
-          {loading ? "Aplicando..." : "Aplicar cupón"}
+          {loading ? "Aplicando..." : "Aplicar"}
         </button>
       </div>
       {error && (
-        <span
-          className="coupon-error text-sm ml-1 mt-1 block"
-          style={{ color: "red" }}
-        >
+        <div className="text-sm mt-1 text-red-700 bg-red-100 p-2 rounded-md flex justify-center max-w-sm mx-auto w-full items-center">
           {error}
-        </span>
+        </div>
       )}
     </>
   );

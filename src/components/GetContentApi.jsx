@@ -230,7 +230,7 @@ export async function GetCompanyInfo() {
 export async function GetCoupons(couponCode) {
   try {
     const res = await fetchData(
-      `promociones?populate=*&filters[coupon][isActive][$eq]=true&filters[coupon][code][$eq]=${couponCode}`
+      `promociones?filters[coupon][isActive][$eq]=true&populate[coupon][populate][products][fields]=documentId&filters[coupon][code][$eqi]=${couponCode}`
     );
     if (!res) {
       return null;

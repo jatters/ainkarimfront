@@ -34,7 +34,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
   const registerUser = watch("register");
 
   return (
-    <div className="mx-auto lg:p-8 bg-white">
+    <div className="mx-auto lg:p-2 bg-white">
       <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2  sm:col-span-1">
           <label htmlFor="firstName" className="sr-only">
@@ -263,7 +263,33 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         </div>
         {showAddressFields && (
           <>
-            <div className="col-span-2  sm:col-span-1">
+          <div>
+            <label htmlFor="city" className="sr-only">Ciudad</label>
+            <select name="city" id="city" {...register("city", {
+              required: {
+                value: true,
+                message: "Ciudad es requerida",
+              },
+            })} className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              errors.city ? "!border-red-500" : ""
+            }`}>
+              <option value="">Selecciona una ciudad</option>
+              <option value="Bogota">Bogota</option>
+              <option value="Bucaramanga">Bucaramanga</option>
+              <option value="Cajica">Cajica</option>
+              <option value="Cali">Cali</option>
+              <option value="Chia">Chía</option>
+              <option value="Medellin">Medellin</option>
+              <option value="Yopal">Yopal</option>
+              <option value="Zipaquirá">Zipaquira</option>
+            </select>
+            {errors.city && (
+              <span className="text-sm text-red-600 mt-2 pl-1 block">
+                {errors.city.message}
+              </span>
+            )}
+          </div>
+            {/* <div className="col-span-2  sm:col-span-1">
               <label htmlFor="city" className="sr-only">
                 Ciudad
               </label>
@@ -294,8 +320,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   {errors.city.message}
                 </span>
               )}
-            </div>
-            <div className="col-span-2  sm:col-span-1">
+            </div> */}
+            {/* <div className="col-span-2  sm:col-span-1">
               <label htmlFor="departament" className="sr-only">
                 Departamento
               </label>
@@ -326,7 +352,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   {errors.departament.message}
                 </span>
               )}
-            </div>
+            </div> */}
             <div className="col-span-2  sm:col-span-1">
               <label htmlFor="address" className="sr-only">
                 Dirección

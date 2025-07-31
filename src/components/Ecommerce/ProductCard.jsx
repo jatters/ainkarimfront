@@ -233,7 +233,7 @@ export default function ProductCard({ product }) {
                 </div>
               )}
 
-            <div className="flex  gap-3 mt-auto w-full justify-center pb-5">
+            <div className="flex gap-3 mt-auto w-full justify-center pb-5">
               <Link
                 href={`/producto/${slug}`}
                 className="text-sm border border-green-800 text-green-800 px-4 py-2 flex items-center gap-1 rounded-md transition-colors duration-200 hover:bg-green-800 hover:text-white"

@@ -1,21 +1,175 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import CheckoutForm from "@/components/Forms/CheckoutForm";
 import { CartContext } from "@/context/CartContext";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
 import Tooltip from "@mui/material/Tooltip";
 import CouponInput from "@/components/Ecommerce/CouponInput";
+import Image from "next/image";
+import logoMercadoPago from "../../../public/logo-mercado-pago.svg";
+import Link from "next/link";
+
+const formatPrice = (value) =>
+  `$${Number(value).toLocaleString("es-CO", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
 
 export default function PaymentPage() {
   const { cart, removeFromCart, coupon } = useContext(CartContext);
-  const [formState, setFormState] = useState({ isValid: false, formData: {} });
+  const [formState, setFormState] = useState({
+    isValid: false,
+    formData: {},
+    triggerValidation: () => {},
+  });
   const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleFormChange = (updatedFormState) => {
-    setFormState(updatedFormState);
+  const calculateProductDiscount = (cart, coupon, rate) => {
+    if (!coupon || coupon.appliesTo !== "Productos") return 0;
+
+    const validProductIds = coupon.products?.map((p) => p.documentId) || [];
+
+    return cart
+      .filter(
+        (item) =>
+          !item.isReservation && validProductIds.includes(item.documentId)
+      )
+      .reduce(
+        (sum, item) => sum + parseFloat(item.price) * item.quantity * rate,
+        0
+      );
   };
+
+  /* const calculateSubtotal = (item) => {
+    const price = parseFloat(item.Precio || item.price || 0);
+    const additional = item.additionalService
+      ? parseFloat(item.additionalService.price || 0)
+      : 0;
+    const quantity = item.reservationData?.persons || item.quantity || 1;
+    return (price + additional) * quantity;
+  }; */
+
+  // Subtotal, descuento y total memorizados
+  const calculateSubtotal = (item) => {
+    const price = parseFloat(item.Precio || item.price || 0);
+    const additional = item.additionalService
+      ? parseFloat(item.additionalService.price || 0)
+      : 0;
+    const quantity = item.reservationData?.persons || item.quantity || 1;
+    return (price + additional) * quantity;
+  };
+
+  // Subtotales
+  const subtotalProductos = useMemo(
+    () =>
+      cart
+        .filter((item) => !item.reservationData)
+        .reduce((sum, item) => sum + calculateSubtotal(item), 0),
+    [cart]
+  );
+
+  const subtotalReservas = useMemo(
+    () =>
+      cart
+        .filter((item) => item.reservationData)
+        .reduce((sum, item) => sum + calculateSubtotal(item), 0),
+    [cart]
+  );
+
+  const subtotalTotal = subtotalProductos + subtotalReservas;
+
+  // Porcentaje de descuento
+  const rawPercent = Number(coupon?.percent) || 0;
+  const rate = Math.min(
+    Math.max(rawPercent > 1 ? rawPercent / 100 : rawPercent, 0),
+    1
+  );
+
+  // Descuento según tipo de cupón
+  /*   let discount = 0;
+  if (coupon) {
+    switch (coupon.appliesTo) {
+      case "Productos":
+        discount = subtotalProductos * rate;
+        break;
+      case "Reservas":
+        discount = subtotalReservas * rate;
+        break;
+      case "Valor total del carrito":
+      default:
+        discount = subtotalTotal * rate;
+        break;
+    }
+  } */
+  const discount = useMemo(() => {
+    if (!coupon) return 0;
+    if (coupon.appliesTo === "Productos") {
+      return calculateProductDiscount(cart, coupon, coupon.percent / 100);
+    } else if (coupon.appliesTo === "Reservas") {
+      return subtotalReservas * (coupon.percent / 100);
+    }
+    return subtotalTotal * (coupon.percent / 100);
+  }, [coupon, cart, subtotalReservas, subtotalTotal]);
+
+  const total = subtotalTotal - discount;
+
+  const subtotal = useMemo(
+    () => cart.reduce((sum, item) => sum + calculateSubtotal(item), 0),
+    [cart]
+  );
+
+  const calculateItemDiscount = (item) => {
+    if (!coupon) return 0;
+    const subtotalItem = calculateSubtotal(item);
+
+    if (coupon.appliesTo === "Productos") {
+      if (item.reservationData) return 0;
+      const validProductIds = coupon.products?.map((p) => p.documentId) || [];
+      if (!validProductIds.includes(item.documentId)) return 0;
+      return subtotalItem * rate;
+    }
+
+    if (coupon.appliesTo === "Reservas") {
+      if (!item.reservationData) return 0;
+      return subtotalItem * rate;
+    }
+
+    return subtotalItem * rate;
+  };
+
+  /* const discount = useMemo(
+    () => (coupon ? (subtotal * coupon.percent) / 100 : 0),
+    [coupon, subtotal]
+  );
+  const total = subtotal - discount; */
+
+  // Mapea datos de pedido para Mercado Pago
+  const orderData = useMemo(
+    () =>
+      cart.map((item) => ({
+        id: item.documentId ? String(item.documentId) : "sin-id",
+        documentId: item.documentId || null,
+        title: item.title || item.attributes?.title || "Sin título",
+        quantity: item.reservationData?.persons || item.quantity || 1,
+        unitPrice: parseFloat(item.Precio || item.price || 0),
+        isReservation: Boolean(item.reservationData),
+        date: item.reservationData?.date || null,
+        time: item.reservationData?.hour || null,
+        additionalService: item.additionalService || null,
+        image: item.image ? { url: item.image.url } : null,
+      })),
+    [cart]
+  );
+
+  const handleFormChange = ({ isValid, formData, triggerValidation }) => {
+    setFormState({ isValid, formData, triggerValidation });
+    setError("");
+  };
+
+  const onError = (message) => setError(message);
+
   const processOrder = async () => {
-    setProcessing(true);
     try {
       const data = formState.formData;
       let userId = null;
@@ -77,180 +231,155 @@ export default function PaymentPage() {
 
       return customerData;
     } catch (error) {
-      console.error("❌ Error en el registro:", error);
+      onError(error.message || "Error en el registro de usuario");
       throw error;
-    } finally {
-      setProcessing(false);
     }
   };
-
-  const calculateSubtotal = (item) => {
-    const price = parseFloat(item.Precio || item.price || 0);
-    const additionalPrice = item.additionalService
-      ? parseFloat(item.additionalService.price)
-      : 0;
-    const quantity = item.reservationData?.persons || item.quantity || 1;
-    return price * quantity + additionalPrice;
-  };
-
-  const calculateTotal = () => {
-    if (coupon) {
-      return (
-        cart.reduce((total, item) => total + calculateSubtotal(item), 0) -
-        cart.reduce((total, item) => total + calculateSubtotal(item), 0) *
-          (coupon.percent / 100)
-      );
-    }
-    return cart.reduce((total, item) => total + calculateSubtotal(item), 0);
-  };
-
-  const formatPrice = (price) => {
-    return `$${Number(price).toLocaleString("es-CO", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })}`;
-  };
-
-  const baseurl = process.env.NEXT_PUBLIC_STRAPI_URL;
-
-  const orderData = cart.map((product) => ({
-    id: product.documentId ? String(product.documentId) : "sin-id",
-    name: product.title || product.attributes?.title || "Producto sin nombre",
-    date: product.reservationData?.date || null,
-    time: product.reservationData?.hour || null,
-    guests: product.reservationData?.persons || null,
-    price: parseFloat(product.Precio || product.price || 0),
-    additionalService: product.additionalService || null,
-    quantity: product.quantity || 1,
-    image: product.image ? { url: product.image.url } : null,
-  }));
-  const subtotal = cart.reduce(
-    (total, item) => total + calculateSubtotal(item),
-    0
-  );
-  const discountValue = coupon ? subtotal * (coupon.percent / 100) : 0;
-  const total = subtotal - discountValue;
 
   return (
     <>
       <main>
-        <div className="container mx-auto py-8 lg:py-16 px-5">
-          <h1 className="font-bold text-center text-2xl lg:text-4xl uppercase -text--dark-green">
-            FINALIZAR COMPRA
-          </h1>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-9 -bg--grey-lightest py-5 lg:py-10 rounded-lg ">
-            <div className="mt-6">
-              {orderData.length > 0 && (
-                <CheckoutForm
-                  showAddressFields={cart.some((item) => !item.reservationData)}
-                  onFormChange={handleFormChange}
-                />
-              )}
+        <div className="container mx-auto p-5 lg:p-10">
+          {error && (
+            <div className="bg-red-100 text-red-700 p-3 rounded my-6 ">
+              {error}
+            </div>
+          )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 -bg--grey-lightest rounded-lg ">
+            <div className="">
+              <h1 className="font-bold text-2xl lg:text-4xl -text--dark-green mb-8">
+                Finaliza tu compra
+              </h1>
+              <CheckoutForm
+                showAddressFields={cart.some((item) => !item.reservationData)}
+                onFormChange={handleFormChange}
+              />
             </div>
 
-            <div className="col-span-1">
-              <h2 className="font-bold text-2xl mb-6 -text--dark-green">
-                TU PEDIDO
+            <div className="col-span-1 pt-5 border-t border-gray-200 bg-slate-100/80 p-5 border-2 rounded-xl">
+              <h2 className="font-bold text-2xl mb-6 -text--dark-green text-center sm:text-left">
+                Resumen de tu pedido
               </h2>
-              <div className="bg-white rounded-lg py-4 px-5 border">
-                {cart.map((product, index) => {
-                  const isReservation = !!product.reservationData;
-
-                  const title =
-                    product.title || product.attributes?.title || "Sin título";
-                  const pricePerUnit = parseFloat(
-                    product.Precio || product.price || 0
-                  );
-                  const quantity =
-                    product.reservationData?.persons || product.quantity || 1;
-
-                  const subtotalPrice = calculateSubtotal(product);
+              <div className="rounded-lg py-4 p-2">
+                {cart.map((item, index) => {
+                  const {
+                    title = "Sin título",
+                    price: pricePerUnit = 0,
+                    quantity = 1,
+                    reservationData,
+                  } = item;
+                  const isReservation = !!reservationData;
+                  const subtotalPrice = calculateSubtotal(item);
 
                   return (
                     <div
                       key={index}
-                      className="grid grid-cols-5 py-3 pl-4 gap-5 border-b items-center hover:bg-slate-100 duration-200"
+                      className="grid grid-cols-5 py-3 gap-5 border-b items-center"
                     >
                       <div className="col-span-4">
-                        <div className="font-bold -text--dark-green">
+                        <div className="font-semibold text-gray-800">
                           {title}
                         </div>
                         {isReservation ? (
                           <div className="text-sm text-gray-600">
-                            <div>
-                              <span className="font-semibold -text--dark-green">
-                                Fecha:
-                              </span>{" "}
-                              {product.reservationData?.date || "N/A"}
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">Fecha: </span>
+                              <span>{reservationData.date || "N/A"}</span>
                             </div>
-                            <div>
-                              <span className="font-semibold -text--dark-green">
-                                Hora:
-                              </span>{" "}
-                              {product.reservationData?.hour || "N/A"}
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">Hora: </span>
+                              <span>{reservationData.hour || "N/A"}</span>
                             </div>
-                            <div>
-                              <span className="font-semibold -text--dark-green">
-                                {`${product.unitPlan}s`}:
-                              </span>{" "}
-                              {product.reservationData?.persons || "N/A"}
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">
+                                {item?.unitPlan
+                                  ? `${item.unitPlan}s`
+                                  : "Unidades"}
+                                :{" "}
+                              </span>
+                              <span>{reservationData.persons || "N/A"}</span>
                             </div>
-                            <div>
-                              <span className="font-semibold -text--dark-green">
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold text-xs ">
                                 Precio por{" "}
-                                {`${product?.unitPlan.toLowerCase()}` ||
-                                  "unidad"}
-                                :
-                              </span>{" "}
-                              {formatPrice(pricePerUnit)}
+                                {item?.unitPlan
+                                  ? `${item.unitPlan.toLowerCase()}`
+                                  : "unidad"}
+                                :{" "}
+                              </span>
+                              <span>{formatPrice(pricePerUnit)}</span>
                             </div>
-                            {product.additionalService && (
-                              <div>
-                                <span className="font-semibold -text--dark-green">
-                                  Adicional:
-                                </span>{" "}
-                                {product.additionalService.name} -{" "}
-                                {formatPrice(product.additionalService.price)}
+                            {reservationData.additionalService && (
+                              <div className="text-gray-700 text-xs">
+                                <span className="font-semibold">
+                                  Adicional:{" "}
+                                </span>
+                                <span>
+                                  {reservationData.additionalService.name} -{" "}
+                                  {formatPrice(
+                                    reservationData.additionalService.price
+                                  )}
+                                </span>
                               </div>
                             )}
-                            <div>
-                              <span className="font-semibold -text--dark-green">
-                                Subtotal:
-                              </span>{" "}
-                              {formatPrice(subtotalPrice)}
+                            {/* <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">Subtotal: </span>
+                              <span>{formatPrice(subtotalPrice)}</span>
+                            </div> */}
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">Subtotal: </span>
+                              <span>{formatPrice(subtotalPrice)}</span>
+                              {calculateItemDiscount(item) > 0 && (
+                                <div className="text-lime-600 text-xs mt-1">
+                                  <span className="font-semibold">
+                                    Descuento:{" "}
+                                  </span>
+                                  - {formatPrice(calculateItemDiscount(item))}
+                                </div>
+                              )}
                             </div>
                           </div>
                         ) : (
                           <>
-                            <div className="text-sm">
-                              <span className="font-semibold -text--dark-green">
-                                Precio unitario:
-                              </span>{" "}
-                              {`${formatPrice(pricePerUnit)} x ${quantity}`}
+                            <div className="text-xs text-gray-700">
+                              <span className="font-semibold ">
+                                Precio unitario:{" "}
+                              </span>
+                              <span>
+                                {`${formatPrice(pricePerUnit)} x ${quantity}`}
+                              </span>
                             </div>
-                            <div>
-                              <span className="font-semibold -text--dark-green">
-                                Valor:
-                              </span>{" "}
-                              {formatPrice(subtotalPrice)}
+                            <div className="text-gray-700 text-xs">
+                              <span className="font-semibold">Valor: </span>
+                              <span>{formatPrice(subtotalPrice)}</span>
                             </div>
+                            {calculateItemDiscount(item) > 0 && (
+                              <div className="text-lime-600 text-xs mt-1">
+                                <span className="font-semibold">
+                                  Descuento:{" "}
+                                </span>
+                                - {formatPrice(calculateItemDiscount(item))}
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
 
-                      <div className="col-span-2 sm:col-span-1 sm:text-center gap-5">
-                        <div className="mb-5 sm:mb-1">
-                          {quantity} {quantity > 1 ? "unidades" : "unidad"}
-                        </div>
-                        <div>
+                      <div className="col-span-2 sm:col-span-1 sm:text-right gap-5">
+                        <div className="">
                           <Tooltip
-                            title="Eliminar producto"
+                            title={`Remover ${
+                              item.title || "producto"
+                            } de tu compra`}
                             placement="top"
                             arrow
                           >
-                            <button onClick={() => removeFromCart(product)}>
-                              <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300 hidden sm:block" />
-                              <span className="-text--light-red font-semibold sm:hidden">
+                            <button
+                              onClick={() => removeFromCart(item)}
+                              className=""
+                            >
+                              <span className="icon-[si--remove-circle-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300 hidden sm:block" />
+                              <span className="-text--light-red font-semibold sm:hidden text-sm">
                                 Eliminar
                               </span>
                             </button>
@@ -262,49 +391,68 @@ export default function PaymentPage() {
                 })}
 
                 {coupon && (
-                  <div className="my-3">
+                  <div className="space-y-5 text-gray-500 mt-5">
                     <div className="grid grid-cols-4">
                       <div className="col-span-2">
-                        <div className="font-bold text-lg">Subtotal</div>
+                        <div className="font-semibold">Subtotal</div>
                       </div>
-                      <div className="col-span-2 text-right text-lg">
+                      <div className="col-span-2 text-right ">
                         {formatPrice(subtotal)}
                       </div>
                     </div>
                     <div className="grid grid-cols-4">
                       <div className="col-span-2">
-                        <div className="font-bold text-lg">Descuento</div>
+                        <div className="font-semibold">Descuento</div>
                       </div>
-                      <div className="col-span-2 text-right text-lg">
+                      <div className="col-span-2 text-right ">
                         {"-"}
 
-                        {formatPrice(discountValue)}
+                        {formatPrice(discount)}
                       </div>
                     </div>
                   </div>
                 )}
-                <div className="grid grid-cols-4 py-8 border-t">
+                <div className="grid grid-cols-4 mt-5 text-gray-700">
                   <div className="col-span-2">
-                    <div className="font-bold text-xl">Total</div>
+                    <div className="font-semibold">Total</div>
                   </div>
-                  <div className="col-span-2 text-right text-xl">
+                  <div className="col-span-2 text-right font-semibold ">
                     <div>{formatPrice(total)}</div>
                   </div>
                 </div>
-                <div>
-                  <CheckoutButton
-                    orderData={cart}
-                    formData={formState.formData}
-                    formValid={formState.isValid}
-                    triggerValidation={formState.triggerValidation}
-                    onBeforePayment={processOrder}
-                    coupon={coupon}
-                  />
-                  {console.log(coupon)}
-                </div>
-                <div className="mt-8">
+                <div className="mt-10">
                   <CouponInput />
                 </div>
+                <CheckoutButton
+                  orderData={orderData}
+                  formData={formState.formData}
+                  formValid={formState.isValid}
+                  triggerValidation={formState.triggerValidation}
+                  onBeforePayment={processOrder}
+                  coupon={coupon}
+                  onError={onError}
+                  discount={discount}
+                  total={total}
+                />
+              </div>
+              <div className="flex flex-col text-center sm:flex-row sm:text-left items-center justify-center border border-gray-100 rounded-lg p-2">
+                <Image
+                  src={logoMercadoPago}
+                  alt="Logo Mercado Pago"
+                  className="w-44"
+                />
+                <p className="font-semibold text-sm text-gray-700">
+                  Todos nuestros pagos son seguros y procesados por Mercado Pago
+                </p>
+              </div>
+              <div className="mt-5 flex items-center justify-center gap-1">
+                ¿Necesitas ayuda?
+                <Link
+                  href="/contacto"
+                  className="-text--dark-green font-semibold hover:-text--light-green duration-200"
+                >
+                  Contáctanos
+                </Link>
               </div>
             </div>
           </div>

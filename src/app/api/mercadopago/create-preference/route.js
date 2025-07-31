@@ -61,6 +61,66 @@ export async function POST(req) {
       );
     }
 
+    const calcItemPrice = (item) => {
+      const qty = item.quantity || 1;
+      const basePrice = parseFloat(item.unitPrice || item.price) || 0;
+      const additional = item.additionalService?.price
+        ? parseFloat(item.additionalService.price)
+        : 0;
+      return basePrice * qty + additional;
+    };
+
+    const subtotalProducts = orderData
+      .filter((item) => !item.isReservation)
+      .reduce((sum, item) => sum + calcItemPrice(item), 0);
+
+    const subtotalReservations = orderData
+      .filter((item) => item.isReservation)
+      .reduce((sum, item) => sum + calcItemPrice(item), 0);
+
+    const totalPriceOrder = subtotalProducts + subtotalReservations;
+
+    /*  let discountValue = 0;
+    if (coupon && coupon.percent) {
+      switch (coupon.appliesTo) {
+        case "Productos":
+          discountValue = subtotalProducts * (coupon.percent / 100);
+          break;
+        case "Reservas":
+          discountValue = subtotalReservations * (coupon.percent / 100);
+          break;
+        case "Valor total del carrito":
+        default:
+          discountValue = totalPriceOrder * (coupon.percent / 100);
+          break;
+      }
+    }
+    
+    const finalTotalPriceOrder = totalPriceOrder - discountValue; */
+    let discountValue = 0;
+    if (coupon && coupon.percent) {
+      const percent = coupon.percent / 100;
+      if (coupon.appliesTo === "Productos") {
+        const validProductIds = coupon.products?.map((p) => p.documentId) || [];
+        discountValue =
+          orderData
+            .filter(
+              (item) =>
+                !item.isReservation && validProductIds.includes(item.documentId)
+            )
+            .reduce((sum, item) => sum + calcItemPrice(item), 0) * percent;
+      } else if (coupon.appliesTo === "Reservas") {
+        discountValue =
+          orderData
+            .filter((item) => item.isReservation)
+            .reduce((sum, item) => sum + calcItemPrice(item), 0) * percent;
+      } else {
+        discountValue = totalPriceOrder * percent;
+      }
+    }
+
+    const finalTotalPriceOrder = totalPriceOrder - discountValue;
+
     const hasOrderProducts = orderData.some((item) => !item.isReservation);
     const hasReservations = orderData.some((item) => item.isReservation);
 
@@ -74,9 +134,9 @@ export async function POST(req) {
       }
     }
 
-    const totalPriceOrder = orderData.reduce((total, item) => {
+    /* const totalPriceOrder = orderData.reduce((total, item) => {
       const qty = item.quantity || 1;
-      const basePrice = parseFloat(item.price) || 0;
+      const basePrice = parseFloat(item.unitPrice) || 0;
       if (
         item.isReservation &&
         item.additionalService &&
@@ -91,7 +151,7 @@ export async function POST(req) {
     if (coupon && coupon.percent) {
       discountValue = totalPriceOrder * (coupon.percent / 100);
     }
-    const finalTotalPriceOrder = totalPriceOrder - discountValue;
+    const finalTotalPriceOrder = totalPriceOrder - discountValue; */
 
     const internalOrderPayload = {
       creationDate: new Date().toISOString(),
@@ -109,7 +169,7 @@ export async function POST(req) {
       items: JSON.stringify(orderData),
       totalPriceOrder: finalTotalPriceOrder,
       coupon: coupon ? coupon.code : null,
-      discount: coupon ? totalPriceOrder * (coupon.percent / 100) : 0,
+      discount: discountValue,
       numberOrder: null,
       state: "Pendiente",
       payment_status: "Pendiente",
@@ -175,7 +235,7 @@ export async function POST(req) {
           category_id: "reservas",
           quantity: qty,
           currency_id: "COP",
-          unit_price: parseFloat(item.price) || 0,
+          unit_price: parseFloat(item.unitPrice || item.price) || 0,
         });
 
         mpItems.push({
@@ -204,7 +264,7 @@ export async function POST(req) {
           category_id: item.isReservation ? "reservas" : "services",
           quantity: qty,
           currency_id: "COP",
-          unit_price: parseFloat(item.price) || 0,
+          unit_price: parseFloat(item.unitPrice || item.price) || 0,
         });
       }
     });
@@ -301,29 +361,26 @@ export async function POST(req) {
     }
 
     for (const item of orderData) {
-      if (item.isReservation && item.reservationData) {
-        const rawTime = item.reservationData.hour || "10:30 am";
+      if (item.isReservation) {
+        const rawTime = item.time || "10:30 am";
         const reservationTime = convertTimeString(rawTime);
+        const reservationDate =
+          item.date || new Date().toISOString().split("T")[0];
         const qty = item.quantity || 1;
-        const basePrice = parseFloat(item.price) || 0;
-
-        const totalPriceReservation =
-          item.additionalService && item.additionalService.price
-            ? basePrice * qty + parseFloat(item.additionalService.price)
-            : basePrice * qty;
+        const basePrice = parseFloat(item.unitPrice) || 0;
+        const additionalPrice = parseFloat(item.additionalService?.price) || 0;
+        const totalPriceReservation = basePrice * qty + additionalPrice;
         const reservationDiscount = coupon?.percent
           ? totalPriceReservation * (coupon.percent / 100)
           : 0;
-        const finalTotalPriceReservation =
+        const finalPriceReservation =
           totalPriceReservation - reservationDiscount;
 
         const reservationPayload = {
           data: {
-            plan: item.documentId,
-            guests: item.reservationData.persons || qty,
-            reservationDate:
-              item.reservationData.date ||
-              new Date().toISOString().split("T")[0],
+            plan: item.id, // ojo: aquí usas `item.id` mapeado desde documentId
+            guests: qty,
+            reservationDate,
             reservationTime,
             state: "Pendiente",
             payment_status: "Pendiente",
@@ -336,9 +393,8 @@ export async function POST(req) {
             customerDocument: customer.document,
             customerEmail: customer.email,
             customerPhone: customer.mobiletwo,
-            totalPriceReservation: finalTotalPriceReservation,
-            servicios_adicionale: item?.additionalService?.documentId || null,
-
+            totalPriceReservation: finalPriceReservation,
+            servicios_adicionale: item.additionalService?.documentId || null,
             pedidos: {
               connect: [{ documentId: orderDocumentId }],
             },

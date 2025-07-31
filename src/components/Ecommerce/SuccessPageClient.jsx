@@ -101,6 +101,9 @@ export default function SuccessPageClient() {
       <p className="text-center text-gray-600 mt-2">
         Tu pago ha sido procesado con éxito.
       </p>
+      <p className="text-center text-gray-600 mt-2 text-sm">
+        {new Date(date).toLocaleString("es-CO")}
+      </p>
 
       <ConfettiWrapper />
 

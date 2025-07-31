@@ -368,7 +368,7 @@ export default function ReservationField({
                     name="persons"
                     value={reservationData.persons}
                     aria-label="Número de personas"
-                    className="appearance-none border -border--dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-none h-10"
+                    className="appearance-none border -border--dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-none h-10 rounded-none"
                   />
                   <button
                     className="-bg--dark-green/70 text-white rounded-r focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
