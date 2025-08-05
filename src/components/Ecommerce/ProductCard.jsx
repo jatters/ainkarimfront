@@ -140,37 +140,31 @@ export default function ProductCard({ product }) {
       />
       {isActive && (
         <article
-          className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-col gap-5 border border-slate-100 h-full max-h-[570px] lg:max-h-[520px] xl:max-h-[480px] 2xl:max-h-[480px] justify-items-center"
+          className="relative group shadow-md rounded-lg hover:shadow-lg duration-300 flex flex-row sm:flex-col gap-x-2 sm:gap-y-5 sm:border sm:border-slate-100 sm:h-full max-h-[570px] lg:max-h-[520px] xl:max-h-[500px] 2xl:max-h-[480px] justify-items-center"
           itemType="https://schema.org/Product"
           itemScope
         >
           {isOnSale && (
-            <div className="absolute top-3 right-4 bg-red-600 text-white text-xs py-2 px-3 flex items-center justify-center rounded-xl font-bold group-hover:bg-red-700 duration-200 z-10">
+            <div className="hidden sm:flex absolute top-2 left-2 bg-red-600 text-white text-xs py-2 px-3 items-center justify-center rounded-xl font-bold group-hover:bg-red-700 duration-200 z-10">
               OFERTA %
             </div>
           )}
 
-          {outOfStock && (
-            <div className="absolute top-3 left-4 bg-black/50 text-white text-xs py-2 px-3 flex items-center justify-center rounded-xl font-bold group-hover:bg-black/70 duration-200 z-10">
-              Agotado
-            </div>
-          )}
-
-          <div className="relative overflow-hidden rounded-t-lg border-b border-slate-100 flex-shrink-0">
+          <div className="relative sm:overflow-hidden rounded-tl-lg rounded-bl-lg sm:rounded-bl-none sm:rounded-t-lg sm:border-b sm:border-slate-100 sm:flex-shrink-0 aspect-square">
             <Link href={`/producto/${slug}`}>
               <Image
                 src={imageUrl}
                 width={370}
                 height={370}
                 alt={altText}
-                className="rounded-t-lg group-hover:scale-105 duration-200 w-full h-full object-contain"
+                className="rounded-tl-lg rounded-bl-lg sm:rounded-bl-none sm:rounded-t-lg  group-hover:scale-105 duration-200 w-36 h-36 sm:w-full sm:h-full object-contain"
                 itemProp="image"
               />
             </Link>
           </div>
-          <div className="px-4 flex flex-col flex-1 items-center">
+          <div className="sm:px-4 flex flex-col sm:flex-1 sm:items-center w-full">
             <h2
-              className="font-semibold uppercase text-center text-gray-800 group-hover:text-green-800 duration-200"
+              className="font-semibold uppercase text-sm sm:text-base sm:text-center text-gray-800 group-hover:text-green-800 duration-200 line-clamp-1 sm:line-clamp-none"
               itemProp="name"
             >
               <Link href={`/producto/${slug}`}>{title}</Link>
@@ -187,7 +181,7 @@ export default function ProductCard({ product }) {
               itemType="https://schema.org/Offer"
             >
               {isOnSale ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-2 sm:mt-0">
                   <span className="text-sm text-gray-600 line-through">
                     <FormatPrice price={parsedRegularPrice} />
                   </span>
@@ -199,7 +193,7 @@ export default function ProductCard({ product }) {
                   </span>
                 </div>
               ) : (
-                <div className="mb-3 text-base text-green-800 font-semibold">
+                <div className="mt-2 sm:mt-0 text-base text-green-800 font-semibold">
                   <FormatPrice price={parsedRegularPrice} />
                 </div>
               )}
@@ -209,12 +203,19 @@ export default function ProductCard({ product }) {
                 content={isActive ? "InStock" : "OutOfStock"}
               />
             </div>
-            <div className="flex-1"></div>
+
+            {isOnSale && (
+              <div className="sm:hidden">
+                <div className="bg-red-500 text-white text-xs py-1 px-2 items-center justify-center rounded w-fit">
+                  OFERTA %
+                </div>
+              </div>
+            )}
 
             {isVariable &&
               Array.isArray(variaciones) &&
               variaciones.length > 0 && (
-                <div className="w-full mt-2">
+                <div className="w-full mt-2 hidden sm:block">
                   <div className="flex gap-2 overflow-x-auto whitespace-nowrap mb-5  w-full">
                     {variaciones.map((variation) => (
                       <button
@@ -231,9 +232,8 @@ export default function ProductCard({ product }) {
                     ))}
                   </div>
                 </div>
-              )}
-
-            <div className="flex gap-3 mt-auto w-full justify-center pb-5">
+              )}             
+            <div className="gap-3  w-full sm:justify-center sm:pb-5 hidden sm:flex mt-4">
               <Link
                 href={`/producto/${slug}`}
                 className="text-sm border border-green-800 text-green-800 px-4 py-2 flex items-center gap-1 rounded-md transition-colors duration-200 hover:bg-green-800 hover:text-white"
@@ -258,19 +258,60 @@ export default function ProductCard({ product }) {
                     disabled={(isVariable && !selectedVariation) || outOfStock}
                     className={`text-sm text-white px-4 py-2 rounded-md transition-colors duration-200 ${
                       (isVariable && !selectedVariation) || outOfStock
-                        ? "bg-gray-400 cursor-not-allowed"
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                         : "bg-green-700 hover:bg-green-800"
                     }`}
                     aria-label={
                       isVariable && !selectedVariation
                         ? "Selecciona una variación"
-                        : "Agregar al carrito"
+                        : "Añadir al carrito"
                     }
                   >
-                    Añadir a carrito
+                    {outOfStock ? "Agotado" : "Añadir al carrito"}
                   </button>
                 </span>
               </Tooltip>
+            </div>
+            <div className="flex-1" />
+            <div className="flex justify-between mr-2 mb-2 sm:hidden mt-2">
+              <Link
+                href={`/producto/${slug}`}
+                className="border border-green-800 text-green-800 px-2 py-2 flex items-center gap-1 rounded"
+                aria-label={`Ver producto ${title}`}
+              >
+                <span
+                  className="icon-[hugeicons--view] text-lg"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+
+              {outOfStock ? (
+                <div className="bg-black/50 text-white text-xs py-2 px-2 rounded group-hover:bg-black/70 w-fit">
+                  Agotado
+                </div>
+              ) : (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={(isVariable && !selectedVariation) || outOfStock}
+                  className={`text-sm text-white px-2 py-2 rounded-md transition-colors duration-200 flex items-center gap-1 ${
+                    (isVariable && !selectedVariation) || outOfStock
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-green-700 hover:bg-green-800"
+                  }`}
+                  aria-label={
+                    isVariable && !selectedVariation
+                      ? "Selecciona una variación"
+                      : "Añadir al carrito"
+                  }
+                >
+                  <span
+                    className="icon-[zmdi--shopping-cart-plus] text-lg"
+                    role="img"
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
             </div>
           </div>
         </article>

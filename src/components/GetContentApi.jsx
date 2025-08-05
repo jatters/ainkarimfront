@@ -98,7 +98,7 @@ export async function GetProductsForHome() {
 export async function GetProducts() {
   try {
     const res = await fetchData(
-      `productos?fields[0]=title&fields[1]=slug&fields[2]=isActive&fields[3]=isVariable&fields[4]=price&fields[5]=regularPrice&fields[6]=outOfStock&populate=cepas_de_vino&populate=image&populate=categorias_de_producto&populate=variaciones&sort=title:desc`
+      `productos?fields[0]=title&fields[1]=slug&fields[2]=isActive&fields[3]=isVariable&fields[4]=price&fields[5]=regularPrice&fields[6]=outOfStock&populate=cepas_de_vino&populate=image&populate=categorias_de_producto&populate=variaciones&sort=order:asc`
     );
     if (!res || !res.data) {
       console.error("Error fetching products");

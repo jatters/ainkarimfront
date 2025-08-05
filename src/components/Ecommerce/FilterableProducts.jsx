@@ -73,7 +73,8 @@ export default function FilterableProducts({
           onCategoriasChange={handleCategoriasChange}
         />
       </aside>
-      <div className="col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-5 row-span-5 px-5">
+      {console.log("filteredProducts", filteredProducts)}
+      <div className="col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 row-span-5 px-2 sm:px-5">
         {filteredProducts.map((product) => (
           <ProductCard key={product.documentId} product={product} />
         ))}
