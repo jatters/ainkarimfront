@@ -26,6 +26,7 @@
     "date-fns-tz": "^3.2.0",
     "dayjs": "^1.11.13",
     "jsonwebtoken": "^9.0.2",
+    "lottie-react": "^2.4.1",
     "mercadopago": "^2.8.0",
     "next": "^15.4.5",
     "next-view-transitions": "^0.3.4",

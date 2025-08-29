@@ -35,14 +35,14 @@ export default function HeroCoverHome() {
         <div className="flex flex-col md:flex-row gap-4  items-center justify-center mb-8 px-5 ">
           <Link
             href="/visitas"
-            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200 "
+            className="-bg--dark-green text-white flex gap-1 items-center px-5 py-3 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200 "
           >
             <span className="icon-[uil--schedule] text-lg" />
             Ver Planes
           </Link>
           <Link
             href="/productos"
-            className="-bg--dark-green text-white flex gap-1 items-center px-7 py-4 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200"
+            className="-bg--dark-green text-white flex gap-1 items-center px-5 py-3 rounded-md text-sm font-medium md:text-base hover:-bg--light-green transition duration-200"
           >
             <span className="icon-[material-symbols-light--wine-bar-rounded] text-lg" />
             Ver Productos

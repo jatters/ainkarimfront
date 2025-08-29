@@ -18,10 +18,10 @@ export default async function Footer() {
   const companyInfo = await GetCompanyInfo();
 
   return (
-    <footer className="-bg--dark-green text-white">
+    <footer className="bg-gradient-to-tl from-black -to--dark-green to-50% text-white">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-5 md:px-12 pt-8 md:pt-16 pb-6 md:pb-12 gap-8">
         <div>
-          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             EL VIÑEDO
           </div>
           <ul
@@ -96,7 +96,7 @@ export default async function Footer() {
           </ul>
         </div>
         <div>
-          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             VÍNCULOS DE INTERÉS
           </div>
           <nav role="navigation" aria-label="Vínculos de interés">
@@ -144,7 +144,7 @@ export default async function Footer() {
             </ul>
           </nav>
           <nav className="mt-5" role="navigation" aria-label="Legal">
-            <div className="text-xl mb-3 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+            <div className="text-lg mb-3 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
               Legal
             </div>
             <ul className="space-y-2 text-sm">
@@ -176,7 +176,7 @@ export default async function Footer() {
           </nav>
         </div>
         <div>
-          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             HORARIOS
           </div>
           <ul
@@ -235,7 +235,7 @@ export default async function Footer() {
           </ul>
         </div>
         <div>
-          <div className="text-xl mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:w-10">
+          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             OFICINA
           </div>
           <ul
@@ -263,7 +263,7 @@ export default async function Footer() {
         </div>
       </div>
       <div className="flex flex-col items-center pb-5">
-        <span className="text-lg md:text-xl font-semibold">Síguenos</span>
+        <span className="text-lg md:text-xl font-medium">Síguenos</span>
         <ul
           className="flex flex-row  gap-4 my-3"
           aria-label="Redes sociales del Viñedo Ain Karim"

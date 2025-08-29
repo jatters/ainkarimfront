@@ -4,6 +4,9 @@ import Image from "next/image";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 import Script from "next/script";
+import LottieAnimation from "@/components/LotttieAnimation";
+import BusTransport from "../../../public/bustransport.json";
+import CarTransport from "../../../public/car-transport.json";
 
 export async function generateMetadata() {
   const title = "Información | Viñedo Ain Karim";
@@ -117,15 +120,22 @@ export default function Informationpage() {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
-          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg border border-gray-200">
-            <span className="icon-[lucide--car] text-8xl -text--dark-green" />
+          <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
             <h3 className="-text--dark-green text-xl font-semibold">
               AUTOMÓVIL PARTICULAR
             </h3>
-            <p>Para llegar al viñedo se tienen dos vías:</p>
-            <ul className="list-disc">
+
+            <LottieAnimation
+              animationData={CarTransport}
+              loop={true}
+              className="w-48 h-32"
+            />
+            <p className="font-semibold mb-3">
+              Para llegar al Viñedo se tienen dos vías
+            </p>
+            <ul className="list-disc prose">
               <li>
-                Desde el municipio de villa de Leyva, se debe tomar la vía Villa
+                Desde el municipio de Villa de Leyva, se debe tomar la vía Villa
                 de Leyva - Santa Sofía, estamos ubicados a 10 km, tomando un
                 desvío hacia Sutamarchán.
               </li>
@@ -136,17 +146,27 @@ export default function Informationpage() {
               </li>
             </ul>
           </div>
-          <div className="py-5 flex flex-col items-center space-y-5 px-10 shadow-lg rounded-lg border border-gray-200">
-            <span className="icon-[lucide--bus] text-8xl -text--dark-green" />
+          <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
             <h3 className="-text--dark-green text-xl font-semibold">
               BUS COLECTIVO
             </h3>
-            <p>Para llegar en bus podrias:</p>
-            <p>
+            <LottieAnimation
+              animationData={BusTransport}
+              loop={true}
+              className="w-48 !h-32 !-mt-12 mb-12"
+            />
+            <p className="font-semibold mb-3">Para llegar en bus podrias</p>
+            <p className="prose">
               Llegar al terminal de Villa de Leyva y tomar el bus de salida para
-              Santa Sofía, indicar al señor conductor para ir al viñedo Ain
-              Karim, en este punto de llegada deberás caminar 1 kilómetro y
-              llegarás a tu destino, el Viñedo Ain Karim
+              Santa Sofía, indicar al señor conductor que vas para el{" "}
+              <span className="-text--dark-green font-semibold">
+                Viñedo Ain Karim
+              </span>
+              , en este punto de llegada deberás caminar 1 kilómetro y llegarás
+              a tu destino, el{" "}
+              <span className="-text--dark-green font-semibold">
+                Viñedo Ain Karim
+              </span>
             </p>
           </div>
         </div>

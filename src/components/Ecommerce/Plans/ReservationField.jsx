@@ -381,13 +381,14 @@ export default function ReservationField({
               </div>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col">              
               <ListHours
                 horarios={horarios}
                 blockedRanges={blockedTimeRanges[reservationData.date] || []}
                 classNameInput="w-full"
                 classNameContainer="flex flex-col"
                 value={reservationData.hour}
+                reservationDate={reservationData.date}
                 onChange={(hour) => {
                   setReservationData((prev) => ({ ...prev, hour }));
                   if (!hour) {

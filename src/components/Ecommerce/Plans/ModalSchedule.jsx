@@ -444,6 +444,7 @@ export default function ModalSchedule({
                     classNameInput="w-full"
                     classNameContainer="flex flex-col"
                     value={reservationData.hour}
+                    reservationDate={reservationData.date}
                     onChange={(hour) => {
                       setReservationData((prev) => ({ ...prev, hour }));
                       if (!hour) {
