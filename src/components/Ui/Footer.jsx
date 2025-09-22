@@ -95,8 +95,8 @@ export default async function Footer() {
             </li>
           </ul>
         </div>
-        <div>
-          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+        <div className="hidden md:block">
+          <div className=" text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             VÍNCULOS DE INTERÉS
           </div>
           <nav role="navigation" aria-label="Vínculos de interés">

@@ -16,8 +16,8 @@ export default function ProductsFilter({
   return (
     <div className="px-5 space-y-5">
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <span className="font-semibold capitalize -text--dark-green">
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "white" }} /> } sx={{ backgroundColor: "#062f1d", borderRadius: "5px 5px 0 0" }}>
+          <span className="font-semibold text-white">
             Cepas
           </span>
         </AccordionSummary>
@@ -40,8 +40,8 @@ export default function ProductsFilter({
       </Accordion>
 
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <span className="font-semibold capitalize -text--dark-green">
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#062f1d" }} />} sx={{ backgroundColor: "#062f1d", borderRadius: "5px 5px 0 0 " }}>
+          <span className="font-semibold text-white">
             Categorías
           </span>
         </AccordionSummary>

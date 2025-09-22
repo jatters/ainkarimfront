@@ -23,13 +23,13 @@ export default function PlanRecomendations({
           <li>
             Para reprogramación de su reserva, envíe un correo a{" "}
             <a
-              href={`mailto:${ventasEmail}`}
+              href={`mailto:${contactEmail}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Ventas del Viñedo Ain Karim"
               className="hover:-text--light-green hover:underline duration-200"
             >
-              {ventasEmail}
+              {contactEmail}
             </a>
           </li>
           <li>

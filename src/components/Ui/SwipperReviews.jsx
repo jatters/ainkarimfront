@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import Image from "next/image";
 import Rating from "@mui/material/Rating";
@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
 
-import { Autoplay} from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 
 export default function SwiperReviews({ reviews }) {
   if (reviews.length === 0) {
@@ -23,8 +23,8 @@ export default function SwiperReviews({ reviews }) {
         delay: 5000,
         disableOnInteraction: true,
         pauseOnMouseEnter: true,
-      }}      
-      loop={true}      
+      }}
+      loop={true}
       breakpoints={{
         0: {
           slidesPerView: 1,
@@ -40,7 +40,7 @@ export default function SwiperReviews({ reviews }) {
     >
       {reviews.map((review) => (
         <SwiperSlide key={review.review_id}>
-          <div className="p-4 shadow-xl rounded-xl gap-y-3 flex flex-col px-6 justify-between my-10">
+          <div className="p-4 shadow-xl rounded-xl gap-y-3 flex flex-col px-6 justify-between my-10 min-h-80">
             <div className="flex gap-2 justify-between  pt-6 pb-2">
               <div className="flex items-center flex-row gap-2">
                 <div className="h-14 w-14">

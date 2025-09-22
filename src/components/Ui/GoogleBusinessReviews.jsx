@@ -15,7 +15,7 @@ async function getGoogleReviews() {
       "x-rapidapi-key": KEY,
     },
     next: {
-      revalidate: 604800, // revalidate every week
+      revalidate: 604800,
     },
   });
 
@@ -40,12 +40,11 @@ export default async function GoogleReviews() {
   try {
     const result = await getGoogleReviews();
     data = result.data || [];
+    if (data.length === 0) {
+      return null;
+    }
   } catch (error) {
     console.error("Error fetching Google reviews:", error);
-    return null;
-  }
-
-  if (data.length === 0 || !data.reviews) {
     return null;
   }
 
@@ -66,7 +65,7 @@ export default async function GoogleReviews() {
           </p>
         </div>
         <div className="px-5">
-          <SwiperReviews reviews={reviews} />
+          <SwiperReviews reviews={reviews}  />
         </div>
       </div>
     </section>
