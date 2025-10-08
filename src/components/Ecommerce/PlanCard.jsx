@@ -12,7 +12,7 @@ const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export default function PlanCard({
   planId,
-  name,  
+  name,
   price,
   slug,
   image,
@@ -53,16 +53,22 @@ export default function PlanCard({
             {name}
           </Link>
         </h2>
-        <div className="flex flex-col items-center">
-          <p className="font-semibold text-base">{formatPrice(price) || ""}</p>
-          <p className="text-xs -text--dark-green">
-            {price ? (
-              `por ${unitPlan.toLowerCase()}`
-            ) : (
-              <span className="break-normal">Ingresa para ver más</span>
-            )}
-          </p>
-        </div>
+        {price > 0 ? (
+          <div className="flex flex-col items-center ">
+            <p className="font-semibold text-base">
+              {formatPrice(price) || ""}
+            </p>
+            <span className="break-normal text-right text-xs">
+              por {unitPlan.toLowerCase()}
+            </span>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center">
+            <span className="break-normal text-right text-xs">
+              Ingresa para ver más
+            </span>
+          </div>
+        )}
       </div>
       <ul
         className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}

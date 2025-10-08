@@ -36,11 +36,12 @@ export default function PlanRecomendations({
             No está permitido el consumo de alimentos y bebidas dentro del
             Viñedo que no hayan sido adquiridos en el mismo.
           </li>
-          <li>
-            Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}
-            s, por favor solicite información al correo{" "}
-            <a
-              href={`mailto:${contactEmail}`}
+          {max_reservations > 1 && (
+            <li>
+              Si es un grupo de más de {max_reservations} {unitPlan.toLowerCase()}
+              s, por favor solicite información al correo{" "}
+              <a
+                href={`mailto:${contactEmail}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Viñedo Ain Karim"
@@ -49,6 +50,7 @@ export default function PlanRecomendations({
               {contactEmail}
             </a>
           </li>
+          )}
         </ul>
         <div className="mb-4">
           <Link
