@@ -13,11 +13,12 @@ export default function PlanRecomendations({
     <div className="p-5 border -border--dark-green rounded-md mt-8 group">
       <div className="flex items-center text-2xl font-bold gap-2 pt-2 pb-4">
         <span className="icon-[emojione--warning] group-hover:animate-pulse" />
-        Recomendaciones
+        Advertencias y Recomendaciones
       </div>
       <div className="space-y-3">
         <p>Evite contratiempos:</p>
         <ul className="list-disc list-inside">
+          <li>No habrá reembolso por incumplimiento de la reserva.</li>
           <li>Procure llegar 15 minutos antes de su reserva programada.</li>
           <li>No podrá reprogramar su horario de reserva en el mismo día.</li>          
           <li>
