@@ -18,7 +18,7 @@ export default function PlanRecomendations({
       <div className="space-y-3">
         <p>Evite contratiempos:</p>
         <ul className="list-disc list-inside">
-          <li>No habrá reembolso por incumplimiento de la reserva.</li>
+          <li>No habrá reembolso por incumplimiento de la reserva (ver 3.9.6).</li>
           <li>Procure llegar 15 minutos antes de su reserva programada.</li>
           <li>No podrá reprogramar su horario de reserva en el mismo día.</li>          
           <li>
