@@ -8,6 +8,9 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import { Toaster } from "react-hot-toast";
 import { ViewTransitions } from "next-view-transitions";
 import contactPage from "./contacto/page";
+import Maintenance from "@/components/Ui/Maintenance";
+
+const WORKER_URL = process.env.NEXT_PUBLIC_MAINTENANCE_WORKER_URL;
 
 export const montserrat = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -115,7 +118,7 @@ export const metadata = {
     statusBarStyle: "black-translucent",
     title: "Viñedo Ain Karim",
   },
-  manifest: "/manifest.webmanifest",   
+  manifest: "/manifest.webmanifest",
 
   structuredData: {
     "@context": "https://schema.org",
@@ -207,20 +210,64 @@ export const metadata = {
   },
 };
 
-export default function RootLayout(props) {
+async function checkMaintenanceStatus() {
+  if (!WORKER_URL) {
+    console.warn(
+      "La URL del Worker no está configurada. Asumiendo modo normal."
+    );
+    return false;
+  }
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(WORKER_URL, {
+      next: {
+        revalidate: 3600,
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      console.error(`Worker respondió con error ${res.status}.`);
+      return false;
+    }
+    const data = await res.json();
+    return Boolean(data.maintenance);
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.error("Maintenance check timed out after 5 seconds");
+    } else {
+      console.error("Error al obtener el estado del Worker:", error);
+    }
+    return false;
+  }
+}
+
+export default async function RootLayout(props) {
+  const isMaintenance = await checkMaintenanceStatus();  
   return (
     <ViewTransitions>
-      <html lang="es" >
+      <html lang="es">
         <body
           className={`${montserrat.variable} ${marcellus.variable} antialiased`}
         >
-          <GoogleTagManager gtmId="GTM-KCRVM32" />
-          <CartProvider>
-            <Header />
-            <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
-            <Footer />
-            <Toaster position="bottom-right" />
-          </CartProvider>
+          {isMaintenance ? (
+            <Maintenance />
+          ) : (
+            <>
+              <GoogleTagManager gtmId="GTM-KCRVM32" />
+              <CartProvider>
+                <Header />
+                <AppRouterCacheProvider>
+                  {props.children}
+                </AppRouterCacheProvider>
+                <Footer />
+                <Toaster position="bottom-right" />
+              </CartProvider>
+            </>
+          )}
         </body>
       </html>
     </ViewTransitions>
