@@ -3,11 +3,13 @@ import Timeline from "@/components/Ui/Timeline";
 import Viticultura from "@/components/Ui/Viticultura";
 import Filantropia from "@/components/Ui/Filantropia";
 import SliderReconocimientos from "@/components/SliderReconocimientos";
-import { GetAboutUs } from "@/components/GetContentApi";
 import Script from "next/script";
+import { getStrapiData } from "@/lib/strapi";
 
 export async function generateMetadata() {
-  const data = await GetAboutUs();
+  const data = await getStrapiData(
+    "nosotro?populate[timeline][populate][image][fields]=url,alternativeText&populate[viticultura][populate][image][fields]=url,alternativeText&populate[filantropia][populate][image][fields]=url,alternativeText&populate[slider][populate][image][fields]=url,alternativeText&populate[cover][fields]=url,alternativeText"
+  );
   if (!data) {
     return {
       title: "El Vinedo",
@@ -54,7 +56,9 @@ export async function generateMetadata() {
 }
 
 export default async function vinedoPage() {
-  const data = await GetAboutUs();
+  const data = await getStrapiData(
+    "nosotro?populate[timeline][populate][image][fields]=url,alternativeText&populate[viticultura][populate][image][fields]=url,alternativeText&populate[filantropia][populate][image][fields]=url,alternativeText&populate[slider][populate][image][fields]=url,alternativeText&populate[cover][fields]=url,alternativeText"
+  );
   if (!data) {
     console.error("Error fetching about us info page");
     return <div>Error cargando la información</div>;

@@ -3,16 +3,8 @@ import { Link } from "next-view-transitions";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 import { GetCompanyInfo } from "../GetContentApi";
+import formatPhoneNumber from "../../lib/FormatPhoneNumber";
 
-const formatPhoneNumber = (phoneNumber) => {
-  if (!phoneNumber) return "";
-  const cleaned = phoneNumber.toString().replace(/\D/g, "");
-  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    return `(${match[1]}) ${match[2]} ${match[3]}`;
-  }
-  return phoneNumber;
-};
 
 export default async function Footer() {
   const companyInfo = await GetCompanyInfo();
@@ -77,7 +69,7 @@ export default async function Footer() {
                   className="hover:-text--light-green duration-200"
                   href={`tel:${companyInfo?.vinedoPhone}`}
                 >
-                  {formatPhoneNumber(companyInfo?.vinedoPhone)}
+                  {formatPhoneNumber(companyInfo.vinedoPhone)}
                 </a>
               )}
             </li>
@@ -139,6 +131,14 @@ export default async function Footer() {
                   className="hover:-text--light-green duration-200"
                 >
                   Puntos de venta
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/registro-agencias"
+                  className="hover:-text--light-green duration-200"
+                >
+                  Registro de agencias
                 </Link>
               </li>
             </ul>

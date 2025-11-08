@@ -2,6 +2,7 @@ import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { GetPage } from "@/components/GetContentApi";
+import { getStrapiData } from "@/lib/strapi";
 
 export async function generateMetadata() {
   const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendaciones";
@@ -60,7 +61,7 @@ const extractPlainText = (blocks) => {
 };
 
 export default async function AdvertenciasPage() {
-  const pageData = await GetPage({ page: "advertencia-y-recomendacion" });
+  const pageData = await getStrapiData("advertencia-y-recomendacion");
 
   if (!pageData) {
     console.error("Error al obtener la página de advertencias");

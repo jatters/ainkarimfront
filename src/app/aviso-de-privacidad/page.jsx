@@ -1,7 +1,7 @@
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
-import { GetPage } from "@/components/GetContentApi";
+import { getStrapiData } from "@/lib/strapi";
 
 const extractPlainText = (content) => {
   if (!content) return "";
@@ -21,7 +21,7 @@ export async function generateMetadata() {
     "Consulta nuestro aviso de privacidad y conoce cómo protegemos tus datos personales.";
   let imageUrl = "https://ainkarim.co/banner-puntos-de-venta.webp";
 
-  const avisoPrivacidad = await GetPage({ page: "aviso-de-privacidad" });
+  const avisoPrivacidad = await getStrapiData("aviso-de-privacidad");
   if (avisoPrivacidad) {
     metaTitle = avisoPrivacidad.title || metaTitle;
     if (avisoPrivacidad.image && avisoPrivacidad.image.url) {
@@ -63,7 +63,7 @@ export async function generateMetadata() {
 }
 
 export default async function AvisoPrivacidadPage() {
-  const avisoPrivacidad = await GetPage({ page: "aviso-de-privacidad" });
+  const avisoPrivacidad = await getStrapiData("aviso-de-privacidad");
 
   if (!avisoPrivacidad) {
     console.error("Error fetching menu");
@@ -121,7 +121,7 @@ export default async function AvisoPrivacidadPage() {
         }
       />
       <section className="max-w-screen-lg mx-auto pt-8 pb-12 px-5">
-        <div className="mx-auto max-w-screen-lg [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
+        <div className="mx-auto max-w-screen-lg  prose-base [&>p]:mb-4 [&>p]:text-gray-700 [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
           <BlocksRenderer content={content || ""} />
         </div>
       </section>

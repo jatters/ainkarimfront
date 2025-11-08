@@ -12,6 +12,7 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.2.2",
     "@mercadopago/sdk-react": "^0.0.23",
     "@mui/icons-material": "^5.18.0",
     "@mui/material": "^5.18.0",
@@ -41,7 +42,8 @@
     "styled-components": "^6.1.19",
     "swiper": "^11.2.10",
     "swr": "^2.3.6",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.403",
