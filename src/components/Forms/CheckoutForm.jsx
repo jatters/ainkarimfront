@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import style from "./PrettyCheckbox.css";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
@@ -58,8 +58,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Primer Nombre"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none  ${
-              errors.firstName ? "border-red-500" : "-border--light-gray"
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden  ${
+              errors.firstName ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.firstName && (
@@ -90,8 +90,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Segundo Nombre"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.secondName ? "border-red-500" : "-border--light-gray"
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.secondName ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.secondName && (
@@ -122,8 +122,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Primer apellido"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.lastname ? "border-red-500" : "-border--light-gray"
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.lastname ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.lastname && (
@@ -154,8 +154,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               },
             })}
             placeholder="Segundo apellido"
-            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.secondSurname ? "border-red-500" : "-border--light-gray"
+            className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.secondSurname ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.secondSurname && (
@@ -171,8 +171,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <select
             type="select"
             id="documentType"
-            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.documentType ? "!border-red-500" : ""
+            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.documentType ? "border-red-500!" : ""
             }`}
             {...register("documentType", {
               required: {
@@ -199,8 +199,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="text"
             id="document"
-            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.document ? "!border-red-500" : ""
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.document ? "border-red-500!" : ""
             }`}
             placeholder="Número de Documento"
             {...register("document", {
@@ -235,8 +235,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="text"
             id="mobiletwo"
-            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.mobiletwo ? "!border-red-500" : ""
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.mobiletwo ? "border-red-500!" : ""
             }`}
             placeholder="Número de celular"
             {...register("mobiletwo", {
@@ -270,8 +270,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 value: true,
                 message: "Ciudad es requerida",
               },
-            })} className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.city ? "!border-red-500" : ""
+            })} className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.city ? "border-red-500!" : ""
             }`}>
               <option value="">Selecciona una ciudad</option>
               <option value="Bogota">Bogota</option>
@@ -296,8 +296,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <input
                 type="text"
                 id="city"
-                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-                  errors.city ? "!border-red-500" : ""
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+                  errors.city ? "border-red-500!" : ""
                 }`}
                 placeholder="Ciudad"
                 {...register("city", {
@@ -328,8 +328,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <input
                 type="text"
                 id="departament"
-                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-                  errors.departament ? "!border-red-500" : ""
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+                  errors.departament ? "border-red-500!" : ""
                 }`}
                 placeholder="Departamento"
                 {...register("departament", {
@@ -360,8 +360,8 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <input
                 type="text"
                 id="address"
-                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-                  errors.address ? "!border-red-500" : "border"
+                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+                  errors.address ? "border-red-500!" : "border"
                 }`}
                 placeholder="Dirección"
                 {...register("address", {
@@ -390,7 +390,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           <input
             type="email"
             id="email"
-            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.email ? "border-red-500" : "border"
             }`}
             placeholder="Tu correo electrónico"
@@ -442,7 +442,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                     errors.password ? "border-red-500" : "border"
                   }`}
                   placeholder="Crea tu contraseña"
@@ -524,7 +524,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
-                  className={`mt-1 p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  className={`mt-1 p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                     errors.confirmPassword ? "border-red-500" : "border"
                   }`}
                   placeholder="Confirma tu contraseña"
@@ -608,7 +608,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
-                    className="font-medium hover:-text--light-green duration-200"
+                    className="font-medium hover:text-light-green duration-200"
                   >
                     Política de Tratamiento de Datos Personales
                   </Link>
@@ -616,7 +616,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
-                    className="underline hover:-text--light-green duration-200"
+                    className="underline hover:text-light-green duration-200"
                   >
                     aquí
                   </Link>
@@ -641,7 +641,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   </strong>
                   <a
                     href="mailto:smartinez@marquesvl.com"
-                    className="hover:-text--light-green duration-200 font-medium"
+                    className="hover:text-light-green duration-200 font-medium"
                   >
                     smartinez@marquesvl.com.
                   </a>
@@ -653,7 +653,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
               datos personales, y en especial:
             </div>
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -679,7 +679,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 {"Este campo es requerido"}
               </span>
             )}
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -722,7 +722,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
-                    className="font-medium hover:-text--light-green duration-200"
+                    className="font-medium hover:text-light-green duration-200"
                   >
                     Política de Tratamiento de Datos Personales
                   </Link>
@@ -730,7 +730,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <Link
                     href="/politica-de-tratamiento-de-datos-personales"
                     target="_blank"
-                    className="underline hover:-text--light-green duration-200"
+                    className="underline hover:text-light-green duration-200"
                   >
                     aquí
                   </Link>
@@ -755,7 +755,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   </strong>
                   <a
                     href="mailto:smartinez@marquesvl.com"
-                    className="hover:-text--light-green duration-200 font-medium"
+                    className="hover:text-light-green duration-200 font-medium"
                   >
                     smartinez@marquesvl.com.
                   </a>
@@ -767,7 +767,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
               datos personales, y en especial:
             </div>
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -793,7 +793,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 {"Este campo es requerido"}
               </span>
             )}
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"

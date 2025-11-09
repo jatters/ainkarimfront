@@ -1,10 +1,9 @@
 import Image from "next/image";
-import ReactMarkdown from "react-markdown";
 
 export default function Viticultura({ viticultura }) {
   return (
     <section className="container mx-auto pb-8 lg:pb-16 px-5 lg:px-10">
-      <h2 className="text-2xl lg:text-4xl -text--dark-green text-center mb-8 lg:mb-14">
+      <h2 className="text-2xl lg:text-4xl text-dark-green text-center mb-8 lg:mb-14">
         VITICULTURA
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
@@ -27,12 +26,10 @@ export default function Viticultura({ viticultura }) {
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <h3 className="-text--dark-green text-center font-semibold text-xl mt-5 md:hidden">
+            <h3 className="text-dark-green text-center font-semibold text-xl mt-5 md:hidden">
               {item.title}
             </h3>
-            <ReactMarkdown className="px-5 pt-5 pb-10 ">
-              {item.description}
-            </ReactMarkdown>
+            <div className="px-5 pt-5 pb-10 prose">{item.description}</div>
           </div>
         ))}
       </div>

@@ -56,7 +56,7 @@ export default async function GoogleReviews() {
     <section className="">
       <div className="container mx-auto pt-16 py-8 lg:py-12 xl:py-16">
         <div className="">
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold font-serif -text--dark-green text-center lg:text-left uppercase">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold font-serif text-dark-green text-center lg:text-left uppercase">
             Así se vive la experiencia
           </h2>
           <p className="text-xl mt-5 text-center lg:text-left italic">

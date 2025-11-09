@@ -5,7 +5,7 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import Image from "next/image";
-import ReactMarkdown from "react-markdown";
+
 
 export default function Timeline({ timeline }) {
   return (
@@ -33,10 +33,10 @@ export default function Timeline({ timeline }) {
               width={500}
               height={500}
             />
-            <h3 className="vertical-timeline-element-title -text--dark-green font-bold pt-5 uppercase">
+            <h3 className="vertical-timeline-element-title text-dark-green font-bold pt-5 uppercase">
               {item.title}
             </h3>
-            <ReactMarkdown>{item.description}</ReactMarkdown>
+            <p>{item.description}</p>
           </VerticalTimelineElement>
         ))}
       </VerticalTimeline>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import imageNotFound from "@/../public/404.svg";
 import Image from "next/image";
 
@@ -36,19 +36,19 @@ export default function notFound() {
       <div className="flex flex-wrap gap-3 mt-5 justify-center items-center">
         <Link
           href="/"
-          className="-bg--dark-green text-white py-2 px-4 rounded-md font-semibold hover:-bg--light-green duration-200"
+          className="bg-dark-green text-white py-2 px-4 rounded-md font-semibold hover:bg-light-green duration-200"
         >
           Volver al inicio
         </Link>
         <Link
           href={"/visitas"}
-          className="-bg--dark-green text-white py-2 px-4 rounded-md font-semibold hover:-bg--light-green duration-200"
+          className="bg-dark-green text-white py-2 px-4 rounded-md font-semibold hover:bg-light-green duration-200"
         >
           Conoce nuestros planes
         </Link>
         <Link
           href={"/productos"}
-          className="-bg--dark-green text-white py-2 px-4 rounded-md font-semibold hover:-bg--light-green duration-200"
+          className="bg-dark-green text-white py-2 px-4 rounded-md font-semibold hover:bg-light-green duration-200"
         >
           Ver nuestros productos
         </Link>

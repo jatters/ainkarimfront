@@ -285,9 +285,9 @@ export default function ModalSchedule({
         >
           <div className="p-2">
             <div className="flex items-start">
-              <div className="flex-shrink-0 pt-[2px] text-gray-600">
+              <div className="shrink-0 pt-[2px] text-gray-600">
                 <span
-                  className="icon-[bx--calendar] -text--light-green"
+                  className="icon-[bx--calendar] text-light-green"
                   role="img"
                   aria-hidden="true"
                 />
@@ -302,9 +302,9 @@ export default function ModalSchedule({
                 } en el ${name}`}</p>
                 <div className="mt-1 flex justify-end space-x-7"></div>
               </div>
-              <div className="ml-3 flex-shrink-0 flex">
+              <div className="ml-3 shrink-0 flex">
                 <button
-                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   onClick={() => toast.dismiss(t.id)}
                 >
                   <span className="sr-only">Cerrar</span>
@@ -339,7 +339,7 @@ export default function ModalSchedule({
     <React.Fragment>
       <button
         onClick={handleClickOpen}
-        className="flex items-center gap-1 -bg--dark-green text-white px-4 py-2 rounded hover:-bg--light-green duration-200"
+        className="flex items-center gap-1 bg-dark-green text-white px-4 py-2 rounded-sm hover:bg-light-green duration-200"
       >
         <span className="icon-[iconoir--cart-plus]"></span> Reservar y pagar
       </button>
@@ -363,14 +363,14 @@ export default function ModalSchedule({
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle className="!font-serif !font-bold !text-2xl uppercase !pt-10 text-center">
+        <DialogTitle className="font-serif! font-bold! text-2xl! uppercase pt-10! text-center text-dark-green">
           {`Reservar ${name || "Plan"}`}
         </DialogTitle>
         <DialogContent>
           <p className="text-center font-semibold mb-5">
             Diligencia los datos de tu reserva
           </p>
-          <div className="-bg--gray py-5 px-5 rounded-xl border shadow-md">
+          <div className="bg-gray py-5 px-5 rounded-xl border border-gray-200 shadow-md">
             <div className="flex flex-col md:flex-row gap-3 items-center justify-center">
               <div className="w-full md:w-auto py-2 flex flex-col gap-3 items-center">
                 <div className="font-bold text-base flex items-center gap-1 text-dark-green">
@@ -403,14 +403,14 @@ export default function ModalSchedule({
 
               <div className="w-full md:w-64 flex flex-col space-y-4">
                 <div className="flex flex-col">
-                  <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
+                  <div className="font-bold text-base flex items-center gap-1 text-dark-green">
                     <span className="icon-[ion--people]"></span>
                     {unitPlan}s:
                   </div>
                   <div className="mt-2 w-full">
                     <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">
                       <button
-                        className="-bg--dark-green/70 text-white rounded-l focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                        className="bg-dark-green/70 text-white rounded-l focus:outline-hidden hover:bg-dark-green duration-200 h-10 flex items-center justify-center"
                         onClick={decreasePersons}
                         aria-label="Disminuir cantidad de personas"
                       >
@@ -422,10 +422,10 @@ export default function ModalSchedule({
                         name="persons"
                         value={reservationData.persons}
                         aria-label="Número de personas"
-                        className="appearance-none border -border--dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-none h-10"
+                        className="appearance-none border border-dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-hidden h-10 bg-white"
                       />
                       <button
-                        className="-bg--dark-green/70 text-white rounded-r focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                        className="bg-dark-green/70 text-white rounded-r focus:outline-hidden hover:bg-dark-green duration-200 h-10 flex items-center justify-center"
                         onClick={increasePersons}
                         aria-label="Aumentar cantidad de personas"
                       >
@@ -466,7 +466,7 @@ export default function ModalSchedule({
               </div>
             </div>
             {reservationData.date && reservationData.hour && (
-              <div className="text-center font-semibold mt-4 md:mt-6 bg-white py-3 rounded-md border text-sm">
+              <div className="text-center font-semibold mt-4 md:mt-6 bg-white py-3 rounded-md border border-gray-200 text-sm">
                 {isLoadingSpots
                   ? "Verificando disponibilidad..."
                   : availableSpots > 0
@@ -487,7 +487,7 @@ export default function ModalSchedule({
                 className={`py-3 px-16 mt-5 rounded-md duration-300 ${
                   availableSpots <= 0 || isLoadingSpots
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "-bg--dark-green text-white hover:-bg--light-green"
+                    : "bg-dark-green text-white hover:bg-light-green"
                 }`}
                 aria-label="Reservar"
               >

@@ -65,7 +65,7 @@ export default function CheckoutButton({
     <div className="flex flex-col items-center mt-8">
       <button
         onClick={handlePayment}
-        className={`-bg--light-green text-white py-2 rounded-lg w-full hover:-bg--dark-green duration-200 font-medium transition ${
+        className={`bg-light-green text-white py-2 rounded-lg w-full hover:bg-dark-green duration-200 font-medium transition ${
           loading ? "opacity-50" : ""
         }`}
         disabled={loading}

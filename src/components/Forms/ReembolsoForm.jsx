@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { useState } from "react";
 import styles from "./PrettyCheckbox.css";
 import { v4 as uuidv4 } from "uuid";
@@ -46,7 +46,7 @@ export default function ReembolsoForm() {
     }
   });
   return (
-    <div className="max-w-screen-md mx-auto shadow-md p-10">
+    <div className="max-w-(--breakpoint-md) mx-auto shadow-md p-10">
       <form
         method="POST"
         onSubmit={onSubmit}
@@ -78,8 +78,8 @@ export default function ReembolsoForm() {
               },
             })}
             placeholder="Nombre y apellido"
-            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.name ? "border-red-500" : "-border--light-gray"
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.name ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.name && (
@@ -95,8 +95,8 @@ export default function ReembolsoForm() {
           <select
             type="select"
             id="documentType"
-            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.documentType ? "!border-red-500" : ""
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.documentType ? "border-red-500!" : ""
             }`}
             {...register("documentType", {
               required: {
@@ -123,8 +123,8 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="legalDocument"
-            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-              errors.legalDocument ? "!border-red-500" : ""
+            className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+              errors.legalDocument ? "border-red-500!" : ""
             }`}
             placeholder="Número de Documento"
             {...register("legalDocument", {
@@ -159,7 +159,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="phone"
-            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`w-full p-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.phone ? "border-red-500" : "border"
             }`}
             placeholder="Celular"
@@ -187,7 +187,7 @@ export default function ReembolsoForm() {
           <input
             type="email"
             id="email"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.email ? "border-red-500" : "border"
             }`}
             placeholder="Tu correo electrónico"
@@ -215,7 +215,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="reservation"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.reservation ? "border-red-500" : "border"
             }`}
             placeholder="Número de reserva"
@@ -243,7 +243,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="reservationDate"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.reservationDate ? "border-red-500" : "border"
             }`}
             placeholder="Fecha de reserva"
@@ -267,7 +267,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="planName"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.planName ? "border-red-500" : "border"
             }`}
             placeholder="Plan"
@@ -295,7 +295,7 @@ export default function ReembolsoForm() {
           <input
             type="tel"
             id="paymentValue"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.paymentValue ? "border-red-500" : "border"
             }`}
             placeholder="Valor pagado"
@@ -323,7 +323,7 @@ export default function ReembolsoForm() {
           <input
             type="text"
             id="paymentMehotd"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.paymentMehotd ? "border-red-500" : "border"
             }`}
             placeholder="Medio de pago"
@@ -355,7 +355,7 @@ export default function ReembolsoForm() {
                 href="/politica-de-tratamiento-de-datos-personales"
                 target="_blank"
                 rel="noopener"
-                className="font-medium hover:-text--light-green duration-200"
+                className="font-medium hover:text-light-green duration-200"
               >
                 Política de Tratamiento de Datos Personales
               </Link>
@@ -364,7 +364,7 @@ export default function ReembolsoForm() {
                 href="/politica-de-tratamiento-de-datos-personales"
                 target="_blank"
                 rel="noopener"
-                className="underline hover:-text--light-green duration-200"
+                className="underline hover:text-light-green duration-200"
               >
                 aquí
               </Link>
@@ -388,7 +388,7 @@ export default function ReembolsoForm() {
               </strong>{" "}
               <a
                 href="mailto:smartinez@marquesvl.com"
-                className="hover:-text--light-green duration-200 font-medium"
+                className="hover:text-light-green duration-200 font-medium"
               >
                 smartinez@marquesvl.com.
               </a>
@@ -426,7 +426,7 @@ export default function ReembolsoForm() {
         <div className="mb-6 col-span-2">
           <button
             type="submit"
-            className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
+            className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-hidden "
             disabled={submitting}
           >
             {submitting ? "Solicitando..." : "Solicitar Reembolso"}

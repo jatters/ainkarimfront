@@ -5,7 +5,7 @@ import WineHarvest from "@/../public/vinedo-maintenance.svg";
 
 export default function Maintenance() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white from-30% -to--dark-green px-5">
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-white from-30% to-dark-green px-5">
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
         <div className="order-2 md:order-1">
           <div className="mb-8 flex items-center justify-center md:justify-start">

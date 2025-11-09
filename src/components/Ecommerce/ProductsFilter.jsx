@@ -40,7 +40,7 @@ export default function ProductsFilter({
       </Accordion>
 
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#062f1d" }} />} sx={{ backgroundColor: "#062f1d", borderRadius: "5px 5px 0 0 " }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />} sx={{ backgroundColor: "#062f1d", borderRadius: "5px 5px 0 0" }}>
           <span className="font-semibold text-white">
             Categorías
           </span>

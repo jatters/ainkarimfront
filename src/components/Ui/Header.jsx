@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { CartContext } from "@/context/CartContext";
 
 // Material-UI Imports
@@ -43,7 +43,7 @@ const UserActions = ({ cartCount }) => (
     <Link href="/iniciar-sesion" aria-label="Iniciar sesión">
       <IconButton aria-label="iniciar sesión" sx={{ color: "#ffffff" }}>
         <span
-          className="icon-[solar--user-bold-duotone] text-2xl hover:-text--light-green hover:scale-110 duration-200"
+          className="icon-[solar--user-bold-duotone] text-2xl hover:text-light-green hover:scale-110 duration-200"
           role="img"
           aria-hidden="true"
         />
@@ -70,7 +70,7 @@ const DesktopNav = ({ scrolled }) => (
       {navLinks.map((link) => (
         <li key={link.href}>
           <Link
-            className="py-3 px-1 hover:-text--light-green duration-200 font-serif"
+            className="py-3 px-1 hover:text-light-green duration-200 font-serif"
             href={link.href}
           >
             {link.label}
@@ -100,7 +100,7 @@ const MobileNav = ({ isOpen, closeMenu, scrolled }) => {
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link
-                className="py-2 px-1 hover:-text--light-green duration-200 text-sm"
+                className="py-2 px-1 hover:text-light-green duration-200 text-sm"
                 href={link.href}
                 onClick={closeMenu}
               >
@@ -192,7 +192,7 @@ export default function Header() {
           <DesktopNav scrolled={scrolled} />
           <div className="flex items-center gap-x-3">
              <Link
-              className={`-bg--dark-green font-medium text-white px-3 py-2 rounded-md hover:-bg--light-green transition-all duration-200 whitespace-nowrap ${
+              className={`bg-dark-green font-medium text-white px-3 py-2 rounded-md hover:bg-light-green transition-all duration-200 whitespace-nowrap ${
                 scrolled ? "text-sm" : "lg:text-sm xl:text-base"
               }`}
               href="/visitas"

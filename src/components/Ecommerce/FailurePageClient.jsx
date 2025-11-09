@@ -157,7 +157,7 @@ export default function FailurePage() {
       <div className="mt-8 flex justify-center items-center gap-4 w-full">
         <button
           onClick={() => router.push("/finalizar-compra")}
-          className="-bg--dark-green text-white px-6 py-2 rounded hover:-bg--light-green transition duration-200"
+          className="bg-dark-green text-white px-6 py-2 rounded-sm hover:bg-light-green transition duration-200"
         >
           Reintentar pago
         </button>

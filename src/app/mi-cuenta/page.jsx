@@ -195,8 +195,8 @@ export default function MyAccountPage() {
   };
 
   return (
-    <main className="max-w-screen-lg mx-auto py-16 px-5">
-      <h1 className="font-bold text-4xl -text--dark-green mb-5">
+    <main className="max-w-(--breakpoint-lg) mx-auto py-16 px-5">
+      <h1 className="font-bold text-4xl text-dark-green mb-5">
         Hola,{" "}
         <span className="capitalize font-bold">
           {formData?.firstName
@@ -216,7 +216,7 @@ export default function MyAccountPage() {
       <p className="prose-base">
         En esta sección encuentras la información de tu perfil. Mantenla
         actualizada para disfrutar de todos los beneficios que el{" "}
-        <span className="text--dark-green font-semibold">Viñedo Ain Karim</span>{" "}
+        <span className="text-dark-green font-semibold">Viñedo Ain Karim</span>{" "}
         tiene para ti.
       </p>
 
@@ -262,11 +262,11 @@ export default function MyAccountPage() {
                 Autorizas recibir mensajes de marketing:
               </span>{" "}
               {formData?.allowMarketing ? (
-                <span className="-text--light-green font-semibold">
+                <span className="text-light-green font-semibold">
                   Sí autorizo
                 </span>
               ) : (
-                <span className="-text--light-red font-semibold">
+                <span className="text-light-red font-semibold">
                   No autorizo
                 </span>
               )}
@@ -274,13 +274,13 @@ export default function MyAccountPage() {
             <div className="flex items-center flex-wrap gap-5 mt-5">
               <button
                 onClick={() => setEditMode(true)}
-                className=" -bg--dark-green text-white py-2 px-6 rounded-md hover:-bg--light-green duration-200 text-sm"
+                className=" bg-dark-green text-white py-2 px-6 rounded-md hover:bg-light-green duration-200 text-sm"
               >
                 Actualizar mi perfil
               </button>
               <button
                 onClick={logout}
-                className="-text--light-red font-semibold rounded-md hover:underline transition duration-200"
+                className="text-light-red font-semibold rounded-md hover:underline transition duration-200"
               >
                 Cerrar Sesión
               </button>
@@ -507,11 +507,11 @@ export default function MyAccountPage() {
                 />
                 <span className="text-sm">
                   {formData.allowMarketing ? (
-                    <span className="-text--light-green font-semibold">
+                    <span className="text-light-green font-semibold">
                       Sí autorizo
                     </span>
                   ) : (
-                    <span className="-text--light-red font-semibold">
+                    <span className="text-light-red font-semibold">
                       No autorizo
                     </span>
                   )}
@@ -616,13 +616,13 @@ export default function MyAccountPage() {
               <button
                 type="button"
                 onClick={() => setEditMode(false)}
-                className="text-sm -text--light-red font-semibold py-2 px-4 rounded-md hover:underline transition duration-200"
+                className="text-sm text-light-red font-semibold py-2 px-4 rounded-md hover:underline transition duration-200"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="-bg--light-green text-sm text-white py-1.5 px-4 rounded-md hover:bg-green-700 transition duration-200"
+                className="bg-light-green text-sm text-white py-1.5 px-4 rounded-md hover:bg-green-700 transition duration-200"
                 disabled={updating}
               >
                 {updating ? "Actualizando..." : "Guardar Cambios"}

@@ -2,7 +2,6 @@
 import React, { useState, useContext } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { GetCoupons } from "../GetContentApi";
 import { CartContext } from "../../context/CartContext";
 
@@ -106,13 +105,13 @@ export default function CouponInput() {
               handleApplyCoupon();
             }
           }}
-          className="pl-10 pr-3 py-2 text-gray-700 focus:outline-none focus:ring-0 w-full text-xs lg:text-sm "
+          className="pl-10 pr-3 py-2 text-gray-700 bg-white focus:outline-hidden focus:ring-0 w-full text-xs lg:text-sm "
           style={{ border: "none" }}
         />
         <button
           onClick={handleApplyCoupon}
           disabled={loading}
-          className="-bg--dark-green text-white px-4 py-2 whitespace-nowrap font-medium hover:-bg--light-green hover:text-white duration-200"
+          className="bg-dark-green text-white px-4 py-2 whitespace-nowrap font-medium hover:bg-light-green hover:text-white duration-200"
         >
           {loading ? "Aplicando..." : "Aplicar"}
         </button>

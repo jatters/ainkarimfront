@@ -16,7 +16,7 @@ function AdditionalServices({ services, onSelectService }) {
 
   return (
     <div className="pt-5">
-      <div className="font-semibold text-lg sm:text-center mb-3 -text--dark-green">
+      <div className="font-semibold text-lg sm:text-center mb-3 text-dark-green">
         ¿Vas a celebrar una ocasión especial?
       </div>
       <div className="sm:text-center text-sm">
@@ -34,7 +34,7 @@ function AdditionalServices({ services, onSelectService }) {
                 name="additionalService"
                 id={`service-${index}`}
                 aria-label={`Agregar ${servicio.name} como servicio adicional`}
-                className="w-4 h-4 -text--light-green bg-gray-100 border-gray-300 rounded"
+                className="w-4 h-4 text-light-green bg-gray-100 border-gray-300 rounded-sm"
                 onChange={() => handleServiceChange(servicio)}
                 checked={selectedService && selectedService.documentId === servicio.documentId}
               />

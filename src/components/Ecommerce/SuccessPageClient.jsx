@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 import { CartContext } from "@/context/CartContext";
-import ConfettiWrapper from "@/components/Ecommerce/ConfettiWrapper";
-import { Link } from "next-view-transitions";
+
+import Link from "next/link";
 
 export default function SuccessPageClient() {
   const searchParams = useSearchParams();
@@ -103,9 +103,7 @@ export default function SuccessPageClient() {
       </p>
       <p className="text-center text-gray-600 mt-2 text-sm">
         {new Date(date).toLocaleString("es-CO")}
-      </p>
-
-      <ConfettiWrapper />
+      </p>     
 
       <div className="mt-6 border-t pt-4">
         <h2 className="text-xl font-semibold text-gray-800">
@@ -209,7 +207,7 @@ export default function SuccessPageClient() {
       <div className="mt-8 text-center">
         <Link
           href="/"
-          className="-bg--dark-green text-white px-6 py-3 rounded-md hover:-bg--light-green transition"
+          className="bg-dark-green text-white px-6 py-3 rounded-md hover:bg-light-green transition"
         >
           Volver al inicio
         </Link>

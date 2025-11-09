@@ -262,7 +262,7 @@ export async function GetUsedSpotsInPlan(selectedDate, selectedHour, planId) {
 }
 
 // Get Single Page Data
-export async function GetPage({ page }) {
+export async function GetPage({ page }) {  
   try {
     const res = await fetchData(`${page}?populate=*`);
     if (!res || !res.data) {

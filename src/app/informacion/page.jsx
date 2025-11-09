@@ -81,8 +81,8 @@ export default function Informationpage() {
         <h2 className="text-3xl lg:text-4xl text-center mb-8">¿CÓMO LLEGAR?</h2>
         <div className="text-center mb-8">
           <p>
-            <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
-            <span className="font-bold -text--dark-green">Ubicación:</span> Km
+            <span className="icon-[ion--location-sharp] text-xl text-light-green"></span>
+            <span className="font-bold text-dark-green">Ubicación:</span> Km
             10 Vía Villa de Leyva - Santa Sofía
           </p>
           <p>Boyacá - Colombia</p>
@@ -93,7 +93,7 @@ export default function Informationpage() {
         </p>
         <div className="max-w-2xl mx-auto py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
+            <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-linear-to-l">
               <a
                 className="flex flex-col items-center"
                 target="_blank"
@@ -105,7 +105,7 @@ export default function Informationpage() {
                 <span>Abrir en Google Maps</span>
               </a>
             </div>
-            <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
+            <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-linear-to-l">
               <a
                 className="flex flex-col items-center"
                 target="_blank"
@@ -121,7 +121,7 @@ export default function Informationpage() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
           <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
-            <h3 className="-text--dark-green text-xl font-semibold">
+            <h3 className="text-dark-green text-xl font-semibold">
               AUTOMÓVIL PARTICULAR
             </h3>
 
@@ -147,24 +147,24 @@ export default function Informationpage() {
             </ul>
           </div>
           <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
-            <h3 className="-text--dark-green text-xl font-semibold">
+            <h3 className="text-dark-green text-xl font-semibold">
               BUS COLECTIVO
             </h3>
             <LottieAnimation
               animationData={BusTransport}
               loop={true}
-              className="w-48 !h-32 !-mt-12 mb-12"
+              className="w-48 h-32! -mt-12! mb-12"
             />
             <p className="font-semibold mb-3">Para llegar en bus podrias</p>
             <p className="prose">
               Llegar al terminal de Villa de Leyva y tomar el bus de salida para
               Santa Sofía, indicar al señor conductor que vas para el{" "}
-              <span className="-text--dark-green font-semibold">
+              <span className="text-dark-green font-semibold">
                 Viñedo Ain Karim
               </span>
               , en este punto de llegada deberás caminar 1 kilómetro y llegarás
               a tu destino, el{" "}
-              <span className="-text--dark-green font-semibold">
+              <span className="text-dark-green font-semibold">
                 Viñedo Ain Karim
               </span>
             </p>

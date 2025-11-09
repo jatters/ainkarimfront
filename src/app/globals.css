@@ -1,26 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import 'tailwindcss';
+@plugin "@iconify/tailwind4";
+@plugin "@tailwindcss/typography";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@theme{
+  --color-light-green:#00af50;
+  --color-dark-green:#062f1d;
+  --color-light-red: #cd181b;
+  --color-dark-red: #94191a; 
+  --color-gray:#f4f4f4;  
+  --font-sans: var(--font-montserrat); /* Asigna Montserrat a la utilidad font-sans */
+  --font-serif: var(--font-marcellus);
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-marcellus: "Marcellus", serif;
+}
+/* @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@utility text-balance {
+  text-wrap: balance;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
   }
-}
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+    }
+  }
+}*/
 body {
   font-family: var(--font-montserrat);
 }
@@ -70,3 +92,4 @@ button {
   height: 100%;
   object-fit: cover;
 }
+ 

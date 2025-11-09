@@ -1,6 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { useState } from "react";
 import style from "./PrettyCheckbox.css";
 import { v4 as uuidv4 } from "uuid";
@@ -53,7 +53,7 @@ export default function ContactForm({ ipAddress, useragent }) {
   });
 
   return (
-    <div className="max-w-screen-sm mt-5 rounded-xl shadow-md px-5">
+    <div className="max-w-(--breakpoint-sm) mt-5 rounded-xl shadow-md px-5">
       <div className="sm:px-4 py-5">
         <form method="POST" onSubmit={onSubmit}>
           <div className="mb-3">
@@ -83,7 +83,7 @@ export default function ContactForm({ ipAddress, useragent }) {
               })}
               placeholder="Nombre"
               aria-label="Ingresa tu nombre"
-              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                 errors.name ? "border-red-500" : "border-gray-400/40"
               } `}
             />
@@ -113,7 +113,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 })}
                 placeholder="Correo"
                 aria-label="Ingresa tu correo electrónico"
-                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                   errors.email ? "border-red-500" : "border-gray-400/40"
                 }`}
               />
@@ -142,7 +142,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 })}
                 placeholder="Teléfono"
                 aria-label="Ingresa tu número de teléfono"
-                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                   errors.phone ? "border-red-500" : "border-gray-400/40"
                 }`}
               />
@@ -172,7 +172,7 @@ export default function ContactForm({ ipAddress, useragent }) {
               id="message"
               placeholder="Mensaje"
               aria-label="Escribe tu mensaje"
-              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                 errors.message ? "border-red-500" : "border-gray-400/40"
               }`}
             ></textarea>
@@ -197,7 +197,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   href="/politica-de-tratamiento-de-datos-personales"
                   target="_blank"
                   rel="noopener"
-                  className="font-medium hover:-text--light-green duration-200"
+                  className="font-medium hover:text-light-green duration-200"
                 >
                   Política de Tratamiento de Datos Personales
                 </Link>
@@ -206,7 +206,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                   href="/politica-de-tratamiento-de-datos-personales"
                   target="_blank"
                   rel="noopener"
-                  className="underline hover:-text--light-green duration-200"
+                  className="underline hover:text-light-green duration-200"
                 >
                   aquí
                 </Link>
@@ -228,7 +228,7 @@ export default function ContactForm({ ipAddress, useragent }) {
                 data, contáctenos al correo electrónico{" "}
                 <a
                   href="mailto:smartinez@marquesvl.com"
-                  className="hover:-text--light-green duration-200 hover:underline  font-medium"
+                  className="hover:text-light-green duration-200 hover:underline  font-medium"
                 >
                   smartinez@marquesvl.com.
                 </a>
@@ -295,7 +295,7 @@ export default function ContactForm({ ipAddress, useragent }) {
           <div className="mb-6">
             <button
               type="submit"
-              className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
+              className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-hidden focus:-bg--dark-gray"
               disabled={submitting}
               aria-label="Enviar mensaje"
             >

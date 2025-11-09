@@ -1,4 +1,4 @@
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import ModalSchedule from "./Plans/ModalSchedule";
 import Image from "next/image";
 
@@ -45,9 +45,9 @@ export default function PlanCard({
         </Link>
       </div>
       <div className="flex w-full px-5 justify-between items-center">
-        <h2 className=" text-xl md:text-xl xl:text-lg 2xl:text-2xl xl:mb-1 font-bold -text--dark-green uppercase">
+        <h2 className=" text-xl md:text-xl xl:text-lg 2xl:text-2xl xl:mb-1 font-bold text-dark-green uppercase">
           <Link
-            className="group-hover:-text--dark-red duration-300"
+            className="group-hover:text-dark-red duration-300"
             href={slug}
           >
             {name}
@@ -71,7 +71,7 @@ export default function PlanCard({
         )}
       </div>
       <ul
-        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y -border--dark-red py-4 flex`}
+        className={`grid-cols-${numColumns} mt-4 mb-6 gap-y-2 gap-x-4 border-y border-dark-red py-4 flex`}
         aria-label="Caracteristicas del plan"
       >
         {experiences?.map((experience, index) => (
@@ -109,7 +109,7 @@ export default function PlanCard({
       <div className="flex flex-wrap gap-5  justify-center">
         <Link
           href={slug}
-          className="flex items-center gap-1 -text--dark-green -border--dark-green border-solid border-2 px-4 py-2 rounded hover:-bg--dark-green hover:text-white duration-200"
+          className="flex items-center gap-1 text-dark-green border-dark-green border-solid border-2 px-4 py-2 rounded-sm hover:bg-dark-green hover:text-white duration-200"
         >
           <span className="icon-[ph--eye]"></span> Ver
         </Link>

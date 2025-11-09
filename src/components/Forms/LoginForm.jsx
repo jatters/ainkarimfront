@@ -61,7 +61,7 @@ export default function LoginForm() {
         id="email"
         placeholder="Correo electrónico"
         aria-label="Correo electrónico"
-        className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none px-5 py-3 w-full"
+        className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden px-5 py-3 w-full"
         {...register("email", {
           required: "El correo es requerido",
           pattern: {
@@ -83,7 +83,7 @@ export default function LoginForm() {
             id="password"
             placeholder="Contraseña"
             aria-label="Contraseña"
-            className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none px-5 py-3  w-full"
+            className="border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden px-5 py-3  w-full"
             {...register("password", {
               required: "La contraseña es requerida",
             })}
@@ -127,7 +127,7 @@ export default function LoginForm() {
 
       <button
         type="submit"
-        className="-bg--dark-green py-3 px-4 rounded-md text-white hover:-bg--light-green transition duration-200"
+        className="bg-dark-green py-3 px-4 rounded-md text-white hover:bg-light-green transition duration-200"
         disabled={loading}
       >
         {loading ? "Iniciando sesión..." : "Iniciar sesión"}

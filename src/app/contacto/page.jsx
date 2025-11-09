@@ -128,28 +128,28 @@ export default async function contactPage() {
       <section className="container mx-auto pt-8 lg:pt-16 pb-8 px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center gap-5 mb-14">
           <div>
-            <h2 className="font-bold text-2xl lg:text-4xl my-3 -text--dark-green">
+            <h2 className="font-bold text-2xl lg:text-4xl my-3 text-dark-green">
               ESCRÍBENOS
             </h2>
             <ContactForm ipAddress={ipAddress} useragent={userAgent} />
           </div>
           <div className="flex flex-col gap-y-10 justify-center px-5">
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-2xl lg:text-4xl mb-6 -text--dark-green">
+              <h2 className="font-bold text-2xl lg:text-4xl mb-6 text-dark-green">
                 EL VIÑEDO
               </h2>
               <ul>
                 <li>
-                  <span className="icon-[ion--location-sharp] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green">
+                  <span className="icon-[ion--location-sharp] text-dark-green"></span>
+                  <span className="font-bold text-dark-green">
                     {" "}
                     Ubicación:
                   </span>{" "}
                   {companyInfo?.vinedoAddress}
                 </li>
                 <li>
-                  <span className="icon-[material-symbols--phonelink-ring-rounded] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green">
+                  <span className="icon-[material-symbols--phonelink-ring-rounded] text-dark-green"></span>
+                  <span className="font-bold text-dark-green">
                     {" "}
                     Teléfono:
                   </span>{" "}
@@ -158,8 +158,8 @@ export default async function contactPage() {
                   </a>
                 </li>
                 <li>
-                  <span className="icon-[solar--clock-square-broken] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green">
+                  <span className="icon-[solar--clock-square-broken] text-dark-green"></span>
+                  <span className="font-bold text-dark-green">
                     {" "}
                     Horarios:
                   </span>{" "}
@@ -168,8 +168,8 @@ export default async function contactPage() {
                 </li>
                 <li className="ml-5">Ultimo recorrido 3:30pm</li>
                 <li>
-                  <span className="icon-[ion--mail-outline] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green"> Correo:</span>
+                  <span className="icon-[ion--mail-outline] text-dark-green"></span>
+                  <span className="font-bold text-dark-green"> Correo:</span>
                   <a href={`mailto:${companyInfo?.contactEmail}`}>
                     {" "}
                     {companyInfo?.contactEmail}
@@ -178,20 +178,20 @@ export default async function contactPage() {
               </ul>
             </div>
             <div className="shadow-xl rounded-lg p-8">
-              <h2 className="font-bold text-2xl lg:text-4xl mb-6 -text--dark-green">
+              <h2 className="font-bold text-2xl lg:text-4xl mb-6 text-dark-green">
                 OFICINA
               </h2>
               <ul>
                 <li>
-                  <span className="icon-[ion--location-sharp] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green">
+                  <span className="icon-[ion--location-sharp] text-dark-green"></span>
+                  <span className="font-bold text-dark-green">
                     Dirección:
                   </span>{" "}
                   {companyInfo?.officeAddress}
                 </li>
                 <li>
-                  <span className="icon-[material-symbols-light--phone-in-talk] -text--dark-green"></span>
-                  <span className="font-bold -text--dark-green">
+                  <span className="icon-[material-symbols-light--phone-in-talk] text-dark-green"></span>
+                  <span className="font-bold text-dark-green">
                     {" "}
                     Teléfono:
                   </span>
@@ -205,18 +205,18 @@ export default async function contactPage() {
         </div>
       </section>
       <section className="container mx-auto pb-16 px-5">
-        <h2 className="font-bold text-2xl lg:text-4xl text-center mb-10 -text--dark-green">
+        <h2 className="font-bold text-2xl lg:text-4xl text-center mb-10 text-dark-green">
           ¿CÓMO LLEGAR?
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="flex flex-col gap-5 flex-wrap items-center">
             <div className="flex items-center flex-wrap justify-center gap-1 text-center">
-              <span className="icon-[ion--location-sharp] text-xl -text--light-green"></span>
-              <span className="font-bold -text--dark-green">Ubicación:</span>{" "}
+              <span className="icon-[ion--location-sharp] text-xl text-light-green"></span>
+              <span className="font-bold text-dark-green">Ubicación:</span>{" "}
               {companyInfo?.vinedoAddress}
             </div>
             <div className="flex flex-wrap gap-5 justify-center">
-              <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
+              <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-linear-to-l">
                 <a
                   className="flex flex-col items-center"
                   target="_blank"
@@ -228,7 +228,7 @@ export default async function contactPage() {
                   <span>Abrir en Google Maps</span>
                 </a>
               </div>
-              <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-gradient-to-l">
+              <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-200 hover:bg-linear-to-l">
                 <a
                   className="flex flex-col items-center"
                   target="_blank"

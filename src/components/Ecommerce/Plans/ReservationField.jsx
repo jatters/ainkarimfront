@@ -253,9 +253,9 @@ export default function ReservationField({
         >
           <div className="p-2">
             <div className="flex items-start">
-              <div className="flex-shrink-0 pt-[2px] text-gray-600">
+              <div className="shrink-0 pt-[2px] text-gray-600">
                 <span
-                  className="icon-[bx--calendar] -text--light-green"
+                  className="icon-[bx--calendar] text-light-green"
                   role="img"
                   aria-hidden="true"
                 />
@@ -270,9 +270,9 @@ export default function ReservationField({
                 } en el ${name}`}</p>
                 <div className="mt-1 flex justify-end space-x-7"></div>
               </div>
-              <div className="ml-3 flex-shrink-0 flex">
+              <div className="ml-3 shrink-0 flex">
                 <button
-                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   onClick={() => toast.dismiss(t.id)}
                 >
                   <span className="sr-only">Cerrar</span>
@@ -312,8 +312,8 @@ export default function ReservationField({
 
   if (horarios && horarios.length > 0) {
     return (
-      <div className="-bg--gray py-2 px-2 xl:px-5 rounded-xl border shadow-md">
-        <div className="font-bold text-xl pb-4 pt-2 -text--dark-green flex gap-2 items-center">
+      <div className="bg-gray py-2 px-2 xl:px-5 rounded-xl border border-gray-200 shadow-md">
+        <div className="font-bold text-xl pb-4 pt-2 text-dark-green flex gap-2 items-center">
           <span className="icon-[akar-icons--schedule]"></span>Reserva ahora
         </div>
         <div className="flex flex-col md:flex-row gap-3 items-center justify-center">
@@ -349,14 +349,14 @@ export default function ReservationField({
 
           <div className="w-full md:w-64 flex flex-col space-y-4">
             <div className="flex flex-col">
-              <div className="font-bold text-base flex items-center gap-1 -text--dark-green">
+              <div className="font-bold text-base flex items-center gap-1 text-dark-green">
                 <span className="icon-[ion--people]"></span>
                 {unitPlan}s:
               </div>
               <div className="mt-2 w-full">
                 <div className="grid grid-cols-[2.5rem_1fr_2.5rem] w-full">
                   <button
-                    className="-bg--dark-green/70 text-white rounded-l focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                    className="bg-dark-green/70 text-white rounded-l focus:outline-hidden hover:bg-dark-green duration-200 h-10 flex items-center justify-center"
                     onClick={decreasePersons}
                     aria-label="Disminuir cantidad de personas"
                   >
@@ -368,10 +368,10 @@ export default function ReservationField({
                     name="persons"
                     value={reservationData.persons}
                     aria-label="Número de personas"
-                    className="appearance-none border -border--dark-green/70 w-full text-gray-700 text-center leading-tight focus:outline-none h-10 rounded-none"
+                    className="appearance-none border border-dark-green/70 bg-white w-full text-gray-700 text-center leading-tight focus:outline-hidden h-10 rounded-none"
                   />
                   <button
-                    className="-bg--dark-green/70 text-white rounded-r focus:outline-none hover:-bg--dark-green duration-200 h-10 flex items-center justify-center"
+                    className="bg-dark-green/70 text-white rounded-r focus:outline-hidden hover:bg-dark-green duration-200 h-10 flex items-center justify-center"
                     onClick={increasePersons}
                     aria-label="Aumentar cantidad de personas"
                   >
@@ -411,7 +411,7 @@ export default function ReservationField({
         </div>
 
         {reservationData.date && reservationData.hour && (
-          <div className="text-center font-semibold mt-4 md:mt-6 bg-white py-3 rounded-md border text-sm">
+          <div className="text-center font-semibold mt-4 md:mt-6 bg-white py-3 rounded-md border border-gray-200 text-sm">
             {isLoadingSpots
               ? "Verificando disponibilidad..."
               : availableSpots > 0
@@ -434,7 +434,7 @@ export default function ReservationField({
             className={`py-3 px-16 mt-5 rounded-md duration-300 ${
               availableSpots <= 0 || isLoadingSpots
                 ? "bg-gray-400 cursor-not-allowed"
-                : "-bg--dark-green text-white hover:-bg--light-green"
+                : "bg-dark-green text-white hover:bg-light-green"
             }`}
             aria-label="Reservar"
           >
@@ -450,17 +450,17 @@ export default function ReservationField({
     );
   } else {
     return (
-      <div className="-bg--gray py-5 px-5 rounded-xl">
-        <div className="font-bold text-2xl pb-4 pt-2 -text--dark-green ">
+      <div className="bg-gray py-5 px-5 rounded-xl">
+        <div className="font-bold text-2xl pb-4 pt-2 text-dark-green ">
           ¿Deseas Reservar?
         </div>
         <div className="pb-3">Comunícate con nosotros para reservar</div>
-        <div className="flex items-center gap-1 py-3 -text--dark-green">
+        <div className="flex items-center gap-1 py-3 text-dark-green">
           <span className="icon-[ph--envelope-simple-bold]"></span>
           <span className="font-bold">Correo:</span>
           <a
             href={`mailto:${contactEmail}`}
-            className="hover:-text--light-green hover:underline duration-200"
+            className="hover:text-light-green hover:underline duration-200"
             aria-label="Enviar correo a Viñedo Ain Karim"
           >
             {contactEmail}

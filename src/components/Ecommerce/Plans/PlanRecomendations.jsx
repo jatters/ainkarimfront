@@ -1,4 +1,4 @@
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export default function PlanRecomendations({
   max_reservations,
@@ -10,7 +10,7 @@ export default function PlanRecomendations({
     return null;
   }
   return (
-    <div className="p-5 border -border--dark-green rounded-md mt-8 group">
+    <div className="p-5 border border-dark-green rounded-md mt-8 group">
       <div className="flex items-center text-2xl font-bold gap-2 pt-2 pb-4">
         <span className="icon-[emojione--warning] group-hover:animate-pulse" />
         Advertencias y Recomendaciones
@@ -28,7 +28,7 @@ export default function PlanRecomendations({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Ventas del Viñedo Ain Karim"
-              className="hover:-text--light-green hover:underline duration-200"
+              className="hover:text-light-green hover:underline duration-200"
             >
               {contactEmail}
             </a>
@@ -46,7 +46,7 @@ export default function PlanRecomendations({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir correo a Viñedo Ain Karim"
-              className="hover:-text--light-green hover:underline duration-200"
+              className="hover:text-light-green hover:underline duration-200"
             >
               {contactEmail}
             </a>
@@ -56,7 +56,7 @@ export default function PlanRecomendations({
         <div className="mb-4">
           <Link
             href="/terminos-y-condiciones"
-            className="text-xs hover:-text--light-green hover:underline duration-200"
+            className="text-xs hover:text-light-green hover:underline duration-200"
             target="_blank"
             rel="noopener"
           >

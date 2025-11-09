@@ -80,7 +80,7 @@ export default async function VisitasPage() {
       <Popup location="plans" />
       <HeaderImage title="Visitas" background="/banner-visitas.webp" />
       <section className="container mx-auto py-8 lg:py-16 px-5">
-        <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-center -text--dark-green">
+        <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-center text-dark-green">
           VIVE ESTAS EXPERIENCIAS CON NOSOTROS
         </h2>
 

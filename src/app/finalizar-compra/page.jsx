@@ -241,13 +241,13 @@ export default function PaymentPage() {
       <main>
         <div className="container mx-auto p-5 lg:p-10">
           {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded my-6 ">
+            <div className="bg-red-100 text-red-700 p-3 rounded-sm my-6 ">
               {error}
             </div>
           )}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 -bg--grey-lightest rounded-lg ">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 rounded-lg ">
             <div className="">
-              <h1 className="font-bold text-2xl lg:text-4xl -text--dark-green mb-8">
+              <h1 className="font-bold text-2xl lg:text-4xl text-dark-green mb-8">
                 Finaliza tu compra
               </h1>
               <CheckoutForm
@@ -257,7 +257,7 @@ export default function PaymentPage() {
             </div>
 
             <div className="col-span-1 pt-5 border-t border-gray-200 bg-slate-100/80 p-5 border-2 rounded-xl">
-              <h2 className="font-bold text-2xl mb-6 -text--dark-green text-center sm:text-left">
+              <h2 className="font-bold text-2xl mb-6 text-dark-green text-center sm:text-left">
                 Resumen de tu pedido
               </h2>
               <div className="rounded-lg py-4 p-2">
@@ -274,7 +274,7 @@ export default function PaymentPage() {
                   return (
                     <div
                       key={index}
-                      className="grid grid-cols-5 py-3 gap-5 border-b items-center"
+                      className="grid grid-cols-5 py-3 gap-5 border-b border-gray-200 items-center"
                     >
                       <div className="col-span-4">
                         <div className="font-semibold text-gray-800">
@@ -378,8 +378,8 @@ export default function PaymentPage() {
                               onClick={() => removeFromCart(item)}
                               className=""
                             >
-                              <span className="icon-[si--remove-circle-line] text-xl hover:-text--red-cruz hover:scale-125 hover:-text--light-red duration-300 hidden sm:block" />
-                              <span className="-text--light-red font-semibold sm:hidden text-sm">
+                              <span className="icon-[si--remove-circle-line] text-xl hover:-text--red-cruz hover:scale-125 hover:text-light-red duration-300 hidden sm:block" />
+                              <span className="text-light-red font-semibold sm:hidden text-sm">
                                 Eliminar
                               </span>
                             </button>
@@ -449,7 +449,7 @@ export default function PaymentPage() {
                 ¿Necesitas ayuda?
                 <Link
                   href="/contacto"
-                  className="-text--dark-green font-semibold hover:-text--light-green duration-200"
+                  className="text-dark-green font-semibold hover:text-light-green duration-200"
                 >
                   Contáctanos
                 </Link>

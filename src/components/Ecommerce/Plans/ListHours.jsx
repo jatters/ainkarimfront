@@ -82,7 +82,7 @@ export default function ListHours({
 
   return (
     <div className={classNameContainer}>
-      <div className="font-bold text-base flex items-center gap-1 text--dark-green">
+      <div className="font-bold text-base flex items-center gap-1 text-dark-green">
         <span className="icon-[lucide--clock]" /> Hora:
       </div>
 
@@ -90,7 +90,7 @@ export default function ListHours({
         value={selectedHour}
         onChange={handleHourChange}
         aria-label="Selecciona un horario"
-        className={`mt-2 p-2 border text-slate-700 border-gray-300 rounded ${classNameInput}`}
+        className={`mt-2 p-2 border text-slate-700 border-gray-300 bg-white focus:outline-none active:outline-none rounded-sm ${classNameInput}`}
         disabled={!horariosFiltrados.length}
       >
         <option value="">Selecciona un horario</option>

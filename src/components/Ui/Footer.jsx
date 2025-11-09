@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import waze from "@/../public/logo-waze.svg";
 import maps from "@/../public/logo-google-maps.svg";
 import { GetCompanyInfo } from "../GetContentApi";
@@ -18,10 +18,10 @@ export default async function Footer() {
   const companyInfo = await GetCompanyInfo();
 
   return (
-    <footer className="bg-gradient-to-tl from-black -to--dark-green to-50% text-white">
+    <footer className="bg-linear-to-tl from-black to-dark-green to-50% text-white">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-auto px-5 md:px-12 pt-8 md:pt-16 pb-6 md:pb-12 gap-8">
         <div>
-          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+          <div className="text-lg mb-6 after:content-[''] after:bg-light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             EL VIÑEDO
           </div>
           <ul
@@ -40,7 +40,7 @@ export default async function Footer() {
               </div>
               <div className="flex flex-wrap gap-2 justify-center mt-3 mb-3">
                 {companyInfo?.linkGoogleMaps && (
-                  <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
+                  <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-linear-to-l">
                     <a
                       className="flex flex-col items-center"
                       target="_blank"
@@ -54,7 +54,7 @@ export default async function Footer() {
                   </div>
                 )}
                 {companyInfo?.linkWaze && (
-                  <div className="bg-gradient-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-gradient-to-l">
+                  <div className="bg-linear-to-r from-white from-0% to-gray-300 to-100% rounded-md px-3 py-3 text-black font-semibold transition-all duration-500 hover:bg-linear-to-l">
                     <a
                       className="flex flex-col items-center"
                       target="_blank"
@@ -74,7 +74,7 @@ export default async function Footer() {
               <span className="font-semibold">Teléfono: </span>
               {companyInfo?.vinedoPhone && (
                 <a
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                   href={`tel:${companyInfo?.vinedoPhone}`}
                 >
                   {formatPhoneNumber(companyInfo?.vinedoPhone)}
@@ -86,7 +86,7 @@ export default async function Footer() {
               <span className="font-semibold">Correo: </span>
               {companyInfo?.contactEmail && (
                 <a
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                   href={`mailto:${companyInfo?.contactEmail}`}
                 >
                   {companyInfo?.contactEmail}
@@ -96,14 +96,14 @@ export default async function Footer() {
           </ul>
         </div>
         <div className="hidden md:block">
-          <div className=" text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+          <div className=" text-lg mb-6 after:content-[''] after:bg-light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             VÍNCULOS DE INTERÉS
           </div>
           <nav role="navigation" aria-label="Vínculos de interés">
             <ul className="flex flex-col space-y-2 text-sm">
               <li>
                 <Link
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                   href="/el-vinedo"
                 >
                   Nosotros
@@ -112,7 +112,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/advertencias-y-recomendaciones"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Advertencias y recomendaciones
                 </Link>
@@ -120,7 +120,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/preguntas-frecuentes"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Preguntas Frecuentes
                 </Link>
@@ -128,7 +128,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/reglamento"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Reglamento
                 </Link>
@@ -136,7 +136,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/puntos-de-venta"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Puntos de venta
                 </Link>
@@ -144,14 +144,14 @@ export default async function Footer() {
             </ul>
           </nav>
           <nav className="mt-5" role="navigation" aria-label="Legal">
-            <div className="text-lg mb-3 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+            <div className="text-lg mb-3 after:content-[''] after:bg-light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
               Legal
             </div>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="/aviso-de-privacidad"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Aviso de Privacidad
                 </Link>
@@ -159,7 +159,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/terminos-y-condiciones"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Términos y condiciones
                 </Link>
@@ -167,7 +167,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/politica-de-tratamiento-de-datos-personales"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Política de tratamiento de datos personales
                 </Link>
@@ -176,7 +176,7 @@ export default async function Footer() {
           </nav>
         </div>
         <div>
-          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+          <div className="text-lg mb-6 after:content-[''] after:bg-light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             HORARIOS
           </div>
           <ul
@@ -202,7 +202,7 @@ export default async function Footer() {
               </li>
             )}
             <li>
-              <div className="h-[1px] bg-white w-20 my-2" />
+              <div className="h-px bg-white w-20 my-2" />
             </li>
             <li>
               <span className="font-semibold">Lunes:</span>{" "}
@@ -235,7 +235,7 @@ export default async function Footer() {
           </ul>
         </div>
         <div>
-          <div className="text-lg mb-6 after:content-[''] after:-bg--light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
+          <div className="text-lg mb-6 after:content-[''] after:bg-light-green after:block after:h-[2px] after:mt-1 after:w-10 font-medium">
             OFICINA
           </div>
           <ul
@@ -252,7 +252,7 @@ export default async function Footer() {
               <span className="font-semibold">Teléfono:</span>
               {companyInfo?.vinedoPhone && (
                 <a
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                   href={`tel:${companyInfo?.vinedoPhone}`}
                 >
                   {formatPhoneNumber(companyInfo?.vinedoPhone)}
@@ -277,7 +277,7 @@ export default async function Footer() {
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Instagram del Viñedo Ain Karim"
               >
-                <span className="icon-[mdi--instagram] hover:-text--light-green hover:scale-110 duration-200"></span>
+                <span className="icon-[mdi--instagram] hover:text-light-green hover:scale-110 duration-200"></span>
               </a>
             </li>
           )}
@@ -290,7 +290,7 @@ export default async function Footer() {
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Facebook del Viñedo Ain Karim"
               >
-                <span className="icon-[carbon--logo-facebook] hover:-text--light-green hover:scale-110 duration-200"></span>
+                <span className="icon-[carbon--logo-facebook] hover:text-light-green hover:scale-110 duration-200"></span>
               </a>
             </li>
           )}
@@ -303,7 +303,7 @@ export default async function Footer() {
                 rel="noreferrer noopener"
                 aria-label="Ir a perfil de Tripadvisor"
               >
-                <span className="icon-[simple-icons--tripadvisor] hover:-text--light-green hover:scale-110 duration-200"></span>
+                <span className="icon-[simple-icons--tripadvisor] hover:text-light-green hover:scale-110 duration-200"></span>
               </a>
             </li>
           )}
@@ -319,7 +319,7 @@ export default async function Footer() {
             href="https://einscube.com/?utm_source=ainkarim"
             target="_blank"
             aria-label="Ir a la página del Desarrollador"
-            className="-text--red-cruz hover:-text--grey-dark hover:font-semibold hover:transition-all"
+            className="text-dark-green hover:text-light-green duration-200 hover:transition-all"
             rel="noopener"
           >
             Einscube

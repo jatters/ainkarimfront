@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "../app/hooks/useAuth";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import banner from "../../public/login-image.webp";
 import LoginForm from "@/components/Forms/LoginForm";
 
@@ -33,7 +33,7 @@ export default function LoginPageClient() {
           className="hidden lg:block h-screen object-cover"
         />
         <div className="py-20 md:py-10 px-5 flex flex-col justify-center items-center">
-          <h1 className="-text--dark-green text-3xl text-center font-bold">
+          <h1 className="text-dark-green text-3xl text-center font-bold">
             Iniciar Sesión
           </h1>
           <p className="font-semibold py-5 text-center">
@@ -45,7 +45,7 @@ export default function LoginPageClient() {
               ¿No tienes una cuenta?{" "}
               <Link
                 href="/registro"
-                className="-text--dark-green font-semibold"
+                className="text-dark-green font-semibold"
               >
                 Registrate
               </Link>
@@ -53,7 +53,7 @@ export default function LoginPageClient() {
             <p className="text-center py-5">
               <Link
                 href={"/recuperar-contrasena"}
-                className="-text--dark-green hover:underline duration-200"
+                className="text-dark-green hover:underline duration-200"
               >
                 Olvidaste tu contraseña{" "}
               </Link>

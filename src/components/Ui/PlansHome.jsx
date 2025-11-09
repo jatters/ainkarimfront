@@ -14,18 +14,18 @@ export default async function PlansHome() {
     <section className="container mx-auto py-8 lg:py-12 xl:py-16">
       <div className="flex justify-center lg:justify-between items-center px-5 xl:px-0">
         <div>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-center lg:text-left -text--dark-green font-serif uppercase">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-center lg:text-left text-dark-green font-serif uppercase">
             Experiencias que inspiran
           </h2>
           <p className="text-xl mt-5 text-center lg:text-left italic">
             Vive momentos inolvidables en{" "}
-            <span className="-text--dark-green font-semibold">Ain Karim</span>.
+            <span className="text-dark-green font-semibold">Ain Karim</span>.
           </p>
         </div>
         <div className="hidden lg:block">
           <Link
             href="/visitas"
-            className="flex items-center gap-2 text-sm xl:text-base font-medium hover:-text--light-green hover:translate-x-2 transition duration-200"
+            className="flex items-center gap-2 text-sm xl:text-base font-medium hover:text-light-green hover:translate-x-2 transition duration-200"
           >
             Ver todos nuestros planes{" "}
             <span

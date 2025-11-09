@@ -10,7 +10,7 @@ export default async function ProductsHome() {
   }
 
   return (
-    <section className="-bg--dark-green">
+    <section className="bg-dark-green">
       <div className="container mx-auto pt-16 py-8 lg:py-12 xl:py-16">
         <div className="flex justify-center lg:justify-between items-center px-5 xl:px-0 mb-10">
           <div>

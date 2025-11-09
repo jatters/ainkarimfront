@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import ProductGallery from "@/components/Ecommerce/SingleProduct/ProductGallery";
 import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVariations";
 import { CartContext } from "@/context/CartContext";
@@ -65,8 +65,8 @@ offers: {
       <main>
         <section className="container mx-auto py-8 lg:py-16 px-5">
           <div className="text-sm flex gap-2">
-            <Link href="/" className="hover:-text--light-green">Inicio</Link> ›{" "}
-            <Link href="/productos" className="hover:-text--light-green">Productos</Link> ›{" "}
+            <Link href="/" className="hover:text-light-green">Inicio</Link> ›{" "}
+            <Link href="/productos" className="hover:text-light-green">Productos</Link> ›{" "}
             <span className="capitalize">{title}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 gap-x-5 gap-y-5 lg:gap-y-9">
@@ -75,10 +75,10 @@ offers: {
             </div>
             <div className="lg:px-5">
               <div className="hidden lg:block">
-                <div className="-text--dark-green text-5xl font-bold mb-2 capitalize flex items-center gap-3">
+                <div className="text-dark-green text-5xl font-bold mb-2 capitalize flex items-center gap-3">
                   <h1>{title}</h1>
                   {regularPrice > price && (
-                    <span className="font-normal -bg--dark-red text-xl text-white px-2 py-1 rounded-md flex items-center gap-1">
+                    <span className="font-normal bg-dark-red text-xl text-white px-2 py-1 rounded-md flex items-center gap-1">
                       <span
                         className="icon-[whh--sale]"
                         role="img"
@@ -88,14 +88,14 @@ offers: {
                     </span>
                   )}
                 </div>
-                <div className="italic mb-2 -text--dark-red">
+                <div className="italic mb-2 text-dark-red">
                   {categoryName}
                 </div>
               </div>              
 
               {regularPrice > price ? (
                 <div className="text-2xl font-semibold mb-5 flex gap-3 ">
-                  <span className="font-normal line-through -text--dark-red">
+                  <span className="font-normal line-through text-dark-red">
                     {formatPrice(regularPrice)}
                   </span>
                   <span>-</span>
@@ -117,7 +117,7 @@ offers: {
               )}
 
               {productDescription && (
-                <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
+                <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:text-dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:text-dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
                   <BlocksRenderer content={productDescription} />
                 </div>
               )}
@@ -198,9 +198,9 @@ function AddToCartButton({ product, selectedVariation }) {
         >
           <div className="p-2">
             <div className="flex items-start">
-              <div className="flex-shrink-0 pt-[2px] text-gray-600">
+              <div className="shrink-0 pt-[2px] text-gray-600">
                 <span
-                  className="icon-[gridicons--cart] text-2xl -text--light-green"
+                  className="icon-[gridicons--cart] text-2xl text-light-green"
                   role="img"
                   aria-hidden="true"
                 />
@@ -210,16 +210,16 @@ function AddToCartButton({ product, selectedVariation }) {
                 <div className="mt-1 flex justify-end space-x-7">
                   <button
                     type="button"
-                    className="bg-white rounded-md text-sm font-medium -text--light-green hover:-text--grey-darkest focus:outline-none "
+                    className="bg-white rounded-md text-sm font-medium text-light-green hover:text-grey-darkest focus:outline-hidden "
                     onClick={() => router.push("/carrito")}
                   >
                     Ir a mi carrito
                   </button>
                 </div>
               </div>
-              <div className="ml-3 flex-shrink-0 flex">
+              <div className="ml-3 shrink-0 flex">
                 <button
-                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   onClick={() => toast.dismiss(t.id)}
                 >
                   <span className="sr-only">Cerrar</span>

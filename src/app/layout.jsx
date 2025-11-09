@@ -6,7 +6,7 @@ import Footer from "@/components/Ui/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Toaster } from "react-hot-toast";
-import { ViewTransitions } from "next-view-transitions";
+
 import contactPage from "./contacto/page";
 import Maintenance from "@/components/Ui/Maintenance";
 
@@ -246,30 +246,26 @@ async function checkMaintenanceStatus() {
 }
 
 export default async function RootLayout(props) {
-  const isMaintenance = await checkMaintenanceStatus();  
+  const isMaintenance = await checkMaintenanceStatus();
   return (
-    <ViewTransitions>
-      <html lang="es">
-        <body
-          className={`${montserrat.variable} ${marcellus.variable} antialiased`}
-        >
-          {isMaintenance ? (
-            <Maintenance />
-          ) : (
-            <>
-              <GoogleTagManager gtmId="GTM-KCRVM32" />
-              <CartProvider>
-                <Header />
-                <AppRouterCacheProvider>
-                  {props.children}
-                </AppRouterCacheProvider>
-                <Footer />
-                <Toaster position="bottom-right" />
-              </CartProvider>
-            </>
-          )}
-        </body>
-      </html>
-    </ViewTransitions>
+    <html lang="es">
+      <body
+        className={`${montserrat.variable} ${marcellus.variable} antialiased`}
+      >
+        {isMaintenance ? (
+          <Maintenance />
+        ) : (
+          <>
+            <GoogleTagManager gtmId="GTM-KCRVM32" />
+            <CartProvider>
+              <Header />
+              <AppRouterCacheProvider>{props.children}</AppRouterCacheProvider>
+              <Footer />
+              <Toaster position="bottom-right" />
+            </CartProvider>
+          </>
+        )}
+      </body>
+    </html>
   );
 }

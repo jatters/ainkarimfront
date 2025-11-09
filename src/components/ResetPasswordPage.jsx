@@ -87,8 +87,8 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="max-w-screen-lg mx-auto py-16 px-5">
-      <h1 className="text-center font-bold text-3xl -text--dark-green">
+    <main className="max-w-(--breakpoint-lg) mx-auto py-16 px-5">
+      <h1 className="text-center font-bold text-3xl text-dark-green">
         Restablecer Contraseña
       </h1>
       <p className="text-center mt-3">Ingresa tu nueva contraseña</p>
@@ -111,7 +111,7 @@ export default function ResetPasswordPage() {
         ) : (
           <>
             <div className="relative">
-              <label className="block font-semibold -text--dark-green">
+              <label className="block font-semibold text-dark-green">
                 Nueva Contraseña
               </label>
               <input
@@ -120,7 +120,7 @@ export default function ResetPasswordPage() {
                 placeholder="Nueva contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full  px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none"
+                className="w-full  px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden"
                 required
               />
               <Tooltip
@@ -151,7 +151,7 @@ export default function ResetPasswordPage() {
             </div>
 
             <div className="relative">
-              <label className="block font-semibold -text--dark-green">
+              <label className="block font-semibold text-dark-green">
                 Confirmar Contraseña
               </label>
               <input
@@ -160,7 +160,7 @@ export default function ResetPasswordPage() {
                 placeholder="Confirmar contraseña"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none"
+                className="w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden"
                 required
               />
               <Tooltip

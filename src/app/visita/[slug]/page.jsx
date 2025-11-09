@@ -1,4 +1,4 @@
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import PlanGallery from "@/components/Ecommerce/PlanGallery";
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 import { GetSinglePlan, GetCompanyInfo } from "@/components/GetContentApi";
@@ -144,11 +144,11 @@ export default async function SinglePlanPage({ params }) {
         />
         <section className="container mx-auto py-5 md:py-8 lg:pt-10 lg:pb-16 px-2 sm:px-5">
           <div className="text-sm flex gap-2">
-            <Link href="/" className="hover:-text--light-green">
+            <Link href="/" className="hover:text-light-green">
               Inicio
             </Link>{" "}
             ›{" "}
-            <Link href="/visitas" className="hover:-text--light-green">
+            <Link href="/visitas" className="hover:text-light-green">
               Visitas
             </Link>{" "}
             › <span className="capitalize font-medium">{title}</span>
@@ -156,7 +156,7 @@ export default async function SinglePlanPage({ params }) {
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-3 gap-y-9">
             <PlanGallery images={extractGallery(gallery)} />
             <div className="px-0 md:px-5">
-              <h1 className="-text--dark-green text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 uppercase">
+              <h1 className="text-dark-green text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 uppercase">
                 {title}
               </h1>
               {Number(price) > 0 && (
@@ -187,7 +187,7 @@ export default async function SinglePlanPage({ params }) {
                 </div>
               )}
               {planDescription && (
-                <div className="prose mb-4 [&>img]:mx-auto [&>p>a]:-text--dark-green [&>p>a]:underline [&>p>a]:hover:-text--light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside">
+                <div className="prose mb-4 [&>img]:mx-auto [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside">
                   <BlocksRenderer content={planDescription} />
                 </div>
               )}

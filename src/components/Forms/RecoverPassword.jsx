@@ -54,7 +54,7 @@ export default function RecoverPassword() {
         <input
           type="email"
           id="email"
-          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
             errors.email ? "border-red-500" : "border"
           }`}
           placeholder="Ingresa tu correo electrónico"
@@ -83,7 +83,7 @@ export default function RecoverPassword() {
 
       <button
         type="submit"
-        className="-bg--dark-green text-white py-2 px-4 rounded-md hover:-bg--light-green transition duration-200"
+        className="bg-dark-green text-white py-2 px-4 rounded-md hover:bg-light-green transition duration-200"
         disabled={loading}
       >
         {loading ? "Enviando..." : "Recuperar contraseña"}

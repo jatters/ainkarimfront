@@ -1,6 +1,6 @@
 "use client";
 import { useState, useContext } from "react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
@@ -15,13 +15,13 @@ const AddedToCartToast = ({ t, title, onGoToCart, onDismiss }) => (
   <div
     className={`${
       t.visible ? "animate-enter" : "animate-leave"
-    } relative max-w-sm w-[290px] bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden`}
+    } relative max-w-sm w-[290px] bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-gray-100 ring-opacity-5 overflow-hidden`}
   >
     <div className="p-2">
       <div className="flex items-start">
-        <div className="flex-shrink-0 pt-[2px] text-gray-600">
+        <div className="shrink-0 pt-[2px] text-gray-600">
           <span
-            className="icon-[gridicons--cart] text-2xl -text--light-green"
+            className="icon-[gridicons--cart] text-2xl text-light-green"
             role="img"
             aria-hidden="true"
           />
@@ -31,16 +31,16 @@ const AddedToCartToast = ({ t, title, onGoToCart, onDismiss }) => (
           <div className="mt-1 flex justify-end space-x-7">
             <button
               type="button"
-              className="bg-white rounded-md text-sm font-medium -text--light-green hover:-text--grey-darkest focus:outline-none"
+              className="bg-white rounded-md text-sm font-medium text-light-green hover:text-grey-darkest focus:outline-hidden"
               onClick={onGoToCart}
             >
               Ir a mi carrito
             </button>
           </div>
         </div>
-        <div className="ml-3 flex-shrink-0 flex">
+        <div className="ml-3 shrink-0 flex">
           <button
-            className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             onClick={onDismiss}
           >
             <span className="sr-only">Cerrar</span>
@@ -146,7 +146,7 @@ export default function ProductCard({ product }) {
         )}
 
         {/* Columna de la Imagen */}        
-        <div className="relative aspect-square w-32 flex-shrink-0 overflow-hidden lg:rounded-tl-lg sm:w-full sm:rounded-t-lg border-b">
+        <div className="relative aspect-square w-32 shrink-0 overflow-hidden lg:rounded-tl-lg sm:w-full sm:rounded-t-lg border-b border-gray-100">
           <Link href={`/producto/${slug}`}>
             <Image
               src={imageUrl}
@@ -163,7 +163,7 @@ export default function ProductCard({ product }) {
         <div className="flex flex-1 flex-col p-2 sm:p-4 min-w-0 bg-white rounded-b-lg">
           
           {/* Sección de Información (crece para ocupar espacio) */}
-          <div className="flex-grow">
+          <div className="grow">
             <div className="text-xs uppercase text-slate-600" itemProp="category">
               {categoryName}
             </div>
@@ -239,12 +239,12 @@ export default function ProductCard({ product }) {
             {/* Acciones para Mobile */}
             <div className="flex items-center justify-between sm:hidden">
                 {outOfStock ? (
-                  <div className="rounded bg-gray-500 px-3 py-2 text-xs font-bold text-white">
+                  <div className="rounded-sm bg-gray-500 px-3 py-2 text-xs font-bold text-white">
                     Agotado
                   </div>
                 ) : (
                   <>
-                    <Link href={`/producto/${slug}`} className="rounded border border-green-800 p-2 text-green-800" aria-label={`Ver producto ${title}`}>
+                    <Link href={`/producto/${slug}`} className="rounded-sm border border-green-800 p-2 text-green-800" aria-label={`Ver producto ${title}`}>
                       <span className="icon-[hugeicons--view] text-lg" />
                     </Link>
                     <Tooltip title={isVariable && !selectedVariation ? "Selecciona una variación" : ""} placement="top" arrow>

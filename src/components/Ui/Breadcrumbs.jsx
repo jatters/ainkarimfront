@@ -1,9 +1,9 @@
-import { Link } from 'next-view-transitions'
+import Link from "next/link";
 
 export default function Breadcrumbs({ title }) {
   return (
     <span className="text-white text-center text-sm gap-x-2 flex justify-center">
-      <Link href="/" className="hover:-text--light-green duration-200">
+      <Link href="/" className="hover:text-light-green duration-200">
         Inicio
       </Link>{" "}
       › <span className="capitalize">{title}</span>

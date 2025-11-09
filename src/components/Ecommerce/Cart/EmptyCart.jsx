@@ -11,7 +11,7 @@ export default function EmptyCart() {
         loop={true}
         className="w-48 h-48 mx-auto"
       />
-      <div className="text-xl text-center font-semibold -text--dark-green">
+      <div className="text-xl text-center font-semibold text-dark-green">
         Tu carrito está vacío.
       </div>
       <p className="text-center text-slate-600 py-3">
@@ -20,13 +20,13 @@ export default function EmptyCart() {
       <div className="flex gap-3 justify-center mt-4 ">
         <Link
           href="/productos"
-          className="-bg--dark-green text-white px-3 sm:px-6 py-2 rounded-md hover:-bg--light-green hover:scale-[1.03] active:scale-[0.97]   duration-200"
+          className="bg-dark-green text-white px-3 sm:px-6 py-2 rounded-md hover:bg-light-green hover:scale-[1.03] active:scale-[0.97]   duration-200"
         >
           Ir a productos
         </Link>
         <Link
           href="/visitas"
-          className="-bg--dark-green text-white px-3 sm:px-6 py-2 rounded-md hover:-bg--light-green hover:scale-[1.03] active:scale-[0.97]  duration-200"
+          className="bg-dark-green text-white px-3 sm:px-6 py-2 rounded-md hover:bg-light-green hover:scale-[1.03] active:scale-[0.97]  duration-200"
         >
           Ir a planes
         </Link>

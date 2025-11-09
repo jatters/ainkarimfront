@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext } from "react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 import CouponInput from "@/components/Ecommerce/CouponInput";
@@ -149,8 +149,8 @@ export default function CarritoPage() {
 
   return (
     <main>
-      <section className="max-w-screen-xl mx-auto py-8 lg:pt-12 lg:pb-16 px-5 lg:px-2">
-        <h1 className=" text-2xl lg:text-3xl -text--dark-green text-center font-bold mb-5 lg:mb-14 lg:col-span-8">
+      <section className="max-w-(--breakpoint-xl) mx-auto py-8 lg:pt-12 lg:pb-16 px-5 lg:px-2">
+        <h1 className=" text-2xl lg:text-3xl text-dark-green text-center font-bold mb-5 lg:mb-14 lg:col-span-8">
           Carrito de Compras
         </h1>
         <div className="grid grid-cols-1 lg:grid-cols-8 gap-4">
@@ -158,7 +158,7 @@ export default function CarritoPage() {
             <div className="overflow-x-auto hidden lg:block">
               <table className="min-w-full bg-white">
                 <thead className="border-b border-gray-100">
-                  <tr className="-text--light-green">
+                  <tr className="text-light-green">
                     <th className="py-2 font-semibold">Producto</th>
                     <th className="py-2 font-semibold">Precio</th>
                     <th className="py-2 font-semibold">Cantidad</th>
@@ -196,7 +196,7 @@ export default function CarritoPage() {
                     return (
                       <tr
                         key={index}
-                        className="text-center even:bg-gray-50 rounded-md border-b"
+                        className="text-center even:bg-gray-50 rounded-md border-b border-gray-200"
                       >
                         <td className="py-2 flex items-center px-5  ">
                           {imageUrl && (
@@ -209,7 +209,7 @@ export default function CarritoPage() {
                             />
                           )}
                           <span className="inline-block max-w-xs text-left">
-                            <span className="font-semibold text-sm -text--dark-green">
+                            <span className="font-semibold text-sm text-dark-green">
                               {displayTitle}
                             </span>
                             {item.additionalService && (
@@ -225,13 +225,13 @@ export default function CarritoPage() {
                             )}
                           </span>
                         </td>
-                        <td className="py-2 items-center justify-center font-bold -text--dark-green">
+                        <td className="py-2 items-center justify-center font-bold text-dark-green">
                           {formatPrice(item.price)}
                         </td>
                         <td className="py-2 px-5">
                           <div className="flex items-center justify-center">
                             <button
-                              className="border px-2 py-2 rounded-l hover:-bg--dark-green hover:text-white focus:outline-none duration-200"
+                              className="border border-gray-200 px-2 py-2 rounded-l hover:bg-dark-green hover:text-white focus:outline-hidden duration-200"
                               onClick={() => decrementarCantidad(item)}
                               aria-label={`Disminuir cantidad de ${displayTitle}`}
                             >
@@ -242,11 +242,11 @@ export default function CarritoPage() {
                               min="1"
                               value={item.quantity}
                               readOnly
-                              className="appearance-none border  w-12 h-[42px] px-0 py-2 text-gray-700 text-center focus:outline-none rounded-none "
+                              className="appearance-none border border-gray-200  w-12 h-[42px] px-0 py-2 text-gray-700 text-center focus:outline-hidden rounded-none "
                               aria-label={`Cantidad de ${displayTitle}`}
                             />
                             <button
-                              className="border px-2 py-2 rounded-r hover:-bg--dark-green hover:text-white focus:outline-none duration-200"
+                              className="border border-gray-200 px-2 py-2 rounded-r hover:bg-dark-green hover:text-white focus:outline-hidden duration-200"
                               onClick={() => incrementarCantidad(item)}
                               disabled={
                                 item.reservationData &&
@@ -265,12 +265,12 @@ export default function CarritoPage() {
                           </div>
                         </td>
                         <td className="py-2 px-2 items-center justify-center">
-                          <span className="font-semibold -text--dark-green">
+                          <span className="font-semibold text-dark-green">
                             {formatPrice(subtotal)}
                           </span>
                           {calculateItemDiscount(item) > 0 && (
                             <div className="text-white bg-lime-600 px-1 py-1 rounded-md flex items-center text-xs w-fit mx-auto">
-                              <span className="icon-[ri--discount-percent-fill] mr-[1px] " />{" "}
+                              <span className="icon-[ri--discount-percent-fill] mr-px " />{" "}
                               -{formatPrice(calculateItemDiscount(item))}
                             </div>
                           )}
@@ -280,7 +280,7 @@ export default function CarritoPage() {
                             onClick={() => removeFromCart(item)}
                             aria-label={`Eliminar ${displayTitle}`}
                           >
-                            <span className="icon-[si--remove-circle-line] hover:-text--light-red hover:scale-125 duration-200" />
+                            <span className="icon-[si--remove-circle-line] hover:text-light-red hover:scale-125 duration-200" />
                           </button>
                         </td>
                       </tr>
@@ -320,7 +320,7 @@ export default function CarritoPage() {
                   : "Imagen del producto";
 
                 return (
-                  <div key={index} className="text-center py-3 border-b">
+                  <div key={index} className="text-center py-3 border-b ">
                     <div className="py-2 flex flex-wrap justify-between sm:items-center flex-col sm:flex-row  ">
                       <div className="flex items-center">
                         {imageUrl && (
@@ -332,8 +332,8 @@ export default function CarritoPage() {
                             className="w-16 h-16 object-cover mr-4 hidden sm:block rounded-md"
                           />
                         )}
-                        <span className="inline-block break-words text-left">
-                          <span className="font-bold -text--dark-green">
+                        <span className="inline-block wrap-break-word text-left">
+                          <span className="font-bold text-dark-green">
                             {displayTitle}
                           </span>
                           {item.additionalService && (
@@ -378,7 +378,7 @@ export default function CarritoPage() {
                     <div className="flex flex-wrap justify-between items-center">
                       <div className="flex items-center justify-center">
                         <button
-                          className="-bg--dark-green/70 text-white px-2 py-2 rounded-l hover:-bg--dark-green focus:outline-none"
+                          className="bg-dark-green/70 text-white px-2 py-2 rounded-l hover:bg-dark-green focus:outline-hidden"
                           onClick={() => decrementarCantidad(item)}
                           aria-label={`Disminuir cantidad de ${displayTitle}`}
                         >
@@ -389,11 +389,11 @@ export default function CarritoPage() {
                           min="1"
                           value={item.quantity}
                           readOnly
-                          className="appearance-none border -border--dark-green/70 w-12 h-10 px-0 py-2 text-gray-700 text-center focus:outline-none rounded-none"
+                          className="appearance-none border border-dark-green/70 w-12 h-10 px-0 py-2 text-gray-700 text-center focus:outline-hidden rounded-none"
                           aria-label={`Cantidad de ${displayTitle}`}
                         />
                         <button
-                          className="-bg--dark-green/70 text-white px-2 py-2 rounded-r hover:-bg--dark-green focus:outline-none"
+                          className="bg-dark-green/70 text-white px-2 py-2 rounded-r hover:bg-dark-green focus:outline-hidden"
                           onClick={() => incrementarCantidad(item)}
                           disabled={
                             item.reservationData &&
@@ -418,7 +418,7 @@ export default function CarritoPage() {
                             onClick={() => removeFromCart(item)}
                             aria-label={`Eliminar ${displayTitle}`}
                           >
-                            <span className="text-sm font-medium -text--light-red">
+                            <span className="text-sm font-medium text-light-red">
                               Eliminar
                             </span>
                           </button>
@@ -430,11 +430,11 @@ export default function CarritoPage() {
               })}
             </div>
 
-            <div className="max-w-screen-lg mx-auto mt-6 flex flex-col md:flex-row justify-center items-center">
+            <div className="max-w-(--breakpoint-lg) mx-auto mt-6 flex flex-col md:flex-row justify-center items-center">
               {/*   <div className="flex gap-4 mb-5">
                 <Link
                     href={continuarComprandoLink}
-                    className="border-2 border-lime-700 text-sm lg:text-base text-gray-800 text-center px-2 sm:px-4 py-2 rounded-md hover:-bg--dark-green hover:-border--dark-green hover:text-white duration-200"
+                    className="border-2 border-lime-700 text-sm lg:text-base text-gray-800 text-center px-2 sm:px-4 py-2 rounded-md hover:bg-dark-green hover:border-dark-green hover:text-white duration-200"
                   >
                     Continuar comprando
                   </Link> */}
@@ -471,25 +471,25 @@ export default function CarritoPage() {
             <>
               <aside className="hidden lg:block lg:col-span-2">
                 <div className="border border-gray-200 py-5 px-5 rounded-md flex flex-col gap-2">
-                  <div className="font-semibold mb-4 border-b pb-2 flex items-center gap-2">
+                  <div className="font-semibold mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
                     Resumen de compra
                   </div>
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <span className="font-semibold -text--dark-green">
+                  <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                    <span className="font-semibold text-dark-green">
                       Subtotal
                     </span>
                     {formatPrice(subtotalTotal)}
                   </div>
                   {coupon && (
-                    <div className="flex items-center justify-between border-b pb-2">
-                      <span className="font-semibold -text--light-green">
+                    <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                      <span className="font-semibold text-light-green">
                         Descuento
                       </span>
                       <span>- {formatPrice(descuento)}</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between py-3">
-                    <span className="font-semibold -text--dark-green">
+                    <span className="font-semibold text-dark-green">
                       Total
                     </span>
                     <span className="font-semibold">{formatPrice(total)}</span>
@@ -497,7 +497,7 @@ export default function CarritoPage() {
                   <div className="flex  mt-10">
                     <Link
                       href="/finalizar-compra"
-                      className="-bg--light-green text-sm lg:text-base text-white text-center px-2 sm:px-4 py-2 w-full rounded-md hover:bg-green-600 duration-200"
+                      className="bg-light-green text-sm lg:text-base text-white text-center px-2 sm:px-4 py-2 w-full rounded-md hover:bg-green-600 duration-200"
                     >
                       Finalizar compra
                     </Link>
@@ -506,13 +506,13 @@ export default function CarritoPage() {
               </aside>
               <div className="lg:hidden bg-white fixed bottom-0 left-0 right-0 h-20 flex w-full justify-center border-t border-gray-200 z-50">
                 <div className="flex justify-between items-center w-full px-3">
-                  <div className="after:[content:''] after:w-32 after:-bg--light-green after:h-[2px] after:block after:mt-2">
+                  <div className="after:[content:''] after:w-32 after:bg-light-green after:h-[2px] after:block after:mt-2">
                     <span className="font-semibold ">Total: </span>
                     {formatPrice(total)}
                   </div>
                   <Link
                     href="/finalizar-compra"
-                    className="-bg--light-green text-base lg:text-base text-white text-center px-2 sm:px-4 py-2  rounded-md hover:bg-green-600 duration-200"
+                    className="bg-light-green text-base lg:text-base text-white text-center px-2 sm:px-4 py-2  rounded-md hover:bg-green-600 duration-200"
                   >
                     Finalizar compra
                   </Link>

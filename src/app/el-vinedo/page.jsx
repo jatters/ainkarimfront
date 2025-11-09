@@ -1,5 +1,5 @@
 import HeaderImage from "@/components/Ui/HeaderImage";
-import Timeline from "@/components/Ui/Timeline";
+//import Timeline from "@/components/Ui/Timeline";
 import Viticultura from "@/components/Ui/Viticultura";
 import Filantropia from "@/components/Ui/Filantropia";
 import SliderReconocimientos from "@/components/SliderReconocimientos";
@@ -94,10 +94,10 @@ export default async function vinedoPage() {
         background={`${process.env.NEXT_PUBLIC_SITE_URL}${cover.url}`}
       />
       <section className="container mx-auto py-16 px-5 lg:px-10">
-        <h2 className="text-2xl lg:text-4xl -text--dark-green text-center mb-14 uppercase">
+        <h2 className="text-2xl lg:text-4xl text-dark-green text-center mb-14 uppercase">
           {"Nuestra Historia"}
         </h2>
-        {timeline && <Timeline timeline={timeline} />}
+        {/* {timeline && <Timeline timeline={timeline} />} */}
       </section>
 
       {viticultura && <Viticultura viticultura={viticultura} />}
