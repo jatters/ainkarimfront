@@ -149,7 +149,7 @@ export default function CarritoPage() {
 
   return (
     <main>
-      <section className="max-w-(--breakpoint-xl) mx-auto py-8 lg:pt-12 lg:pb-16 px-5 lg:px-2">
+      <section className="max-w-7xl mx-auto py-8 lg:pt-12 lg:pb-16 px-5 lg:px-2">
         <h1 className=" text-2xl lg:text-3xl text-dark-green text-center font-bold mb-5 lg:mb-14 lg:col-span-8">
           Carrito de Compras
         </h1>
@@ -430,7 +430,7 @@ export default function CarritoPage() {
               })}
             </div>
 
-            <div className="max-w-(--breakpoint-lg) mx-auto mt-6 flex flex-col md:flex-row justify-center items-center">
+            <div className="max-w-5xl mx-auto mt-6 flex flex-col md:flex-row justify-center items-center">
               {/*   <div className="flex gap-4 mb-5">
                 <Link
                     href={continuarComprandoLink}

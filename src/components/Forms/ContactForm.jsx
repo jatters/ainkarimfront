@@ -54,7 +54,7 @@ export default function ContactForm({ ipAddress, useragent }) {
   });
 
   return (
-    <div className="max-w-(--breakpoint-sm) mt-5 rounded-xl shadow-md px-5">
+    <div className="max-w-2xl mt-5 rounded-xl shadow-md px-5">
       <div className="sm:px-4 py-5">
         <form method="POST" onSubmit={onSubmit}>
           <div className="mb-3">
@@ -240,7 +240,7 @@ export default function ContactForm({ ipAddress, useragent }) {
           <div className="mb-6">
             <button
               type="submit"
-              className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-hidden focus:-bg--dark-gray"
+              className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-hidden focus:bg-dark-gray"
               disabled={submitting}
               aria-label="Enviar mensaje"
             >

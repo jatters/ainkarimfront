@@ -120,8 +120,8 @@ export default function Informationpage() {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
-          <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
-            <h3 className="text-dark-green text-xl font-semibold">
+          <div className="py-5 flex flex-col items-center px-5 md:px-10 shadow-lg rounded-lg border border-gray-200">
+            <h3 className="text-dark-green text-xl font-semibold text-center md:text-left">
               AUTOMÓVIL PARTICULAR
             </h3>
 
@@ -133,7 +133,7 @@ export default function Informationpage() {
             <p className="font-semibold mb-3">
               Para llegar al Viñedo se tienen dos vías
             </p>
-            <ul className="list-disc prose">
+            <ul className="list-none md:list-disc prose">
               <li>
                 Desde el municipio de Villa de Leyva, se debe tomar la vía Villa
                 de Leyva - Santa Sofía, estamos ubicados a 10 km, tomando un
@@ -146,7 +146,7 @@ export default function Informationpage() {
               </li>
             </ul>
           </div>
-          <div className="py-5 flex flex-col items-center px-10 shadow-lg rounded-lg border border-gray-200">
+          <div className="py-5 flex flex-col items-center px-5 md:px-10 shadow-lg rounded-lg border border-gray-200">
             <h3 className="text-dark-green text-xl font-semibold">
               BUS COLECTIVO
             </h3>

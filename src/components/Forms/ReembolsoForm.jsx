@@ -47,7 +47,7 @@ export default function ReembolsoForm() {
     }
   });
   return (
-    <div className="max-w-(--breakpoint-md) mx-auto shadow-md p-10">
+    <div className="max-w-3xl mx-auto shadow-md p-10">
       <form
         method="POST"
         onSubmit={onSubmit}

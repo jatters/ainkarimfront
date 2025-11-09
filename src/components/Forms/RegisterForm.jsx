@@ -450,7 +450,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="departament"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${
                 errors.departament ? "!border-red-500" : ""
               }`}
               placeholder="Departamento"
@@ -482,7 +482,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             <input
               type="text"
               id="address"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${
                 errors.address ? "!border-red-500" : "border"
               }`}
               placeholder="Dirección"
@@ -511,7 +511,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${
                   errors.password ? "border-red-500" : "border"
                 }`}
                 placeholder="Crea tu contraseña"
@@ -593,7 +593,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
-                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : "border"
                 }`}
                 placeholder="Confirma tu contraseña"
@@ -663,7 +663,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             )}
           </div>
           <AuthorizationPersonalData />          
-          <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+          <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
             <label className="checkbox flex items-center gap-1">
               <input
                 type="checkbox"
@@ -690,7 +690,7 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
             </span>
           )}
 
-          <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+          <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
             <label className="checkbox flex items-center gap-1">
               <input
                 type="checkbox"

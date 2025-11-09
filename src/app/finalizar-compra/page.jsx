@@ -389,7 +389,7 @@ export default function PaymentPage() {
                           </form>{" "}
                         </div>
                       ) : (
-                        <div className="mt-2 -text--light-green hover:-text--dark-green duration-200">
+                        <div className="mt-2 text-light-green hover:text-dark-green duration-200">
                           <Link href="#" onClick={() => setLogin(true)}>
                             Iniciar sesión
                           </Link>
@@ -525,7 +525,7 @@ export default function PaymentPage() {
                               onClick={() => removeFromCart(item)}
                               className=""
                             >
-                              <span className="icon-[si--remove-circle-line] text-xl hover:-text--red-cruz hover:scale-125 hover:text-light-red duration-300 hidden sm:block" />
+                              <span className="icon-[si--remove-circle-line] text-xl hover:scale-125 hover:text-light-red duration-300 hidden sm:block" />
                               <span className="text-light-red font-semibold sm:hidden text-sm">
                                 Eliminar
                               </span>

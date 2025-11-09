@@ -3,7 +3,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 import { getStrapiData } from "@/lib/strapi";
 
 export default async function FAQ() {
@@ -14,7 +14,7 @@ export default async function FAQ() {
   }
   return (
     <div
-      className="max-w-3xl px-5 mx-auto py-10 "
+      className="max-w-3xl md:px-5 mx-auto py-10 "
       aria-label="Preguntas frecuentes"
     >
       {faqs.map((faq) => (
@@ -25,9 +25,7 @@ export default async function FAQ() {
             </h3>
           </AccordionSummary>
           <AccordionDetails>
-            <div className=" [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
-              <BlocksRenderer content={faq.asnwer || ""} />
-            </div>
+            <BlocksRendererWithStyles content={faq.asnwer || ""} />
           </AccordionDetails>
         </Accordion>
       ))}

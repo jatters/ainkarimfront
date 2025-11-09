@@ -8,7 +8,7 @@ export default function RecoveryPassword() {
 
   return (
     <main>
-      <section className="max-w-(--breakpoint-lg) mx-auto py-16 px-5 flex justify-center items-center flex-col">
+      <section className="max-w-5xl mx-auto py-16 px-5 flex justify-center items-center flex-col">
         <h1 className="text-dark-green text-3xl font-semibold mb-10 text-center">
           Restablecer contraseña
         </h1>

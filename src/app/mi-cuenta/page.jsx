@@ -195,7 +195,7 @@ export default function MyAccountPage() {
   };
 
   return (
-    <main className="max-w-(--breakpoint-lg) mx-auto py-16 px-5">
+    <main className="max-w-5xl mx-auto py-16 px-5">
       <h1 className="font-bold text-4xl text-dark-green mb-5">
         Hola,{" "}
         <span className="capitalize font-bold">

@@ -1,8 +1,8 @@
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 import Script from "next/script";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { GetPage } from "@/components/GetContentApi";
 import { getStrapiData } from "@/lib/strapi";
+import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 
 export async function generateMetadata() {
   const canonicalUrl = "https://ainkarim.co/advertencias-y-recomendaciones";
@@ -125,10 +125,8 @@ export default async function AdvertenciasPage() {
           image?.url ? `${baseUrl}${image.url}` : "/banner-puntos-de-venta.webp"
         }
       />
-      <section className="max-w-(--breakpoint-lg) mx-auto pt-8 pb-12 px-5">
-        <div className="mx-auto max-w-(--breakpoint-lg) [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:text-gray-700 [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:text-gray-700 [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:text-gray-700 [&>h3]:text-xl [&>h4]:text-lg [&>h4]:text-gray-700 [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:text-gray-700 [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside">
-          <BlocksRenderer content={content || ""} />
-        </div>
+      <section className="max-w-5xl mx-auto pt-8 pb-12 px-5">
+        <BlocksRendererWithStyles content={content || ""} />
       </section>
     </main>
   );

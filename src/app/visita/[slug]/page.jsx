@@ -3,7 +3,7 @@ import PlanGallery from "@/components/Ecommerce/PlanGallery";
 import ReservationField from "@/components/Ecommerce/Plans/ReservationField";
 import { GetSinglePlan, GetCompanyInfo } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 import Script from "next/script";
 
 const formatPrice = (price) => {
@@ -187,9 +187,7 @@ export default async function SinglePlanPage({ params }) {
                 </div>
               )}
               {planDescription && (
-                <div className="prose mb-4 [&>img]:mx-auto [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside">
-                  <BlocksRenderer content={planDescription} />
-                </div>
+                <BlocksRendererWithStyles content={planDescription} />
               )}
               
               <ReservationField

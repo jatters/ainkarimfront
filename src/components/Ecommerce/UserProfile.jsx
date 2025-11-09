@@ -176,7 +176,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
               />
             </div>
           )}
-          <span className="text-2xl font-semibold -text--dark-green font-serif">
+          <span className="text-2xl font-semibold text-dark-green font-serif">
             {user.firstName} {user.middleName} {user.lastName}{" "}
             {user.secondLastName}
           </span>
@@ -226,7 +226,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
                   {email}
                 </div>
                 <button
-                  className="-text--light-green font-medium hover:-text--dark-green hover:underline duration-200"
+                  className="text-light-green font-medium hover:text-dark-green hover:underline duration-200"
                   onClick={() => setChangeEmail(true)}
                 >
                   Cambiar correo
@@ -280,7 +280,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
                   {mobile}
                 </div>
                 <button
-                  className="-text--light-green font-medium hover:-text--dark-green hover:underline duration-200"
+                  className="text-light-green font-medium hover:text-dark-green hover:underline duration-200"
                   onClick={() => setChangePhone(true)}
                 >
                   Cambiar número
@@ -359,7 +359,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
                     <span className="font-semibold">{city}:</span> {address}
                   </div>
                   <button
-                    className="-text--light-green font-medium hover:-text--dark-green duration-200"
+                    className="text-light-green font-medium hover:text-dark-green duration-200"
                     onClick={() => setChangeAddress(true)}
                   >
                     Cambiar dirección

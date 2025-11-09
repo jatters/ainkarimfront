@@ -87,7 +87,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="max-w-(--breakpoint-lg) mx-auto py-16 px-5">
+    <main className="max-w-5xl mx-auto py-16 px-5">
       <h1 className="text-center font-bold text-3xl text-dark-green">
         Restablecer Contraseña
       </h1>

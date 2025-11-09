@@ -69,9 +69,20 @@ export default function SliderMenu({ images }) {
       {/* Slider thumbs */}
       <swiper-container
         ref={thumbsSwiperRef}
-        slides-per-view="9"
+        slides-per-view="8"
         space-between="10"
         watch-slides-progress="true"
+        breakpoints={{
+          320: {
+            slidesPerView: 4,
+          },
+          640: {
+            slidesPerView: 6,
+          },
+          1024: {
+            slidesPerView: 8,
+          },
+        }}
       >
         {slides}
       </swiper-container>

@@ -54,7 +54,7 @@ export default async function GoogleReviews() {
 
   return (
     <section className="">
-      <div className="container mx-auto pt-16 py-8 lg:py-12 xl:py-16">
+      <div className="container mx-auto pt-16 py-8 lg:py-12 xl:py-16 px-5">
         <div className="">
           <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold font-serif text-dark-green text-center lg:text-left uppercase">
             Así se vive la experiencia
@@ -64,7 +64,7 @@ export default async function GoogleReviews() {
             Karim
           </p>
         </div>
-        <div className="px-5">
+        <div className="">
           <SwiperReviews reviews={reviews}  />
         </div>
       </div>

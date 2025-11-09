@@ -103,7 +103,7 @@ const CartItem = ({
             onClick={() => removeFromCart(product)}
             aria-label={`Eliminar ${title}`}
           >
-            <span className="icon-[mingcute--delete-2-line] text-xl hover:-text--red-cruz hover:scale-125 hover:text-light-red duration-300" />
+            <span className="icon-[mingcute--delete-2-line] text-xl hover:scale-125 hover:text-light-red duration-300" />
           </button>
         </div>
         <div>

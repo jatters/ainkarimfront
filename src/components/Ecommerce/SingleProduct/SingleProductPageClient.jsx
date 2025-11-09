@@ -5,7 +5,7 @@ import ProductGallery from "@/components/Ecommerce/SingleProduct/ProductGallery"
 import ProductVariations from "@/components/Ecommerce/SingleProduct/ProductVariations";
 import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 import { normalizeProductForCart } from "@/components/Ecommerce/NormalizeCartProduct";
 import Script from "next/script";
 import toast from "react-hot-toast";
@@ -45,12 +45,14 @@ export default function SingleProductPageClient({ productData }) {
       "@type": "Brand",
       name: "Viñedo Ain Karim",
     },
-offers: {
+    offers: {
       "@type": "Offer",
       url: `https://ainkarim.co/producto/${slug}`,
       priceCurrency: "COP",
       price: price,
-      availability: outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      availability: outOfStock
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
     },
   };
@@ -65,9 +67,14 @@ offers: {
       <main>
         <section className="container mx-auto py-8 lg:py-16 px-5">
           <div className="text-sm flex gap-2">
-            <Link href="/" className="hover:text-light-green">Inicio</Link> ›{" "}
-            <Link href="/productos" className="hover:text-light-green">Productos</Link> ›{" "}
-            <span className="capitalize">{title}</span>
+            <Link href="/" className="hover:text-light-green">
+              Inicio
+            </Link>{" "}
+            ›{" "}
+            <Link href="/productos" className="hover:text-light-green">
+              Productos
+            </Link>{" "}
+            › <span className="capitalize">{title}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 gap-x-5 gap-y-5 lg:gap-y-9">
             <div className="max-w-3xl">
@@ -88,10 +95,8 @@ offers: {
                     </span>
                   )}
                 </div>
-                <div className="italic mb-2 text-dark-red">
-                  {categoryName}
-                </div>
-              </div>              
+                <div className="italic mb-2 text-dark-red">{categoryName}</div>
+              </div>
 
               {regularPrice > price ? (
                 <div className="text-2xl font-semibold mb-5 flex gap-3 ">
@@ -117,11 +122,8 @@ offers: {
               )}
 
               {productDescription && (
-                <div className="[&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:text-dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:text-dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
-                  <BlocksRenderer content={productDescription} />
-                </div>
+                <BlocksRendererWithStyles content={productDescription} />
               )}
-              
 
               {isVariable && variaciones && variaciones.length > 0 && (
                 <div className="mb-4">
@@ -135,7 +137,10 @@ offers: {
 
               <div className="mt-10 lg:mt-0">
                 {outOfStock ? (
-                  <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded-md" disabled>
+                  <button
+                    className="bg-gray-200 text-gray-500 px-4 py-2 rounded-md"
+                    disabled
+                  >
                     Producto agotado
                   </button>
                 ) : (

@@ -1,7 +1,8 @@
 import HeaderImage from "@/components/Ui/HeaderImage";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 import Script from "next/script";
 import { GetPage } from "@/components/GetContentApi";
+
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export async function generateMetadata() {
@@ -97,15 +98,11 @@ export default async function PuntosDeVentaPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
       />
       <HeaderImage title={title} background={imageUrl} />
-      <section className="container mx-auto pt-8 pb-12 px-5">
-        {content && (
-          <div className="mx-auto max-w-(--breakpoint-lg) [&>p]:leading-7 prose [&>p]:mb-4 [&>p]:-text--dark-gray [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:-text--dark-gray [&>h3]:mb-2 [&>h3]:font-semibold [&>h3]:-text--dark-gray [&>h3]:text-xl [&>h4]:text-lg [&>h4]:-text--dark-gray [&>h4]:mb-1 [&>h4]:font-semibold [&>img]:mx-auto [&>strong]:-text--dark-gray [&>p>a]:text-dark-green [&>p>a]:underline [&>p>a]:hover:text-light-green [&>ul]:list-disc [&>ul]:list-inside [&>ul]:pl-5 [&>ul]:mb-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:list-inside ">
-            <BlocksRenderer content={content} />
-          </div>
-        )}
+      <section className="max-w-5xl mx-auto pt-8 pb-12 px-5">
+        {content && <BlocksRendererWithStyles content={content} />}
 
         <div className="overflow-x-auto mt-5">
-          <table className="mx-auto max-w-(--breakpoint-lg) border-collapse">
+          <table className="mx-auto max-w-5xl border-collapse">
             <thead className="bg-dark-green text-white rounded-lg uppercase">
               <tr>
                 <th className="py-2 border-b font-montserrat text-base">

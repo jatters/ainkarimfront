@@ -11,7 +11,7 @@ export default function PasswordInput({ label, fieldName, showPassword, togglePa
           type={showPassword ? "text" : "password"}
           id={fieldName}
           name={fieldName}
-          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none `}
+          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none `}
           placeholder="Crea tu contraseña"          
         />
         <Tooltip

@@ -160,7 +160,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Columna de Contenido */}
-        <div className="flex flex-1 flex-col p-2 sm:p-4 min-w-0 bg-white rounded-b-lg">
+        <div className="flex flex-1 flex-col p-2 sm:p-4 min-w-0 bg-white rounded-br-lg sm:rounded-b-lg">
           
           {/* Sección de Información (crece para ocupar espacio) */}
           <div className="grow">

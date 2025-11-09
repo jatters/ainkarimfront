@@ -1,9 +1,9 @@
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export default function AuthorizationPersonalData() {
   return (
     <>
-      <div className="max-h-28 lg:max-h-40 overflow-y-auto text-sm mb-4 border py-4 px-2 rounded-md col-span-2 mt-5">
+      <div className="max-h-28 lg:max-h-40 overflow-y-auto text-sm mb-4 border border-gray-200 py-4 px-2 rounded-md col-span-2 mt-5">
         <div className="prose-base">
           <div className="font-semibold text-center text-[12px]">
             AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
@@ -18,7 +18,7 @@ export default function AuthorizationPersonalData() {
               href="/politica-de-tratamiento-de-datos-personales"
               target="_blank"
               rel="noopener"
-              className="font-medium hover:-text--light-green duration-200"
+              className="font-medium hover:text-light-green duration-200"
             >
               Política de Tratamiento de Datos Personales
             </Link>
@@ -27,7 +27,7 @@ export default function AuthorizationPersonalData() {
               href="/politica-de-tratamiento-de-datos-personales"
               target="_blank"
               rel="noopener"
-              className="underline hover:-text--light-green duration-200"
+              className="underline hover:text-light-green duration-200"
             >
               aquí
             </Link>
@@ -51,7 +51,7 @@ export default function AuthorizationPersonalData() {
             </strong>
             <a
               href="mailto:smartinez@marquesvl.com"
-              className="hover:-text--light-green duration-200 font-medium"
+              className="hover:text-light-green duration-200 font-medium"
             >
               smartinez@marquesvl.com.
             </a>
