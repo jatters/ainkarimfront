@@ -5,7 +5,8 @@ import maps from "@/../public/logo-google-maps.svg";
 import HeaderImage from "@/components/Ui/HeaderImage";
 import { headers } from "next/headers";
 import Script from "next/script";
-import { GetCompanyInfo } from "@/components/GetContentApi";
+import formatPhoneNumber from "@/lib/FormatPhoneNumber";
+import { getStrapiData } from "@/lib/strapi";
 
 export async function getIPAddress() {
   try {
@@ -17,16 +18,6 @@ export async function getIPAddress() {
     return "IP desconocida";
   }
 }
-
-const formatPhoneNumber = (phoneNumber) => {
-  if (!phoneNumber) return "";
-  const cleaned = phoneNumber.toString().replace(/\D/g, "");
-  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    return `(${match[1]}) ${match[2]} ${match[3]}`;
-  }
-  return phoneNumber;
-};
 
 export async function generateMetadata() {
   const title = "Contacto | Viñedo Ain Karim";
@@ -65,7 +56,7 @@ export async function generateMetadata() {
 export default async function contactPage() {
   const ipAddress = await getIPAddress();
   const userAgent = await (await headers()).get("user-agent");
-  const companyInfo = await GetCompanyInfo();
+  const companyInfo = await getStrapiData("el-vinedo?populate=*");
 
   if (!companyInfo) {
     return (

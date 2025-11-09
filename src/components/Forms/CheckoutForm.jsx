@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import style from "./PrettyCheckbox.css";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import AuthorizationPersonalData from "@/components/Forms/AuthorizationPersonalData";
 
 export default function CheckoutForm({ showAddressFields, onFormChange }) {
   const {
@@ -37,8 +38,11 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
     <div className="mx-auto lg:p-2 bg-white">
       <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="firstName" className="sr-only">
-            Primer nombre
+          <label
+            htmlFor="firstName"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
+            Primer Nombre
           </label>
           <input
             type="text"
@@ -69,7 +73,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="secondName" className="sr-only">
+          <label htmlFor="secondName" className="text-sm font-semibold ml-2">
             Segundo Nombre
           </label>
           <input
@@ -101,8 +105,11 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="lastname" className="sr-only">
-            Primer apellido
+          <label
+            htmlFor="lastname"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
+            Primer Apellido
           </label>
           <input
             type="text"
@@ -133,8 +140,11 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="secondSurname" className="sr-only">
-            Segundo apellido
+          <label
+            htmlFor="secondSurname"
+            className="text-sm font-semibold ml-2 "
+          >
+            Segundo Apellido
           </label>
           <input
             type="text"
@@ -165,7 +175,10 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="documentType" className="sr-only">
+          <label
+            htmlFor="documentType"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
             Tipo de Documento
           </label>
           <select
@@ -182,7 +195,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           >
             <option value="Cédula">Cédula</option>
-            <option value="Cédula de extranjería">Cedula de extranjeria</option>
+            <option value="Cédula de extranjería">Cédula de extranjería</option>
             <option value="NIT">NIT</option>
             <option value="Pasaporte">Pasaporte</option>
           </select>
@@ -193,7 +206,10 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="document" className="sr-only">
+          <label
+            htmlFor="document"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
             Número de Documento
           </label>
           <input
@@ -209,27 +225,22 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 message: "Documento es requerido",
               },
               minLength: {
-                value: 5,
+                value: 4,
                 message: "El documento es muy corto",
-              },
-              maxLength: {
-                value: 10,
-                message: "El documento es muy largo",
-              },
-              pattern: {
-                value: /^\d+$/,
-                message: "El documento no es válido",
               },
             })}
           />
           {errors.document && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
+            <span className="text-sm text-red-600 mt-1 pl-1 block">
               {errors.document.message}
             </span>
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="mobiletwo" className="sr-only">
+          <label
+            htmlFor="mobiletwo"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
             Celular
           </label>
           <input
@@ -256,7 +267,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           />
           {errors.mobiletwo && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
+            <span className="text-sm text-red-600 mt-1 pl-1 block">
               {errors.mobiletwo.message}
             </span>
           )}
@@ -293,68 +304,40 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <label htmlFor="city" className="sr-only">
                 Ciudad
               </label>
-              <input
-                type="text"
+              <select
+                name="city"
                 id="city"
-                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-                  errors.city ? "border-red-500!" : ""
-                }`}
-                placeholder="Ciudad"
                 {...register("city", {
                   required: {
                     value: true,
-                    message: "La ciudad es requerida",
-                  },
-                  minLength: {
-                    value: 2,
-                    message: "La ciudad no es valida",
-                  },
-                  pattern: {
-                    value: /^[A-Za-zÀ-ÿ\s]+$/,
-                    message: "La ciudad no es valida",
+                    message: "Ciudad es requerida",
                   },
                 })}
-              />
+                className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.city ? "!border-red-500" : ""
+                }`}
+              >
+                <option value="">Selecciona una ciudad</option>
+                <option value="Bogota">Bogotá</option>
+                <option value="Bucaramanga">Bucaramanga</option>
+                <option value="Cajica">Cajicá</option>
+                <option value="Cali">Cali</option>
+                <option value="Chia">Chía</option>
+                <option value="Medellin">Medellín</option>
+                <option value="Yopal">Yopal</option>
+                <option value="Zipaquirá">Zipaquira</option>
+              </select>
               {errors.city && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                <span className="text-sm text-red-600 mt-1 pl-1 block">
                   {errors.city.message}
                 </span>
               )}
-            </div> */}
-            {/* <div className="col-span-2  sm:col-span-1">
-              <label htmlFor="departament" className="sr-only">
-                Departamento
-              </label>
-              <input
-                type="text"
-                id="departament"
-                className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-                  errors.departament ? "border-red-500!" : ""
-                }`}
-                placeholder="Departamento"
-                {...register("departament", {
-                  required: {
-                    value: true,
-                    message: "El departamento es requerido",
-                  },
-                  minLength: {
-                    value: 2,
-                    message: "El departamento es muy corto",
-                  },
-                  pattern: {
-                    value: /^[A-Za-zÀ-ÿ\s]+$/,
-                    message: "El departamento no es válido",
-                  },
-                })}
-              />
-              {errors.departament && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
-                  {errors.departament.message}
-                </span>
-              )}
-            </div> */}
+            </div>
             <div className="col-span-2  sm:col-span-1">
-              <label htmlFor="address" className="sr-only">
+              <label
+                htmlFor="address"
+                className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+              >
                 Dirección
               </label>
               <input
@@ -376,7 +359,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 })}
               />
               {errors.address && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                <span className="text-sm text-red-600 mt-1 pl-1 block">
                   {errors.address.message}
                 </span>
               )}
@@ -384,7 +367,10 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           </>
         )}
         <div className="mb-4 col-span-2  sm:col-span-1">
-          <label htmlFor="email" className="sr-only">
+          <label
+            htmlFor="email"
+            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+          >
             Correo
           </label>
           <input
@@ -406,7 +392,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           />
           {errors.email && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
+            <span className="text-sm text-red-600 mt-1 pl-1 block">
               {errors.email.message}
             </span>
           )}
@@ -422,21 +408,19 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               className="checkbox__input"
             />
             <span className="checkbox__label"></span>
-            <span htmlFor="register" className="text-slate-600">
+            <span htmlFor="register" className="text-slate-600  -ml-2 -mt-[2px]">
               ¿Quieres crear una cuenta?
             </span>
-          </label>
-          {errors.register && (
-            <span className="text-sm mb-5 text-red-600 pl-1 block">
-              Debes aceptar la política de tratamiento de datos
-            </span>
-          )}
+          </label>         
         </div>
         {registerUser === true ? (
           <>
-            <div className="col-span-2 ">
+            <div className="col-span-2 md:col-span-1 ">
               <div className="relative">
-                <label htmlFor="password" className="sr-only">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                >
                   Contraseña
                 </label>
                 <input
@@ -492,7 +476,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                    className="absolute inset-y-0 right-3 top-5 flex items-center text-gray-500"
                   >
                     {showPassword ? (
                       <span
@@ -516,10 +500,13 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 md:col-span-1">
               <div className="relative">
-                <label htmlFor="confirmPassword" className="sr-only">
-                  Confirmar Contraseña
+                <label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                >
+                  Confirmar tu contraseña
                 </label>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -570,7 +557,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   <button
                     type="button"
                     onClick={toggleConfirmPasswordVisibility}
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                    className="absolute inset-y-0 right-3 top-5 flex items-center text-gray-500"
                   >
                     {showConfirmPassword ? (
                       <span
@@ -594,66 +581,9 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
-            <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
-              <div className="space-y-3">
-                <div className="font-semibold mb-5 text-center">
-                  AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
-                </div>
-                <p className="overflow-hidden">
-                  El <strong>VIÑEDO AIN KARIM S.A.S.</strong> (NIT. Nº
-                  860.010.706-4, calle 127 # 13a-32 Oficina 202 de Btá. y
-                  teléfono +57 601 258 9933) recolecta, almacena, usa,
-                  transfiere, transmite y en general trata manual o automatizada
-                  datos personales como Responsable de acuerdo con la{" "}
-                  <Link
-                    href="/politica-de-tratamiento-de-datos-personales"
-                    target="_blank"
-                    className="font-medium hover:text-light-green duration-200"
-                  >
-                    Política de Tratamiento de Datos Personales
-                  </Link>
-                  , disponible para su consulta{" "}
-                  <Link
-                    href="/politica-de-tratamiento-de-datos-personales"
-                    target="_blank"
-                    className="underline hover:text-light-green duration-200"
-                  >
-                    aquí
-                  </Link>
-                  . Le informamos que: Todo titular tiene derecho a: conocer,
-                  actualizar y rectificar su información personal; acceder de
-                  manera gratuita a la misma; ser informado sobre su uso;
-                  solicitar prueba de la autorización; acudir ante la
-                  Superintendencia de Industria y Comercio y presentar quejas
-                  por infracciones a lo dispuesto en la normatividad vigente; y
-                  en los casos procedentes, modificar y revocar la autorización
-                  y/o solicitar la supresión de sus datos personales. A su vez,
-                  le informamos que, es de carácter libre y facultativo entregar
-                  datos o responder a preguntas que versen sobre datos de
-                  carácter sensibles (Como datos biométricos, relacionados con
-                  la salud, o aquellos que afectan su intimidad o cuyo uso
-                  indebido pueda generar discriminación), y usted no esta
-                  obligado a otorgar su autorización.{" "}
-                  <strong>
-                    Para información relacionada con el tratamiento de sus datos
-                    personales y el ejercicio de su derecho de hábeas data,
-                    contáctenos al correo electrónico{" "}
-                  </strong>
-                  <a
-                    href="mailto:smartinez@marquesvl.com"
-                    className="hover:text-light-green duration-200 font-medium"
-                  >
-                    smartinez@marquesvl.com.
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="text-xs font-medium mb-3 col-span-2">
-              Con base en la información proporcionada, autorizo de manera
-              voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
-              datos personales, y en especial:
-            </div>
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+            <AuthorizationPersonalData />
+            
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -708,66 +638,9 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           </>
         ) : (
           <>
-            <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
-              <div className="prose-sm">
-                <div className="font-semibold text-center mb-5">
-                  AUTORIZACIÓN WEB PARA EL TRATAMIENTO DE DATOS PERSONALES
-                </div>
-                <p className="overflow-hidden">
-                  El <strong>VIÑEDO AIN KARIM S.A.S.</strong> (NIT. Nº
-                  860.010.706-4, calle 127 # 13a-32 Oficina 202 de Btá. y
-                  teléfono +57 601 258 9933) recolecta, almacena, usa,
-                  transfiere, transmite y en general trata manual o automatizada
-                  datos personales como Responsable de acuerdo con la{" "}
-                  <Link
-                    href="/politica-de-tratamiento-de-datos-personales"
-                    target="_blank"
-                    className="font-medium hover:text-light-green duration-200"
-                  >
-                    Política de Tratamiento de Datos Personales
-                  </Link>
-                  , disponible para su consulta{" "}
-                  <Link
-                    href="/politica-de-tratamiento-de-datos-personales"
-                    target="_blank"
-                    className="underline hover:text-light-green duration-200"
-                  >
-                    aquí
-                  </Link>
-                  . Le informamos que: Todo titular tiene derecho a: conocer,
-                  actualizar y rectificar su información personal; acceder de
-                  manera gratuita a la misma; ser informado sobre su uso;
-                  solicitar prueba de la autorización; acudir ante la
-                  Superintendencia de Industria y Comercio y presentar quejas
-                  por infracciones a lo dispuesto en la normatividad vigente; y
-                  en los casos procedentes, modificar y revocar la autorización
-                  y/o solicitar la supresión de sus datos personales. A su vez,
-                  le informamos que, es de carácter libre y facultativo entregar
-                  datos o responder a preguntas que versen sobre datos de
-                  carácter sensibles (Como datos biométricos, relacionados con
-                  la salud, o aquellos que afectan su intimidad o cuyo uso
-                  indebido pueda generar discriminación), y usted no esta
-                  obligado a otorgar su autorización.{" "}
-                  <strong>
-                    Para información relacionada con el tratamiento de sus datos
-                    personales y el ejercicio de su derecho de hábeas data,
-                    contáctenos al correo electrónico{" "}
-                  </strong>
-                  <a
-                    href="mailto:smartinez@marquesvl.com"
-                    className="hover:text-light-green duration-200 font-medium"
-                  >
-                    smartinez@marquesvl.com.
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="text-xs font-medium mb-3 col-span-2">
-              Con base en la información proporcionada, autorizo de manera
-              voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
-              datos personales, y en especial:
-            </div>
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+            <AuthorizationPersonalData />
+            
+            <div className="pretty-checkbox flex gap-2  items-center -text--light-gray col-span-2  ">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -778,7 +651,12 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   className="checkbox__input"
                 />
                 <span className="checkbox__label"></span>
-                <span htmlFor="terms" className="text-xs">
+                <span
+                  htmlFor="terms"
+                  className={`text-xs ${
+                    errors.terms ? "bg-red-200 py-2 px-1 rounded-lg" : ""
+                  }`}
+                >
                   Autorizo el tratamiento de mis datos de identificación y
                   contancto para emitir la factura electrónica y gestionar mi
                   pedido (lo que implica contacto a través de e-mail, teléfono,
@@ -789,11 +667,11 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               </label>
             </div>
             {errors.terms && (
-              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              <span className="text-sm mb-1 -mt-2 ml-4 text-red-600 pl-2 block">
                 {"Este campo es requerido"}
               </span>
             )}
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+            <div className="pretty-checkbox flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -814,11 +692,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               </label>
             </div>
-            {errors.marketing && (
-              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
-                {"Este campo es requerido"}
-              </span>
-            )}
           </>
         )}
       </form>

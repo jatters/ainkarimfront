@@ -4,6 +4,8 @@ import Link from "next/link";
 import style from "./PrettyCheckbox.css";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
+import AuthorizationPersonalData from "./AuthorizationPersonalData";
+
 
 export default function CheckoutForm({ showAddressFields, orderData }) {
   const {
@@ -441,334 +443,278 @@ export default function CheckoutForm({ showAddressFields, orderData }) {
           )}
         </div>
 
-        <div>
-          <label htmlFor="departament" className="sr-only">
-            Departamento
-          </label>
-          <input
-            type="text"
-            id="departament"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-              errors.departament ? "border-red-500!" : ""
-            }`}
-            placeholder="Departamento"
-            {...register("departament", {
-              required: {
-                value: true,
-                message: "El departamento es requerido",
-              },
-              minLength: {
-                value: 2,
-                message: "El departamento es muy corto",
-              },
-              pattern: {
-                value: /^[A-Za-zÀ-ÿ\s]+$/,
-                message: "El departamento no es válido",
-              },
-            })}
-          />
-          {errors.departament && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.departament.message}
-            </span>
-          )}
-        </div>
-        <div className="col-span-2">
-          <label htmlFor="address" className="sr-only">
-            Dirección
-          </label>
-          <input
-            type="text"
-            id="address"
-            className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-              errors.address ? "border-red-500!" : "border"
-            }`}
-            placeholder="Dirección"
-            {...register("address", {
-              required: {
-                value: true,
-                message: "La dirección es requerida",
-              },
-              minLength: {
-                value: 10,
-                message: "La dirección es muy corta",
-              },
-            })}
-          />
-          {errors.address && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.address.message}
-            </span>
-          )}
-        </div>
-        <div>
-          <div className="relative">
-            <label htmlFor="password" className="sr-only">
-              Contraseña
+          <div>
+            <label htmlFor="departament" className="sr-only">
+              Departamento
             </label>
             <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-                errors.password ? "border-red-500" : "border"
+              type="text"
+              id="departament"
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                errors.departament ? "!border-red-500" : ""
               }`}
-              placeholder="Crea tu contraseña"
-              {...register("password", {
+              placeholder="Departamento"
+              {...register("departament", {
                 required: {
                   value: true,
-                  message: "La contraseña es requerida",
+                  message: "El departamento es requerido",
                 },
                 minLength: {
-                  value: 8,
-                  message: "La contraseña debe tener al menos 8 caracteres",
+                  value: 2,
+                  message: "El departamento es muy corto",
                 },
                 pattern: {
-                  value: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-                  message:
-                    "Debe incluir al menos una mayúscula, un número y un carácter especial",
+                  value: /^[A-Za-zÀ-ÿ\s]+$/,
+                  message: "El departamento no es válido",
                 },
               })}
             />
-            <Tooltip
-              title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-              slotProps={{
-                popper: {
-                  sx: {
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginTop: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginBottom: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginLeft: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginRight: "0px",
-                      },
-                  },
-                },
-              }}
-            >
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-              >
-                {showPassword ? (
-                  <span
-                    className="icon-[ri--eye-close-line]"
-                    role="img"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <span
-                    className="icon-[bi--eye]"
-                    role="img"
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
-            </Tooltip>
+            {errors.departament && (
+              <span className="text-sm text-red-600 mt-2 pl-1 block">
+                {errors.departament.message}
+              </span>
+            )}
           </div>
-          {errors.password && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.password.message}
-            </span>
-          )}
-        </div>
-        <div>
-          <div className="relative">
-            <label htmlFor="confirmPassword" className="sr-only">
-              Confirmar Contraseña
+          <div className="col-span-2">
+            <label htmlFor="address" className="sr-only">
+              Dirección
             </label>
             <input
-              type={showConfirmPassword ? "text" : "password"}
-              id="confirmPassword"
-              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-                errors.confirmPassword ? "border-red-500" : "border"
+              type="text"
+              id="address"
+              className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                errors.address ? "!border-red-500" : "border"
               }`}
-              placeholder="Confirma tu contraseña"
-              {...register("confirmPassword", {
+              placeholder="Dirección"
+              {...register("address", {
                 required: {
                   value: true,
-                  message: "Debes confirmar tu contraseña",
+                  message: "La dirección es requerida",
                 },
-                validate: (value) =>
-                  value === password || "Las contraseñas no coinciden",
+                minLength: {
+                  value: 10,
+                  message: "La dirección es muy corta",
+                },
               })}
             />
-            <Tooltip
-              title={
-                showConfirmPassword
-                  ? "Ocultar contraseña"
-                  : "Mostrar contraseña"
-              }
-              slotProps={{
-                popper: {
-                  sx: {
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginTop: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginBottom: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginLeft: "0px",
-                      },
-                    [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                      {
-                        marginRight: "0px",
-                      },
-                  },
-                },
-              }}
-            >
-              <button
-                type="button"
-                onClick={toggleConfirmPasswordVisibility}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-              >
-                {showConfirmPassword ? (
-                  <span
-                    className="icon-[ri--eye-close-line]"
-                    role="img"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <span
-                    className="icon-[bi--eye]"
-                    role="img"
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
-            </Tooltip>
+            {errors.address && (
+              <span className="text-sm text-red-600 mt-2 pl-1 block">
+                {errors.address.message}
+              </span>
+            )}
           </div>
-          {errors.confirmPassword && (
-            <span className="text-sm text-red-600 mt-2 pl-1 block">
-              {errors.confirmPassword.message}
+          <div>
+            <div className="relative">
+              <label htmlFor="password" className="sr-only">
+                Contraseña
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.password ? "border-red-500" : "border"
+                }`}
+                placeholder="Crea tu contraseña"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es requerida",
+                  },
+                  minLength: {
+                    value: 8,
+                    message: "La contraseña debe tener al menos 8 caracteres",
+                  },
+                  pattern: {
+                    value: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+                    message:
+                      "Debe incluir al menos una mayúscula, un número y un carácter especial",
+                  },
+                })}
+              />
+              <Tooltip
+                title={
+                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                }
+                slotProps={{
+                  popper: {
+                    sx: {
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginTop: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginBottom: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginLeft: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginRight: "0px",
+                        },
+                    },
+                  },
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                  {showPassword ? (
+                    <span
+                      className="icon-[ri--eye-close-line]"
+                      role="img"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <span
+                      className="icon-[bi--eye]"
+                      role="img"
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+              </Tooltip>
+            </div>
+            {errors.password && (
+              <span className="text-sm text-red-600 mt-2 pl-1 block">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <div className="relative">
+              <label htmlFor="confirmPassword" className="sr-only">
+                Confirmar Contraseña
+              </label>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
+                  errors.confirmPassword ? "border-red-500" : "border"
+                }`}
+                placeholder="Confirma tu contraseña"
+                {...register("confirmPassword", {
+                  required: {
+                    value: true,
+                    message: "Debes confirmar tu contraseña",
+                  },
+                  validate: (value) =>
+                    value === password || "Las contraseñas no coinciden",
+                })}
+              />
+              <Tooltip
+                title={
+                  showConfirmPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+                slotProps={{
+                  popper: {
+                    sx: {
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginTop: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginBottom: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginLeft: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginRight: "0px",
+                        },
+                    },
+                  },
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                  {showConfirmPassword ? (
+                    <span
+                      className="icon-[ri--eye-close-line]"
+                      role="img"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <span
+                      className="icon-[bi--eye]"
+                      role="img"
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+              </Tooltip>
+            </div>
+            {errors.confirmPassword && (
+              <span className="text-sm text-red-600 mt-2 pl-1 block">
+                {errors.confirmPassword.message}
+              </span>
+            )}
+          </div>
+          <AuthorizationPersonalData />          
+          <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <label className="checkbox flex items-center gap-1">
+              <input
+                type="checkbox"
+                id="terms"
+                {...register("terms", {
+                  required: true,
+                })}
+                className="checkbox__input"
+              />
+              <span className="checkbox__label"></span>
+              <span htmlFor="terms" className="text-xs">
+                Autorizo el tratamiento de mis datos de identificación y
+                contacto para; crear una cuenta personal que permita gestionar
+                mis reservas y/o pedidos; administrar mis direcciones de envío y
+                facturación; enviar comunicaciones vía e-mail relacionadas con
+                mi cuenta, reservas y/o pedidos; y gestionar la contraseña de mi
+                cuenta y su recuperación en caso de perdida.
+              </span>
+            </label>
+          </div>
+          {errors.terms && (
+            <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              {"Este campo es requerido"}
             </span>
           )}
-        </div>
-        <div className="max-h-20 overflow-y-auto text-sm mb-4 border p-4 rounded-md col-span-2">
-          <div className="space-y-3">
-            <div className="font-semibold mb-5 text-center">
-              AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
-            </div>
-            <p className="overflow-hidden">
-              El <strong>VIÑEDO AIN KARIM S.A.S.</strong> (NIT. Nº
-              860.010.706-4, calle 127 # 13a-32 Oficina 202 de Btá. y teléfono
-              +57 601 258 9933) recolecta, almacena, usa, transfiere, transmite
-              y en general trata manual o automatizada datos personales como
-              Responsable de acuerdo con la{" "}
-              <Link
-                href="/politica-de-tratamiento-de-datos-personales"
-                target="_blank"
-                rel="noopener"
-                className="font-medium hover:text-light-green duration-200"
-              >
-                Política de Tratamiento de Datos Personales
-              </Link>
-              , disponible para su consulta{" "}
-              <Link
-                href="/politica-de-tratamiento-de-datos-personales"
-                target="_blank"
-                rel="noopener"
-                className="underline hover:text-light-green duration-200"
-              >
-                aquí
-              </Link>
-              . Le informamos que: Todo titular tiene derecho a: conocer,
-              actualizar y rectificar su información personal; acceder de manera
-              gratuita a la misma; ser informado sobre su uso; solicitar prueba
-              de la autorización; acudir ante la Superintendencia de Industria y
-              Comercio y presentar quejas por infracciones a lo dispuesto en la
-              normatividad vigente; y en los casos procedentes, modificar y
-              revocar la autorización y/o solicitar la supresión de sus datos
-              personales. A su vez, le informamos que, es de carácter libre y
-              facultativo entregar datos o responder a preguntas que versen
-              sobre datos de carácter sensibles (Como datos biométricos,
-              relacionados con la salud, o aquellos que afectan su intimidad o
-              cuyo uso indebido pueda generar discriminación), y usted no esta
-              obligado a otorgar su autorización.{" "}
-              <strong>
-                Para información relacionada con el tratamiento de sus datos
-                personales y el ejercicio de su derecho de hábeas data,
-                contáctenos al correo electrónico{" "}
-              </strong>
-              <a
-                href="mailto:smartinez@marquesvl.com"
-                className="hover:text-light-green duration-200 font-medium"
-              >
-                smartinez@marquesvl.com.
-              </a>
-            </p>
+
+          <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+            <label className="checkbox flex items-center gap-1">
+              <input
+                type="checkbox"
+                id="marketing"
+                {...register("marketing", {
+                  required: false,
+                })}
+                className="checkbox__input"
+              />
+              <span className="checkbox__label"></span>
+              <span htmlFor="marketing" className="text-xs">
+                Autorizo el tratamiento de mis datos de contacto para informarme
+                de ofertas y lanzamientos exclusivos; invitarme a eventos y en
+                general realizar actos de marketing y/o publicidad por contacto
+                a través de e-mail, teléfono, y/o mensajería instantánea.{" "}
+                <span className="italic font-medium">(Opcional)</span>
+              </span>
+            </label>
           </div>
-        </div>
-        <div className="text-xs font-medium mb-3 col-span-2">
-          Con base en la información proporcionada, autorizo de manera
-          voluntaria, previa, expresa e informada al VIÑEDO para tratar mis
-          datos personales, y en especial:
-        </div>
-        <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
-          <label className="checkbox flex items-center gap-1">
-            <input
-              type="checkbox"
-              id="terms"
-              {...register("terms", {
-                required: true,
-              })}
-              className="checkbox__input"
-            />
-            <span className="checkbox__label"></span>
-            <span htmlFor="terms" className="text-xs">
-              Autorizo el tratamiento de mis datos de identificación y contacto
-              para; crear una cuenta personal que permita gestionar mis reservas
-              y/o pedidos; administrar mis direcciones de envío y facturación;
-              enviar comunicaciones vía e-mail relacionadas con mi cuenta,
-              reservas y/o pedidos; y gestionar la contraseña de mi cuenta y su
-              recuperación en caso de perdida.
+          {errors.marketing && (
+            <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              {"Este campo es requerido"}
             </span>
-          </label>
-        </div>
-        {errors.terms && (
-          <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
-            {"Este campo es requerido"}
-          </span>
-        )}
-        <div className="pretty-checkbox mb-3 flex gap-2  items-center col-span-2">
-          <label className="checkbox flex items-center gap-1">
-            <input
-              type="checkbox"
-              id="marketing"
-              {...register("marketing", {
-                required: false,
-              })}
-              className="checkbox__input"
-            />
-            <span className="checkbox__label"></span>
-            <span htmlFor="marketing" className="text-xs">
-              Autorizo el tratamiento de mis datos de contacto para informarme
-              de ofertas y lanzamientos exclusivos; invitarme a eventos y en
-              general realizar actos de marketing y/o publicidad por contacto a
-              través de e-mail, teléfono, y/o mensajería instantánea.{" "}
-              <span className="italic font-medium">(Opcional)</span>
-            </span>
-          </label>
-        </div>
-        {errors.marketing && (
-          <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
-            {"Este campo es requerido"}
-          </span>
-        )}
+          )}
 
         <div className="mb-6 col-span-2">
           <button

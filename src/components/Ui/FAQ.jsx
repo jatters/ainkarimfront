@@ -3,11 +3,11 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { GetFaqs } from "../GetContentApi";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import { getStrapiData } from "@/lib/strapi";
 
 export default async function FAQ() {
-  const faqs = await GetFaqs();
+  const faqs = await getStrapiData("faqs?fields[0]=title&fields[1]=asnwer");
   if (!faqs) {
     console.error("Error fetching FAQS");
     return <div>Error cargando preguntas frecuentes</div>;

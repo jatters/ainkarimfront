@@ -8,6 +8,12 @@ import CouponInput from "@/components/Ecommerce/CouponInput";
 import Image from "next/image";
 import logoMercadoPago from "../../../public/logo-mercado-pago.svg";
 import Link from "next/link";
+import UserProfile from "@/components/Ecommerce/UserProfile";
+import useAuth from "@/app/hooks/useAuth";
+import userlogin from "../../../public/user-login.json";
+import LottieAnimation from "@/components/LotttieAnimation";
+import EmptyCart from "@/components/Ecommerce/Cart/EmptyCart";
+import { useForm } from "react-hook-form";
 
 const formatPrice = (value) =>
   `$${Number(value).toLocaleString("es-CO", {
@@ -17,13 +23,77 @@ const formatPrice = (value) =>
 
 export default function PaymentPage() {
   const { cart, removeFromCart, coupon } = useContext(CartContext);
+  const { user: authUser, loading: authLoading } = useAuth();
+
+  const [updatedUser, setUpdatedUser] = useState(null);
+
+  const [login, setLogin] = useState(false);
+  const { register, handleSubmit } = useForm();
+
   const [formState, setFormState] = useState({
     isValid: false,
     formData: {},
     triggerValidation: () => {},
   });
+
+  const visibleUser = updatedUser || authUser;
+
+  const handleFormChange = ({ isValid, formData, triggerValidation }) => {
+    setFormState({ isValid, formData, triggerValidation });
+  };
+
+  const handleUserUpdate = (partialFields) => {
+    // fusiona con lo que tengamos (authUser o updatedUser)
+    setUpdatedUser((prev) => {
+      const base = prev || authUser || {};
+      return { ...base, ...partialFields };
+    });
+
+    // mantiene sincronizado el "formData" para el botón de pago
+    setFormState((f) => ({
+      ...f,
+      formData: {
+        ...f.formData,
+        mobiletwo: partialFields.mobile ?? f.formData.mobiletwo,
+        city: partialFields.city ?? f.formData.city,
+        address: partialFields.address ?? f.formData.address,
+        marketing:
+          partialFields.allowMarketing ?? f.formData.marketing,
+        email: partialFields.email ?? f.formData.email,
+      },
+      isValid: true,
+    }));
+  };
+
+  const calculateSubtotal = (item) => {
+    const price = parseFloat(item.Precio || item.price || 0);
+    const additional = item.additionalService
+      ? parseFloat(item.additionalService.price || 0)
+      : 0;
+    const quantity = item.reservationData?.persons || item.quantity || 1;
+    return (price + additional) * quantity;
+  };
+
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
+
+  const effectiveFormValid = authUser ? true : formState.isValid;
+  const effectiveFormData = visibleUser
+    ? {
+        // Mapea sólo los campos que el checkout necesita (mínimo email)
+        firstName: visibleUser.firstName,
+        middleName: visibleUser.middleName,
+        lastName: visibleUser.lastName,
+        secondLastName: visibleUser.secondLastName,
+        documentType: visibleUser.documentType,
+        document: visibleUser.document,
+        mobiletwo: visibleUser.mobile,
+        city: visibleUser.city,
+        address: visibleUser.address,
+        marketing: visibleUser.allowMarketing,
+        email: visibleUser.email,
+      }
+    : formState.formData;
 
   const calculateProductDiscount = (cart, coupon, rate) => {
     if (!coupon || coupon.appliesTo !== "Productos") return 0;
@@ -39,25 +109,6 @@ export default function PaymentPage() {
         (sum, item) => sum + parseFloat(item.price) * item.quantity * rate,
         0
       );
-  };
-
-  /* const calculateSubtotal = (item) => {
-    const price = parseFloat(item.Precio || item.price || 0);
-    const additional = item.additionalService
-      ? parseFloat(item.additionalService.price || 0)
-      : 0;
-    const quantity = item.reservationData?.persons || item.quantity || 1;
-    return (price + additional) * quantity;
-  }; */
-
-  // Subtotal, descuento y total memorizados
-  const calculateSubtotal = (item) => {
-    const price = parseFloat(item.Precio || item.price || 0);
-    const additional = item.additionalService
-      ? parseFloat(item.additionalService.price || 0)
-      : 0;
-    const quantity = item.reservationData?.persons || item.quantity || 1;
-    return (price + additional) * quantity;
   };
 
   // Subtotales
@@ -86,22 +137,6 @@ export default function PaymentPage() {
     1
   );
 
-  // Descuento según tipo de cupón
-  /*   let discount = 0;
-  if (coupon) {
-    switch (coupon.appliesTo) {
-      case "Productos":
-        discount = subtotalProductos * rate;
-        break;
-      case "Reservas":
-        discount = subtotalReservas * rate;
-        break;
-      case "Valor total del carrito":
-      default:
-        discount = subtotalTotal * rate;
-        break;
-    }
-  } */
   const discount = useMemo(() => {
     if (!coupon) return 0;
     if (coupon.appliesTo === "Productos") {
@@ -138,13 +173,6 @@ export default function PaymentPage() {
     return subtotalItem * rate;
   };
 
-  /* const discount = useMemo(
-    () => (coupon ? (subtotal * coupon.percent) / 100 : 0),
-    [coupon, subtotal]
-  );
-  const total = subtotal - discount; */
-
-  // Mapea datos de pedido para Mercado Pago
   const orderData = useMemo(
     () =>
       cart.map((item) => ({
@@ -162,13 +190,13 @@ export default function PaymentPage() {
     [cart]
   );
 
-  const handleFormChange = ({ isValid, formData, triggerValidation }) => {
+  /* const handleFormChange = ({ isValid, formData, triggerValidation }) => {
     setFormState({ isValid, formData, triggerValidation });
     setError("");
-  };
+  }; */
 
   const onError = (message) => setError(message);
-
+  /* 
   const processOrder = async () => {
     try {
       const data = formState.formData;
@@ -234,7 +262,57 @@ export default function PaymentPage() {
       onError(error.message || "Error en el registro de usuario");
       throw error;
     }
+  }; */
+
+  // onBeforePayment: si authUser existe, actualizamos teléfono/dirección/ciudad/marketing
+  const processOrder = async () => {
+    const data = visibleUser ? effectiveFormData : formState.formData;
+    const customerData = {
+      firstName: visibleUser?.firstName || data.firstName?.toUpperCase(),
+      middleName:
+        visibleUser?.middleName || data.secondName?.toUpperCase() || "",
+      lastName: visibleUser?.lastName || data.lastname?.toUpperCase(),
+      secondLastName:
+        visibleUser?.secondLastName ||
+        data.secondSurname?.toUpperCase() ||
+        "",
+      documentType: visibleUser?.documentType || data.documentType,
+      document: visibleUser?.document || data.document,
+      mobile: data.mobiletwo,
+      city: data.city,
+      address: data.address,
+      allowMarketing: data.marketing,
+      email: visibleUser?.email || data.email,
+      confirmed: !!visibleUser,
+    };
+
+    if (visibleUser) {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/${visibleUser.id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+          },
+          body: JSON.stringify({
+            mobile: customerData.mobile,
+            city: customerData.city,
+            address: customerData.address,
+            allowMarketing: customerData.allowMarketing,
+            email: customerData.email,
+          }),
+        }
+      );
+    }
+
+    return customerData;
   };
+
+  if (!cart.length) {
+    return <EmptyCart />;
+  }
 
   return (
     <>
@@ -250,10 +328,82 @@ export default function PaymentPage() {
               <h1 className="font-bold text-2xl lg:text-4xl text-dark-green mb-8">
                 Finaliza tu compra
               </h1>
-              <CheckoutForm
-                showAddressFields={cart.some((item) => !item.reservationData)}
-                onFormChange={handleFormChange}
-              />
+              {authLoading ? (
+                <div className="text-center flex flex-col items-center justify-center h-full">
+                  <LottieAnimation
+                    animationData={userlogin}
+                    loop={true}
+                    className="w-20 h-20"
+                  />
+                  <p className="text-sm text-gray-600 mt-2">
+                    Cargando información de usuario…
+                  </p>
+                </div>
+              ) : authUser ? (
+                <UserProfile
+                  user={visibleUser}
+                  onUserUpdate={handleUserUpdate}
+                  shippingAddress={cart.some((item) => !item.reservationData)}
+                />
+              ) : (
+                <>
+                  <div className=" text-slate-600 border border-gray-200 p-5 rounded-lg flex items-center gap-2">
+                    <div>
+                      <LottieAnimation
+                        animationData={userlogin}
+                        loop={false}
+                        className="w-20 h-20"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-semibold">¿Tienes una cuenta?</div>
+                      <p>Haz más rápido tus pagos iniciando sesión</p>
+
+                      {login ? (
+                        <div>
+                          <form className="flex flex-col gap-2 mt-5">
+                            <input
+                              type="text"
+                              {...register("username")}
+                              className="w-full border rounded px-3 py-2"
+                            />
+                            <input
+                              type="password"
+                              {...register("password")}
+                              className="w-full border rounded px-3 py-2"
+                            />
+                            <div className="flex items-center gap-2 mt-5">
+                              <button
+                                type="submit"
+                                className="bg-green-500 text-white px-3 py-1 rounded font-medium hover:bg-green-700 hover:scale-[1.03] active:scale-[0.97] duration-200"
+                              >
+                                Iniciar sesión
+                              </button>
+                              <button
+                                onClick={() => setLogin(false)}
+                                className="bg-red-500 text-white px-3 py-1 rounded font-medium hover:bg-red-700 hover:scale-[1.03] active:scale-[0.97] duration-200"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          </form>{" "}
+                        </div>
+                      ) : (
+                        <div className="mt-2 -text--light-green hover:-text--dark-green duration-200">
+                          <Link href="#" onClick={() => setLogin(true)}>
+                            Iniciar sesión
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <CheckoutForm
+                    showAddressFields={cart.some((i) => !i.reservationData)}
+                    onFormChange={handleFormChange}
+                  />
+                </>
+              )}
             </div>
 
             <div className="col-span-1 pt-5 border-t border-gray-200 bg-slate-100/80 p-5 border-2 rounded-xl">
@@ -322,10 +472,7 @@ export default function PaymentPage() {
                                 </span>
                               </div>
                             )}
-                            {/* <div className="text-gray-700 text-xs">
-                              <span className="font-semibold">Subtotal: </span>
-                              <span>{formatPrice(subtotalPrice)}</span>
-                            </div> */}
+
                             <div className="text-gray-700 text-xs">
                               <span className="font-semibold">Subtotal: </span>
                               <span>{formatPrice(subtotalPrice)}</span>
@@ -425,12 +572,12 @@ export default function PaymentPage() {
                 </div>
                 <CheckoutButton
                   orderData={orderData}
-                  formData={formState.formData}
-                  formValid={formState.isValid}
+                  formData={effectiveFormData}
+                  formValid={effectiveFormValid}
                   triggerValidation={formState.triggerValidation}
                   onBeforePayment={processOrder}
                   coupon={coupon}
-                  onError={onError}
+                  onError={(msg) => console.error(msg)}
                   discount={discount}
                   total={total}
                 />

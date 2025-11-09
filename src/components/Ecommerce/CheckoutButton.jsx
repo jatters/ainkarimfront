@@ -40,12 +40,18 @@ export default function CheckoutButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderData,
-          customer: formData,
+          //customer: formData,
+          customer: customerData,
           coupon,
           discount,
           total,
         }),
       });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`MP API error ${res.status}: ${text}`);
+      }
 
       const data = await res.json();
 
