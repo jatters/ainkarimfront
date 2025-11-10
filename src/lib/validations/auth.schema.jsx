@@ -7,20 +7,8 @@ const ACCEPTED_FILE_TYPES = [
   "image/jpg",
   "image/png",
 ];
-/* const fileValidation = z
-  .any()
-  .refine((files) => files && files.length > 0, {
-    message: "Debes adjuntar un archivo",
-  })
-  .refine(
-    (files) => ACCEPTED_FILE_TYPES.includes(files[0]?.type),
-    "Solo se permiten archivos PDF o imágenes (JPG, PNG)"
-  )
-  .refine(
-    (files) => files[0]?.size <= MAX_FILE_SIZE,
-    "El archivo no debe superar los 10 MB"
-  ); */
-  const fileValidation = z
+
+const fileValidation = z
   .instanceof(File)
   .refine((file) => file.size <= MAX_FILE_SIZE, {
     message: "El archivo no debe superar los 10 MB",
@@ -43,9 +31,13 @@ export const AgencySchema = z
       .string()
       .min(5, "La ciudad debe tener al menos 5 caracteres")
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "La ciudad no es válida"),
-    AgencyAddress: z.string().min(5, "La dirección debe tener al menos 5 caracteres"),
+    AgencyAddress: z
+      .string()
+      .min(5, "La dirección debe tener al menos 5 caracteres"),
     AgencyEmail: z.email("El correo no es válido"),
-    AgencyPhone: z.string().regex(/^[0-9]{7,10}$/, "El teléfono debe tener al menos 7 caracteres"),
+    AgencyPhone: z
+      .string()
+      .regex(/^[0-9]{7,10}$/, "El teléfono debe tener al menos 7 caracteres"),
     AgencyNIT: z
       .string()
       .regex(/^[0-9\-]+$/, "NIT inválido")
@@ -64,10 +56,10 @@ export const AgencySchema = z
     AgencyContactLastName: z
       .string()
       .min(3, "El apellido debe tener al menos 3 caracteres")
-      .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El apellido no es válido"), 
+      .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El apellido no es válido"),
     AgencyRUT: fileValidation.optional(),
     AgencyCommerce: fileValidation.optional(),
-    AgencyTourismRegister: fileValidation.optional(),   
+    AgencyTourismRegister: fileValidation.optional(),
     password: z
       .string()
       .min(8, "La contraseña debe tener al menos 8 caracteres"),

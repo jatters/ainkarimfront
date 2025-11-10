@@ -12,7 +12,7 @@ export async function GET(req) {
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me?populate=*`,
     {
       method: "GET",
       headers: {

@@ -136,7 +136,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/registro-agencias"
-                  className="hover:-text--light-green duration-200"
+                  className="hover:text-light-green duration-200"
                 >
                   Registro de agencias
                 </Link>

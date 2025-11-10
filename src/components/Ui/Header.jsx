@@ -157,9 +157,7 @@ export default function Header() {
           <Image
             src={logo}
             alt="Logo Ain Karim"
-            width={160}
-            height={36}
-            className="invert h-10 w-40"
+            className="invert w-40 h-auto"
             priority={true}
           />
         </Link>
@@ -179,10 +177,8 @@ export default function Header() {
           <Image
             src={logo}
             alt="Logo Ain Karim"
-            width={256}
-            height={56}
             className={`invert transition-all duration-200 ${
-              scrolled ? "h-12 w-44" : "h-[59px] lg:w-52 xl:w-64"
+              scrolled ? "w-44 h-auto" : "h-auto lg:w-52 xl:w-64"
             }`}
             priority={true}
           />

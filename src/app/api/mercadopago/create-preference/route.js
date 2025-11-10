@@ -46,7 +46,13 @@ async function getProductConnection(documentId) {
 
 export async function POST(req) {
   try {
-    const { orderData, customer, coupon } = await req.json();
+    const {
+      orderData,
+      customer,
+      coupon,
+      agencyDiscount = 0,
+      agencyDiscountPercent = 0,
+    } = await req.json();
 
     if (!orderData || orderData.length === 0) {
       return NextResponse.json(
@@ -80,6 +86,7 @@ export async function POST(req) {
 
     const totalPriceOrder = subtotalProducts + subtotalReservations;
 
+    
     /*  let discountValue = 0;
     if (coupon && coupon.percent) {
       switch (coupon.appliesTo) {
@@ -119,7 +126,8 @@ export async function POST(req) {
       }
     }
 
-    const finalTotalPriceOrder = totalPriceOrder - discountValue;
+    const finalTotalPriceOrder =
+      totalPriceOrder - discountValue - agencyDiscount;
 
     const hasOrderProducts = orderData.some((item) => !item.isReservation);
     const hasReservations = orderData.some((item) => item.isReservation);
@@ -281,6 +289,18 @@ export async function POST(req) {
         unit_price: -discountValue,
       });
     }
+    if (agencyDiscount > 0) {
+      mpItems.push({
+        id: "agency-discount",
+        title: "Descuento de agencia",
+        description: `Descuento especial del ${agencyDiscountPercent}% aplicado a reservas`,
+        picture_url: "https://via.placeholder.com/150",
+        category_id: "discount",
+        quantity: 1,
+        currency_id: "COP",
+        unit_price: -agencyDiscount,
+      });
+    }
 
     const additionalInfo = orderData
       .map((item) => `${item.quantity}x ${item.title || item.name}`)
@@ -388,7 +408,8 @@ export async function POST(req) {
             customerName: customer.firstName.toUpperCase(),
             customerMiddleName: customer.middleName?.toUpperCase() || "",
             customerLastname: customer.lastName.toUpperCase(),
-            customerSecondLastname: customer.secondLastName?.toUpperCase() || "",
+            customerSecondLastname:
+              customer.secondLastName?.toUpperCase() || "",
             customerDocumentType: customer.documentType,
             customerDocument: customer.document,
             customerEmail: customer.email,

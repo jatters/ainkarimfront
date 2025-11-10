@@ -79,7 +79,9 @@ export default function ProductCard({ product }) {
 
   const baseurl = process.env.NEXT_PUBLIC_SITE_URL;
   const categoryName = categorias_de_producto?.name || "Vinos";
-  const imageUrl = image?.formats?.small?.url ? `${baseurl}${image.formats.small.url}` : "/placeholder.png";
+  const imageUrl = image?.formats?.small?.url
+    ? `${baseurl}${image.formats.small.url}`
+    : "/placeholder.png";
   const altText = image?.alternativeText || `Producto ${title}`;
   const parsedRegularPrice = parseInt(regularPrice, 10);
   const parsedPrice = parseInt(price, 10);
@@ -88,7 +90,7 @@ export default function ProductCard({ product }) {
   // --- MANEJADORES DE EVENTOS ---
   const handleAddToCart = () => {
     if (outOfStock || (isVariable && !selectedVariation)) return;
-    
+
     const cartItem = normalizeProductForCart(product, selectedVariation);
     addToCart(cartItem);
 
@@ -117,7 +119,9 @@ export default function ProductCard({ product }) {
       url: `${baseurl}/producto/${slug}`,
       priceCurrency: "COP",
       price: isOnSale ? parsedPrice : parsedRegularPrice,
-      availability: isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      availability: isActive
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: "Viñedo Ain Karim" },
     },
@@ -138,47 +142,55 @@ export default function ProductCard({ product }) {
         itemScope
         itemType="https://schema.org/Product"
       >
-        {/* Badge de Oferta (Unificado para mobile y desktop) */}
         {isOnSale && (
           <div className="absolute top-2 left-2 z-10 rounded-full bg-red-600 px-2 py-1 text-[10px] font-bold text-white sm:px-3 sm:py-2 sm:text-xs">
             OFERTA
           </div>
         )}
 
-        {/* Columna de la Imagen */}        
         <div className="relative aspect-square w-32 shrink-0 overflow-hidden lg:rounded-tl-lg sm:w-full sm:rounded-t-lg border-b border-gray-100">
-          <Link href={`/producto/${slug}`}>
+          <Link href={`/producto/${slug}`} className="relative h-full w-full block">
             <Image
               src={imageUrl}
-              fill // Usar 'fill' es más moderno y se adapta mejor al contenedor
+              fill
               alt={altText}
-              className="object-cover duration-200 group-hover:scale-110" // Cambiado a object-cover y sin clases de redondeo
+              className="object-cover duration-200 group-hover:scale-110"
               itemProp="image"
-              sizes="(max-width: 640px) 128px, 370px" // Ayuda a Next.js a cargar la imagen óptima
+              sizes="(max-width: 640px) 128px, 370px"
             />
           </Link>
         </div>
 
-        {/* Columna de Contenido */}
         <div className="flex flex-1 flex-col p-2 sm:p-4 min-w-0 bg-white rounded-br-lg sm:rounded-b-lg">
-          
-          {/* Sección de Información (crece para ocupar espacio) */}
           <div className="grow">
-            <div className="text-xs uppercase text-slate-600" itemProp="category">
+            <div
+              className="text-xs uppercase text-slate-600"
+              itemProp="category"
+            >
               {categoryName}
             </div>
-            <h2 className="mt-1 font-semibold uppercase text-gray-800 duration-200 line-clamp-2 group-hover:text-green-800 sm:text-base" itemProp="name">
+            <h2
+              className="mt-1 font-semibold uppercase text-gray-800 duration-200 line-clamp-2 group-hover:text-green-800 sm:text-base"
+              itemProp="name"
+            >
               <Link href={`/producto/${slug}`}>{title}</Link>
             </h2>
 
-            {/* Precios */}
-            <div className="mt-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+            <div
+              className="mt-2"
+              itemProp="offers"
+              itemScope
+              itemType="https://schema.org/Offer"
+            >
               {isOnSale ? (
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm text-gray-500 line-through">
                     <FormatPrice price={parsedRegularPrice} />
                   </span>
-                  <span className="text-lg font-semibold text-green-800" itemProp="price">
+                  <span
+                    className="text-lg font-semibold text-green-800"
+                    itemProp="price"
+                  >
                     <FormatPrice price={parsedPrice} />
                   </span>
                 </div>
@@ -188,11 +200,15 @@ export default function ProductCard({ product }) {
                 </div>
               )}
               <meta itemProp="priceCurrency" content="COP" />
-              <meta itemProp="availability" content={isActive ? "InStock" : "OutOfStock"} />
+              <meta
+                itemProp="availability"
+                content={isActive ? "InStock" : "OutOfStock"}
+              />
             </div>
 
-            {/* Variaciones (Ahora visibles en mobile) */}
-            {isVariable && Array.isArray(variaciones) && variaciones.length > 0 && (
+            {isVariable &&
+              Array.isArray(variaciones) &&
+              variaciones.length > 0 && (
                 <div className="mt-2 flex min-w-0 gap-2 overflow-x-auto whitespace-nowrap pb-2">
                   {variaciones.map((variation) => (
                     <button
@@ -208,12 +224,10 @@ export default function ProductCard({ product }) {
                     </button>
                   ))}
                 </div>
-            )}
+              )}
           </div>
 
-          {/* Sección de Acciones (siempre al fondo gracias a mt-auto) */}
           <div className="mt-auto pt-2">
-            {/* Acciones para Desktop */}
             <div className="hidden gap-3 sm:flex">
               <Link
                 href={`/producto/${slug}`}
@@ -222,13 +236,27 @@ export default function ProductCard({ product }) {
               >
                 Ver
               </Link>
-              <Tooltip title={outOfStock ? "Producto agotado" : isVariable && !selectedVariation ? "Selecciona una variación" : ""} placement="top" arrow>
+              <Tooltip
+                title={
+                  outOfStock
+                    ? "Producto agotado"
+                    : isVariable && !selectedVariation
+                    ? "Selecciona una variación"
+                    : ""
+                }
+                placement="top"
+                arrow
+              >
                 <span>
                   <button
                     onClick={handleAddToCart}
                     disabled={(isVariable && !selectedVariation) || outOfStock}
                     className="flex flex-1 items-center justify-center rounded-md px-4 py-2 text-sm text-white transition-colors duration-200 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-600 bg-green-700 hover:bg-green-800"
-                    aria-label={isVariable && !selectedVariation ? "Selecciona una variación" : "Añadir al carrito"}
+                    aria-label={
+                      isVariable && !selectedVariation
+                        ? "Selecciona una variación"
+                        : "Añadir al carrito"
+                    }
                   >
                     {outOfStock ? "Agotado" : "Comprar"}
                   </button>
@@ -236,31 +264,46 @@ export default function ProductCard({ product }) {
               </Tooltip>
             </div>
 
-            {/* Acciones para Mobile */}
             <div className="flex items-center justify-between sm:hidden">
-                {outOfStock ? (
-                  <div className="rounded-sm bg-gray-500 px-3 py-2 text-xs font-bold text-white">
-                    Agotado
-                  </div>
-                ) : (
-                  <>
-                    <Link href={`/producto/${slug}`} className="rounded-sm border border-green-800 p-2 text-green-800" aria-label={`Ver producto ${title}`}>
-                      <span className="icon-[hugeicons--view] text-lg" />
-                    </Link>
-                    <Tooltip title={isVariable && !selectedVariation ? "Selecciona una variación" : ""} placement="top" arrow>
-                        <span>
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={isVariable && !selectedVariation}
-                                className="flex items-center gap-1 rounded-md bg-green-700 px-3 py-2 text-sm text-white transition-colors duration-200 disabled:cursor-not-allowed disabled:bg-gray-400"
-                                aria-label={isVariable && !selectedVariation ? "Selecciona una variación" : "Añadir al carrito"}
-                            >
-                                <span className="icon-[zmdi--shopping-cart-plus] text-lg" />
-                            </button>
-                        </span>
-                    </Tooltip>
-                  </>
-                )}
+              {outOfStock ? (
+                <div className="rounded-sm bg-gray-500 px-3 py-2 text-xs font-bold text-white">
+                  Agotado
+                </div>
+              ) : (
+                <>
+                  <Link
+                    href={`/producto/${slug}`}
+                    className="rounded-sm border border-green-800 p-2 text-green-800"
+                    aria-label={`Ver producto ${title}`}
+                  >
+                    <span className="icon-[hugeicons--view] text-lg" />
+                  </Link>
+                  <Tooltip
+                    title={
+                      isVariable && !selectedVariation
+                        ? "Selecciona una variación"
+                        : ""
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <span>
+                      <button
+                        onClick={handleAddToCart}
+                        disabled={isVariable && !selectedVariation}
+                        className="flex items-center gap-1 rounded-md bg-green-700 px-3 py-2 text-sm text-white transition-colors duration-200 disabled:cursor-not-allowed disabled:bg-gray-400"
+                        aria-label={
+                          isVariable && !selectedVariation
+                            ? "Selecciona una variación"
+                            : "Añadir al carrito"
+                        }
+                      >
+                        <span className="icon-[zmdi--shopping-cart-plus] text-lg" />
+                      </button>
+                    </span>
+                  </Tooltip>
+                </>
+              )}
             </div>
           </div>
         </div>

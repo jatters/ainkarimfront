@@ -12,6 +12,8 @@ export default function CheckoutButton({
   onBeforePayment,
   coupon,
   discount,
+  agencyDiscount,
+  agencyDiscountPercent,
   total,
 }) {
   const [loading, setLoading] = useState(false);
@@ -44,6 +46,8 @@ export default function CheckoutButton({
           customer: customerData,
           coupon,
           discount,
+          agencyDiscount, 
+          agencyDiscountPercent,
           total,
         }),
       });

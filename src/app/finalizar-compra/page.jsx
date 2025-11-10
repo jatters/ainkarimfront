@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext, useState, useMemo, useEffect } from "react";
 import CheckoutForm from "@/components/Forms/CheckoutForm";
 import { CartContext } from "@/context/CartContext";
 import CheckoutButton from "@/components/Ecommerce/CheckoutButton";
@@ -14,6 +14,7 @@ import userlogin from "../../../public/user-login.json";
 import LottieAnimation from "@/components/LotttieAnimation";
 import EmptyCart from "@/components/Ecommerce/Cart/EmptyCart";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 const formatPrice = (value) =>
   `$${Number(value).toLocaleString("es-CO", {
@@ -23,7 +24,7 @@ const formatPrice = (value) =>
 
 export default function PaymentPage() {
   const { cart, removeFromCart, coupon } = useContext(CartContext);
-  const { user: authUser, loading: authLoading } = useAuth();
+  const { user: authUser, loading: authLoading, setUser } = useAuth();
 
   const [updatedUser, setUpdatedUser] = useState(null);
 
@@ -36,7 +37,50 @@ export default function PaymentPage() {
     triggerValidation: () => {},
   });
 
+  const router = useRouter();
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  const onSubmitLogin = async (formData) => {
+    setLoginLoading(true);
+    setLoginError("");
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.username,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Correo o contraseña incorrectos");
+
+      // obtener usuario actualizado inmediatamente
+      const userResponse = await fetch("/api/auth/me", {
+        credentials: "include",
+      });
+      if (!userResponse.ok) throw new Error("No se pudo obtener usuario");
+      const userData = await userResponse.json();
+
+      setUser(userData);
+      setLogin(false);
+    } catch (error) {
+      console.error("Error en el login:", error);
+      setLoginError(error.message);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log("authUser actualizado:", authUser);
+  }, [authUser]);
   const visibleUser = updatedUser || authUser;
+  const isAgency = visibleUser?.role?.name === "Agencia";
+  const AgencyDiscount = isAgency ? visibleUser?.authorizedDiscount || 0 : 0;
 
   const handleFormChange = ({ isValid, formData, triggerValidation }) => {
     setFormState({ isValid, formData, triggerValidation });
@@ -57,8 +101,7 @@ export default function PaymentPage() {
         mobiletwo: partialFields.mobile ?? f.formData.mobiletwo,
         city: partialFields.city ?? f.formData.city,
         address: partialFields.address ?? f.formData.address,
-        marketing:
-          partialFields.allowMarketing ?? f.formData.marketing,
+        marketing: partialFields.allowMarketing ?? f.formData.marketing,
         email: partialFields.email ?? f.formData.email,
       },
       isValid: true,
@@ -112,7 +155,7 @@ export default function PaymentPage() {
   };
 
   // Subtotales
-  const subtotalProductos = useMemo(
+  /*  const subtotalProductos = useMemo(
     () =>
       cart
         .filter((item) => !item.reservationData)
@@ -124,6 +167,31 @@ export default function PaymentPage() {
     () =>
       cart
         .filter((item) => item.reservationData)
+        .reduce((sum, item) => sum + calculateSubtotal(item), 0),
+        
+    [cart]
+  );
+
+  const subtotalTotal = subtotalProductos + subtotalReservas; */
+  const subtotalReservasBruto = useMemo(() => {
+    return cart
+      .filter((item) => item.reservationData)
+      .reduce((sum, item) => sum + calculateSubtotal(item), 0);
+  }, [cart]);
+
+  const agencyDiscountValue = useMemo(() => {
+    if (!isAgency) return 0;
+    return subtotalReservasBruto * (AgencyDiscount / 100);
+  }, [isAgency, subtotalReservasBruto, AgencyDiscount]);
+
+  const subtotalReservas = useMemo(() => {
+    return subtotalReservasBruto - agencyDiscountValue;
+  }, [subtotalReservasBruto, agencyDiscountValue]);
+
+  const subtotalProductos = useMemo(
+    () =>
+      cart
+        .filter((item) => !item.reservationData)
         .reduce((sum, item) => sum + calculateSubtotal(item), 0),
     [cart]
   );
@@ -144,6 +212,7 @@ export default function PaymentPage() {
     } else if (coupon.appliesTo === "Reservas") {
       return subtotalReservas * (coupon.percent / 100);
     }
+
     return subtotalTotal * (coupon.percent / 100);
   }, [coupon, cart, subtotalReservas, subtotalTotal]);
 
@@ -273,9 +342,7 @@ export default function PaymentPage() {
         visibleUser?.middleName || data.secondName?.toUpperCase() || "",
       lastName: visibleUser?.lastName || data.lastname?.toUpperCase(),
       secondLastName:
-        visibleUser?.secondLastName ||
-        data.secondSurname?.toUpperCase() ||
-        "",
+        visibleUser?.secondLastName || data.secondSurname?.toUpperCase() || "",
       documentType: visibleUser?.documentType || data.documentType,
       document: visibleUser?.document || data.document,
       mobile: data.mobiletwo,
@@ -361,32 +428,52 @@ export default function PaymentPage() {
 
                       {login ? (
                         <div>
-                          <form className="flex flex-col gap-2 mt-5">
+                          <form
+                            onSubmit={handleSubmit(onSubmitLogin)}
+                            className="flex flex-col gap-2 mt-5"
+                          >
                             <input
-                              type="text"
-                              {...register("username")}
+                              type="email"
+                              {...register("username", { required: true })}
+                              placeholder="Correo electrónico"
                               className="w-full border rounded px-3 py-2"
                             />
                             <input
                               type="password"
-                              {...register("password")}
+                              {...register("password", { required: true })}
+                              placeholder="Contraseña"
                               className="w-full border rounded px-3 py-2"
                             />
+
+                            {loginError && (
+                              <div className="text-red-600 text-sm mt-2">
+                                {loginError}
+                              </div>
+                            )}
+
                             <div className="flex items-center gap-2 mt-5">
                               <button
                                 type="submit"
-                                className="bg-green-500 text-white px-3 py-1 rounded font-medium hover:bg-green-700 hover:scale-[1.03] active:scale-[0.97] duration-200"
+                                disabled={loginLoading}
+                                className={`bg-green-500 text-white px-3 py-1 rounded font-medium hover:bg-green-700 hover:scale-[1.03] active:scale-[0.97] duration-200 ${
+                                  loginLoading
+                                    ? "opacity-70 cursor-not-allowed"
+                                    : ""
+                                }`}
                               >
-                                Iniciar sesión
+                                {loginLoading
+                                  ? "Iniciando..."
+                                  : "Iniciar sesión"}
                               </button>
                               <button
+                                type="button"
                                 onClick={() => setLogin(false)}
                                 className="bg-red-500 text-white px-3 py-1 rounded font-medium hover:bg-red-700 hover:scale-[1.03] active:scale-[0.97] duration-200"
                               >
                                 Cancelar
                               </button>
                             </div>
-                          </form>{" "}
+                          </form>
                         </div>
                       ) : (
                         <div className="mt-2 text-light-green hover:text-dark-green duration-200">
@@ -547,7 +634,21 @@ export default function PaymentPage() {
                         {formatPrice(subtotal)}
                       </div>
                     </div>
-                    <div className="grid grid-cols-4">
+                    {isAgency && (
+                      <div className="grid grid-cols-4 mt-5 text-gray-500">
+                        <div className="col-span-2">
+                          <div className="font-semibold">
+                            Descuento de agencia
+                          </div>
+                        </div>
+                        <div className="col-span-2 text-right ">
+                          {"-"}
+
+                          {formatPrice(agencyDiscountValue)}
+                        </div>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-4 mt-5 text-gray-700">
                       <div className="col-span-2">
                         <div className="font-semibold">Descuento</div>
                       </div>
@@ -556,6 +657,18 @@ export default function PaymentPage() {
 
                         {formatPrice(discount)}
                       </div>
+                    </div>
+                  </div>
+                )}
+                {isAgency && !coupon && (
+                  <div className="grid grid-cols-4 mt-5 text-gray-700">
+                    <div className="col-span-2">
+                      <div className="font-semibold">Descuento de agencia</div>
+                    </div>
+                    <div className="col-span-2 text-right ">
+                      {"-"}
+
+                      {formatPrice(agencyDiscountValue)}
                     </div>
                   </div>
                 )}
@@ -579,6 +692,8 @@ export default function PaymentPage() {
                   coupon={coupon}
                   onError={(msg) => console.error(msg)}
                   discount={discount}
+                  agencyDiscount={agencyDiscountValue}
+                  agencyDiscountPercent={AgencyDiscount}
                   total={total}
                 />
               </div>

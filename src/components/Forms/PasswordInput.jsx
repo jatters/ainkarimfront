@@ -1,6 +1,7 @@
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import FormError from "./FormError";
 
-export default function PasswordInput({ label, fieldName, showPassword, togglePasswordVisibility }) {
+export default function PasswordInput({ label, fieldName, showPassword, togglePasswordVisibility, disabled, defaultValue, error }) {
   return (
     <div className="col-span-2 md:col-span-1">
       <div className="relative">
@@ -11,8 +12,10 @@ export default function PasswordInput({ label, fieldName, showPassword, togglePa
           type={showPassword ? "text" : "password"}
           id={fieldName}
           name={fieldName}
-          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none `}
+          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${error ? "border-red-500" : ""}`}
           placeholder="Crea tu contraseña"          
+          disabled={disabled}
+          defaultValue={defaultValue}
         />
         <Tooltip
           title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
@@ -56,6 +59,7 @@ export default function PasswordInput({ label, fieldName, showPassword, togglePa
           </button>
         </Tooltip>
       </div>      
+      <FormError errors={error} />
     </div>
   );
 }

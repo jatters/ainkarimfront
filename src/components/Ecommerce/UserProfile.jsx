@@ -34,7 +34,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
     },
   });
 
-  // ⬇️ Sincroniza el formulario cuando cambie el user
+  //  Sincroniza el formulario cuando cambie el user
   useEffect(() => {
     reset({
       mobile: user.mobile || "",
@@ -75,7 +75,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
     }
     const data = await res.json();
 
-    // 🔁 Resetea el formulario con los valores devueltos
+    // Resetea el formulario con los valores devueltos
     reset({
       mobile: data.mobile ?? user.mobile ?? "",
       city: data.city ?? user.city ?? "",
@@ -85,7 +85,7 @@ export default function UserProfile({ user, onUserUpdate, shippingAddress }) {
       email: data.email ?? user.email ?? "",
     });
 
-    // 🔼 notifica al padre (PaymentPage) para overlay inmediato
+    // notifica al padre (PaymentPage) para overlay inmediato
     if (typeof onUserUpdate === "function") {
       onUserUpdate(data);
     }

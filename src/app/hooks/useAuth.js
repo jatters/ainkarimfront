@@ -33,5 +33,5 @@ export default function useAuth() {
     router.push("/iniciar-sesion");
   };
 
-  return { user, loading, logout };
+  return { user, loading, logout, setUser };
 }

@@ -274,34 +274,11 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         </div>
         {showAddressFields && (
           <>
-          <div>
-            <label htmlFor="city" className="sr-only">Ciudad</label>
-            <select name="city" id="city" {...register("city", {
-              required: {
-                value: true,
-                message: "Ciudad es requerida",
-              },
-            })} className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
-              errors.city ? "border-red-500!" : ""
-            }`}>
-              <option value="">Selecciona una ciudad</option>
-              <option value="Bogota">Bogota</option>
-              <option value="Bucaramanga">Bucaramanga</option>
-              <option value="Cajica">Cajica</option>
-              <option value="Cali">Cali</option>
-              <option value="Chia">Chía</option>
-              <option value="Medellin">Medellin</option>
-              <option value="Yopal">Yopal</option>
-              <option value="Zipaquirá">Zipaquira</option>
-            </select>
-            {errors.city && (
-              <span className="text-sm text-red-600 mt-2 pl-1 block">
-                {errors.city.message}
-              </span>
-            )}
-          </div>
-            {/* <div className="col-span-2  sm:col-span-1">
-              <label htmlFor="city" className="sr-only">
+            <div>
+              <label
+                htmlFor="city"
+                className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+              >
                 Ciudad
               </label>
               <select
@@ -313,22 +290,22 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                     message: "Ciudad es requerida",
                   },
                 })}
-                className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:-ring--light-green focus:outline-none ${
-                  errors.city ? "!border-red-500" : ""
+                className={`p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+                  errors.city ? "border-red-500!" : ""
                 }`}
               >
                 <option value="">Selecciona una ciudad</option>
-                <option value="Bogota">Bogotá</option>
+                <option value="Bogota">Bogota</option>
                 <option value="Bucaramanga">Bucaramanga</option>
-                <option value="Cajica">Cajicá</option>
+                <option value="Cajica">Cajica</option>
                 <option value="Cali">Cali</option>
                 <option value="Chia">Chía</option>
-                <option value="Medellin">Medellín</option>
+                <option value="Medellin">Medellin</option>
                 <option value="Yopal">Yopal</option>
                 <option value="Zipaquirá">Zipaquira</option>
               </select>
               {errors.city && (
-                <span className="text-sm text-red-600 mt-1 pl-1 block">
+                <span className="text-sm text-red-600 mt-2 pl-1 block">
                   {errors.city.message}
                 </span>
               )}
@@ -408,10 +385,13 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               className="checkbox__input"
             />
             <span className="checkbox__label"></span>
-            <span htmlFor="register" className="text-slate-600  -ml-2 -mt-[2px]">
+            <span
+              htmlFor="register"
+              className="text-slate-600  -ml-2 -mt-[2px]"
+            >
               ¿Quieres crear una cuenta?
             </span>
-          </label>         
+          </label>
         </div>
         {registerUser === true ? (
           <>
@@ -581,9 +561,34 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </span>
               )}
             </div>
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+              <label className="checkbox flex items-center">
+                <input
+                  type="checkbox"
+                  id="policy"
+                  {...register("policy", {
+                    required: true,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="policy" className="text-sm">
+                  He leído y Acepto los{" "}
+                  <Link href="/terminos-y-condiciones" target="_blank">
+                    Términos y Condiciones
+                  </Link>{" "}
+                  del servicio.
+                </span>
+              </label>
+            </div>
+            {errors.policy && (
+              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+                {"Este campo es requerido"}
+              </span>
+            )}
             <AuthorizationPersonalData />
-            
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center -text--light-gray col-span-2">
+
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -638,9 +643,34 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           </>
         ) : (
           <>
+            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+              <label className="checkbox flex items-center">
+                <input
+                  type="checkbox"
+                  id="policy"
+                  {...register("policy", {
+                    required: true,
+                  })}
+                  className="checkbox__input"
+                />
+                <span className="checkbox__label"></span>
+                <span htmlFor="policy" className="text-sm">
+                  He leído y Acepto los{" "}
+                  <Link href="/terminos-y-condiciones" target="_blank">
+                    Términos y Condiciones
+                  </Link>{" "}
+                  del servicio.
+                </span>
+              </label>
+            </div>
+            {errors.policy && (
+              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+                {"Este campo es requerido"}
+              </span>
+            )}
             <AuthorizationPersonalData />
-            
-            <div className="pretty-checkbox flex gap-2  items-center -text--light-gray col-span-2  ">
+
+            <div className="pretty-checkbox flex gap-2  items-center text-light-gray col-span-2  ">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"

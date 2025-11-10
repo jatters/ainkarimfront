@@ -1,11 +1,11 @@
-import React, { useState, useActionState } from "react";
+import React, { useState, useActionState, useEffect } from "react";
 import InputField from "@/components/Forms/InputField";
 import PasswordInput from "@/components/Forms/PasswordInput";
 import CheckboxInput from "@/components/Forms/CheckboxInput";
 import AuthorizationPersonalData from "./AuthorizationPersonalData";
 import { actions } from "@/actions";
 import FormError from "@/components/Forms/FormError";
-
+import CheckboxTermsAndConditions from "./CheckboxTermsAndConditions";
 
 const INITIAL_STATE = {
   success: false,
@@ -35,24 +35,39 @@ const INITIAL_STATE = {
   },
 };
 
-export default function AgencyRegisterForm() {
-  const [formState, formAction] = useActionState(actions.auth.AgencyRegister, INITIAL_STATE);  
+export default function AgencyRegisterForm({ onSuccess }) {
+  const [formState, formAction] = useActionState(
+    actions.auth.AgencyRegister,
+    INITIAL_STATE
+  );
   const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
-  console.log("formState", formState);
+  useEffect(() => {
+    if (formState?.success) {
+      onSuccess?.();
+    }
+  }, [formState, onSuccess]);
+
+  useEffect(() => {
+  if (formState?.error || formState?.success) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}, [formState]);
+
   return (
-    <div className="mx-auto mt-10 lg:mx-10">
-      <form        
+    <div className="mx-auto mt-10 ">
+      <form
         action={formAction}
         className="grid grid-cols-1 md:grid-cols-2 gap-3"
       >
         <div className="col-span-2">
-          <h2 className="text-lg font-semibold -text--dark-green font-sans">
+          <h2 className="text-lg font-semibold text-dark-green font-sans">
             Información de la agencia
           </h2>
         </div>
@@ -64,7 +79,7 @@ export default function AgencyRegisterForm() {
           defaultValue={formState.data.AgencyName}
           error={formState.FrontendErrors?.AgencyName}
         />
-        
+
         <InputField
           label="Departamento"
           fieldName="AgencyDepartment"
@@ -73,7 +88,7 @@ export default function AgencyRegisterForm() {
           defaultValue={formState.data.AgencyDepartment}
           error={formState.FrontendErrors?.AgencyDepartment}
         />
-        
+
         <InputField
           label="Ciudad"
           fieldName="AgencyCity"
@@ -130,9 +145,9 @@ export default function AgencyRegisterForm() {
           defaultValue={formState.data.AgencyTourismCodeExpiration}
           error={formState.FrontendErrors?.AgencyTourismCodeExpiration}
         />
-        <hr className="col-span-2 my-3" />
+        <hr className="col-span-2 my-3 text-gray-300" />
         <div className="col-span-2">
-          <h2 className="text-lg font-semibold -text--dark-green font-sans">
+          <h2 className="text-lg font-semibold text-dark-green font-sans">
             Información de contacto principal
           </h2>
         </div>
@@ -152,9 +167,9 @@ export default function AgencyRegisterForm() {
           defaultValue={formState.data.AgencyContactLastName}
           error={formState.FrontendErrors?.AgencyContactLastName}
         />
-        <hr className="col-span-2 my-3" />
+        <hr className="col-span-2 my-3 text-gray-300 " />
         <div className="col-span-2">
-          <h2 className="text-lg font-semibold -text--dark-green font-sans">
+          <h2 className="text-lg font-semibold text-dark-green font-sans">
             Documentos Requeridos
           </h2>
         </div>
@@ -182,9 +197,9 @@ export default function AgencyRegisterForm() {
           defaultValue={formState.data.AgencyTourismRegister}
           error={formState.FrontendErrors?.AgencyTourismRegister}
         />
-        <hr className="col-span-2 my-3" />
+        <hr className="col-span-2 my-3 text-gray-300" />
         <div className="col-span-2">
-          <h2 className="text-lg font-semibold -text--dark-green font-sans">
+          <h2 className="text-lg font-semibold text-dark-green font-sans">
             Información de acceso
           </h2>
         </div>
@@ -193,6 +208,8 @@ export default function AgencyRegisterForm() {
           fieldName="password"
           showPassword={showPassword}
           togglePasswordVisibility={togglePasswordVisibility}
+          disabled={submitting}
+          defaultValue={formState.data.password}
           error={formState.FrontendErrors?.password}
         />
         <PasswordInput
@@ -200,14 +217,14 @@ export default function AgencyRegisterForm() {
           fieldName="confirmPassword"
           showPassword={showConfirmPassword}
           togglePasswordVisibility={toggleConfirmPasswordVisibility}
+          disabled={submitting}
+          defaultValue={formState.data.confirmPassword}
           error={formState.FrontendErrors?.confirmPassword}
         />
-        <CheckboxInput
-          fieldName="terms"
-          content="Acepto los términos y condiciones"
-          required={true}
+        <CheckboxTermsAndConditions
           disabled={submitting}
           error={formState.FrontendErrors?.terms}
+          defaultValue={formState.data.terms}
         />
         <AuthorizationPersonalData />
 
@@ -222,6 +239,7 @@ export default function AgencyRegisterForm() {
           required={true}
           disabled={submitting}
           error={formState.FrontendErrors?.dataTreatment}
+          defaultValue={formState.data.dataTreatment}
         />
         <CheckboxInput
           fieldName="marketing"
@@ -232,11 +250,12 @@ export default function AgencyRegisterForm() {
           required={false}
           disabled={submitting}
           error={formState.FrontendErrors?.marketing}
+          defaultValue={formState.data.marketing}
         />
         <div className="mb-6 col-span-2">
           <button
             type="submit"
-            className="w-full px-4 py-2 mt-3 -bg--dark-green text-white rounded-md hover:-bg--light-green focus:outline-none focus:-bg--dark-gray"
+            className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-none focus:bg-dark-gray duration-200"
             disabled={submitting}
           >
             {submitting ? "Registrando..." : "Registrar mi agencia"}
