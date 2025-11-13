@@ -3,6 +3,11 @@ const nextConfig = {
   env: {
     MP_PUBLIC_KEY: process.env.NEXT_PUBLIC_MP_PUBLIC_KEY,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

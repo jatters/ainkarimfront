@@ -1,5 +1,6 @@
 import React, { useState, useActionState, useEffect } from "react";
 import InputField from "@/components/Forms/InputField";
+import FileInput from "@/components/Forms/FileInput";
 import PasswordInput from "@/components/Forms/PasswordInput";
 import CheckboxInput from "@/components/Forms/CheckboxInput";
 import AuthorizationPersonalData from "./AuthorizationPersonalData";
@@ -44,9 +45,23 @@ export default function AgencyRegisterForm({ onSuccess }) {
   const [response, setResponse] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [persistedFiles, setPersistedFiles] = useState({
+    AgencyRUT: null,
+    AgencyCommerce: null,
+    AgencyTourismRegister: null,
+  });
+  const formRef = React.useRef(null);
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
+
+  const handleFileChange = (fieldName, file) => {
+    setPersistedFiles((prev) => ({
+      ...prev,
+      [fieldName]: file,
+    }));
+  };
 
   useEffect(() => {
     if (formState?.success) {
@@ -55,15 +70,34 @@ export default function AgencyRegisterForm({ onSuccess }) {
   }, [formState, onSuccess]);
 
   useEffect(() => {
-  if (formState?.error || formState?.success) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}, [formState]);
+    if (formState?.error || formState?.success) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [formState]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    Object.entries(persistedFiles).forEach(([fieldName, file]) => {
+      if (file) {
+        const currentFile = formData.get(fieldName);
+
+        if (!currentFile || currentFile.size === 0) {
+          formData.set(fieldName, file);
+        }
+      }
+    });
+
+    await formAction(formData);
+  };
 
   return (
     <div className="mx-auto mt-10 ">
       <form
-        action={formAction}
+        ref={formRef}
+        onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-3"
       >
         <div className="col-span-2">
@@ -173,29 +207,29 @@ export default function AgencyRegisterForm({ onSuccess }) {
             Documentos Requeridos
           </h2>
         </div>
-        <InputField
+        <FileInput
           label="RUT"
           fieldName="AgencyRUT"
-          type="file"
           disabled={submitting}
-          defaultValue={formState.data.AgencyRUT}
           error={formState.FrontendErrors?.AgencyRUT}
+          onFileChange={handleFileChange}
+          persistedFile={persistedFiles.AgencyRUT}
         />
-        <InputField
+        <FileInput
           label="Cámara de Comercio"
           fieldName="AgencyCommerce"
-          type="file"
           disabled={submitting}
-          defaultValue={formState.data.AgencyCommerce}
           error={formState.FrontendErrors?.AgencyCommerce}
+          onFileChange={handleFileChange}
+          persistedFile={persistedFiles.AgencyCommerce}
         />
-        <InputField
+        <FileInput
           label="Registro Nacional de Turismo"
           fieldName="AgencyTourismRegister"
-          type="file"
           disabled={submitting}
-          defaultValue={formState.data.AgencyTourismRegister}
           error={formState.FrontendErrors?.AgencyTourismRegister}
+          onFileChange={handleFileChange}
+          persistedFile={persistedFiles.AgencyTourismRegister}
         />
         <hr className="col-span-2 my-3 text-gray-300" />
         <div className="col-span-2">
@@ -271,6 +305,14 @@ export default function AgencyRegisterForm({ onSuccess }) {
               {response.message === "Te has registrado exitosamente"
                 ? `Gracias ${response.name}, te has registrado exitosamente.`
                 : response.message}
+            </div>
+          )}
+          {formState?.BackendErrors && (
+            <div className="text-red-500 text-center col-span-2 italic">
+              {formState?.BackendErrors?.message ===
+              "Email or Username are already taken"
+                ? "El usuario ya está registrado"
+                : formState?.BackendErrors?.message}
             </div>
           )}
         </div>
