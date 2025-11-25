@@ -32,7 +32,6 @@ export async function registerAgency(data) {
   const registerUrl = `${URL_BASE}/api/auth/local/register`;
 
   try {
-    
     const registerPayload = {
       username: data.AgencyEmail,
       email: data.AgencyEmail,
@@ -54,7 +53,6 @@ export async function registerAgency(data) {
     const userId = registerResult.user.id;
     const jwtToken = registerResult.jwt;
 
-    
     const updateUrl = `${URL_BASE}/api/users/${userId}`;
     const updatePayload = {
       firstName: data.AgencyContactName,
@@ -92,7 +90,6 @@ export async function registerAgency(data) {
       };
     }
 
-    
     const uploadFile = async (file, fieldName) => {
       if (!file) return null;
 
@@ -106,7 +103,7 @@ export async function registerAgency(data) {
         const uploadResponse = await fetch(`${URL_BASE}/api/upload`, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${API_TOKEN}`, 
+            Authorization: `Bearer ${API_TOKEN}`,
           },
           body: formData,
         });
@@ -124,10 +121,12 @@ export async function registerAgency(data) {
       }
     };
 
-  
     const RUT = await uploadFile(data.AgencyRUT, "AgencyRUT");
     const Commerce = await uploadFile(data.AgencyCommerce, "AgencyCommerce");
-    const TourismRegister = await uploadFile(data.AgencyTourismRegister, "AgencyTourismRegister");
+    const TourismRegister = await uploadFile(
+      data.AgencyTourismRegister,
+      "AgencyTourismRegister"
+    );
 
     console.log("Archivos subidos:", { RUT, Commerce, TourismRegister });
 
@@ -137,8 +136,6 @@ export async function registerAgency(data) {
     return { error: { message: error.message || "Error en el registro" } };
   }
 }
-
-
 
 export async function login(data) {
   const url = `${URL_BASE}/api/auth/local`;

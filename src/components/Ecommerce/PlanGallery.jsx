@@ -4,6 +4,23 @@ import Image from "next/image";
 register();
 
 export default function PlanGallery({ images }) {
+  if (images.length === 0) {
+    return null;
+  }
+  if (images.length < 2) {
+    return (
+      <div>
+        <Image
+          src={images[0].sourceUrl}
+          alt={images[0].altText}
+          className="object-contain border border-gray-100 rounded-lg mx-auto w-[350px] lg:w-[500px] xl:w-full "
+          loading="lazy"
+          width={742}
+          height={742}
+        />
+      </div>
+    );
+  }
   const swiperSlides = images.map((image, index) => (
     <swiper-slide key={index}>
       <Image

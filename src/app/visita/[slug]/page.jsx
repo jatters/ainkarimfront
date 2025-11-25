@@ -5,6 +5,7 @@ import { GetSinglePlan, GetCompanyInfo } from "@/components/GetContentApi";
 import PlanRecomendations from "@/components/Ecommerce/Plans/PlanRecomendations";
 import BlocksRendererWithStyles from "@/components/Ui/BlocksRendererWithStyles";
 import Script from "next/script";
+import Image from "next/image";
 
 const formatPrice = (price) => {
   if (!price) return "";
@@ -153,10 +154,11 @@ export default async function SinglePlanPage({ params }) {
             </Link>{" "}
             › <span className="capitalize font-medium">{title}</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-3 gap-y-9">
+          <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-x-5 gap-y-9">
             <PlanGallery images={extractGallery(gallery)} />
+
             <div className="px-0 md:px-5">
-              <h1 className="text-dark-green text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 uppercase">
+              <h1 className="text-dark-green px-2.5 md:px-5 text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 uppercase">
                 {title}
               </h1>
               {Number(price) > 0 && (
@@ -187,9 +189,9 @@ export default async function SinglePlanPage({ params }) {
                 </div>
               )}
               {planDescription && (
-                <BlocksRendererWithStyles content={planDescription} />
+                <BlocksRendererWithStyles content={planDescription} className="px-2.5 lg:px-5" />
               )}
-              
+
               <ReservationField
                 documentId={documentId}
                 name={title}

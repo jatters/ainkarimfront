@@ -49,11 +49,10 @@ export default function RegistroAgencias() {
           </p>
           <p className="font-semibold">Documentos requeridos:</p>
           <ul className="list-disc">
-            <li>RUT (adjunto y número)</li>
-            <li>Cámara de Comercio (adjunto)</li>
+            <li>RUT (Actualizado)</li>
+            <li>Cámara de Comercio (No mayor a 30 días)</li>
             <li>
-              Registro Nacional de Turismo (adjunto, código y fecha de
-              vencimiento)
+              Registro Nacional de Turismo (Vigente)
             </li>
           </ul>
         </div>

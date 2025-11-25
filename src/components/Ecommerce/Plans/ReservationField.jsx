@@ -381,7 +381,7 @@ export default function ReservationField({
               </div>
             </div>
 
-            <div className="flex flex-col">              
+            <div className="flex flex-col">
               <ListHours
                 horarios={horarios}
                 blockedRanges={blockedTimeRanges[reservationData.date] || []}
@@ -450,13 +450,16 @@ export default function ReservationField({
     );
   } else {
     return (
-      <div className="bg-gray py-5 px-5 rounded-xl">
-        <div className="font-bold text-2xl pb-4 pt-2 text-dark-green ">
-          ¿Deseas Reservar?
+      <div className="bg-gray p-3 px-2.5 lg:px-5 lg:p-5 rounded-xl">
+        <div className="font-bold text-lg lg:text-2xl lg:pb-2 pt-2 text-dark-green ">
+          Solicite su cotización por este medio
         </div>
-        <div className="pb-3">Comunícate con nosotros para reservar</div>
-        <div className="flex items-center gap-1 py-3 text-dark-green">
-          <span className="icon-[ph--envelope-simple-bold]"></span>
+        <div className="flex items-center gap-1 pt-3 text-dark-green">
+          <span
+            className="icon-[ph--envelope-simple-bold]"
+            role="img"
+            aria-hidden="true"
+          />
           <span className="font-bold">Correo:</span>
           <a
             href={`mailto:${contactEmail}`}
@@ -464,6 +467,21 @@ export default function ReservationField({
             aria-label="Enviar correo a Viñedo Ain Karim"
           >
             {contactEmail}
+          </a>
+        </div>
+        <div className="flex items-center gap-1 py-3 text-dark-green">
+          <span
+            className="icon-[heroicons-solid--phone]"
+            role="img"
+            aria-hidden="true"
+          />
+          <span className="font-bold">Teléfono:</span>
+          <a
+            href={`tel:6019156635`}
+            className="hover:text-light-green hover:underline duration-200"
+            aria-label="Llamar a Ventas del Viñedo Ain Karim"
+          >
+            601 915 6635
           </a>
         </div>
       </div>

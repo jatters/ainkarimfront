@@ -223,7 +223,7 @@ async function checkMaintenanceStatus() {
 
     const res = await fetch(WORKER_URL, {
       next: {
-        revalidate: 3600,
+        revalidate: 604800,
       },
       signal: controller.signal,
     });
