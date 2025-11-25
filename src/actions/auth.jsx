@@ -4,7 +4,6 @@ import { z } from "zod";
 import { registerAgency } from "@/lib/strapi";
 
 export async function AgencyRegister(prevState, formData) {
-    console.log(formData);
   const fields = {
     AgencyName: formData.get("AgencyName"),
     AgencyDepartment: formData.get("AgencyDepartment"),
@@ -27,40 +26,37 @@ export async function AgencyRegister(prevState, formData) {
     marketing: formData.get("marketing") === "on",
   };
 
-  
   const validatedfield = AgencySchema.safeParse(fields);
 
-    if (!validatedfield.success) {
-        const flattenedErrors = z.flattenError(validatedfield.error);
-        console.log("Errors", flattenedErrors.fieldErrors);
+  if (!validatedfield.success) {
+    const flattenedErrors = z.flattenError(validatedfield.error);
+    console.log("Errors", flattenedErrors.fieldErrors);
 
-        return {
-            success: false,
-            message: "Validación fallida",
-            BackendErrors: null,
-            FrontendErrors: flattenedErrors.fieldErrors,
-            data: fields,
-        }
-    }
-    
-    const response = await registerAgency(validatedfield.data);
-    if (!response || response.error) {
-        return {
-            success: false,
-            message: "Error al registrar agencia",
-            BackendErrors: response?.error,
-            FrontendErrors: null,
-            data: fields,
-        }
-    }
-    console.log("Registro exitoso");
-
- 
     return {
-        success: true,
-        message: "Agencia registrada exitosamente",
-        BackendErrors: null,
-        FrontendErrors: null,
-        data: fields,
-    }
+      success: false,
+      message: "Validación fallida",
+      BackendErrors: null,
+      FrontendErrors: flattenedErrors.fieldErrors,
+      data: fields,
+    };
+  }
+
+  const response = await registerAgency(validatedfield.data);
+  if (!response || response.error) {
+    return {
+      success: false,
+      message: "Error al registrar agencia",
+      BackendErrors: response?.error,
+      FrontendErrors: null,
+      data: fields,
+    };
+  }
+
+  return {
+    success: true,
+    message: "Agencia registrada exitosamente",
+    BackendErrors: null,
+    FrontendErrors: null,
+    data: fields,
+  };
 }

@@ -40,7 +40,9 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="firstName"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className={`text-xs font-semibold  after:content-['*'] after:text-red-500 after:ml-0.5 ${
+              errors.firstName ? "text-red-500" : "text-gray-500"
+            }`}
           >
             Primer Nombre
           </label>
@@ -61,19 +63,21 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 message: "El nombre no es válido",
               },
             })}
-            placeholder="Primer Nombre"
             className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden  ${
               errors.firstName ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.firstName && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.firstName.message}
             </span>
           )}
         </div>
         <div className="col-span-2  sm:col-span-1">
-          <label htmlFor="secondName" className="text-sm font-semibold ml-2">
+          <label
+            htmlFor="secondName"
+            className="text-xs font-semibold text-gray-500 "
+          >
             Segundo Nombre
           </label>
           <input
@@ -93,13 +97,12 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 message: "El nombre no es válido",
               },
             })}
-            placeholder="Segundo Nombre"
             className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.secondName ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.secondName && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.secondName.message}
             </span>
           )}
@@ -107,7 +110,9 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="lastname"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className={`text-xs  font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${
+              errors.lastname ? "text-red-500" : "text-gray-500"
+            }`}
           >
             Primer Apellido
           </label>
@@ -128,13 +133,12 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 message: "El apellido no es válido",
               },
             })}
-            placeholder="Primer apellido"
             className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.lastname ? "border-red-500" : "border-light-gray"
             } `}
           />
           {errors.lastname && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.lastname.message}
             </span>
           )}
@@ -142,7 +146,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="secondSurname"
-            className="text-sm font-semibold ml-2 "
+            className="text-xs text-gray-500 font-semibold"
           >
             Segundo Apellido
           </label>
@@ -163,7 +167,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 message: "El apellido no es válido",
               },
             })}
-            placeholder="Segundo apellido"
             className={`w-full uppercase px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.secondSurname ? "border-red-500" : "border-light-gray"
             } `}
@@ -177,7 +180,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="documentType"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className="text-xs text-gray-500 font-semibold after:content-['*'] after:text-red-500 after:ml-0.5"
           >
             Tipo de Documento
           </label>
@@ -208,7 +211,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="document"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.document ? "text-red-500" : "text-gray-500"}`}
           >
             Número de Documento
           </label>
@@ -218,7 +221,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.document ? "border-red-500!" : ""
             }`}
-            placeholder="Número de Documento"
             {...register("document", {
               required: {
                 value: true,
@@ -231,7 +233,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           />
           {errors.document && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.document.message}
             </span>
           )}
@@ -239,7 +241,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="col-span-2  sm:col-span-1">
           <label
             htmlFor="mobiletwo"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.mobiletwo ? "text-red-500" : "text-gray-500"}`}
           >
             Celular
           </label>
@@ -249,7 +251,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.mobiletwo ? "border-red-500!" : ""
             }`}
-            placeholder="Número de celular"
             {...register("mobiletwo", {
               required: "Número de celular requerido",
               minLength: {
@@ -267,7 +268,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           />
           {errors.mobiletwo && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.mobiletwo.message}
             </span>
           )}
@@ -277,7 +278,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             <div>
               <label
                 htmlFor="city"
-                className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.city ? "text-red-500" : "text-gray-500"}`}
               >
                 Ciudad
               </label>
@@ -305,7 +306,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 <option value="Zipaquirá">Zipaquira</option>
               </select>
               {errors.city && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                <span className="text-xs text-red-600 mt-2 pl-1 block">
                   {errors.city.message}
                 </span>
               )}
@@ -313,7 +314,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             <div className="col-span-2  sm:col-span-1">
               <label
                 htmlFor="address"
-                className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.address ? "text-red-500" : "text-gray-500"}`}
               >
                 Dirección
               </label>
@@ -323,7 +324,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                   errors.address ? "border-red-500!" : "border"
                 }`}
-                placeholder="Dirección"
                 {...register("address", {
                   required: {
                     value: true,
@@ -336,7 +336,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 })}
               />
               {errors.address && (
-                <span className="text-sm text-red-600 mt-1 pl-1 block">
+                <span className="text-xs text-red-600 mt-1 pl-1 block">
                   {errors.address.message}
                 </span>
               )}
@@ -346,7 +346,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
         <div className="mb-4 col-span-2  sm:col-span-1">
           <label
             htmlFor="email"
-            className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+            className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.email ? "text-red-500" : "text-gray-500"}`}
           >
             Correo
           </label>
@@ -356,7 +356,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
               errors.email ? "border-red-500" : "border"
             }`}
-            placeholder="Tu correo electrónico"
             {...register("email", {
               required: {
                 value: true,
@@ -369,7 +368,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
             })}
           />
           {errors.email && (
-            <span className="text-sm text-red-600 mt-1 pl-1 block">
+            <span className="text-xs text-red-600 mt-1 pl-1 block">
               {errors.email.message}
             </span>
           )}
@@ -382,13 +381,10 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               {...register("register", {
                 required: false,
               })}
-              className="checkbox__input"
+              className="checkbox__input "
             />
-            <span className="checkbox__label"></span>
-            <span
-              htmlFor="register"
-              className="text-slate-600  -ml-2 -mt-[2px]"
-            >
+            <span className="checkbox__label w-2!"></span>
+            <span htmlFor="register" className="text-gray-600 text-sm">
               ¿Quieres crear una cuenta?
             </span>
           </label>
@@ -399,7 +395,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <div className="relative">
                 <label
                   htmlFor="password"
-                  className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                  className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.password ? "text-red-500" : "text-gray-500"}`}
                 >
                   Contraseña
                 </label>
@@ -409,7 +405,6 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                     errors.password ? "border-red-500" : "border"
                   }`}
-                  placeholder="Crea tu contraseña"
                   {...register("password", {
                     required: {
                       value: true,
@@ -475,7 +470,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </Tooltip>
               </div>
               {errors.password && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                <span className="text-xs text-red-600 mt-2 pl-1 block">
                   {errors.password.message}
                 </span>
               )}
@@ -484,17 +479,16 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               <div className="relative">
                 <label
                   htmlFor="confirmPassword"
-                  className="text-sm font-semibold ml-2 after:content-['*'] after:text-red-500 after:ml-1"
+                  className={`text-xs font-semibold after:content-['*'] after:text-red-500 after:ml-0.5 ${errors.confirmPassword ? "text-red-500" : "text-gray-500"}`}
                 >
                   Confirmar tu contraseña
                 </label>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
-                  className={`mt-1 p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
+                  className={`p-2 px-3 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-hidden ${
                     errors.confirmPassword ? "border-red-500" : "border"
                   }`}
-                  placeholder="Confirma tu contraseña"
                   {...register("confirmPassword", {
                     required: {
                       value: true,
@@ -556,7 +550,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                 </Tooltip>
               </div>
               {errors.confirmPassword && (
-                <span className="text-sm text-red-600 mt-2 pl-1 block">
+                <span className="text-xs text-red-600 mt-2 pl-1 block">
                   {errors.confirmPassword.message}
                 </span>
               )}
@@ -572,7 +566,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   className="checkbox__input"
                 />
                 <span className="checkbox__label"></span>
-                <span htmlFor="policy" className="text-sm">
+                <span htmlFor="policy" className={`text-sm ${errors.policy ? "text-red-600" : "text-gray-500"}`}>
                   He leído y Acepto los{" "}
                   <Link href="/terminos-y-condiciones" target="_blank">
                     Términos y Condiciones
@@ -582,13 +576,13 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               </label>
             </div>
             {errors.policy && (
-              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              <span className="text-xs mb-1 -mt-2 text-red-600 pl-2 block">
                 {"Este campo es requerido"}
               </span>
             )}
             <AuthorizationPersonalData />
 
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+            <div className="pretty-checkbox  flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center gap-1">
                 <input
                   type="checkbox"
@@ -599,7 +593,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   className="checkbox__input"
                 />
                 <span className="checkbox__label"></span>
-                <span htmlFor="terms" className="text-xs">
+                <span htmlFor="terms" className={`text-xs ${errors.terms ? "text-red-600" : "text-gray-500"}`}>
                   Autorizo el tratamiento de mis datos de identificación y
                   contacto para; crear una cuenta personal que permita gestionar
                   mis reservas y/o pedidos; administrar mis direcciones de envío
@@ -610,7 +604,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               </label>
             </div>
             {errors.terms && (
-              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              <span className="text-xs mb-1 ml-4 text-red-600 pl-2 block">
                 {"Este campo es requerido"}
               </span>
             )}
@@ -643,7 +637,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
           </>
         ) : (
           <>
-            <div className="pretty-checkbox mb-3 flex gap-2  items-center text-light-gray col-span-2">
+            <div className="pretty-checkbox flex gap-2  items-center text-light-gray col-span-2">
               <label className="checkbox flex items-center">
                 <input
                   type="checkbox"
@@ -653,10 +647,14 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
                   })}
                   className="checkbox__input"
                 />
-                <span className="checkbox__label"></span>
-                <span htmlFor="policy" className="text-sm">
+                <span className="checkbox__label w-2!"></span>
+                <span htmlFor="policy" className="text-sm text-gray-600">
                   He leído y Acepto los{" "}
-                  <Link href="/terminos-y-condiciones" target="_blank">
+                  <Link
+                    href="/terminos-y-condiciones"
+                    target="_blank"
+                    className="text-light-green hover:text-dark-green hover:underline transition-all duration-200"
+                  >
                     Términos y Condiciones
                   </Link>{" "}
                   del servicio.
@@ -664,7 +662,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               </label>
             </div>
             {errors.policy && (
-              <span className="text-sm mb-1 -mt-2 text-red-600 pl-2 block">
+              <span className="text-xs mb-1 ml-4  text-red-600 pl-2 block">
                 {"Este campo es requerido"}
               </span>
             )}
@@ -697,7 +695,7 @@ export default function CheckoutForm({ showAddressFields, onFormChange }) {
               </label>
             </div>
             {errors.terms && (
-              <span className="text-sm mb-1 -mt-2 ml-4 text-red-600 pl-2 block">
+              <span className="text-xs mb-1 -mt-2 ml-4 text-red-600 pl-2 block">
                 {"Este campo es requerido"}
               </span>
             )}

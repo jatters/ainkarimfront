@@ -75,9 +75,7 @@ export default function PaymentPage() {
     }
   };
 
-  useEffect(() => {
-    console.log("authUser actualizado:", authUser);
-  }, [authUser]);
+  useEffect(() => {}, [authUser]);
   const visibleUser = updatedUser || authUser;
   const isAgency = visibleUser?.role?.name === "Agencia";
   const AgencyDiscount = isAgency ? visibleUser?.authorizedDiscount || 0 : 0;
@@ -334,10 +332,12 @@ export default function PaymentPage() {
   }; */
 
   // onBeforePayment: si authUser existe, actualizamos teléfono/dirección/ciudad/marketing
+
   const processOrder = async () => {
     const data = visibleUser ? effectiveFormData : formState.formData;
     const customerData = {
       firstName: visibleUser?.firstName || data.firstName?.toUpperCase(),
+      agencyName: visibleUser?.AgencyName || data.agencyName?.toUpperCase(),
       middleName:
         visibleUser?.middleName || data.secondName?.toUpperCase() || "",
       lastName: visibleUser?.lastName || data.lastname?.toUpperCase(),
@@ -436,13 +436,13 @@ export default function PaymentPage() {
                               type="email"
                               {...register("username", { required: true })}
                               placeholder="Correo electrónico"
-                              className="w-full border rounded px-3 py-2"
+                              className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-light-green focus:outline-hidden"
                             />
                             <input
                               type="password"
                               {...register("password", { required: true })}
                               placeholder="Contraseña"
-                              className="w-full border rounded px-3 py-2"
+                              className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-light-green focus:outline-hidden"
                             />
 
                             {loginError && (
@@ -694,6 +694,7 @@ export default function PaymentPage() {
                   discount={discount}
                   agencyDiscount={agencyDiscountValue}
                   agencyDiscountPercent={AgencyDiscount}
+                  isAgency={isAgency}
                   total={total}
                 />
               </div>

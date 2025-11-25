@@ -128,8 +128,6 @@ export async function registerAgency(data) {
       "AgencyTourismRegister"
     );
 
-    console.log("Archivos subidos:", { RUT, Commerce, TourismRegister });
-
     return { jwt: jwtToken, user: updateResult };
   } catch (error) {
     console.error("Error al registrar agencia:", error);

@@ -14,6 +14,7 @@ export default function CheckoutButton({
   discount,
   agencyDiscount,
   agencyDiscountPercent,
+  isAgency,
   total,
 }) {
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,7 @@ export default function CheckoutButton({
           discount,
           agencyDiscount, 
           agencyDiscountPercent,
+          isAgency,
           total,
         }),
       });

@@ -52,6 +52,7 @@ export async function POST(req) {
       coupon,
       agencyDiscount = 0,
       agencyDiscountPercent = 0,
+      isAgency = false,
     } = await req.json();
 
     if (!orderData || orderData.length === 0) {
@@ -86,7 +87,6 @@ export async function POST(req) {
 
     const totalPriceOrder = subtotalProducts + subtotalReservations;
 
-    
     /*  let discountValue = 0;
     if (coupon && coupon.percent) {
       switch (coupon.appliesTo) {
@@ -394,7 +394,7 @@ export async function POST(req) {
           ? totalPriceReservation * (coupon.percent / 100)
           : 0;
         const finalPriceReservation =
-          totalPriceReservation - reservationDiscount;
+          totalPriceReservation - reservationDiscount - agencyDiscount;
 
         const reservationPayload = {
           data: {
@@ -405,9 +405,13 @@ export async function POST(req) {
             state: "Pendiente",
             payment_status: "Pendiente",
             creationDate: new Date().toISOString(),
-            customerName: customer.firstName.toUpperCase(),
+            customerName: isAgency
+              ? "AGENCIA"
+              : customer.firstName.toUpperCase(),
             customerMiddleName: customer.middleName?.toUpperCase() || "",
-            customerLastname: customer.lastName.toUpperCase(),
+            customerLastname: isAgency
+              ? customer.agencyName?.toUpperCase()
+              : customer.lastName.toUpperCase(),
             customerSecondLastname:
               customer.secondLastName?.toUpperCase() || "",
             customerDocumentType: customer.documentType,
@@ -419,6 +423,7 @@ export async function POST(req) {
             pedidos: {
               connect: [{ documentId: orderDocumentId }],
             },
+            isAgency: isAgency,
           },
         };
 

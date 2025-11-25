@@ -51,7 +51,7 @@ export const AgencySchema = z
       .min(5, "La fecha de vencimiento no es válida"),
     AgencyContactName: z
       .string()
-      .min(5, "El nombre debe tener al menos 5 caracteres")
+      .min(2, "El nombre debe tener al menos 2 caracteres")
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El nombre no es válido"),
     AgencyContactLastName: z
       .string()

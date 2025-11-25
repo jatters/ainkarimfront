@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function AuthorizationPersonalData() {
   return (
     <>
-      <div className="mb-4 border border-gray-300 py-4 px-2 rounded-md col-span-2 ">
+      <div className="mb-4 border border-gray-300 text-gray-600 bg-slate-50 py-4 px-2 rounded-md col-span-2 ">
         <div className="prose-base">
           <div className="font-semibold text-center text-xs">
             AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
@@ -26,7 +26,7 @@ export default function AuthorizationPersonalData() {
               href="/politica-de-tratamiento-de-datos-personales"
               target="_blank"
               rel="noopener"
-              className="underline hover:text-light-green duration-200"
+              className="underline text-light-green hover:text-dark-green duration-200"
             >
               aquí
             </Link>
@@ -49,7 +49,7 @@ export default function AuthorizationPersonalData() {
           </p>
         </div>
       </div>
-      <div className="text-xs font-medium mb-3 col-span-2">
+      <div className="text-xs text-gray-600 font-medium mb-3 col-span-2">
         Con base en la información proporcionada, autorizo de manera voluntaria,
         previa, expresa e informada al VIÑEDO para tratar mis datos personales,
         y en especial:
