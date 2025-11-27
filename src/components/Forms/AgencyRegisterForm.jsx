@@ -1,4 +1,9 @@
-import React, { useState, useActionState, useEffect } from "react";
+import React, {
+  useState,
+  useActionState,
+  useEffect,
+  useTransition,
+} from "react";
 import InputField from "@/components/Forms/InputField";
 import FileInput from "@/components/Forms/FileInput";
 import PasswordInput from "@/components/Forms/PasswordInput";
@@ -41,7 +46,7 @@ export default function AgencyRegisterForm({ onSuccess }) {
     actions.auth.AgencyRegister,
     INITIAL_STATE
   );
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, startTransition] = useTransition();
   const [response, setResponse] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -90,8 +95,43 @@ export default function AgencyRegisterForm({ onSuccess }) {
       }
     });
 
-    await formAction(formData);
+    startTransition(async () => {
+      await formAction(formData);
+    });
   };
+
+  useEffect(() => {
+    const sendConfirmationEmail = async () => {
+      if (formState?.success) {
+        try {
+          const emailResponse = await fetch("/api/sendEmail", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              formType: "RegistroAgencia",
+              email: formState.data.AgencyEmail,
+              name: formState.data.AgencyName,
+              contactName: formState.data.AgencyContactName,
+              contactLastName: formState.data.AgencyContactLastName,
+              date: new Date().toISOString(),
+            }),
+          });
+
+          if (!emailResponse.ok) {
+            console.error("Error al enviar el correo de confirmación");
+          } else {
+            console.log("Correo de confirmación enviado exitosamente");
+          }
+        } catch (emailError) {
+          console.error("Error al enviar correo:", emailError);
+        }
+      }
+    };
+
+    sendConfirmationEmail();
+  }, [formState?.success, formState?.data]);
 
   return (
     <div className="mx-auto mt-10 ">
@@ -289,11 +329,12 @@ export default function AgencyRegisterForm({ onSuccess }) {
         <div className="mb-6 col-span-2">
           <button
             type="submit"
-            className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-none focus:bg-dark-gray duration-200"
+            className="w-full px-4 py-2 mt-3 bg-dark-green text-white rounded-md hover:bg-light-green focus:outline-none focus:bg-dark-gray duration-200 disabled:opacity-50"
             disabled={submitting}
           >
-            {submitting ? "Registrando..." : "Registrar mi agencia"}
+            {submitting ? "Registrando Agencia..." : "Registrar mi agencia"}
           </button>
+
           {response && (
             <div
               className={`col-span-2 text-center font-semibold py-4 rounded ${
@@ -315,6 +356,13 @@ export default function AgencyRegisterForm({ onSuccess }) {
                 : formState?.BackendErrors?.message}
             </div>
           )}
+          {formState?.FrontendErrors &&
+            Object.keys(formState.FrontendErrors).length > 0 && (
+              <div className="bg-red-200 py-2 text-red-700 text-center col-span-2 mt-4 font-medium text-sm rounded">
+                Al parecer hay información incorrecta. Por favor, verifica los
+                campos marcados en rojo para continuar.
+              </div>
+            )}
         </div>
       </form>
     </div>

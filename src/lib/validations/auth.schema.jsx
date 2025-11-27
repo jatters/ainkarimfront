@@ -21,19 +21,18 @@ export const AgencySchema = z
   .object({
     AgencyName: z
       .string()
-      .min(5, "El nombre no es válido")
-      .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El nombre no es válido"),
+      .min(5, "El nombre no es válido"),
     AgencyDepartment: z
       .string()
       .min(5, "El departamento debe tener al menos 5 caracteres")
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El departamento no es válido"),
     AgencyCity: z
       .string()
-      .min(5, "La ciudad debe tener al menos 5 caracteres")
+      .min(5, "La ciudad debe tener al menos 3 caracteres")
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "La ciudad no es válida"),
     AgencyAddress: z
       .string()
-      .min(5, "La dirección debe tener al menos 5 caracteres"),
+      .min(5, "La dirección debe tener al menos 3 caracteres"),
     AgencyEmail: z.email("El correo no es válido"),
     AgencyPhone: z
       .string()
@@ -55,7 +54,7 @@ export const AgencySchema = z
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El nombre no es válido"),
     AgencyContactLastName: z
       .string()
-      .min(3, "El apellido debe tener al menos 3 caracteres")
+      .min(3, "El apellido debe tener al menos 2 caracteres")
       .regex(/^[A-Za-zÀ-ÿ\s]+$/, "El apellido no es válido"),
     AgencyRUT: fileValidation.optional(),
     AgencyCommerce: fileValidation.optional(),

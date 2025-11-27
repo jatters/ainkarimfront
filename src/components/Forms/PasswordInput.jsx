@@ -12,7 +12,7 @@ export default function PasswordInput({ label, fieldName, showPassword, togglePa
           type={showPassword ? "text" : "password"}
           id={fieldName}
           name={fieldName}
-          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${error ? "border-red-500" : ""}`}
+          className={`mt-1 p-2 w-full border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none disabled:opacity-50 ${error ? "border-red-500" : ""}`}
           placeholder="Crea tu contraseña"          
           disabled={disabled}
           defaultValue={defaultValue}

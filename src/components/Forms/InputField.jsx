@@ -26,7 +26,7 @@ export default function InputField({
         name={fieldName}
         className={`w-full px-3 py-2 border border-gray-400/40 rounded-lg text-gray-700 focus:ring-1 focus:ring-light-green focus:outline-none ${
           hasError ? "border-red-500" : ""
-        } `}
+        } disabled:opacity-50 `}
         disabled={disabled}
         defaultValue={defaultValue}
       />

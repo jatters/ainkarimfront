@@ -10,12 +10,12 @@ export default function CheckboxInput({ fieldName, content, required, disabled, 
             type="checkbox"
             id={fieldName}
             name={fieldName}
-            className="checkbox__input"
+            className="checkbox__input "
             disabled={disabled}
             defaultChecked={defaultValue}
           />
           <span className="checkbox__label"></span>
-          <span htmlFor={fieldName} className="text-xs">
+          <span htmlFor={fieldName} className="text-xs ">
             {content}            
           </span>
         </label>

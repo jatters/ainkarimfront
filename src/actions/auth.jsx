@@ -25,12 +25,13 @@ export async function AgencyRegister(prevState, formData) {
     dataTreatment: formData.get("dataTreatment") === "on",
     marketing: formData.get("marketing") === "on",
   };
+  await new Promise(resolve => setTimeout(resolve, 1500));
 
   const validatedfield = AgencySchema.safeParse(fields);
 
   if (!validatedfield.success) {
     const flattenedErrors = z.flattenError(validatedfield.error);
-    console.log("Errors", flattenedErrors.fieldErrors);
+    
 
     return {
       success: false,

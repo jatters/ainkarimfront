@@ -37,6 +37,14 @@ export async function POST(request) {
     const SalesMail = SendData?.ventasEmail;
     const ContactMail = SendData?.contactEmail;
 
+    let recipientEmail;
+
+    if (formType === "RegistroAgencia") {
+      recipientEmail = email;
+    } else {
+      recipientEmail = ContactMail;
+    }
+
     let subject;
     let htmlContent;
 
@@ -197,6 +205,217 @@ export async function POST(request) {
         </div>
       `;
         break;
+      case "RegistroAgencia":
+        subject = `Solicitud de registro de agencia`;
+        htmlContent = `
+        <div
+          style="
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+          "
+        >
+          <div
+            style="
+              max-width: 600px;
+              margin: 0 auto;
+              background-color: #ffffff;
+            "
+          >
+            <!-- Header with Logo -->
+            <div
+              style="
+                text-align: center;
+                background-color: #1a1a1a;
+                padding: 30px 20px;
+              "
+            >
+              <img
+                src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png"
+                alt="Logo Viñedo Ain Karim"
+                style="
+                  width: 250px; 
+                  max-width: 100%; 
+                  height: auto;
+                  display: block;
+                  margin: 0 auto;
+                "
+              />
+            </div>
+
+            <!-- Hero Image -->
+            <div style="text-align: center; margin: 0">
+              <img
+                src="https://ainkarim.co/uploads/correo_bienvenida_4c4cc92287.jpg"
+                alt="Viñedo Ain Karim"
+                style="
+                  width: 100%;
+                  max-width: 600px;
+                  height: auto;
+                  display: block;
+                "
+              />
+            </div>
+
+            <!-- Main Content -->
+            <div style="padding: 30px 40px">
+              <!-- Body Text -->
+              <p
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #333333;
+                  margin: 0 0 20px 0;
+                "
+              >
+                ¡Gracias por tu interés en formar parte de nuestra red de agencias
+                aliadas! Hemos recibido exitosamente tu solicitud de registro y
+                queremos darte la más cordial bienvenida a nuestra familia vinícola.
+              </p>
+
+              <p
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #333333;
+                  margin: 0 0 30px 0;
+                "
+              >
+                Como el proceso de elaboración de un buen vino, sabemos que la calidad
+                requiere tiempo y atención a cada detalle. Por ello, nuestro equipo
+                está revisando cuidadosamente la información y documentación que nos
+                has proporcionado para garantizar una experiencia de colaboración
+                excepcional.
+              </p>
+
+              <!-- Section Title -->
+              <h2
+                style="
+                  color: #062f1d;
+                  font-size: 20px;
+                  line-height: 1.4;
+                  margin: 0 0 15px 0;
+                  font-weight: 600;
+                "
+              >
+                ¿Qué sigue ahora?
+              </h2>
+
+              <!-- Steps List -->
+              <ol style="padding-left: 20px; margin: 0 0 20px 0">
+                <li
+                  style="
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #333333;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <strong style="color: #062f1d">Revisión de documentos:</strong> Nuestro equipo verificará
+                  toda la información proporcionada (RUT, Cámara de Comercio y
+                  Registro Nacional de Turismo)
+                </li>
+                <li
+                  style="
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #333333;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <strong style="color: #062f1d">Validación de datos:</strong> Confirmaremos que tu agencia
+                  cumple con todos los requisitos necesarios
+                </li>
+                <li
+                  style="
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #333333;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <strong style="color: #062f1d">Activación de cuenta:</strong> Una vez aprobado, recibirás
+                  un correo de confirmación, podras iniciase sesión con los datos registrados.
+                </li>
+              </ol>
+
+              <!-- Highlight Box -->
+              <div
+                style="
+                  background-color: #f8f9fa;
+                  border-left: 4px solid #062f1d;
+                  padding: 15px 20px;
+                  margin: 0 0 25px 0;
+                "
+              >
+                <p
+                  style="
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #333333;
+                    margin: 0;
+                  "
+                >
+                  <strong style="color: #062f1d">Tiempo estimado de respuesta:</strong> 2-3 días hábiles
+                </p>
+              </div>
+
+              <p
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #333333;
+                  margin: 0 0 20px 0;
+                "
+              >
+                Estamos emocionados de comenzar esta alianza contigo y de que puedas
+                ofrecer a tus clientes experiencias únicas en nuestro viñedo.
+              </p>
+
+              <p
+                style="
+                  font-size: 16px;
+                  line-height: 1.6;
+                  color: #062f1d;
+                  margin: 0 0 30px 0;
+                  font-weight: 600;
+                "
+              >
+                ¡Salud y hasta pronto!
+              </p>
+            </div>
+
+            <!-- Footer -->
+            <div
+              style="
+                background-color: #f8f9fa;
+                padding: 20px 40px;
+                text-align: center;
+                border-top: 1px solid #e0e0e0;
+              "
+            >
+              <p
+                style="
+                  font-size: 14px;
+                  line-height: 1.5;
+                  color: #6c757d;
+                  margin: 0;
+                "
+              >
+                Este mensaje fue enviado desde 
+                <a 
+                  href="https://ainkarim.co" 
+                  style="color: #062f1d; text-decoration: none"
+                  target="_blank"
+                >
+                  ainkarim.co
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>`;
+        break;
 
       default:
         return NextResponse.json(
@@ -209,9 +428,9 @@ export async function POST(request) {
         email: "no-reply@ainkarim.co",
         name: "Viñedo Ain Karim",
       },
-      to: Array.isArray(ContactMail)
-        ? ContactMail.map((email) => ({ email }))
-        : [{ email: ContactMail }],
+      to: Array.isArray(recipientEmail)
+        ? recipientEmail.map((email) => ({ email }))
+        : [{ email: recipientEmail }],
       subject: subject,
       htmlContent: htmlContent,
     });
